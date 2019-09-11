@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home component tests Check Home Component Render 1`] = `
+<div
+  className="container-fluid home"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="hero-container"
+    >
+      <button
+        className="btn btn-white hero-sign-in"
+        onClick={[Function]}
+      >
+        Sign in
+        <i
+          className="glyphicon glyphicon-menu-right"
+        />
+      </button>
+      
+    </div>
+  </div>
+</div>
+`;
