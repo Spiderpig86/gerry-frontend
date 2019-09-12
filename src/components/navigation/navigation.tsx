@@ -56,12 +56,12 @@ class NavigationComponent extends React.Component<INavigationComponentProps, INa
                                     <span className="icon-bar"></span>
                                     <span className="icon-bar"></span>
                                 </button>
-                                <a className="navbar-brand" href="/"><span>Brand</span></a>
+                                <a className="navbar-brand" href="/"><span>Gerry</span></a>
                             </div>
                             <div className="collapse navbar-collapse" id="nav-logo">
                                 {this.props.isAuthed ? (
                                     <ul className="nav navbar-nav navbar-right">
-                                        <li className="hidden-md hidden-lg"><Link to="/">Brand</Link></li>
+                                        <li className="hidden-md hidden-lg"><Link to="/">Gerry</Link></li>
                                         <li className="hidden-md hidden-lg"><Link to="/dashboard">{Resources.Navigation.Dashboard}</Link></li>
                                         <li><Link to="/settings">{Resources.Navigation.Settings}</Link></li>
                                         <li><a href="#" onClick={this.handleUnauth}>{Resources.Navigation.SignOut}</a></li>
@@ -83,9 +83,6 @@ class NavigationComponent extends React.Component<INavigationComponentProps, INa
                 <div className="navigation">
                     <nav className="navbar navbar-default">
                         <div className="container-fluid">
-                            <div className="navbar-header">
-                                <Link className="navbar-brand hidden-xs hidden-sm" to="/">React-Redux Starer</Link>
-                            </div>
                             <div className="collapse navbar-collapse" id="nav">
                                 {this.props.isAuthed ? (
                                     <ul className="nav navbar-nav">

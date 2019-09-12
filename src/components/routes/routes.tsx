@@ -3,7 +3,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { Main, NotFound } from "components";
-import { Home, Dashboard } from "modules";
+import { Home, Dashboard, Test } from "modules";
 
 export class Routes extends React.Component {
     render() {
@@ -15,6 +15,7 @@ export class Routes extends React.Component {
                     </Route>
                     <Main path="/home" component={Home} checkAuthentication={false} />
                     <Main path="/dashboard" component={Dashboard} checkAuthentication={true} />
+                    <Main path="/test" component={Test} checkAuthentication={false} />
                     <Main path="*" component={NotFound} checkAuthentication={false} />
                 </Switch>
             </Router>
