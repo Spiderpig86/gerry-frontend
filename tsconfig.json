@@ -8,7 +8,12 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
-    "lib": ["es5", "es2015", "dom", "scripthost"]
+    "resolveJsonModule": true,
+    "lib": ["es5", "es2015", "dom", "scripthost"],
+    "baseUrl": ".",
+    "paths": {
+        "*": ["./@types/*", "./src/typings"]
+    }
   },
   "include": [
     "./src/**/*"
