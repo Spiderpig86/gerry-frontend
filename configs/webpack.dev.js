@@ -8,6 +8,7 @@ module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle-dev.js",
+        libraryTarget: "umd",
         path: path.resolve(__dirname, "..", "public"),
         publicPath: "/"
     },
