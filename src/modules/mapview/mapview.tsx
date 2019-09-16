@@ -20,10 +20,9 @@ export class MapView extends React.Component {
                 let partyColor: Color = majorityParty.percent >= 0.75 
                     ? Color.rgb([49,117,173]).darken(majorityParty.percent / 100.0 - 0.75)
                     : Color.rgb([49,117,173]).lighten(0.75 - majorityParty.percent / 100.0);
-                    console.log(partyColor.hex());
                 return {
                     color: '#1f2021',
-                    weight: 0.5,
+                    weight: 0.3,
                     fillOpacity: 0.5,
                     fillColor: partyColor.hex()
                 };
@@ -33,14 +32,48 @@ export class MapView extends React.Component {
                     : Color.rgb([215,110,110]).lighten(0.75 - majorityParty.percent / 100.0);
                 return {
                     color: '#1f2021',
-                    weight: 0.5,
+                    weight: 0.3,
                     fillOpacity: 0.5,
                     fillColor: partyColor.hex()
                 };
             default:
                 return {
                     color: '#1f2021',
-                    weight: 0.5,
+                    weight: 0.1,
+                    fillOpacity: 0.5,
+                    fillColor: '#fff2af'
+                };
+        }
+    }
+
+    getDistrictStyleHovered(feature: any, layer: any): PathOptions {
+        const majorityParty = this.getMajorityParty(feature.properties);
+
+        switch (majorityParty.party) {
+            case 'D':
+                let partyColor: Color = majorityParty.percent >= 0.75 
+                    ? Color.rgb([49,117,173]).darken(majorityParty.percent / 100.0 - 0.75)
+                    : Color.rgb([49,117,173]).lighten(0.75 - majorityParty.percent / 100.0);
+                return {
+                    color: '#1f2021',
+                    weight: 1,
+                    fillOpacity: 0.5,
+                    fillColor: partyColor.hex()
+                };
+            case 'R':
+                partyColor = majorityParty.percent >= 0.75 
+                    ? Color.rgb([215,110,110]).darken(majorityParty.percent / 100.0 - 0.75)
+                    : Color.rgb([215,110,110]).lighten(0.75 - majorityParty.percent / 100.0);
+                return {
+                    color: '#1f2021',
+                    weight: 1,
+                    fillOpacity: 0.5,
+                    fillColor: partyColor.hex()
+                };
+            default:
+                return {
+                    color: '#1f2021',
+                    weight: 1,
                     fillOpacity: 0.5,
                     fillColor: '#fff2af'
                 };
@@ -48,8 +81,16 @@ export class MapView extends React.Component {
     }
 
     showPopup(feature: any, layer: any) {
+        console.log(layer);
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`
-        layer.bindPopup(popupContent)
+        layer.bindPopup(popupContent);
+    }
+
+    onMouseHover(layer: any) {
+        console.log(layer);
+        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`
+        layer.target.bindPopup(popupContent);
+        layer.target.openPopup(layer.latlng);
     }
 
     render() {
@@ -113,6 +154,7 @@ export class MapView extends React.Component {
                         data={CA_DISTRICTS as GeoJsonObject}
                         style={this.getDistrictStyle.bind(this)}
                         onEachFeature={this.showPopup}
+                        onMouseOver={this.onMouseHover}
                     />
                 </Map>
             </div>
