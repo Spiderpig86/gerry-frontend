@@ -95,9 +95,64 @@ export class MapView extends React.Component {
 
     render() {
         const position = new LatLng(40.3, -96.0);
+        const rightSidebarStyles = {
+            bmBurgerButton: {
+              position: 'fixed',
+              width: '20px',
+              height: '18px',
+              right: '20px',
+              left: 'auto',
+              top: '20px'
+            },
+            bmBurgerBars: {
+              background: '#373a47'
+            },
+            bmBurgerBarsHover: {
+              background: '#a90000'
+            },
+            bmCrossButton: {
+              height: '24px',
+              width: '24px'
+            },
+            bmCross: {
+              background: '#bdc3c7'
+            },
+            bmMenuWrap: {
+              position: 'fixed',
+              height: '100%'
+            },
+            bmMenu: {
+              background: '#373a47',
+              padding: '2.5em 1.5em 0',
+              fontSize: '1.15em'
+            },
+            bmMorphShape: {
+              fill: '#373a47'
+            },
+            bmItemList: {
+              color: '#b8b7ad',
+              padding: '0.8em'
+            },
+            bmItem: {
+              display: 'inline-block'
+            },
+            bmOverlay: {
+              background: 'rgba(0, 0, 0, 0.3)'
+            }
+          }
         return (
             <div className="container-fluid d-flex">
                 <Menu>
+                    <a key="0" href=""><i className="fa fa-fw fa-star-o" /><span>Favorites</span></a>
+                    <a key="1" href=""><i className="fa fa-fw fa-bell-o" /><span>Alerts</span></a>
+                    <a key="2" href=""><i className="fa fa-fw fa-envelope-o" /><span>Messages</span></a>
+                    <a key="3" href=""><i className="fa fa-fw fa-comment-o" /><span>Comments</span></a>
+                    <a key="4" href=""><i className="fa fa-fw fa-bar-chart-o" /><span>Analytics</span></a>
+                    <a key="5" href=""><i className="fa fa-fw fa-newspaper-o" /><span>Reading List</span></a>
+                </Menu>
+
+                
+                <Menu right styles={ rightSidebarStyles }>
                     <a key="0" href=""><i className="fa fa-fw fa-star-o" /><span>Favorites</span></a>
                     <a key="1" href=""><i className="fa fa-fw fa-bell-o" /><span>Alerts</span></a>
                     <a key="2" href=""><i className="fa fa-fw fa-envelope-o" /><span>Messages</span></a>
@@ -110,13 +165,6 @@ export class MapView extends React.Component {
                         url={MAP_BOX_ENDPOINT + MAP_BOX_TOKEN}
                         attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
                     />
-                    <Marker position={position}>
-                        <Popup>
-                            A pretty CSS3 popup.
-                            <br />
-                            Easily customizable.
-                        </Popup>
-                    </Marker>
                     <LayersControl position="bottomright">
                         <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
                             <TileLayer
