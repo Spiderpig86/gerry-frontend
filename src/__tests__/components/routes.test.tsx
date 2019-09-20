@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import React from "react";
 import renderer from "react-test-renderer";
-import { Routes } from "components";
+import { Routes } from "global_components";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";

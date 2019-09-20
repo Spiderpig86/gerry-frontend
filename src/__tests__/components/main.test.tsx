@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { users } from "../../redux/modules/users/users"
-import { Main } from "components";
+import { Main } from "global_components";
 import { Home } from "modules";
 
 describe("Main component tests", () => {

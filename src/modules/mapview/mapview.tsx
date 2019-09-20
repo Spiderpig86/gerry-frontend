@@ -3,9 +3,12 @@ import * as Color from 'color';
 
 import { Map, Marker, Popup, TileLayer, GeoJSON, FeatureGroup, LayersControl, ZoomControl } from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
-import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
 import { GeoJsonObject } from 'geojson';
 import { slide as Menu } from 'react-burger-menu';
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+
+import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
+import { CustomTab } from './components';
 
 import './mapview.scss';
 import * as CA_DISTRICTS from '../../data/UT-demo.json';
@@ -140,15 +143,23 @@ export class MapView extends React.Component {
               background: 'rgba(0, 0, 0, 0.3)'
             }
           }
+
+        // TODO: Split menus into their own components
         return (
             <div className="container-fluid d-flex">
                 <Menu>
-                    <a key="0" href=""><i className="fa fa-fw fa-star-o" /><span>Favorites</span></a>
-                    <a key="1" href=""><i className="fa fa-fw fa-bell-o" /><span>Alerts</span></a>
-                    <a key="2" href=""><i className="fa fa-fw fa-envelope-o" /><span>Messages</span></a>
-                    <a key="3" href=""><i className="fa fa-fw fa-comment-o" /><span>Comments</span></a>
-                    <a key="4" href=""><i className="fa fa-fw fa-bar-chart-o" /><span>Analytics</span></a>
-                    <a key="5" href=""><i className="fa fa-fw fa-newspaper-o" /><span>Reading List</span></a>
+                    <h1>Gerry</h1>
+                    <Tabs>
+                        <TabList>
+                            <CustomTab>Inputs</CustomTab>
+                            <CustomTab>Logs</CustomTab>
+                            <CustomTab>Statistics</CustomTab>
+                        </TabList>
+
+                        <TabPanel>Panel 1</TabPanel>
+                        <TabPanel>Panel 2</TabPanel>
+                        <TabPanel>Panel 2</TabPanel>
+                    </Tabs>
                 </Menu>
 
                 

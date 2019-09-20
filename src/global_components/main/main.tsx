@@ -5,7 +5,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Navigation, Footer } from "components";
+import { Navigation, Footer } from "global_components";
 import * as userActionCreators from "../../redux/modules/users/users";
 
 interface IMainContainerProps {
