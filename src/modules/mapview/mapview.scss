@@ -1,0 +1,42 @@
+body {
+    margin-bottom: 0;
+
+    .container-fluid {
+        padding: 0;
+    }
+}
+
+.row {
+    margin: 0;
+}
+
+.flex-fill {
+    flex: 1 1 auto;
+    min-height: 100vh;
+}
+
+.bm-burger {
+    position: fixed;
+    width: 36px;
+    height: 30px;
+    left: 36px;
+    top: 36px;
+}
+
+.bm-burger-bars {
+    background-color: #373a47;
+}
+
+.bm-burger-button {
+    position: fixed;
+    width: 20px;
+    height: 18px;
+    left: 20px;
+    top: 20px;
+}
+
+.bm-menu {
+    background: #fff;
+    font-size: 1.15em;
+    padding: 1.5rem;
+}

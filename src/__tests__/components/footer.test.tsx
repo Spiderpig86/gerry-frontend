@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import React from "react";
 import renderer from "react-test-renderer";
-import { Footer } from "components";
+import { Footer } from "global_components";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { MemoryRouter as Router } from "react-router-dom";

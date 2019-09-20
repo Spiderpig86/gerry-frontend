@@ -7,7 +7,7 @@ import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import { Routes }  from "components";
+import { Routes }  from "global_components";
 import { users } from "./redux/modules/users/users"
 
 const store = createStore(users, applyMiddleware(thunk));

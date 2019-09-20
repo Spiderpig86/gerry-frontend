@@ -3,3 +3,4 @@ public/*.*
 src/**/*.js
 src/**/*.js.map
 node_modules
+.vscode

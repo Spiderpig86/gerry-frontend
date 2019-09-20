@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { User } from "models";
-import { authenticate, checkIfAuthenticated } from "components";
+import { authenticate, checkIfAuthenticated } from "global_components";
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
