@@ -1,19 +1,50 @@
 import * as React from 'react';
 import * as Color from 'color';
 
-import { Map, Marker, Popup, TileLayer, GeoJSON, FeatureGroup, LayersControl, ZoomControl } from 'react-leaflet';
+import { Map, Marker, Popup, TileLayer, GeoJSON, LayersControl, ZoomControl } from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
-import { slide as Menu } from 'react-burger-menu';
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
 import { CustomTab, LeftSidebar, RightSidebar } from './components';
+import { StateBordersApi, States } from '../../api/state-borders';
 
 import './mapview.scss';
 import * as UT_Precincts from '../../data/UT-demo.json';
 
-export class MapView extends React.Component {
+interface IMapViewState {
+    stateBorders: any[]
+    selectedState: string
+}
+
+export class MapView extends React.Component<{}, IMapViewState> {
+
+    state = {
+        stateBorders: [],
+        selectedState: 'UT'
+    };
+
+    async componentDidMount() {
+        console.log('aergaegre');
+        const statePopulator = new StateBordersApi();
+        await Promise.all([
+            statePopulator.fetchStateBorder(States.CA),
+            statePopulator.fetchStateBorder(States.UT),
+            statePopulator.fetchStateBorder(States.VA),
+        ]).then(data => this.setState({
+            stateBorders: data
+        }));
+        console.log(this.state.stateBorders);
+    }
+
+    getStateStyle(feature: any, layer: any): PathOptions {
+        return {
+            color: 'rgb(51, 136, 255)',
+            weight: 1,
+            fillOpacity: 0.5,
+            fillColor: 'rgb(51, 136, 255)'
+        };
+    }
 
     getDistrictStyle(feature: any, layer: any): PathOptions {
         const majorityParty = this.getMajorityParty(feature.properties);
@@ -26,7 +57,7 @@ export class MapView extends React.Component {
                 return {
                     color: '#1f2021',
                     weight: 0.3,
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'R':
@@ -36,14 +67,14 @@ export class MapView extends React.Component {
                 return {
                     color: '#1f2021',
                     weight: 0.3,
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             default:
                 return {
                     color: '#1f2021',
                     weight: 0.1,
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: '#fff2af'
                 };
         }
@@ -108,6 +139,7 @@ export class MapView extends React.Component {
 
     render() {
         const position = new LatLng(40.3, -96.0);
+        console.log(this.state);
 
         // TODO: Split menus into their own components
         return (
@@ -134,7 +166,7 @@ export class MapView extends React.Component {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="Mapbox Light">
+                        <LayersControl.BaseLayer checked name="Mapbox Light">
                             <TileLayer
                             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
@@ -154,12 +186,29 @@ export class MapView extends React.Component {
                         </LayersControl.BaseLayer>
                     </LayersControl>
                     <ZoomControl position={'bottomright'} />
-                    <GeoJSON
-                        data={UT_Precincts as GeoJsonObject}
-                        style={this.getDistrictStyle.bind(this)}
-                        onEachFeature={this.showPopup}
-                        onMouseOver={this.onMouseHover}
-                    />
+                    {
+                        this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
+
+                            if (data.state === this.state.selectedState) {
+                                return (
+                                    <GeoJSON
+                                        data={UT_Precincts as GeoJsonObject}
+                                        style={this.getDistrictStyle.bind(this)}
+                                        onEachFeature={this.showPopup}
+                                        onMouseOver={this.onMouseHover}
+                                    />
+                                )
+                            } else {
+                                return (
+                                    <GeoJSON
+                                        key={data.state}
+                                        data={data.data as GeoJsonObject}
+                                        style={this.getStateStyle.bind(this)}
+                                    />
+                                )
+                            }
+                        })
+                    }
                 </Map>
             </div>
         );
