@@ -8,10 +8,10 @@ import { slide as Menu } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
-import { CustomTab } from './components';
+import { CustomTab, LeftSidebar, RightSidebar } from './components';
 
 import './mapview.scss';
-import * as CA_DISTRICTS from '../../data/UT-demo.json';
+import * as UT_Precincts from '../../data/UT-demo.json';
 
 export class MapView extends React.Component {
 
@@ -73,6 +73,16 @@ export class MapView extends React.Component {
                     fillOpacity: 0.5,
                     fillColor: partyColor.hex()
                 };
+            case 'I':
+                partyColor = majorityParty.percent >= 0.75 
+                    ? Color.rgb([130, 182, 127]).darken(majorityParty.percent / 100.0 - 0.75)
+                    : Color.rgb([30, 182, 127]).lighten(0.75 - majorityParty.percent / 100.0);
+                return {
+                    color: '#1f2021',
+                    weight: 1,
+                    fillOpacity: 0.5,
+                    fillColor: partyColor.hex()
+                };
             default:
                 return {
                     color: '#1f2021',
@@ -98,79 +108,14 @@ export class MapView extends React.Component {
 
     render() {
         const position = new LatLng(40.3, -96.0);
-        const rightSidebarStyles = {
-            bmBurgerButton: {
-              position: 'fixed',
-              width: '20px',
-              height: '18px',
-              right: '20px',
-              left: 'auto',
-              top: '20px'
-            },
-            bmBurgerBars: {
-              background: '#373a47'
-            },
-            bmBurgerBarsHover: {
-              background: '#a90000'
-            },
-            bmCrossButton: {
-              height: '24px',
-              width: '24px'
-            },
-            bmCross: {
-              background: '#bdc3c7'
-            },
-            bmMenuWrap: {
-              position: 'fixed',
-              height: '100%'
-            },
-            bmMenu: {
-              background: '#373a47',
-              padding: '2.5em 1.5em 0',
-              fontSize: '1.15em'
-            },
-            bmMorphShape: {
-              fill: '#373a47'
-            },
-            bmItemList: {
-              color: '#b8b7ad',
-              padding: '0.8em'
-            },
-            bmItem: {
-              display: 'inline-block'
-            },
-            bmOverlay: {
-              background: 'rgba(0, 0, 0, 0.3)'
-            }
-          }
 
         // TODO: Split menus into their own components
         return (
             <div className="container-fluid d-flex">
-                <Menu>
-                    <h1>Gerry</h1>
-                    <Tabs>
-                        <TabList>
-                            <CustomTab>Inputs</CustomTab>
-                            <CustomTab>Logs</CustomTab>
-                            <CustomTab>Statistics</CustomTab>
-                        </TabList>
-
-                        <TabPanel>Panel 1</TabPanel>
-                        <TabPanel>Panel 2</TabPanel>
-                        <TabPanel>Panel 2</TabPanel>
-                    </Tabs>
-                </Menu>
-
                 
-                <Menu right styles={ rightSidebarStyles }>
-                    <a key="0" href=""><i className="fa fa-fw fa-star-o" /><span>Favorites</span></a>
-                    <a key="1" href=""><i className="fa fa-fw fa-bell-o" /><span>Alerts</span></a>
-                    <a key="2" href=""><i className="fa fa-fw fa-envelope-o" /><span>Messages</span></a>
-                    <a key="3" href=""><i className="fa fa-fw fa-comment-o" /><span>Comments</span></a>
-                    <a key="4" href=""><i className="fa fa-fw fa-bar-chart-o" /><span>Analytics</span></a>
-                    <a key="5" href=""><i className="fa fa-fw fa-newspaper-o" /><span>Reading List</span></a>
-                </Menu>
+                <LeftSidebar />
+                <RightSidebar />
+                
                 <Map className="row flex-fill" center={position} zoomControl={false} zoom={5} style={{ height: '700px' }} animate={true} easeLinearly={true}>
                     <TileLayer
                         url={MAP_BOX_ENDPOINT + MAP_BOX_TOKEN}
@@ -210,7 +155,7 @@ export class MapView extends React.Component {
                     </LayersControl>
                     <ZoomControl position={'bottomright'} />
                     <GeoJSON
-                        data={CA_DISTRICTS as GeoJsonObject}
+                        data={UT_Precincts as GeoJsonObject}
                         style={this.getDistrictStyle.bind(this)}
                         onEachFeature={this.showPopup}
                         onMouseOver={this.onMouseHover}
@@ -226,4 +171,15 @@ export class MapView extends React.Component {
             { party: 'D', percent: parseFloat(properties.DemocratChance) } : 
             { party: 'R', percent: parseFloat(properties.RepublicanChance) };
     }
+
+    // private getMajorityParty(properties: any): { party: string, percent: number } {
+    //     console.log(properties);
+    //     const totalVotes = properties.PRES16R + properties.PRES16D + properties.PRES16I;
+
+    //     const republicanPercent = { percent: properties.PRES16R / totalVotes, party: 'R' };
+    //     const democratPercent = { percent: properties.PRES16D / totalVotes, party: 'D' };
+    //     const independentPercent = { percent: properties.PRES16I / totalVotes, party: 'I' };
+
+    //     return [republicanPercent, democratPercent, independentPercent].reduce((prev: any, cur: any) => prev.percent < cur.percent ? cur : prev);
+    // }
 }

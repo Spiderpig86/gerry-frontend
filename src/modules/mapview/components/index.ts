@@ -1,1 +1,0 @@
-export { CustomTab } from './customtab';
