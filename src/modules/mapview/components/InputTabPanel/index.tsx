@@ -14,7 +14,7 @@ export class InputTabPanel extends React.Component {
     render() {
         return (
             <div>
-                <div className="px-3" style={{maxHeight: '80vh', overflow: 'auto'}}>
+                <div className="px-4" style={{maxHeight: '80vh', overflow: 'auto'}}>
                     <div className="py-3">
                         <h3>State Selection</h3>
                         <DropdownButton id="dropdown-basic-button" title="Select State">

@@ -144,6 +144,26 @@ export class MapView extends React.Component<{}, IMapViewState> {
         layer.target.openPopup(layer.latlng);
     }
 
+    onMouseHoverPrecinct(layer: any) {
+        console.log(layer);
+        const properties: any = layer.layer.feature.properties;
+        const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
+            <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
+            <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
+            <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
+            <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
+            <li><b>African American Population:</b> ${Math.round(properties.NH_BLACK)}</li>
+            <li><b>Asian Population:</b> ${Math.round(properties.NH_ASIAN)}</li>
+            <li><b>Hispanic Population:</b> ${Math.round(properties.HISP)}</li>
+            <li><b>Native American Population:</b> ${Math.round(properties.NH_AMIN)}</li>
+            <li><b>Other Population:</b> ${Math.round(properties.NH_OTHER)}</li>
+            <li><b>Pacific Islander Population:</b> ${Math.round(properties.NH_NHPI)}</li>
+            <li><b>Non-Hispanic White Population:</b> ${Math.round(properties.NH_WHITE)}</li>
+        </ul></Popup>`
+        layer.target.bindPopup(popupContent);
+        layer.target.openPopup(layer.latlng);
+    }
+
     render() {
         const position = new LatLng(40.3, -96.0);
         console.log(this.state);
@@ -209,6 +229,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                         <GeoJSON
                                             data={this.state.precincts as GeoJsonObject}
                                             style={this.getPrecinctStyle.bind(this)}
+                                            onMouseOver={this.onMouseHoverPrecinct}
                                         />
                                     </div>
                                 )
