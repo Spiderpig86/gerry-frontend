@@ -11,6 +11,26 @@ export enum States {
 
 export class StateBordersApi {
 
+    public async fetchPrecincts(): Promise<any> {
+        try {
+            const data = await Axios.get(`./api/UT2.json`);
+            console.log(data);
+            return {
+                status: 'OK',
+                data: {
+                    type: 'Feature',
+                    geometry: data.data
+                }
+            };
+        } catch (e) {
+            console.log(e);
+            return {
+                status: 'ERR',
+                data: null
+            };
+        }
+    }
+
     public async fetchStateBorder(state: States): Promise<any> {
         try {
             const data = await Axios.get(`https://raw.githubusercontent.com/unitedstates/districts/gh-pages/states/${state}/shape.geojson`);

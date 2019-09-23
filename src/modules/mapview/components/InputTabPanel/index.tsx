@@ -28,7 +28,6 @@ export class InputTabPanel extends React.Component {
                     <div className="mb-5">
                         {
                             Array.from(Array(5).keys()).map((e: any, i : number) => {
-                                console.log(i);
                                 return (
                                     <Form.Group key={`algoGroup${i}`} className="w-100 py-2 row form-group d-flex align-items-center">
                                         <Form.Check key={`algoOption${i}`} custom type={'radio'} id={`algoOption${i}`} label={`Option ${i}`} />

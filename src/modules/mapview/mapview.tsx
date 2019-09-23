@@ -10,22 +10,23 @@ import { CustomTab, LeftSidebar, RightSidebar } from './components';
 import { StateBordersApi, States } from '../../api/state-borders';
 
 import './mapview.scss';
-import * as UT_Precincts from '../../data/UT-demo.json';
+import * as UT_Districts from '../../data/UT-demo.json';
 
 interface IMapViewState {
     stateBorders: any[]
     selectedState: string
+    precincts: any;
 }
 
 export class MapView extends React.Component<{}, IMapViewState> {
 
     state = {
         stateBorders: [],
-        selectedState: 'UT'
+        selectedState: 'UT',
+        precincts: null
     };
 
     async componentDidMount() {
-        console.log('aergaegre');
         const statePopulator = new StateBordersApi();
         await Promise.all([
             statePopulator.fetchStateBorder(States.CA),
@@ -34,7 +35,13 @@ export class MapView extends React.Component<{}, IMapViewState> {
         ]).then(data => this.setState({
             stateBorders: data
         }));
-        console.log(this.state.stateBorders);
+
+        const precincts: any = await statePopulator.fetchPrecincts();
+        console.log(precincts.data);
+        console.log(UT_Districts);
+        this.setState({
+            precincts: precincts.data.geometry
+        });
     }
 
     getStateStyle(feature: any, layer: any): PathOptions {
@@ -48,12 +55,15 @@ export class MapView extends React.Component<{}, IMapViewState> {
 
     getDistrictStyle(feature: any, layer: any): PathOptions {
         const majorityParty = this.getMajorityParty(feature.properties);
+        if (majorityParty.percent === NaN) {
+            majorityParty.party = '-';
+        }
 
         switch (majorityParty.party) {
             case 'D':
-                let partyColor: Color = majorityParty.percent >= 0.75 
-                    ? Color.rgb([49,117,173]).darken(majorityParty.percent / 100.0 - 0.75)
-                    : Color.rgb([49,117,173]).lighten(0.75 - majorityParty.percent / 100.0);
+                let partyColor: Color = majorityParty.percent >= 0.55 
+                    ? Color.rgb([49,117,173]).saturate(majorityParty.percent / 100.0 - 0.55)
+                    : Color.rgb([49,117,173]).desaturate(0.75 - majorityParty.percent / 100.0);
                 return {
                     color: '#1f2021',
                     weight: 0.3,
@@ -61,9 +71,9 @@ export class MapView extends React.Component<{}, IMapViewState> {
                     fillColor: partyColor.hex()
                 };
             case 'R':
-                partyColor = majorityParty.percent >= 0.75 
-                    ? Color.rgb([215,110,110]).darken(majorityParty.percent / 100.0 - 0.75)
-                    : Color.rgb([215,110,110]).lighten(0.75 - majorityParty.percent / 100.0);
+                partyColor = majorityParty.percent >= 0.55 
+                    ? Color.rgb([215,110,110]).saturate(majorityParty.percent / 100.0 - 0.55)
+                    : Color.rgb([215,110,110]).desaturate(0.75 - majorityParty.percent / 100.0);
                 return {
                     color: '#1f2021',
                     weight: 0.3,
@@ -74,64 +84,61 @@ export class MapView extends React.Component<{}, IMapViewState> {
                 return {
                     color: '#1f2021',
                     weight: 0.1,
-                    fillOpacity: 0.75,
                     fillColor: '#fff2af'
                 };
         }
     }
 
-    getDistrictStyleHovered(feature: any, layer: any): PathOptions {
-        const majorityParty = this.getMajorityParty(feature.properties);
+    getPrecinctStyle(feature: any, layer: any): PathOptions {
+        const majorityParty = this.getMajorityPartyPrecinct(feature.properties);
+        console.log(majorityParty);
 
         switch (majorityParty.party) {
             case 'D':
                 let partyColor: Color = majorityParty.percent >= 0.75 
-                    ? Color.rgb([49,117,173]).darken(majorityParty.percent / 100.0 - 0.75)
-                    : Color.rgb([49,117,173]).lighten(0.75 - majorityParty.percent / 100.0);
+                    ? Color.rgb([16,114,195]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.rgb([16,114,195]).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: '#1f2021',
-                    weight: 1,
-                    fillOpacity: 0.5,
+                    color: Color.rgb([16,114,195]).darken(.25).hex(),
+                    weight: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'R':
                 partyColor = majorityParty.percent >= 0.75 
-                    ? Color.rgb([215,110,110]).darken(majorityParty.percent / 100.0 - 0.75)
-                    : Color.rgb([215,110,110]).lighten(0.75 - majorityParty.percent / 100.0);
+                    ? Color.rgb([170,57,57]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.rgb([170,57,57]).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: '#1f2021',
-                    weight: 1,
-                    fillOpacity: 0.5,
+                    color: Color.rgb([170,57,57]).darken(.25).hex(),
+                    weight: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'I':
-                partyColor = majorityParty.percent >= 0.75 
-                    ? Color.rgb([130, 182, 127]).darken(majorityParty.percent / 100.0 - 0.75)
-                    : Color.rgb([30, 182, 127]).lighten(0.75 - majorityParty.percent / 100.0);
+                partyColor = majorityParty.percent >= 0.55 
+                    ? Color.rgb([130,182,127]).saturate((majorityParty.percent - 0.55) * 3).darken((majorityParty.percent - 0.55))
+                    : Color.rgb([130,182,127]).lighten((0.55 - majorityParty.percent) * 3);
                 return {
-                    color: '#1f2021',
-                    weight: 1,
-                    fillOpacity: 0.5,
+                    color: Color.rgb([130,182,127]).darken(.25).hex(),
+                    weight: 0.5,
+                    fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             default:
                 return {
                     color: '#1f2021',
-                    weight: 1,
-                    fillOpacity: 0.5,
-                    fillColor: '#fff2af'
+                    weight: 0.3,
+                    fillOpacity: 0,
                 };
         }
     }
 
     showPopup(feature: any, layer: any) {
-        console.log(layer);
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`
         layer.bindPopup(popupContent);
     }
 
     onMouseHover(layer: any) {
-        console.log(layer);
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`
         layer.target.bindPopup(popupContent);
         layer.target.openPopup(layer.latlng);
@@ -189,14 +196,21 @@ export class MapView extends React.Component<{}, IMapViewState> {
                     {
                         this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
 
-                            if (data.state === this.state.selectedState) {
+                            if (data.state === this.state.selectedState && this.state.precincts) {
                                 return (
-                                    <GeoJSON
-                                        data={UT_Precincts as GeoJsonObject}
-                                        style={this.getDistrictStyle.bind(this)}
-                                        onEachFeature={this.showPopup}
-                                        onMouseOver={this.onMouseHover}
-                                    />
+                                    <div key={'selected'}>
+                                        {/* <GeoJSON
+                                            data={UT_Districts as GeoJsonObject}
+                                            // style={this.getDistrictStyle.bind(this)}
+                                            style={{ color: '#222' }}
+                                            onEachFeature={this.showPopup}
+                                            onMouseOver={this.onMouseHover}
+                                        /> */}
+                                        <GeoJSON
+                                            data={this.state.precincts as GeoJsonObject}
+                                            style={this.getPrecinctStyle.bind(this)}
+                                        />
+                                    </div>
                                 )
                             } else {
                                 return (
@@ -221,14 +235,19 @@ export class MapView extends React.Component<{}, IMapViewState> {
             { party: 'R', percent: parseFloat(properties.RepublicanChance) };
     }
 
-    // private getMajorityParty(properties: any): { party: string, percent: number } {
-    //     console.log(properties);
-    //     const totalVotes = properties.PRES16R + properties.PRES16D + properties.PRES16I;
+    private getMajorityPartyPrecinct(properties: any): { party: string, percent: number } {
+        console.log(properties);
+        const totalVotes = properties.PRES16R + properties.PRES16D + properties.PRES16I;
 
-    //     const republicanPercent = { percent: properties.PRES16R / totalVotes, party: 'R' };
-    //     const democratPercent = { percent: properties.PRES16D / totalVotes, party: 'D' };
-    //     const independentPercent = { percent: properties.PRES16I / totalVotes, party: 'I' };
+        if (totalVotes === 0) {
+            return { percent: 0, party: '-' };
+        }
 
-    //     return [republicanPercent, democratPercent, independentPercent].reduce((prev: any, cur: any) => prev.percent < cur.percent ? cur : prev);
-    // }
+        const republicanPercent = { percent: properties.PRES16R / totalVotes, party: 'R' };
+        const democratPercent = { percent: properties.PRES16D / totalVotes, party: 'D' };
+        const independentPercent = { percent: properties.PRES16I / totalVotes, party: 'I' };
+        console.log([republicanPercent, democratPercent, independentPercent]);
+
+        return [republicanPercent, democratPercent, independentPercent].reduce((prev: any, cur: any) => prev.percent < cur.percent ? cur : prev);
+    }
 }
