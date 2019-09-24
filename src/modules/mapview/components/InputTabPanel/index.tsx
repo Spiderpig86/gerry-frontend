@@ -15,7 +15,7 @@ export class InputTabPanel extends React.Component {
         return (
             <div className="px-4" style={{overflow: 'auto', maxHeight: '75vh'}}>
                 <div className="py-3">
-                    <h3>State Selection</h3>
+                    <h4>State Selection</h4>
                     <DropdownButton id="dropdown-basic-button" title="Select State">
                         <Dropdown.Item onClick={() => {}}>California</Dropdown.Item>
                         <Dropdown.Item onClick={() => {}}>Utah</Dropdown.Item>
@@ -23,7 +23,7 @@ export class InputTabPanel extends React.Component {
                     </DropdownButton>
                 </div>
 
-                <h3>Algorithm Options</h3>
+                <h4>Algorithm Options</h4>
                 <div className="mb-5">
                     {
                         Array.from(Array(5).keys()).map((e: any, i : number) => {
@@ -36,10 +36,10 @@ export class InputTabPanel extends React.Component {
                     }
                 </div>
 
-                <h3>District Properties</h3>
+                <h4>District Properties</h4>
 
                 <div className="mb-3">
-                    <h5>Minority Group Thresholds</h5>
+                    <h6>Minority Group Thresholds</h6>
 
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckAfrican'} label={'African Americans'} />
@@ -99,7 +99,7 @@ export class InputTabPanel extends React.Component {
                 </div>
 
                 <div className="mb-3">
-                    <h3>Parameters</h3>
+                    <h4>Parameters</h4>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Label className='col-6'>Population Equality</Form.Label>
                         <TooltipSlider

@@ -9,26 +9,26 @@ export interface IDemographicsTabProps {
 export class DemographicsTabPanel extends React.PureComponent<{}, {}> {
     render() {
         return (
-            <>
+            <div style={{ maxHeight: '80vh', overflow: 'auto', padding: '0 1.5rem' }}>
+                <br />
                 <h4>Demographics</h4>
+                <p>Non-Hispanic White:</p>
+                <p>Non-Hispanic African Americans:</p>
+                <p>Non-Hispanic Native Americans:</p>
+                <p>Non-Hispanic Asian:</p>
+                <p>Non-Hispanic Pacific Islander:</p>
+                <p>Non-Hispanic Other:</p>
+                <p>Non-Hispanic Biracial:</p>
                 <br />
-                <p><b>Non-Hispanic White:</b></p>
-                <p><b>Non-Hispanic African Americans:</b></p>
-                <p><b>Non-Hispanic Native Americans:</b></p>
-                <p><b>Non-Hispanic Asian:</b></p>
-                <p><b>Non-Hispanic Pacific Islander:</b></p>
-                <p><b>Non-Hispanic Other:</b></p>
-                <p><b>Non-Hispanic Biracial:</b></p>
-                <br />
-                <p><b>Hispanic:</b></p>
-                <p><b>Hispanic White:</b></p>
-                <p><b>Hispanic African Americans:</b></p>
-                <p><b>Hispanic Native Americans:</b></p>
-                <p><b>Hispanic Asian:</b></p>
-                <p><b>Hispanic Pacific Islander:</b></p>
-                <p><b>Hispanic Other:</b></p>
-                <p><b>Hispanic Biracial:</b></p>
-            </>
+                <p>Hispanic:</p>
+                <p>Hispanic White:</p>
+                <p>Hispanic African Americans:</p>
+                <p>Hispanic Native Americans:</p>
+                <p>Hispanic Asian:</p>
+                <p>Hispanic Pacific Islander:</p>
+                <p>Hispanic Other:</p>
+                <p>Hispanic Biracial:</p>
+            </div>
         )
     }
 }

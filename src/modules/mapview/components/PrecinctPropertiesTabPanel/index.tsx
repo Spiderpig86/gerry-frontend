@@ -13,16 +13,16 @@ export interface IPrecinctPropertiesTabProps {
 export class PrecinctPropertiesTabPanel extends React.PureComponent<{}, {}> {
     render() {
         return (
-            <>
-                <h4>Precinct Properties</h4>
+            <div style={{ padding: '0 1.5rem' }}>
                 <br />
-                <p><b>Precinct Name:</b></p>
-                <p><b>Sub-precinct Number:</b></p>
-                <p><b>Municipality Name:</b></p>
-                <p><b>County Name:</b></p>
-                <p><b>Jurisdiction Name:</b></p>
-                <p><b>Congressional District ID:</b></p>
-            </>
+                <h4>Precinct Properties</h4>
+                <p>Precinct Name:</p>
+                <p>Sub-precinct Number:</p>
+                <p>Municipality Name:</p>
+                <p>County Name:</p>
+                <p>Jurisdiction Name:</p>
+                <p>Congressional District ID:</p>
+            </div>
         )
     }
 }

@@ -1,15 +1,30 @@
 import * as React from 'react';
 
-import { slide as Menu } from 'react-burger-menu';
+import { slide as Menu, slide } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import { CustomTab, ElectionsTabPanel } from '../';
 import { DemographicsTabPanel } from '../DemographicsTabPanel';
 import { VotingAgeTabPanel } from '../VotingAgeTabPanel';
 import { PrecinctPropertiesTabPanel } from '../PrecinctPropertiesTabPanel';
+import { MapView } from '../../mapview';
 
-export class RightSidebar extends React.Component {
+interface IRightSidebarProps {
+    isOpen: boolean;
+    closeSideBarHook: () => void;
+    mapView: MapView;
+}
+
+export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
+
+    menuHandler(state: any) {
+        if (!state.isOpen) {
+            this.props.mapView.setState({ isOpen: false });
+        }
+    }
+
     render() {
+        console.log(this.props);
         const rightSidebarStyles = {
             bmBurgerButton: {
                 position: 'fixed',
@@ -38,7 +53,6 @@ export class RightSidebar extends React.Component {
             },
             bmMenu: {
                 background: '#fff',
-                padding: '2.5rem 1.5rem 0',
                 fontSize: '1rem'
             },
             bmMorphShape: {
@@ -49,14 +63,17 @@ export class RightSidebar extends React.Component {
             },
             bmOverlay: {
                 background: 'rgba(0, 0, 0, 0.3)'
+            },
+            bmItemList: {
+
             }
         };
         return (
-            <Menu right width={'500px'} styles={ rightSidebarStyles }>
-                <h3>N/A Precinct Data</h3>
+            <Menu onStateChange={e => this.menuHandler.call(this, e) } isOpen={this.props.isOpen} right width={'500px'} styles={ rightSidebarStyles }>
+                <h3 className="px-3">N/A Precinct Data</h3>
 
                 <Tabs>
-                    <TabList>
+                    <TabList className='px-3'>
                         <CustomTab>Election</CustomTab>
                         <CustomTab>Demographics</CustomTab>
                         <CustomTab>Voting Age</CustomTab>

@@ -16,6 +16,7 @@ interface IMapViewState {
     stateBorders: any[]
     selectedState: string
     precincts: any;
+    isOpen: boolean;
 }
 
 export class MapView extends React.Component<{}, IMapViewState> {
@@ -23,7 +24,8 @@ export class MapView extends React.Component<{}, IMapViewState> {
     state = {
         stateBorders: [],
         selectedState: 'UT',
-        precincts: null
+        precincts: null,
+        isOpen: false
     };
 
     async componentDidMount() {
@@ -130,15 +132,34 @@ export class MapView extends React.Component<{}, IMapViewState> {
         }
     }
 
+    onEachFeature(feature: any, layer: any) {
+        layer.on({
+            click: this.showPrecinctData.bind(this)
+        });
+    }
+
     showPopup(feature: any, layer: any) {
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`
         layer.bindPopup(popupContent);
+    }
+
+    showPrecinctData(feature: any, layer: any) {
+        console.log(this.state);
+        this.setState({
+            isOpen: true
+        });
     }
 
     onMouseHover(layer: any) {
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`
         layer.target.bindPopup(popupContent);
         layer.target.openPopup(layer.latlng);
+    }
+
+    resetLeftSidebarHook() {
+        this.setState({
+            isOpen: false
+        });
     }
 
     onMouseHoverPrecinct(layer: any) {
@@ -168,7 +189,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
             <div className="container-fluid d-flex">
                 
                 <LeftSidebar />
-                <RightSidebar />
+                <RightSidebar closeSideBarHook={this.resetLeftSidebarHook} mapView={this} isOpen={this.state.isOpen}/>
                 
                 <Map className="row flex-fill" center={position} zoomControl={false} zoom={5} style={{ height: '700px' }} animate={true} easeLinearly={true}>
                     <TileLayer
@@ -224,7 +245,8 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                         <GeoJSON
                                             data={this.state.precincts as GeoJsonObject}
                                             style={this.getPrecinctStyle.bind(this)}
-                                            onMouseOver={this.onMouseHoverPrecinct}
+                                            // onMouseOver={this.onMouseHoverPrecinct}
+                                            onEachFeature={this.onEachFeature.bind(this)}
                                         />
                                     </div>
                                 )

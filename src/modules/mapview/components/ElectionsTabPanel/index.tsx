@@ -15,9 +15,9 @@ export interface IVoteData {
 export class ElectionsTabPanel extends React.PureComponent<{}, {}> {
     render() {
         return (
-            <>
-                <h4>2016 Election</h4>
+            <div style={{ padding: '0 1.5rem' }}>
                 <br/>
+                <h4>2016 Election</h4>
                 <p><b>Presidential</b></p>
                 <p>Democratic Votes:</p>
                 <p>Republican Votes:</p>
@@ -32,7 +32,7 @@ export class ElectionsTabPanel extends React.PureComponent<{}, {}> {
                 <p>Democratic Votes:</p>
                 <p>Republican Votes:</p>
                 <p>Independent Votes:</p>
-            </>
+            </div>
         )
     }
 }
