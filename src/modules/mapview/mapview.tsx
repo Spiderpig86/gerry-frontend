@@ -37,8 +37,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
         }));
 
         const precincts: any = await statePopulator.fetchPrecincts();
-        console.log(precincts.data);
-        console.log(UT_Districts);
         this.setState({
             precincts: precincts.data.geometry
         });
@@ -91,7 +89,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
 
     getPrecinctStyle(feature: any, layer: any): PathOptions {
         const majorityParty = this.getMajorityPartyPrecinct(feature.properties);
-        console.log(majorityParty);
 
         switch (majorityParty.party) {
             case 'D':
@@ -145,7 +142,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
     }
 
     onMouseHoverPrecinct(layer: any) {
-        console.log(layer);
         const properties: any = layer.layer.feature.properties;
         const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
             <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
@@ -166,7 +162,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
 
     render() {
         const position = new LatLng(40.3, -96.0);
-        console.log(this.state);
 
         // TODO: Split menus into their own components
         return (
@@ -250,14 +245,12 @@ export class MapView extends React.Component<{}, IMapViewState> {
     }
 
     private getMajorityParty(properties: any): { party: string, percent: number } {
-        console.log(properties);
         return properties.DemocratChance > properties.RepublicanChance ? 
             { party: 'D', percent: parseFloat(properties.DemocratChance) } : 
             { party: 'R', percent: parseFloat(properties.RepublicanChance) };
     }
 
     private getMajorityPartyPrecinct(properties: any): { party: string, percent: number } {
-        console.log(properties);
         const totalVotes = properties.PRES16R + properties.PRES16D + properties.PRES16I;
 
         if (totalVotes === 0) {
@@ -267,7 +260,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
         const republicanPercent = { percent: properties.PRES16R / totalVotes, party: 'R' };
         const democratPercent = { percent: properties.PRES16D / totalVotes, party: 'D' };
         const independentPercent = { percent: properties.PRES16I / totalVotes, party: 'I' };
-        console.log([republicanPercent, democratPercent, independentPercent]);
 
         return [republicanPercent, democratPercent, independentPercent].reduce((prev: any, cur: any) => prev.percent < cur.percent ? cur : prev);
     }

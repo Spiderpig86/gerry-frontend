@@ -34,7 +34,7 @@ export class RightSidebar extends React.Component {
                 height: '100%'
             },
             bmMenu: {
-                background: '#373a47',
+                background: '#fff',
                 padding: '2.5em 1.5em 0',
                 fontSize: '1.15em'
             },
@@ -53,13 +53,60 @@ export class RightSidebar extends React.Component {
             }
         };
         return (
-            <Menu right styles={ rightSidebarStyles }>
-                <a key="0" href=""><i className="fa fa-fw fa-star-o" /><span>Favorites</span></a>
-                <a key="1" href=""><i className="fa fa-fw fa-bell-o" /><span>Alerts</span></a>
-                <a key="2" href=""><i className="fa fa-fw fa-envelope-o" /><span>Messages</span></a>
-                <a key="3" href=""><i className="fa fa-fw fa-comment-o" /><span>Comments</span></a>
-                <a key="4" href=""><i className="fa fa-fw fa-bar-chart-o" /><span>Analytics</span></a>
-                <a key="5" href=""><i className="fa fa-fw fa-newspaper-o" /><span>Reading List</span></a>
+            <Menu right width={'500px'} styles={ rightSidebarStyles }>
+                <h3>N/A Precinct Data</h3>
+
+                <h5>2016 Election</h5>
+
+                <p><b>Presidential</b></p>
+                <p><b>Democratic Votes:</b></p>
+                <p><b>Republican Votes:</b></p>
+                <p><b>Independent Votes:</b></p>
+
+                <p><b>Senatorial</b></p>
+                <p><b>Democratic Votes:</b></p>
+                <p><b>Republican Votes:</b></p>
+                <p><b>Independent Votes:</b></p>
+
+                <p><b>Gubernatorial</b></p>
+                <p><b>Democratic Votes:</b></p>
+                <p><b>Republican Votes:</b></p>
+                <p><b>Independent Votes:</b></p>
+
+                <h5>Demographics</h5>
+                <p><b>Non-Hispanic White:</b></p>
+                <p><b>Non-Hispanic African Americans:</b></p>
+                <p><b>Non-Hispanic Native Americans:</b></p>
+                <p><b>Non-Hispanic Asian:</b></p>
+                <p><b>Non-Hispanic Pacific Islander:</b></p>
+                <p><b>Non-Hispanic Other:</b></p>
+                <p><b>Non-Hispanic Biracial:</b></p>
+                
+                <p><b>Hispanic:</b></p>
+                <p><b>Hispanic White:</b></p>
+                <p><b>Hispanic African Americans:</b></p>
+                <p><b>Hispanic Native Americans:</b></p>
+                <p><b>Hispanic Asian:</b></p>
+                <p><b>Hispanic Pacific Islander:</b></p>
+                <p><b>Hispanic Other:</b></p>
+                <p><b>Hispanic Biracial:</b></p>
+
+                <h5>Voting Age</h5>
+                <p><b>Voting Age White:</b></p>
+                <p><b>Voting Age African Americans:</b></p>
+                <p><b>Voting Age Native Americans:</b></p>
+                <p><b>Voting Age Asian:</b></p>
+                <p><b>Voting Age Pacific Islander:</b></p>
+                <p><b>Voting Age Other:</b></p>
+                <p><b>Voting Age Biracial:</b></p>
+
+                <h5>Precinct Properties</h5>
+                <p><b>Precinct Name:</b></p>
+                <p><b>Sub-precinct Number:</b></p>
+                <p><b>Municipality Name:</b></p>
+                <p><b>County Name:</b></p>
+                <p><b>Jurisdiction Name:</b></p>
+                <p><b>Congressional District ID:</b></p>
             </Menu>
         );
     }
