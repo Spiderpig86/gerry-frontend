@@ -3,7 +3,10 @@ import * as React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
-import { CustomTab } from '../';
+import { CustomTab, ElectionsTabPanel } from '../';
+import { DemographicsTabPanel } from '../DemographicsTabPanel';
+import { VotingAgeTabPanel } from '../VotingAgeTabPanel';
+import { PrecinctPropertiesTabPanel } from '../PrecinctPropertiesTabPanel';
 
 export class RightSidebar extends React.Component {
     render() {
@@ -35,15 +38,11 @@ export class RightSidebar extends React.Component {
             },
             bmMenu: {
                 background: '#fff',
-                padding: '2.5em 1.5em 0',
-                fontSize: '1.15em'
+                padding: '2.5rem 1.5rem 0',
+                fontSize: '1rem'
             },
             bmMorphShape: {
                 fill: '#373a47'
-            },
-            bmItemList: {
-                color: '#b8b7ad',
-                padding: '0.8em'
             },
             bmItem: {
                 display: 'inline-block'
@@ -56,57 +55,26 @@ export class RightSidebar extends React.Component {
             <Menu right width={'500px'} styles={ rightSidebarStyles }>
                 <h3>N/A Precinct Data</h3>
 
-                <h5>2016 Election</h5>
-
-                <p><b>Presidential</b></p>
-                <p><b>Democratic Votes:</b></p>
-                <p><b>Republican Votes:</b></p>
-                <p><b>Independent Votes:</b></p>
-
-                <p><b>Senatorial</b></p>
-                <p><b>Democratic Votes:</b></p>
-                <p><b>Republican Votes:</b></p>
-                <p><b>Independent Votes:</b></p>
-
-                <p><b>Gubernatorial</b></p>
-                <p><b>Democratic Votes:</b></p>
-                <p><b>Republican Votes:</b></p>
-                <p><b>Independent Votes:</b></p>
-
-                <h5>Demographics</h5>
-                <p><b>Non-Hispanic White:</b></p>
-                <p><b>Non-Hispanic African Americans:</b></p>
-                <p><b>Non-Hispanic Native Americans:</b></p>
-                <p><b>Non-Hispanic Asian:</b></p>
-                <p><b>Non-Hispanic Pacific Islander:</b></p>
-                <p><b>Non-Hispanic Other:</b></p>
-                <p><b>Non-Hispanic Biracial:</b></p>
-                
-                <p><b>Hispanic:</b></p>
-                <p><b>Hispanic White:</b></p>
-                <p><b>Hispanic African Americans:</b></p>
-                <p><b>Hispanic Native Americans:</b></p>
-                <p><b>Hispanic Asian:</b></p>
-                <p><b>Hispanic Pacific Islander:</b></p>
-                <p><b>Hispanic Other:</b></p>
-                <p><b>Hispanic Biracial:</b></p>
-
-                <h5>Voting Age</h5>
-                <p><b>Voting Age White:</b></p>
-                <p><b>Voting Age African Americans:</b></p>
-                <p><b>Voting Age Native Americans:</b></p>
-                <p><b>Voting Age Asian:</b></p>
-                <p><b>Voting Age Pacific Islander:</b></p>
-                <p><b>Voting Age Other:</b></p>
-                <p><b>Voting Age Biracial:</b></p>
-
-                <h5>Precinct Properties</h5>
-                <p><b>Precinct Name:</b></p>
-                <p><b>Sub-precinct Number:</b></p>
-                <p><b>Municipality Name:</b></p>
-                <p><b>County Name:</b></p>
-                <p><b>Jurisdiction Name:</b></p>
-                <p><b>Congressional District ID:</b></p>
+                <Tabs>
+                    <TabList>
+                        <CustomTab>Election</CustomTab>
+                        <CustomTab>Demographics</CustomTab>
+                        <CustomTab>Voting Age</CustomTab>
+                        <CustomTab>Properties</CustomTab>
+                    </TabList>
+                    <TabPanel>
+                        <ElectionsTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <DemographicsTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <VotingAgeTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <PrecinctPropertiesTabPanel />
+                    </TabPanel>
+                </Tabs>
             </Menu>
         );
     }

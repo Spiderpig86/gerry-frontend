@@ -14,7 +14,7 @@ export class LeftSidebar extends React.Component {
             <Menu width={'500px'}>
                 <h1 className='px-3'>Gerry</h1>
                 <Tabs>
-                    <TabList className='px-3'>
+                    <TabList>
                         <CustomTab>Inputs</CustomTab>
                         <CustomTab>Logs</CustomTab>
                         <CustomTab>Statistics</CustomTab>
