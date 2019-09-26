@@ -20,7 +20,9 @@ interface IMapViewState {
     stateBorders: any[]
     selectedState: string
     precincts: any;
+    map: Map;
     isOpen: boolean;
+    zoom: number;
     
     mapProps: {
         demographicsProps: IDemographicsTabProps;
@@ -37,6 +39,8 @@ export class MapView extends React.Component<{}, IMapViewState> {
         selectedState: 'UT',
         precincts: null,
         isOpen: false,
+        map: null,
+        zoom: 5,
         mapProps: {
             demographicsProps: null,
             electionsProps: null,
@@ -59,6 +63,216 @@ export class MapView extends React.Component<{}, IMapViewState> {
         this.setState({
             precincts: precincts.data.geometry
         });
+    }
+
+    onEachFeature(feature: any, layer: any) {
+        layer.on({
+            click: this.showPrecinctData.bind(this)
+        });
+    }
+
+    showPopup(feature: any, layer: any) {
+        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`
+        layer.bindPopup(popupContent);
+    }
+
+    showPrecinctData(feature: any, layer: any) {
+        const properties = feature.target.feature.properties;
+        console.log(properties);
+        const electionsProps: IElectionsTabProps = {
+            presidentialResults: {
+                democraticVotes: properties.PRES16D,
+                republicanVotes: properties.PRES16R,
+                independentVotes: properties.PRES16I
+            },
+            senatorialResults: {
+                democraticVotes: properties.SEN16D,
+                republicanVotes: properties.SEN16R,
+            },
+            gubernatorialResults: {
+                democraticVotes: properties.GOV16D,
+                republicanVotes: properties.GOV16R,
+            }
+        };
+        const demographicsProps: IDemographicsTabProps = {
+            totalPopulation: properties.TOTPOP,
+            nonHispanicDemographics: {
+                White: properties.NH_WHITE,
+                AfricanAmerican: properties.NH_BLACK,
+                Asian: properties.NH_ASIAN,
+                NativeAmericans: properties.NH_AMIN,
+                PacificIslander: properties.NH_NHPI,
+                Other: properties.NH_OTHER,
+                Biracial: properties.NH_2MORE
+            },
+            hispanicDemographics: {
+                White: properties.H_WHITE,
+                AfricanAmerican: properties.H_BLACK,
+                Asian: properties.H_ASIAN,
+                NativeAmericans: properties.H_AMIN,
+                PacificIslander: properties.H_NHPI,
+                Other: properties.H_OTHER,
+                Biracial: properties.H_2MORE,
+                Hispanic: properties.HISP
+            }
+        };
+        const votingAgeProps: IVotingAgeTabProps = {
+            totalVotingPopulation: properties.VAP,
+            votingAgeDemographics: {
+                White: properties.WVAP,
+                AfricanAmerican: properties.BVAP,
+                Hispanic: properties.HVAP,
+                NativeAmericans: properties.AMINVAP,
+                Asian: properties.ASIANVAP,
+                PacificIslander: properties.NHPIVAP,
+                Other: properties.OTHERVAP,
+                Biracial: properties['2MOREVAP']
+            }
+        };
+        const precinctProps: IPrecinctPropertiesTabProps = {
+            precinctName: properties.PrcncID,
+            subPrecinctNumber: properties.SbPrcnc,
+            municipalityName: properties.AliasNm,
+            countyName: properties.cnty_nm,
+            jurisdictionName: properties.jrsdctn,
+            congressionalDistrictId: properties.CD
+        }
+        this.setState({
+            isOpen: true,
+            mapProps: {
+                electionsProps,
+                demographicsProps,
+                votingAgeProps,
+                precinctProps
+            }
+        });
+    }
+
+    onMouseHover(layer: any) {
+        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`
+        layer.target.bindPopup(popupContent);
+        layer.target.openPopup(layer.latlng);
+    }
+
+    onMouseHoverPrecinct(layer: any) {
+        const properties: any = layer.layer.feature.properties;
+        const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
+            <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
+            <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
+            <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
+            <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
+            <li><b>African American Population:</b> ${Math.round(properties.NH_BLACK)}</li>
+            <li><b>Asian Population:</b> ${Math.round(properties.NH_ASIAN)}</li>
+            <li><b>Hispanic Population:</b> ${Math.round(properties.HISP)}</li>
+            <li><b>Native American Population:</b> ${Math.round(properties.NH_AMIN)}</li>
+            <li><b>Other Population:</b> ${Math.round(properties.NH_OTHER)}</li>
+            <li><b>Pacific Islander Population:</b> ${Math.round(properties.NH_NHPI)}</li>
+            <li><b>Non-Hispanic White Population:</b> ${Math.round(properties.NH_WHITE)}</li>
+        </ul></Popup>`
+        layer.target.bindPopup(popupContent);
+        layer.target.openPopup(layer.latlng);
+    }
+
+    onZoom(e) {
+        console.log(e);
+        this.setState({
+            zoom: this.state.map.viewport.zoom
+        });
+    }
+
+    render() {
+        const position = new LatLng(40.3, -96.0);
+
+        // TODO: Split menus into their own components
+        return (
+            <div className="container-fluid d-flex">
+                
+                <LeftSidebar />
+                <RightSidebar {...this.state.mapProps} mapView={this} isOpen={this.state.isOpen}/>
+                
+                <Map 
+                    className="row flex-fill"
+                    ref={(ref) => { this.state.map = ref }}
+                    center={position}
+                    zoomControl={false}
+                    zoom={5}
+                    style={{ height: '700px' }}
+                    animate={true}
+                    easeLinearly={true}
+                    onZoomEnd={this.onZoom.bind(this)}
+                >
+                    <TileLayer
+                        url={MAP_BOX_ENDPOINT + MAP_BOX_TOKEN}
+                        attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
+                    />
+                    <LayersControl position="bottomright">
+                        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
+                            <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                            />
+                        </LayersControl.BaseLayer>
+                        <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
+                            <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                        </LayersControl.BaseLayer>
+                        <LayersControl.BaseLayer checked name="Mapbox Light">
+                            <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
+                            />
+                        </LayersControl.BaseLayer>
+                        <LayersControl.BaseLayer name="Mapbox Dark">
+                            <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
+                            />
+                        </LayersControl.BaseLayer>
+                        <LayersControl.BaseLayer name="Mapbox Streets">
+                            <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
+                            />
+                        </LayersControl.BaseLayer>
+                    </LayersControl>
+                    <ZoomControl position={'bottomright'} />
+                    {
+                        this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
+
+                            if (data.state === this.state.selectedState && this.state.precincts && this.state.zoom > 5) {
+                                return (
+                                    <div key={'selected'}>
+                                        {/* <GeoJSON
+                                            data={UT_Districts as GeoJsonObject}
+                                            // style={this.getDistrictStyle.bind(this)}
+                                            style={{ color: '#222' }}
+                                            onEachFeature={this.showPopup}
+                                            onMouseOver={this.onMouseHover}
+                                        /> */}
+                                        <GeoJSON
+                                            data={this.state.precincts as GeoJsonObject}
+                                            style={this.getPrecinctStyle.bind(this)}
+                                            onMouseOver={this.onMouseHoverPrecinct}
+                                            onEachFeature={this.onEachFeature.bind(this)}
+                                        />
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <GeoJSON
+                                        key={data.state}
+                                        data={data.data as GeoJsonObject}
+                                        style={this.getStateStyle.bind(this)}
+                                    />
+                                )
+                            }
+                        })
+                    }
+                </Map>
+            </div>
+        );
     }
 
     getStateStyle(feature: any, layer: any): PathOptions {
@@ -147,203 +361,6 @@ export class MapView extends React.Component<{}, IMapViewState> {
                     fillOpacity: 0,
                 };
         }
-    }
-
-    onEachFeature(feature: any, layer: any) {
-        layer.on({
-            click: this.showPrecinctData.bind(this)
-        });
-    }
-
-    showPopup(feature: any, layer: any) {
-        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`
-        layer.bindPopup(popupContent);
-    }
-
-    showPrecinctData(feature: any, layer: any) {
-        const properties = feature.target.feature.properties;
-        console.log(properties);
-        const electionsProps: IElectionsTabProps = {
-            presidentialResults: {
-                democraticVotes: properties.PRES16D,
-                republicanVotes: properties.PRES16R,
-                independentVotes: properties.PRES16I
-            },
-            senatorialResults: {
-                democraticVotes: properties.SEN16D,
-                republicanVotes: properties.SEN16R,
-            },
-            gubernatorialResults: {
-                democraticVotes: properties.GOV16D,
-                republicanVotes: properties.GOV16R,
-            }
-        };
-        const demographicsProps: IDemographicsTabProps = {
-            nonHispanicDemographics: {
-                White: properties.NH_WHITE,
-                AfricanAmerican: properties.NH_BLACK,
-                Asian: properties.NH_ASIAN,
-                NativeAmericans: properties.NH_AMIN,
-                PacificIslander: properties.NH_NHPI,
-                Other: properties.NH_OTHER,
-                Biracial: properties.NH_2MORE
-            },
-            hispanicDemographics: {
-                White: properties.H_WHITE,
-                AfricanAmerican: properties.H_BLACK,
-                Asian: properties.H_ASIAN,
-                NativeAmericans: properties.H_AMIN,
-                PacificIslander: properties.H_NHPI,
-                Other: properties.H_OTHER,
-                Biracial: properties.H_2MORE,
-                Hispanic: properties.HISP
-            }
-        };
-        const votingAgeProps: IVotingAgeTabProps = {
-            votingAgeDemographics: {
-                White: properties.WVAP,
-                AfricanAmerican: properties.BVAP,
-                Hispanic: properties.HVAP,
-                NativeAmericans: properties.AMINVAP,
-                Asian: properties.ASIANVAP,
-                PacificIslander: properties.NHPIVAP,
-                Other: properties.OTHERVAP,
-                Biracial: properties['2MOREVAP']
-            }
-        };
-        const precinctProps: IPrecinctPropertiesTabProps = {
-            precinctName: properties.PrcncID,
-            subPrecinctNumber: properties.SbPrcnc,
-            municipalityName: properties.AliasNm,
-            countyName: properties.cnty_nm,
-            jurisdictionName: properties.jrsdctn,
-            congressionalDistrictId: properties.CD
-        }
-        this.setState({
-            isOpen: true,
-            mapProps: {
-                electionsProps,
-                demographicsProps,
-                votingAgeProps,
-                precinctProps
-            }
-        });
-    }
-
-    onMouseHover(layer: any) {
-        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`
-        layer.target.bindPopup(popupContent);
-        layer.target.openPopup(layer.latlng);
-    }
-
-    resetLeftSidebarHook() {
-        this.setState({
-            isOpen: false
-        });
-    }
-
-    onMouseHoverPrecinct(layer: any) {
-        const properties: any = layer.layer.feature.properties;
-        const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
-            <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
-            <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
-            <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
-            <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
-            <li><b>African American Population:</b> ${Math.round(properties.NH_BLACK)}</li>
-            <li><b>Asian Population:</b> ${Math.round(properties.NH_ASIAN)}</li>
-            <li><b>Hispanic Population:</b> ${Math.round(properties.HISP)}</li>
-            <li><b>Native American Population:</b> ${Math.round(properties.NH_AMIN)}</li>
-            <li><b>Other Population:</b> ${Math.round(properties.NH_OTHER)}</li>
-            <li><b>Pacific Islander Population:</b> ${Math.round(properties.NH_NHPI)}</li>
-            <li><b>Non-Hispanic White Population:</b> ${Math.round(properties.NH_WHITE)}</li>
-        </ul></Popup>`
-        layer.target.bindPopup(popupContent);
-        layer.target.openPopup(layer.latlng);
-    }
-
-    render() {
-        const position = new LatLng(40.3, -96.0);
-
-        // TODO: Split menus into their own components
-        return (
-            <div className="container-fluid d-flex">
-                
-                <LeftSidebar />
-                <RightSidebar {...this.state.mapProps} closeSideBarHook={this.resetLeftSidebarHook} mapView={this} isOpen={this.state.isOpen}/>
-                
-                <Map className="row flex-fill" center={position} zoomControl={false} zoom={5} style={{ height: '700px' }} animate={true} easeLinearly={true}>
-                    <TileLayer
-                        url={MAP_BOX_ENDPOINT + MAP_BOX_TOKEN}
-                        attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
-                    />
-                    <LayersControl position="bottomright">
-                        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-                            <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
-                            <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer checked name="Mapbox Light">
-                            <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="Mapbox Dark">
-                            <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="Mapbox Streets">
-                            <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
-                            />
-                        </LayersControl.BaseLayer>
-                    </LayersControl>
-                    <ZoomControl position={'bottomright'} />
-                    {
-                        this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
-
-                            if (data.state === this.state.selectedState && this.state.precincts) {
-                                return (
-                                    <div key={'selected'}>
-                                        {/* <GeoJSON
-                                            data={UT_Districts as GeoJsonObject}
-                                            // style={this.getDistrictStyle.bind(this)}
-                                            style={{ color: '#222' }}
-                                            onEachFeature={this.showPopup}
-                                            onMouseOver={this.onMouseHover}
-                                        /> */}
-                                        <GeoJSON
-                                            data={this.state.precincts as GeoJsonObject}
-                                            style={this.getPrecinctStyle.bind(this)}
-                                            onMouseOver={this.onMouseHoverPrecinct}
-                                            onEachFeature={this.onEachFeature.bind(this)}
-                                        />
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <GeoJSON
-                                        key={data.state}
-                                        data={data.data as GeoJsonObject}
-                                        style={this.getStateStyle.bind(this)}
-                                    />
-                                )
-                            }
-                        })
-                    }
-                </Map>
-            </div>
-        );
     }
 
     private getMajorityParty(properties: any): { party: string, percent: number } {

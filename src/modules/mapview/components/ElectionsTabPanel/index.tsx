@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Placeholder } from '../../../../global_components';
+
 export interface IElectionsTabProps {
     presidentialResults: IVoteData;
     senatorialResults: IVoteData;
@@ -15,7 +17,7 @@ export interface IVoteData {
 export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {}> {
     render() {
         if (!this.props.presidentialResults || !this.props.senatorialResults || !this.props.gubernatorialResults) {
-            return ``;
+            return <Placeholder></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>

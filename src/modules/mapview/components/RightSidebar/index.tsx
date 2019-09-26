@@ -13,7 +13,6 @@ import { RightSidebarStyles } from '../../../../global_components';
 
 interface IRightSidebarProps {
     isOpen: boolean;
-    closeSideBarHook: () => void;
     mapView: MapView;
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;

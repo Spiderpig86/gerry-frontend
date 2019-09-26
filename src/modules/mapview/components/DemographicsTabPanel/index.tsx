@@ -1,17 +1,25 @@
 import * as React from 'react';
+
 import { IDemographics } from '../../../../models';
+import { Placeholder } from '../../../../global_components';
 
 export interface IDemographicsTabProps {
     hispanicDemographics: IDemographics;
     nonHispanicDemographics: IDemographics;
+    totalPopulation?: number;
 }
 
 export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabProps, {}> {
     render() {
+        if (!this.props.hispanicDemographics || !this.props.nonHispanicDemographics) {
+            return <Placeholder></Placeholder>;
+        }
         return (
             <div style={{ maxHeight: '80vh', overflow: 'auto', padding: '0 1.5rem' }}>
                 <br />
                 <h4>Demographics</h4>
+
+                <p><b>Total Population: </b> {Math.round(this.props.totalPopulation) || 'N/A'}</p>
                 <p>Non-Hispanic White: {Math.round(this.props.nonHispanicDemographics.White)}</p>
                 <p>Non-Hispanic African Americans: {Math.round(this.props.nonHispanicDemographics.AfricanAmerican)}</p>
                 <p>Non-Hispanic Native Americans: {Math.round(this.props.nonHispanicDemographics.NativeAmericans)}</p>

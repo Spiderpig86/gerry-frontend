@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Placeholder } from '../../../../global_components';
+
 export interface IPrecinctPropertiesTabProps {
     precinctName?: string;
     subPrecinctNumber?: number;
@@ -11,6 +13,9 @@ export interface IPrecinctPropertiesTabProps {
 
 export class PrecinctPropertiesTabPanel extends React.PureComponent<IPrecinctPropertiesTabProps, {}> {
     render() {
+        if (!this.props) {
+            return <Placeholder></Placeholder>;
+        }
         return (
             <div style={{ padding: '0 1.5rem' }}>
                 <br />
