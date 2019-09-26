@@ -8,6 +8,10 @@ import { GeoJsonObject } from 'geojson';
 import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
 import { CustomTab, LeftSidebar, RightSidebar } from './components';
 import { StateBordersApi, States } from '../../api/state-borders';
+import { IDemographicsTabProps } from './components/DemographicsTabPanel';
+import { IElectionsTabProps } from './components/ElectionsTabPanel';
+import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
+import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 
 import './mapview.scss';
 import * as UT_Districts from '../../data/UT-demo.json';
@@ -17,6 +21,13 @@ interface IMapViewState {
     selectedState: string
     precincts: any;
     isOpen: boolean;
+    
+    mapProps: {
+        demographicsProps: IDemographicsTabProps;
+        electionsProps: IElectionsTabProps;
+        precinctProps: IPrecinctPropertiesTabProps;
+        votingAgeProps: IVotingAgeTabProps;
+    }
 }
 
 export class MapView extends React.Component<{}, IMapViewState> {
@@ -25,7 +36,13 @@ export class MapView extends React.Component<{}, IMapViewState> {
         stateBorders: [],
         selectedState: 'UT',
         precincts: null,
-        isOpen: false
+        isOpen: false,
+        mapProps: {
+            demographicsProps: null,
+            electionsProps: null,
+            precinctProps: null,
+            votingAgeProps: null
+        }
     };
 
     async componentDidMount() {
@@ -144,9 +161,72 @@ export class MapView extends React.Component<{}, IMapViewState> {
     }
 
     showPrecinctData(feature: any, layer: any) {
-        console.log(this.state);
+        const properties = feature.target.feature.properties;
+        console.log(properties);
+        const electionsProps: IElectionsTabProps = {
+            presidentialResults: {
+                democraticVotes: properties.PRES16D,
+                republicanVotes: properties.PRES16R,
+                independentVotes: properties.PRES16I
+            },
+            senatorialResults: {
+                democraticVotes: properties.SEN16D,
+                republicanVotes: properties.SEN16R,
+            },
+            gubernatorialResults: {
+                democraticVotes: properties.GOV16D,
+                republicanVotes: properties.GOV16R,
+            }
+        };
+        const demographicsProps: IDemographicsTabProps = {
+            nonHispanicDemographics: {
+                White: properties.NH_WHITE,
+                AfricanAmerican: properties.NH_BLACK,
+                Asian: properties.NH_ASIAN,
+                NativeAmericans: properties.NH_AMIN,
+                PacificIslander: properties.NH_NHPI,
+                Other: properties.NH_OTHER,
+                Biracial: properties.NH_2MORE
+            },
+            hispanicDemographics: {
+                White: properties.H_WHITE,
+                AfricanAmerican: properties.H_BLACK,
+                Asian: properties.H_ASIAN,
+                NativeAmericans: properties.H_AMIN,
+                PacificIslander: properties.H_NHPI,
+                Other: properties.H_OTHER,
+                Biracial: properties.H_2MORE,
+                Hispanic: properties.HISP
+            }
+        };
+        const votingAgeProps: IVotingAgeTabProps = {
+            votingAgeDemographics: {
+                White: properties.WVAP,
+                AfricanAmerican: properties.BVAP,
+                Hispanic: properties.HVAP,
+                NativeAmericans: properties.AMINVAP,
+                Asian: properties.ASIANVAP,
+                PacificIslander: properties.NHPIVAP,
+                Other: properties.OTHERVAP,
+                Biracial: properties['2MOREVAP']
+            }
+        };
+        const precinctProps: IPrecinctPropertiesTabProps = {
+            precinctName: properties.PrcncID,
+            subPrecinctNumber: properties.SbPrcnc,
+            municipalityName: properties.AliasNm,
+            countyName: properties.cnty_nm,
+            jurisdictionName: properties.jrsdctn,
+            congressionalDistrictId: properties.CD
+        }
         this.setState({
-            isOpen: true
+            isOpen: true,
+            mapProps: {
+                electionsProps,
+                demographicsProps,
+                votingAgeProps,
+                precinctProps
+            }
         });
     }
 
@@ -189,7 +269,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
             <div className="container-fluid d-flex">
                 
                 <LeftSidebar />
-                <RightSidebar closeSideBarHook={this.resetLeftSidebarHook} mapView={this} isOpen={this.state.isOpen}/>
+                <RightSidebar {...this.state.mapProps} closeSideBarHook={this.resetLeftSidebarHook} mapView={this} isOpen={this.state.isOpen}/>
                 
                 <Map className="row flex-fill" center={position} zoomControl={false} zoom={5} style={{ height: '700px' }} animate={true} easeLinearly={true}>
                     <TileLayer
@@ -245,7 +325,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                         <GeoJSON
                                             data={this.state.precincts as GeoJsonObject}
                                             style={this.getPrecinctStyle.bind(this)}
-                                            // onMouseOver={this.onMouseHoverPrecinct}
+                                            onMouseOver={this.onMouseHoverPrecinct}
                                             onEachFeature={this.onEachFeature.bind(this)}
                                         />
                                     </div>

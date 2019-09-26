@@ -48,6 +48,14 @@ body {
     overflow: hidden !important;
 }
 
+.bm-menu-wrap {
+    max-width: 500px;
+}
+
+.bm-cross {
+    background-color: #bdc3c7;
+}
+
 .bm-item-list {
     display: flex;
     flex-direction: column;
@@ -57,3 +65,9 @@ body {
 /* SLIDER TOOLSTRIPS */
 .rc-tooltip { z-index: 1500; }
 .rc-slider-tooltip { z-index: 1500; }
+
+@media screen and (max-width: 768px) {
+    .bm-menu-wrap {
+        width: 100%;
+    }
+}

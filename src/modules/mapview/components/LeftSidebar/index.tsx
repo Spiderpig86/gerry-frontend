@@ -6,12 +6,13 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { CustomTab, InputTabPanel } from '../';
 import { AlgorithmPanel } from '../AlgorithmPanel';
 import { LogsTabPanel } from '../LogsTabPanel';
+import { LeftSidebarStyles } from '../../../../global_components';
 
 export class LeftSidebar extends React.Component {
 
     render() {
         return (
-            <Menu width={'500px'}>
+            <Menu styles={LeftSidebarStyles} width={'100%'}>
                 <h1 className='px-3'>Gerry</h1>
                 <Tabs>
                     <TabList className='px-3'>

@@ -9,3 +9,4 @@ export {
     checkIfAuthenticated
 } from './authentication/authentication';
 export { NotFound } from './notfound/notfound';
+export { LeftSidebarStyles, RightSidebarStyles } from './sidebar/sidebar';

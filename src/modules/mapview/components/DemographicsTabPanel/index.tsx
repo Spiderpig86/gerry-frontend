@@ -6,28 +6,28 @@ export interface IDemographicsTabProps {
     nonHispanicDemographics: IDemographics;
 }
 
-export class DemographicsTabPanel extends React.PureComponent<{}, {}> {
+export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabProps, {}> {
     render() {
         return (
             <div style={{ maxHeight: '80vh', overflow: 'auto', padding: '0 1.5rem' }}>
                 <br />
                 <h4>Demographics</h4>
-                <p>Non-Hispanic White:</p>
-                <p>Non-Hispanic African Americans:</p>
-                <p>Non-Hispanic Native Americans:</p>
-                <p>Non-Hispanic Asian:</p>
-                <p>Non-Hispanic Pacific Islander:</p>
-                <p>Non-Hispanic Other:</p>
-                <p>Non-Hispanic Biracial:</p>
+                <p>Non-Hispanic White: {Math.round(this.props.nonHispanicDemographics.White)}</p>
+                <p>Non-Hispanic African Americans: {Math.round(this.props.nonHispanicDemographics.AfricanAmerican)}</p>
+                <p>Non-Hispanic Native Americans: {Math.round(this.props.nonHispanicDemographics.NativeAmericans)}</p>
+                <p>Non-Hispanic Asian: {Math.round(this.props.nonHispanicDemographics.Asian)}</p>
+                <p>Non-Hispanic Pacific Islander: {Math.round(this.props.nonHispanicDemographics.PacificIslander)}</p>
+                <p>Non-Hispanic Other: {Math.round(this.props.nonHispanicDemographics.Other)}</p>
+                <p>Non-Hispanic Biracial: {Math.round(this.props.nonHispanicDemographics.Biracial)}</p>
                 <br />
-                <p>Hispanic:</p>
-                <p>Hispanic White:</p>
-                <p>Hispanic African Americans:</p>
-                <p>Hispanic Native Americans:</p>
-                <p>Hispanic Asian:</p>
-                <p>Hispanic Pacific Islander:</p>
-                <p>Hispanic Other:</p>
-                <p>Hispanic Biracial:</p>
+                <p>Hispanic: {Math.round(this.props.hispanicDemographics.Hispanic)}</p>
+                <p>Hispanic White: {Math.round(this.props.hispanicDemographics.White)}</p>
+                <p>Hispanic African Americans: {Math.round(this.props.hispanicDemographics.AfricanAmerican)}</p>
+                <p>Hispanic Native Americans: {Math.round(this.props.hispanicDemographics.NativeAmericans)}</p>
+                <p>Hispanic Asian: {Math.round(this.props.hispanicDemographics.Asian)}</p>
+                <p>Hispanic Pacific Islander: {Math.round(this.props.hispanicDemographics.PacificIslander)}</p>
+                <p>Hispanic Other: {Math.round(this.props.hispanicDemographics.Other)}</p>
+                <p>Hispanic Biracial: {Math.round(this.props.hispanicDemographics.Biracial)}</p>
             </div>
         )
     }

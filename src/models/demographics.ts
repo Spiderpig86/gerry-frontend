@@ -7,6 +7,7 @@
 export interface IDemographics {
     White: number;
     AfricanAmerican: number;
+    Hispanic?: number;
     NativeAmericans: number;
     Asian: number;
     PacificIslander: number;
