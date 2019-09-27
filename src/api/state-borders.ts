@@ -11,22 +11,34 @@ export enum States {
 
 export class StateBordersApi {
 
-    public async fetchPrecincts(): Promise<any> {
-        try {
-            const data = await Axios.get(`./api/UT2.json`);
-            console.log(data);
-            return {
-                status: 'OK',
-                data: {
-                    type: 'Feature',
-                    geometry: data.data
-                }
-            };
-        } catch (e) {
-            console.log(e);
+    public async fetchPrecincts(state: string): Promise<any> {
+
+        if (state === 'UT') {
+            try {
+                const data = await Axios.get(`./api/UT2.json`);
+                console.log(data);
+                return {
+                    status: 'OK',
+                    data: {
+                        type: 'Feature',
+                        geometry: data.data
+                    }
+                };
+            } catch (e) {
+                console.log(e);
+                return {
+                    status: 'ERR',
+                    data: {
+                        geometry: null
+                    }
+                };
+            }
+        } else {
             return {
                 status: 'ERR',
-                data: null
+                data: {
+                    geometry: null
+                }
             };
         }
     }

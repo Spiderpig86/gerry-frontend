@@ -1,13 +1,16 @@
 import * as React from 'react';
 import * as Color from 'color';
+import * as mapActionCreators from '../../redux/modules/state/state';
 
-import { Map, Marker, Popup, TileLayer, GeoJSON, LayersControl, ZoomControl } from 'react-leaflet';
+import { Map, TileLayer, GeoJSON, LayersControl, ZoomControl } from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
 
 import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
-import { CustomTab, LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
+import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
 import { StateBordersApi, States } from '../../api/state-borders';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
@@ -16,6 +19,11 @@ import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 
 import './mapview.scss';
 import * as UT_Districts from '../../data/UT-demo.json';
+
+interface IMapViewProps {
+    selectedState: string;
+    precincts: any;
+}
 
 interface IMapViewState {
     stateBorders: any[]
@@ -35,9 +43,9 @@ interface IMapViewState {
     mapTooltip: IMapTooltipProps;
 }
 
-export class MapView extends React.Component<{}, IMapViewState> {
+export class MapViewComponent extends React.Component<IMapViewProps, IMapViewState> {
 
-    state = {
+    state: IMapViewState = {
         stateBorders: [],
         selectedState: 'UT',
         precincts: null,
@@ -67,7 +75,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
             stateBorders: data
         }));
 
-        const precincts: any = await statePopulator.fetchPrecincts();
+        const precincts: any = await statePopulator.fetchPrecincts(this.props.selectedState);
         this.setState({
             precincts: precincts.data.geometry
         });
@@ -273,8 +281,10 @@ export class MapView extends React.Component<{}, IMapViewState> {
                     <ZoomControl position={'bottomright'} />
                     {
                         this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
+                            console.log(this.props);
 
-                            if (data.state === this.state.selectedState && this.state.precincts && this.state.zoom > 5) {
+                            if (data.state === this.props.selectedState && this.props.precincts && this.state.zoom > 5) {
+                                console.log(this.props.precincts);
                                 return (
                                     <div key={'selected'}>
                                         {/* <GeoJSON
@@ -285,7 +295,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                             onMouseOver={this.onMouseHover}
                                         /> */}
                                         <GeoJSON
-                                            data={this.state.precincts as GeoJsonObject}
+                                            data={this.props.precincts as GeoJsonObject}
                                             style={this.getPrecinctStyle.bind(this)}
                                             onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                             onMouseOut={this.onMouseLeavePrecinct.bind(this)}
@@ -418,3 +428,10 @@ export class MapView extends React.Component<{}, IMapViewState> {
         return [republicanPercent, democratPercent, independentPercent].reduce((prev: any, cur: any) => prev.percent < cur.percent ? cur : prev);
     }
 }
+
+export const MapView = connect(
+    (state: any) => {
+        return ({ selectedState: state.stateReducer.selectedState, precincts: state.stateReducer.precincts })
+    },
+    (dispatch) => bindActionCreators(mapActionCreators, dispatch)
+)(MapViewComponent);

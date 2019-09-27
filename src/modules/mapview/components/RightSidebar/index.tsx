@@ -7,13 +7,13 @@ import { CustomTab, ElectionsTabPanel } from '../';
 import { DemographicsTabPanel, IDemographicsTabProps } from '../DemographicsTabPanel';
 import { VotingAgeTabPanel, IVotingAgeTabProps } from '../VotingAgeTabPanel';
 import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../PrecinctPropertiesTabPanel';
-import { MapView } from '../../mapview';
+import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
 
 interface IRightSidebarProps {
     isOpen: boolean;
-    mapView: MapView;
+    mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;

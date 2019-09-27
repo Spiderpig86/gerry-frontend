@@ -3,11 +3,12 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Routes } from 'global_components';
 import { users } from './redux/modules/users/users';
+import { stateReducer } from './redux/modules/state/state';
 
 import './styles/global.scss';
 import { StateBordersApi } from './api/state-borders';
@@ -18,7 +19,8 @@ import { faPlay, faPause, faSquare } from '@fortawesome/free-solid-svg-icons';
 
 library.add(fas, faPlay, faPause, faSquare);
 
-const store = createStore(users, applyMiddleware(thunk));
+const rootReducer = combineReducers({users, stateReducer});
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>

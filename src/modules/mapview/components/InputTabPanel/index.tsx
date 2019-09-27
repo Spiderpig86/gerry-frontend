@@ -1,7 +1,10 @@
 import * as React from 'react';
+import * as mapActionCreators from '../../../../redux/modules/state/state';
 
-import { Row, Dropdown, DropdownButton, Button, Form } from 'react-bootstrap'
+import { Row, Dropdown, DropdownButton, Button, Form } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip, Handle, Range } from 'rc-slider';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
@@ -9,7 +12,13 @@ import '../../../../styles/tooltip.scss';
 const TooltipRange = createSliderWithTooltip(Range);
 const TooltipSlider = createSliderWithTooltip(Slider);
 
-export class InputTabPanel extends React.Component {
+
+interface IInputTabPanelProps {
+    selectedState: string;
+    setSelectedState: (state: string) => void;
+}
+
+export class InputTabPanelComponent extends React.Component<IInputTabPanelProps, {}> {
 
     render() {
         return (
@@ -17,9 +26,9 @@ export class InputTabPanel extends React.Component {
                 <div className="py-3">
                     <h4>State Selection</h4>
                     <DropdownButton id="dropdown-basic-button" title="Select State">
-                        <Dropdown.Item onClick={() => {}}>California</Dropdown.Item>
-                        <Dropdown.Item onClick={() => {}}>Utah</Dropdown.Item>
-                        <Dropdown.Item onClick={() => {}}>Virginia</Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.props.setSelectedState('CA')}>California</Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.props.setSelectedState('UT')}>Utah</Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.props.setSelectedState('VA')}>Virginia</Dropdown.Item>
                     </DropdownButton>
                 </div>
 
@@ -142,3 +151,10 @@ export class InputTabPanel extends React.Component {
         );
     }
 }
+
+export const InputTabPanel = connect(
+    (state: any) => {
+        return ({ selectedState: state.selectedState });
+    },
+    (dispatch) => bindActionCreators(mapActionCreators, dispatch)
+)(InputTabPanelComponent);
