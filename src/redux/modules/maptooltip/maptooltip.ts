@@ -2,7 +2,6 @@ const SET_TOOLTIP_DATA = 'SET_TOOLTIP_DATA';
 
 export const setTooltipData = (data: any) => {
     return (dispatch: any) => {
-        console.log('aerg')
         dispatch(setTooltip(data));
     }
 }

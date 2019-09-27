@@ -21,11 +21,12 @@ interface IInputTabPanelProps {
 export class InputTabPanelComponent extends React.Component<IInputTabPanelProps, {}> {
 
     render() {
+        const dropdownTitle = `Selected State: ${ this.props.selectedState }`;
         return (
             <div className="px-4" style={{overflow: 'auto', maxHeight: '75vh'}}>
                 <div className="py-3">
                     <h4>State Selection</h4>
-                    <DropdownButton id="dropdown-basic-button" title="Select State">
+                    <DropdownButton id="dropdown-basic-button" title={dropdownTitle}>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('CA')}>California</Dropdown.Item>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('UT')}>Utah</Dropdown.Item>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('VA')}>Virginia</Dropdown.Item>
@@ -154,7 +155,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
 
 export const InputTabPanel = connect(
     (state: any) => {
-        return ({ selectedState: state.selectedState });
+        return ({ selectedState: state.stateReducer.selectedState });
     },
     (dispatch) => bindActionCreators(mapActionCreators, dispatch)
 )(InputTabPanelComponent);

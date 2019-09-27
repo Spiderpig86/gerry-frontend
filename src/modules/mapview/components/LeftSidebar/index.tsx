@@ -3,10 +3,12 @@ import * as React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
-import { CustomTab, InputTabPanel } from '../';
+import { InputTabPanel } from '../';
 import { AlgorithmPanel } from '../AlgorithmPanel';
 import { LogsTabPanel } from '../LogsTabPanel';
 import { LeftSidebarStyles } from '../../../../global_components';
+
+import '../../../../styles/cirrus/tabs.scss';
 
 export class LeftSidebar extends React.Component {
 
@@ -14,11 +16,11 @@ export class LeftSidebar extends React.Component {
         return (
             <Menu styles={LeftSidebarStyles} width={'100%'}>
                 <h1 className='px-3'>Gerry</h1>
-                <Tabs>
+                <Tabs className='tab-container'>
                     <TabList className='px-3'>
-                        <CustomTab>Inputs</CustomTab>
-                        <CustomTab>Logs</CustomTab>
-                        <CustomTab>Statistics</CustomTab>
+                        <Tab><h6>Inputs</h6></Tab>
+                        <Tab><h6>Logs</h6></Tab>
+                        <Tab><h6>Statistics</h6></Tab>
                     </TabList>
 
                     <TabPanel>

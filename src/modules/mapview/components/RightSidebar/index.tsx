@@ -3,13 +3,15 @@ import * as React from 'react';
 import { slide as Menu, slide } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
-import { CustomTab, ElectionsTabPanel } from '../';
+import { ElectionsTabPanel } from '../';
 import { DemographicsTabPanel, IDemographicsTabProps } from '../DemographicsTabPanel';
 import { VotingAgeTabPanel, IVotingAgeTabProps } from '../VotingAgeTabPanel';
 import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../PrecinctPropertiesTabPanel';
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
+
+import '../../../../styles/cirrus/tabs.scss';
 
 interface IRightSidebarProps {
     isOpen: boolean;
@@ -33,12 +35,12 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
             <Menu onStateChange={e => this.menuHandler.call(this, e) } isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'}>
                 <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
 
-                <Tabs>
+                <Tabs className='tab-container'>
                     <TabList className='px-3'>
-                        <CustomTab>Election</CustomTab>
-                        <CustomTab>Demographics</CustomTab>
-                        <CustomTab>Voting Age</CustomTab>
-                        <CustomTab>Properties</CustomTab>
+                        <Tab><h6>Election</h6></Tab>
+                        <Tab><h6>Demographics</h6></Tab>
+                        <Tab><h6>Voting Age</h6></Tab>
+                        <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
