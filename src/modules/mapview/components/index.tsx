@@ -9,4 +9,5 @@ export { PrecinctPropertiesTabPanel } from './PrecinctPropertiesTabPanel';
 export { VotingAgeTabPanel } from './VotingAgeTabPanel';
 
 export { AlgorithmPanel } from './AlgorithmPanel';
+export { StatisticsAccordionComponent } from './StatisticsAccordionComponent';
 export { MapTooltip, IMapTooltipProps } from './MapTooltip';

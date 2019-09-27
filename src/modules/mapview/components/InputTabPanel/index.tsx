@@ -23,7 +23,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
     render() {
         const dropdownTitle = `Selected State: ${ this.props.selectedState }`;
         return (
-            <div className="px-4" style={{overflow: 'auto', maxHeight: '75vh'}}>
+            <div className="px-4" style={{overflow: 'auto', maxHeight: '80vh'}}>
                 <div className="py-3">
                     <h4>State Selection</h4>
                     <DropdownButton id="dropdown-basic-button" title={dropdownTitle}>
@@ -32,6 +32,8 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                         <Dropdown.Item onClick={() => this.props.setSelectedState('VA')}>Virginia</Dropdown.Item>
                     </DropdownButton>
                 </div>
+
+                <br />
 
                 <h4>Algorithm Options</h4>
                 <div className="mb-5">
