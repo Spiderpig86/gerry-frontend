@@ -2,10 +2,12 @@ import * as React from 'react';
 
 import { Accordion, Card } from 'react-bootstrap';
 
+import './styles.scss';
+
 export class StatisticsAccordionComponent extends React.PureComponent {
     render() {
         return (
-            <Accordion>
+            <Accordion class='statistics-accordion'>
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
                         Demographics

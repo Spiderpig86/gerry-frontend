@@ -3,7 +3,9 @@
 @import "../../styles/variables";
 .navigation {
     .navbar-default {
-        background-color: white;
-        border-color: white;
+        background-color: transparent;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
     }
 }
