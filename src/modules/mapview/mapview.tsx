@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Color from 'color';
 import * as mapActionCreators from '../../redux/modules/state/state';
+import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import { Map, TileLayer, GeoJSON, LayersControl, ZoomControl } from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
@@ -23,6 +24,7 @@ import * as UT_Districts from '../../data/UT-demo.json';
 interface IMapViewProps {
     selectedState: string;
     precincts: any;
+    store: any;
 }
 
 interface IMapViewState {
@@ -74,11 +76,14 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
         ]).then(data => this.setState({
             stateBorders: data
         }));
+    }
 
-        const precincts: any = await statePopulator.fetchPrecincts(this.props.selectedState);
-        this.setState({
-            precincts: precincts.data.geometry
-        });
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.mapTooltip.statistics !== nextState.mapTooltip.statistics) {
+            return false;
+        }
+
+        return true;
     }
 
     onEachFeatureDistrict(feature: any, layer: any) {
@@ -100,7 +105,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
 
     showPrecinctData(feature: any, layer: any) {
         const properties = feature.target.feature.properties;
-        console.log(properties);
         const electionsProps: IElectionsTabProps = {
             presidentialResults: {
                 democraticVotes: properties.PRES16D,
@@ -178,14 +182,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
 
     onMouseHoverPrecinct(layer: any) {
         const properties: any = layer.layer.feature.properties;
-        // const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
-        //     <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
-        //     <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
-        //     <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
-        //     <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
-        // </ul></Popup>`
-        // layer.target.bindPopup(popupContent);
-        // layer.target.openPopup(layer.latlng);
         const toolTipProps = {
             title: 'Precinct Data',
             subtitle: `Precinct: ${properties.PrcncID}`,
@@ -195,19 +191,17 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                 {key: 'Independent Votes: ', value: `${properties.PRES16I}`},
             ]
         };
-        this.setState({
-            mapTooltip: toolTipProps
-        });
+        this.props.store.dispatch(setTooltipData(toolTipProps));
     }
 
     onMouseLeavePrecinct(layer: any) {
-        this.setState({
+        this.props.store.dispatch(setTooltipData({
             mapTooltip: {
                 title: null,
                 subtitle: null,
                 statistics: null
             }
-        });
+        }));
     }
 
     onZoom(e) {
@@ -219,7 +213,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
     render() {
         const position = new LatLng(40.3, -96.0);
 
-        // TODO: Split menus into their own components
         return (
             <div className="container-fluid d-flex">
                 
@@ -231,8 +224,7 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                     ref={(ref) => { this.state.map = ref }}
                     center={position}
                     zoomControl={false}
-                    zoom={5}
-                    style={{ height: '700px' }}
+                    zoom={4}
                     animate={true}
                     easeLinearly={true}
                     onZoomEnd={this.onZoom.bind(this)}
@@ -281,10 +273,8 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                     <ZoomControl position={'bottomright'} />
                     {
                         this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
-                            console.log(this.props);
 
                             if (data.state === this.props.selectedState && this.props.precincts && this.state.zoom > 5) {
-                                console.log(this.props.precincts);
                                 return (
                                     <div key={'selected'}>
                                         {/* <GeoJSON
@@ -296,6 +286,7 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                                         /> */}
                                         <GeoJSON
                                             data={this.props.precincts as GeoJsonObject}
+                                            preferCanvas={true}
                                             style={this.getPrecinctStyle.bind(this)}
                                             onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                             onMouseOut={this.onMouseLeavePrecinct.bind(this)}
@@ -430,8 +421,8 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
 }
 
 export const MapView = connect(
-    (state: any) => {
-        return ({ selectedState: state.stateReducer.selectedState, precincts: state.stateReducer.precincts })
+    (state: any, ownProps: any) => {
+        return ({ selectedState: state.stateReducer.selectedState, precincts: state.stateReducer.precincts, store: ownProps.store })
     },
     (dispatch) => bindActionCreators(mapActionCreators, dispatch)
 )(MapViewComponent);

@@ -1,4 +1,4 @@
-import { StateBordersApi, States } from '../../../api/state-borders';
+import { StateBordersApi } from '../../../api/state-borders';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';

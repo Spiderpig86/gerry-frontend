@@ -1,4 +1,8 @@
 import * as React from 'react';
+import * as mapActionCreators from '../../../../redux/modules/maptooltip/maptooltip';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import './styles.scss';
 
@@ -8,7 +12,7 @@ export interface IMapTooltipProps {
     statistics: { key: string; value: string }[];
 }
 
-export class MapTooltip extends React.PureComponent<IMapTooltipProps, {}> {
+class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
 
     render() {
         return (
@@ -26,3 +30,10 @@ export class MapTooltip extends React.PureComponent<IMapTooltipProps, {}> {
         );
     }
 }
+
+export const MapTooltip = connect(
+    (state: any) => {
+        return ({ ...state.mapTooltipReducer.tooltipData })
+    },
+    (dispatch) => bindActionCreators(mapActionCreators, dispatch)
+)(MapTooltipComponent);

@@ -9,6 +9,7 @@ import thunk from 'redux-thunk';
 import { Routes } from 'global_components';
 import { users } from './redux/modules/users/users';
 import { stateReducer } from './redux/modules/state/state';
+import { mapTooltipReducer } from './redux/modules/maptooltip/maptooltip';
 
 import './styles/global.scss';
 import { StateBordersApi } from './api/state-borders';
@@ -19,12 +20,12 @@ import { faPlay, faPause, faSquare } from '@fortawesome/free-solid-svg-icons';
 
 library.add(fas, faPlay, faPause, faSquare);
 
-const rootReducer = combineReducers({users, stateReducer});
+const rootReducer = combineReducers({users, stateReducer, mapTooltipReducer});
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
-        <Routes />
+        <Routes store={store} />
     </Provider>,
     document.getElementById('app')
 );

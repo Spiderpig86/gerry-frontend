@@ -4,11 +4,11 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Main, NotFound } from '..';
 import { Home, Dashboard, Test, MapView } from '../../modules';
-import { StateBordersApi } from '../../api/state-borders';
 
-export class Routes extends React.Component {
+export class Routes extends React.Component<any, {}> {
 
     render() {
+        console.log(this.props);
         return (
             <Router>
                 <Switch>
@@ -18,7 +18,9 @@ export class Routes extends React.Component {
                     <Main path='/home' component={Home} checkAuthentication={false} />
                     <Main path='/dashboard' component={Dashboard} checkAuthentication={true} />
                     <Main path='/test' component={Test} checkAuthentication={false} />
-                    <Route path='/map' component={MapView} />
+                    <Route path='/map' render={(props) => (
+                        <MapView store={this.props.store} {...props} />
+                    )}/>
                     <Main path='*' component={NotFound} checkAuthentication={false} />
                 </Switch>
             </Router>
