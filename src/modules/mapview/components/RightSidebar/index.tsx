@@ -29,10 +29,9 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
     }
 
     render() {
-        console.log(this.props);
         return (
             <Menu onStateChange={e => this.menuHandler.call(this, e) } isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'}>
-                <h3 className="px-3">N/A Precinct Data</h3>
+                <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
 
                 <Tabs>
                     <TabList className='px-3'>

@@ -4,9 +4,10 @@ import * as Color from 'color';
 import { Map, Marker, Popup, TileLayer, GeoJSON, LayersControl, ZoomControl } from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
+import Control from 'react-leaflet-control';
 
 import { MAP_BOX_ENDPOINT, MAP_BOX_TOKEN } from '../../config/constants';
-import { CustomTab, LeftSidebar, RightSidebar } from './components';
+import { CustomTab, LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
 import { StateBordersApi, States } from '../../api/state-borders';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
@@ -29,7 +30,9 @@ interface IMapViewState {
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
         votingAgeProps: IVotingAgeTabProps;
-    }
+    };
+
+    mapTooltip: IMapTooltipProps;
 }
 
 export class MapView extends React.Component<{}, IMapViewState> {
@@ -46,6 +49,11 @@ export class MapView extends React.Component<{}, IMapViewState> {
             electionsProps: null,
             precinctProps: null,
             votingAgeProps: null
+        },
+        mapTooltip: {
+            title: null,
+            subtitle: null,
+            statistics: null
         }
     };
 
@@ -65,7 +73,13 @@ export class MapView extends React.Component<{}, IMapViewState> {
         });
     }
 
-    onEachFeature(feature: any, layer: any) {
+    onEachFeatureDistrict(feature: any, layer: any) {
+        layer.on({
+            click: (() => this.state.map.leafletElement.fitBounds(layer.getBounds()))
+        });
+    }
+
+    onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: this.showPrecinctData.bind(this)
         });
@@ -156,25 +170,39 @@ export class MapView extends React.Component<{}, IMapViewState> {
 
     onMouseHoverPrecinct(layer: any) {
         const properties: any = layer.layer.feature.properties;
-        const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
-            <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
-            <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
-            <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
-            <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
-            <li><b>African American Population:</b> ${Math.round(properties.NH_BLACK)}</li>
-            <li><b>Asian Population:</b> ${Math.round(properties.NH_ASIAN)}</li>
-            <li><b>Hispanic Population:</b> ${Math.round(properties.HISP)}</li>
-            <li><b>Native American Population:</b> ${Math.round(properties.NH_AMIN)}</li>
-            <li><b>Other Population:</b> ${Math.round(properties.NH_OTHER)}</li>
-            <li><b>Pacific Islander Population:</b> ${Math.round(properties.NH_NHPI)}</li>
-            <li><b>Non-Hispanic White Population:</b> ${Math.round(properties.NH_WHITE)}</li>
-        </ul></Popup>`
-        layer.target.bindPopup(popupContent);
-        layer.target.openPopup(layer.latlng);
+        // const popupContent = ` <Popup><p class="text-align-center"><b>Precinct ${properties.PrcncID} Data</b></p><ul>
+        //     <li><b>Democratic Votes:</b> ${properties.PRES16D}</li>
+        //     <li><b>Republican Votes:</b> ${properties.PRES16R}</li>
+        //     <li><b>Independent Votes:</b> ${properties.PRES16I}</li>
+        //     <li><b>Total Population:</b> ${Math.round(properties.TOTPOP)}</li>
+        // </ul></Popup>`
+        // layer.target.bindPopup(popupContent);
+        // layer.target.openPopup(layer.latlng);
+        const toolTipProps = {
+            title: 'Precinct Data',
+            subtitle: `Precinct: ${properties.PrcncID}`,
+            statistics: [
+                {key: 'Democratic Votes: ', value: `${properties.PRES16D}`},
+                {key: 'Republican Votes: ', value: `${properties.PRES16R}`},
+                {key: 'Independent Votes: ', value: `${properties.PRES16I}`},
+            ]
+        };
+        this.setState({
+            mapTooltip: toolTipProps
+        });
+    }
+
+    onMouseLeavePrecinct(layer: any) {
+        this.setState({
+            mapTooltip: {
+                title: null,
+                subtitle: null,
+                statistics: null
+            }
+        });
     }
 
     onZoom(e) {
-        console.log(e);
         this.setState({
             zoom: this.state.map.viewport.zoom
         });
@@ -237,6 +265,11 @@ export class MapView extends React.Component<{}, IMapViewState> {
                             />
                         </LayersControl.BaseLayer>
                     </LayersControl>
+
+                    <Control position="bottomleft">
+                        <MapTooltip {...this.state.mapTooltip} />
+                    </Control>
+
                     <ZoomControl position={'bottomright'} />
                     {
                         this.state.stateBorders && this.state.stateBorders.map((data: any, i: number) => {
@@ -254,8 +287,9 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                         <GeoJSON
                                             data={this.state.precincts as GeoJsonObject}
                                             style={this.getPrecinctStyle.bind(this)}
-                                            onMouseOver={this.onMouseHoverPrecinct}
-                                            onEachFeature={this.onEachFeature.bind(this)}
+                                            onMouseOver={this.onMouseHoverPrecinct.bind(this)}
+                                            onMouseOut={this.onMouseLeavePrecinct.bind(this)}
+                                            onEachFeature={this.onEachFeaturePrecinct.bind(this)}
                                         />
                                     </div>
                                 )
@@ -265,6 +299,7 @@ export class MapView extends React.Component<{}, IMapViewState> {
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
                                         style={this.getStateStyle.bind(this)}
+                                        onEachFeature={this.onEachFeatureDistrict.bind(this)}
                                     />
                                 )
                             }
