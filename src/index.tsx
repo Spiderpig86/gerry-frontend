@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/// <reference path='./typings/png.d.ts'/>
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -13,12 +14,6 @@ import { mapTooltipReducer } from './redux/modules/maptooltip/maptooltip';
 
 import './styles/global.scss';
 import { StateBordersApi } from './api/state-borders';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { faPlay, faPause, faSquare } from '@fortawesome/free-solid-svg-icons';
-
-library.add(fas, faPlay, faPause, faSquare);
 
 const rootReducer = combineReducers({users, stateReducer, mapTooltipReducer});
 const store = createStore(rootReducer, applyMiddleware(thunk));

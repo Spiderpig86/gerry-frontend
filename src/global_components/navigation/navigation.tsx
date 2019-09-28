@@ -49,7 +49,7 @@ class NavigationComponent extends React.Component<
                     <Nav.Link href="#developers">Developers</Nav.Link>
                 </Nav>
                 <Nav className="ml-auto">
-                    <Button variant="outline-light">Launch</Button>
+                    <Link to='/map'><Button variant="outline-light">Launch</Button></Link>
                 </Nav>
             </Navbar>
         );
