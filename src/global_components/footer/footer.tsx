@@ -14,7 +14,7 @@ export class Footer extends React.Component {
             <div className='footer'>
                 <Container className='h-100 d-flex justify-content-center align-items-center'>
                     <a href='#' target='_blank'>
-                      <button className='btn-github'><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon> View on Github</button>
+                      <button className='btn-github'><FontAwesomeIcon className='mr-3' icon={faGithub}></FontAwesomeIcon> View on Github</button>
                     </a>
                 </Container>
             </div>

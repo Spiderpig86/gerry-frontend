@@ -94,7 +94,19 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
 
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
-            click: this.showPrecinctData.bind(this)
+            click: this.showPrecinctData.bind(this),
+            mouseover: () => {
+                layer.setStyle({
+                    weight: 5,
+                    color: layer.options.color
+                });
+            },
+            mouseout: () => {
+                layer.setStyle({
+                    weight: 0.5,
+                    color: layer.options.color
+                });
+            },
         });
     }
 

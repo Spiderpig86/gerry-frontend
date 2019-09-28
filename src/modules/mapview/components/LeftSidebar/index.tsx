@@ -17,7 +17,7 @@ export class LeftSidebar extends React.Component {
     render() {
         return (
             <Menu styles={LeftSidebarStyles} width={'100%'}>
-                <h1 className='px-3'><Link to='/'>Gerry</Link></h1>
+                <h1 className='px-3'><Link to='/' style={{ color: '#364b62' }}>Gerry</Link></h1>
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
                         <Tab><h6>Inputs</h6></Tab>
