@@ -4,13 +4,11 @@ import { slide as Menu } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Link } from 'react-router-dom';
 
-import { InputTabPanel } from '../';
+import { InputTabPanel, FilterTabPanel, LogsTabPanel, StatisticsTabPanel } from '../';
 import { AlgorithmPanel } from '../AlgorithmPanel';
-import { LogsTabPanel } from '../LogsTabPanel';
 import { LeftSidebarStyles } from '../../../../global_components';
 
 import '../../../../styles/cirrus/tabs.scss';
-import { StatisticsTabPanel } from '../StatisticsTabPanel';
 
 export class LeftSidebar extends React.Component {
 
@@ -21,12 +19,16 @@ export class LeftSidebar extends React.Component {
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
                         <Tab><h6>Inputs</h6></Tab>
+                        <Tab><h6>Filter</h6></Tab>
                         <Tab><h6>Logs</h6></Tab>
                         <Tab><h6>Statistics</h6></Tab>
                     </TabList>
 
                     <TabPanel>
                         <InputTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <FilterTabPanel />
                     </TabPanel>
                     <TabPanel>
                         <LogsTabPanel />

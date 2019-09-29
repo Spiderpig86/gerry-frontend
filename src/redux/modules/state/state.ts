@@ -2,6 +2,7 @@ import { StateBordersApi } from '../../../api/state-borders';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
+const SET_MAP_FILTER = 'SET_MAP_FILTER';
 
 export const setSelectedState = (state: string) => {
     return (dispatch: any) => {
@@ -10,6 +11,12 @@ export const setSelectedState = (state: string) => {
         statePopulator.fetchPrecincts(state).then(precincts => {
             dispatch(setPrecincts(precincts.data.geometry|| null));
         });
+    }
+}
+
+export const setMapFilter = (filter: string) => {
+    return (dispatch: any) => {
+        dispatch(setFilter(filter));
     }
 }
 
@@ -33,9 +40,17 @@ export const setPrecincts = (precincts: any) => {
     }
 }
 
+export const setFilter = (filter: string) => {
+    return {
+        type: SET_MAP_FILTER,
+        filter
+    }
+}
+
 const initialState = {
     selectedState: 'N/A',
-    precincts: null
+    precincts: null,
+    filter: 'USPRES16'
 }
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -49,6 +64,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 precincts: action.precincts
+            }
+        case SET_MAP_FILTER:
+            return {
+                ...state,
+                filter: action.filter
             }
         default:
             return state;

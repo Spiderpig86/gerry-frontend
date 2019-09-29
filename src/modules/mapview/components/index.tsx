@@ -1,6 +1,8 @@
 export { LeftSidebar } from './LeftSidebar';
 export { InputTabPanel } from './InputTabPanel';
+export { FilterTabPanel } from './FilterTabPanel';
 export { LogsTabPanel } from './LogsTabPanel';
+export { StatisticsTabPanel } from './StatisticsTabPanel';
 
 export { RightSidebar } from './RightSidebar';
 export { DemographicsTabPanel } from './DemographicsTabPanel';

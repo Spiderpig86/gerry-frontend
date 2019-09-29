@@ -18,3 +18,11 @@ export const ETHNICITY = 'Ethnicity';
 export const REP_CHANCE = 'RepublicanChance';
 export const DEM_CHANCE = 'DemocratChance';
 export const MINORITY_REP_CHANCE = 'MinorityRepChance';
+
+// MAP FILTERS
+export const WHITE_DENSITY = 'WHITE_DENSITY';
+export const BLACK_DENSITY = 'BLACK_DENSITY';
+export const HISPANIC_DENSITY = 'HISPANIC_DENSITY';
+export const ASIAN_DENSITY = 'ASIAN_DENSITY';
+export const NATIVE_AMERICAN_DENSITY = 'NATIVE_AMERICAN_DENSITY';
+export const PACIFIC_ISLANDER_DENSITY = 'PACIFIC_ISLANDER_DENSITY';
