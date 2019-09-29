@@ -51,7 +51,8 @@ export class StateBordersApi {
                 state,
                 data: {
                     type: 'Feature',
-                    geometry: data.data
+                    geometry: data.data,
+                    state
                 }
             };
         } catch (e) {

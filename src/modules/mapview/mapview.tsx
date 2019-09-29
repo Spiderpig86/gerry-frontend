@@ -88,7 +88,11 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
 
     onEachFeatureDistrict(feature: any, layer: any) {
         layer.on({
-            click: (() => this.state.map.leafletElement.fitBounds(layer.getBounds()))
+            click: (() => {
+                this.state.map.leafletElement.fitBounds(layer.getBounds());
+                this.props.store.dispatch(mapActionCreators.setSelectedState(feature.state));
+                console.log(feature.state);
+            })
         });
     }
 

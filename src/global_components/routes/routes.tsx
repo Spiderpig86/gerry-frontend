@@ -19,7 +19,7 @@ export class Routes extends React.Component<any, {}> {
                     <Main path='/dashboard' component={Dashboard} checkAuthentication={true} />
                     <Main path='/test' component={Test} checkAuthentication={false} />
                     <Route path='/map' render={(props) => (
-                        <MapView store={this.props.store} {...props} />
+                        <MapView key='map' store={this.props.store} {...props} />
                     )}/>
                     <Main path='*' component={NotFound} checkAuthentication={false} />
                 </Switch>
