@@ -51,8 +51,8 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                 <h4>District Properties</h4>
 
                 <div className="mb-4">
-                    <h6>Majority Minority Threshold</h6>
-                    <p className="alert alert-info">The minimum is to prevent cracking (low thresholds will dilute voters). The maximum is to prevent packing.</p>
+                    <h6>Majority Minority District Threshold</h6>
+                    <p className="alert alert-info">The minimum is to prevent cracking (low thresholds will dilute voters). The maximum is to prevent packing. Select the demographics you want to consider collectively as minorities.</p>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Check custom className={'col-6'} type={'checkbox'} id={'majorityMinoritySlider'} label={'Min/Max Minority Percentage of Population'} />
                         <TooltipRange 
@@ -60,48 +60,77 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             count={1}
                             allowCross={false}
                             pushable={false}
-                            defaultValue={[0, 0]}
+                            min={50}
+                            max={100}
+                            defaultValue={[50, 50]}
                             tipFormatter={value => `${value}%`}
                         />
+                    </Form.Group>
+
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupCheckAfrican'} label={'African Americans'} />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupCheckAsian'} label={'Asians'} />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupCheckPacific'} label={'Pacific Islanders'} />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupCheckHispanic'} label={'Hispanics'} />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupCheckNHWhite'} label={'Non-Hispanic Whites'} />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-12'} type={'checkbox'} id={'minorityGroupOther'} label={'Other'} />
                     </Form.Group>
 
                     <h6 className='mt-3'>Voter Cohesiveness</h6>
-                    <p className='alert alert-info'>Ensures that voters of a group are not being diluted. Set minimum threshold for each ethnic group that vote for the same party.</p>
+                    <p className='alert alert-info'>Set the threshold to consider when a demographic is voting for a specific party. Set minimum threshold for each ethnic group that vote for the same party.</p>
 
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckAfrican'} label={'African Americans'} />
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupWhite'} label={'White'} />
                         <TooltipSlider 
                             className={'col-6'}
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckAsian'} label={'Asians'} />
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupCheckAfrican'} label={'African Americans'} />
                         <TooltipSlider 
                             className={'col-6'}
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckPacific'} label={'Pacific Islanders'} />
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupCheckAsian'} label={'Asians'} />
                         <TooltipSlider 
                             className={'col-6'}
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckHispanic'} label={'Hispanics'} />
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupCheckPacific'} label={'Pacific Islanders'} />
                         <TooltipSlider 
                             className={'col-6'}
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'minorityGroupCheckNHWhite'} label={'Non-Hispanic Whites'} />
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupCheckHispanic'} label={'Hispanics'} />
+                        <TooltipSlider 
+                            className={'col-6'}
+                            defaultValue={0}
+                            tipFormatter={value => `${value}%`}
+                        />
+                    </Form.Group>
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
+                        <Form.Check custom className={'col-6'} type={'checkbox'} id={'cohesiveGroupCheckNHWhite'} label={'Non-Hispanic Whites'} />
                         <TooltipSlider 
                             className={'col-6'}
                             defaultValue={0}
@@ -112,7 +141,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
 
                 <div className="mb-4">
                     <h4>Parameters</h4>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className='col-6'>Population Equality</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
@@ -121,7 +150,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             max={100}
                         ></TooltipSlider>
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className='col-6'>Compactness</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
@@ -130,7 +159,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             max={100}
                         ></TooltipSlider>
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className='col-6'>Partisan Fairness</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
@@ -139,7 +168,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             max={100}
                         ></TooltipSlider>
                     </Form.Group>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                    <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className='col-6'>Contiguity</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
