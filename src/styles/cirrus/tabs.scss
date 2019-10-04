@@ -1,16 +1,12 @@
 /* TABS AND TAB CONTAINER */
 .tab-container {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     overflow: hidden;
     overflow-x: auto; /* Allow scrollbar to be visible if the width of the tabs exeeds container */
-    -webkit-box-align: stretch;
-        -ms-flex-align: stretch;
-            align-items: stretch;
+    align-items: stretch;
+    height: 100%;
+    flex-direction: column;
 }
 
 /* Tabs are embedded inside an unordered list */
@@ -52,6 +48,7 @@
 }
 
 .tab-container li.react-tabs__tab--selected {
+    overflow: auto;
     border-radius: 0;
     border-bottom: 2px solid #f03d4d;
     transition: all .3s;
@@ -116,4 +113,8 @@
 
 .tab-container .icon:last-child { /* Right icon */
     margin-left: .75rem;
+}
+
+.react-tabs__tab-panel--selected {
+    height: 100%;
 }

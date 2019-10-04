@@ -33,7 +33,7 @@ export const LeftSidebarStyles = {
         fill: '#373a47'
     },
     bmItem: {
-        display: 'inline-block'
+        display: 'inherit'
     },
     bmOverlay: {
         background: 'rgba(0, 0, 0, 0.3)'
@@ -77,10 +77,11 @@ export const RightSidebarStyles = {
         fill: '#373a47'
     },
     bmItem: {
-        display: 'inline-block'
+        display: 'inherit'
     },
     bmOverlay: {
-        background: 'rgba(0, 0, 0, 0.3)'
+        background: 'rgba(0, 0, 0, 0.3)',
+        zIndex: '-1'
     },
     bmItemList: { }
 };

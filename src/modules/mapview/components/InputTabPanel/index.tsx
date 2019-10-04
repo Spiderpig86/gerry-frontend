@@ -23,15 +23,49 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
     render() {
         const dropdownTitle = `Selected State: ${ this.props.selectedState }`;
         return (
-            <div className="px-4" style={{overflow: 'auto', maxHeight: '80vh'}}>
+            <div className="px-4" style={{overflow: 'auto', height: '100%'}}>
                 <div className="py-3">
-                    <h4>State Selection</h4>
+                    <h4>Phase 0</h4>
+                    <h6>State Selection</h6>
                     <DropdownButton id="dropdown-basic-button" title={dropdownTitle}>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('CA')}>California</Dropdown.Item>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('UT')}>Utah</Dropdown.Item>
                         <Dropdown.Item onClick={() => this.props.setSelectedState('VA')}>Virginia</Dropdown.Item>
                     </DropdownButton>
+                    
                 </div>
+
+                <div className="py-3">
+                    <h6>Demographic Bloc Voting Threshold</h6>
+                    <p className="alert alert-info">First, select the minimum percentage of a demographic must be populated in percinct to be considered.</p>
+                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                    <DropdownButton className={'col-6'} id="dropdown-basic-button" title={'Bloc Demographic'}>
+                        <Dropdown.Item onClick={() => {}}>White</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>African American</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>Hispanic</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>Asian</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>Native American</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>Pacific Islander</Dropdown.Item>
+                    </DropdownButton>
+                    <TooltipSlider 
+                        className={'col-6'}
+                        defaultValue={0}
+                        tipFormatter={value => `${value}%`}
+                    />
+                    </Form.Group>
+                </div>
+
+            <div className="py-3">
+                <p className="alert alert-info">Then, select the threshold for the minimum winning party percentage for the selected election to see if the demographic voted en masse for the winning party.</p>
+                <Form.Group className="row form-group d-flex align-items-center py-2">
+                    <Form.Label className={'col-4'} for={''}>Winning Party:</Form.Label>
+                    <TooltipSlider
+                        className={'col-8'} 
+                        defaultValue={0}
+                        tipFormatter={value => `${value}%`}
+                    />
+                </Form.Group>
+            </div>
 
                 <br />
 
@@ -148,6 +182,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             defaultValue={0}
                             min={0}
                             max={100}
+                            tipFormatter={value => `${value}%`}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -157,6 +192,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             defaultValue={0}
                             min={0}
                             max={100}
+                            tipFormatter={value => `${value}%`}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -166,6 +202,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             defaultValue={0}
                             min={0}
                             max={100}
+                            tipFormatter={value => `${value}%`}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -175,6 +212,7 @@ export class InputTabPanelComponent extends React.Component<IInputTabPanelProps,
                             defaultValue={0}
                             min={0}
                             max={100}
+                            tipFormatter={value => `${value}%`}
                         ></TooltipSlider>
                     </Form.Group>
                 </div>

@@ -8,7 +8,7 @@ import { fas, faPlay, faPause, faSquare } from '@fortawesome/free-solid-svg-icon
 export class AlgorithmPanel extends React.PureComponent {
     render() {
         return (
-            <Row className={'d-flex w-100'} style={{ position: 'absolute', bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
+            <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
                 <ButtonGroup>
                     <Button><FontAwesomeIcon icon={faPlay} /></Button>
                     <Button><FontAwesomeIcon icon={faPause} /></Button>

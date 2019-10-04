@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { slide as Menu, slide } from 'react-burger-menu';
+import { slide as Menu, } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import { ElectionsTabPanel } from '../';
