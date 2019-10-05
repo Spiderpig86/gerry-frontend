@@ -1,3 +1,4 @@
+import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../api/state-borders';
 
 const SET_STATE = 'SET_STATE';
@@ -50,7 +51,7 @@ export const setFilter = (filter: string) => {
 const initialState = {
     selectedState: 'N/A',
     precincts: null,
-    filter: 'USPRES16'
+    filter: Constants.MAP_FILTER_PRES_2016
 }
 
 export const stateReducer = (state = initialState, action: any) => {
