@@ -6,7 +6,7 @@ import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
 export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
     render() {
         return (
-            <div style={{ padding: '0 1.5rem', overflow: 'auto', maxHeight: '80vh' }}>
+            <div style={{ padding: '0 1.5rem' }}>
                 <br />
                 <h4>Statistics</h4>
 

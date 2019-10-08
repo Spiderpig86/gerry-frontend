@@ -55,6 +55,9 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_CONGRESS_2018)} />
                 </Form.Group>
+                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                    <Form.Check name='population' custom type={'radio'} id={`congressionalDistricts`} label={`Congressional Districts`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_DISTRICTS)} />
+                </Form.Group>
             </div>
         )
     }

@@ -7,7 +7,7 @@ import './styles.scss';
 export class StatisticsAccordionComponent extends React.PureComponent {
     render() {
         return (
-            <Accordion class='statistics-accordion'>
+            <Accordion className='statistics-accordion'>
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
                         Demographics

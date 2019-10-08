@@ -428,6 +428,8 @@ export class MapViewComponent extends React.Component<
     getPrecinctStyle(feature: any, layer: any): PathOptions {
         if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
             return this.colorPolitical(feature, this.props.filter);
+        } else if (this.props.filter === Constants.MAP_FILTER_DISTRICTS) {
+            return this.colorDistricts(feature, this.props.filter);
         } else {
             return this.colorDemographic(feature, this.props.filter);
         }
@@ -494,6 +496,20 @@ export class MapViewComponent extends React.Component<
 
         return {
             color: Color.rgb([252, 210, 122])
+            .darken(0.5)
+            .hex(),
+            weight: 0.5,
+            fillOpacity: 0.75,
+            fillColor: color
+        };
+    }
+
+    private colorDistricts(feature: any, filter: string) {
+        const properties = feature.properties;
+        const color = Constants.DISTRICT_COLORS[properties.CD - 1];
+
+        return {
+            color: Color.default(color)
             .darken(0.5)
             .hex(),
             weight: 0.5,
