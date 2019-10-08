@@ -23,7 +23,7 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                     <Form.Check name='population' custom type={'radio'} id={`whiteDensity`} label={`Non-Hispanic White Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_WHITE_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`hispanicDensity`} label={`Hispanic`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HISPANIC_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`hispanicDensity`} label={`Hispanic Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HISPANIC_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check name='population' custom type={'radio'} id={`blackDensity`} label={`Non-Hispanic African American Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_BLACK_DENSITY)} />

@@ -85,7 +85,8 @@ export class MapViewComponent extends React.Component<
     async componentDidMount() {
         const statePopulator = new StateBordersApi();
         await Promise.all([
-            statePopulator.fetchStateBorder(States.CA),
+            statePopulator.fetchStateBorder(States.MI),
+            statePopulator.fetchStateBorder(States.RI),
             statePopulator.fetchStateBorder(States.UT),
             statePopulator.fetchStateBorder(States.VA)
         ]).then(data =>
