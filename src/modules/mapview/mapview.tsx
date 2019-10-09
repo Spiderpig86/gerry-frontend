@@ -23,7 +23,7 @@ import {
     MapTooltip,
     IMapTooltipProps
 } from './components';
-import { StateBordersApi, States } from '../../api/state-borders';
+import { StateBordersApi, States } from '../../libs/state-borders';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
@@ -61,7 +61,7 @@ interface IMapViewState {
 export class MapViewComponent extends React.Component<
     IMapViewProps,
     IMapViewState
-> {
+    > {
     state: IMapViewState = {
         stateBorders: [],
         selectedState: 'UT',
@@ -85,8 +85,7 @@ export class MapViewComponent extends React.Component<
     async componentDidMount() {
         const statePopulator = new StateBordersApi();
         await Promise.all([
-            statePopulator.fetchStateBorder(States.MI),
-            statePopulator.fetchStateBorder(States.RI),
+            statePopulator.fetchStateBorder(States.CA),
             statePopulator.fetchStateBorder(States.UT),
             statePopulator.fetchStateBorder(States.VA)
         ]).then(data =>
@@ -110,7 +109,6 @@ export class MapViewComponent extends React.Component<
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                console.log(this.state.selectedState);
                 this.props.store.dispatch(
                     mapActionCreators.setSelectedState(feature.state)
                 );
@@ -134,11 +132,6 @@ export class MapViewComponent extends React.Component<
                 });
             }
         });
-    }
-
-    showPopup(feature: any, layer: any) {
-        const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${feature.properties.HistoricVote}</pre></Popup>`;
-        layer.bindPopup(popupContent);
     }
 
     showPrecinctData(feature: any, layer: any) {
@@ -220,15 +213,7 @@ export class MapViewComponent extends React.Component<
 
     onMouseHoverPrecinct(layer: any) {
         const properties: any = layer.layer.feature.properties;
-        const toolTipProps = {
-            title: 'Precinct Data',
-            subtitle: `Precinct: ${properties.PrcncID}`,
-            statistics: [
-                { key: 'Democratic Votes: ', value: `${properties.PRES16D}` },
-                { key: 'Republican Votes: ', value: `${properties.PRES16R}` },
-                { key: 'Independent Votes: ', value: `${properties.PRES16I}` }
-            ]
-        };
+        const toolTipProps = this.getMapTooltipProps(this.props.filter, properties);
         this.props.store.dispatch(setTooltipData(toolTipProps));
     }
 
@@ -391,11 +376,11 @@ export class MapViewComponent extends React.Component<
                 let partyColor: Color =
                     majorityParty.percent >= 0.55
                         ? Color.rgb([49, 117, 173]).saturate(
-                              majorityParty.percent / 100.0 - 0.55
-                          )
+                            majorityParty.percent / 100.0 - 0.55
+                        )
                         : Color.rgb([49, 117, 173]).desaturate(
-                              0.75 - majorityParty.percent / 100.0
-                          );
+                            0.75 - majorityParty.percent / 100.0
+                        );
                 return {
                     color: '#1f2021',
                     weight: 0.3,
@@ -406,11 +391,11 @@ export class MapViewComponent extends React.Component<
                 partyColor =
                     majorityParty.percent >= 0.55
                         ? Color.rgb([215, 110, 110]).saturate(
-                              majorityParty.percent / 100.0 - 0.55
-                          )
+                            majorityParty.percent / 100.0 - 0.55
+                        )
                         : Color.rgb([215, 110, 110]).desaturate(
-                              0.75 - majorityParty.percent / 100.0
-                          );
+                            0.75 - majorityParty.percent / 100.0
+                        );
                 return {
                     color: '#1f2021',
                     weight: 0.3,
@@ -442,30 +427,30 @@ export class MapViewComponent extends React.Component<
         switch (majorityParty.party) {
             case 'D':
                 let partyColor: Color = majorityParty.percent >= 0.75
-                    ? Color.rgb([16,114,195]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.rgb([16,114,195]).lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.rgb([16, 114, 195]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.rgb([16, 114, 195]).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([16,114,195]).darken(.25).hex(),
+                    color: Color.rgb([16, 114, 195]).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'R':
                 partyColor = majorityParty.percent >= 0.75
-                    ? Color.rgb([170,57,57]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.rgb([170,57,57]).lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.rgb([170, 57, 57]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.rgb([170, 57, 57]).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([170,57,57]).darken(.25).hex(),
+                    color: Color.rgb([170, 57, 57]).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'I':
                 partyColor = majorityParty.percent >= 0.55
-                    ? Color.rgb([130,182,127]).saturate((majorityParty.percent - 0.55) * 3).darken((majorityParty.percent - 0.55))
-                    : Color.rgb([130,182,127]).lighten((0.55 - majorityParty.percent) * 3);
+                    ? Color.rgb([130, 182, 127]).saturate((majorityParty.percent - 0.55) * 3).darken((majorityParty.percent - 0.55))
+                    : Color.rgb([130, 182, 127]).lighten((0.55 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([130,182,127]).darken(.25).hex(),
+                    color: Color.rgb([130, 182, 127]).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
@@ -497,8 +482,8 @@ export class MapViewComponent extends React.Component<
 
         return {
             color: Color.rgb([252, 210, 122])
-            .darken(0.5)
-            .hex(),
+                .darken(0.5)
+                .hex(),
             weight: 0.5,
             fillOpacity: 0.75,
             fillColor: color
@@ -511,8 +496,8 @@ export class MapViewComponent extends React.Component<
 
         return {
             color: Color.default(color)
-            .darken(0.5)
-            .hex(),
+                .darken(0.5)
+                .hex(),
             weight: 0.5,
             fillOpacity: 0.75,
             fillColor: color
@@ -549,6 +534,54 @@ export class MapViewComponent extends React.Component<
         }
 
         return demographicPopulation / properties.TOTPOP;
+    }
+
+    private getMapTooltipProps(filter: string, properties: any): IMapTooltipProps {
+        switch (filter) {
+            case Constants.MAP_FILTER_PRES_2016:
+                return {
+                    title: '2016 Presidential Election',
+                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    statistics: [
+                        { key: 'Democratic Votes: ', value: `${properties.PRES16D}` },
+                        { key: 'Republican Votes: ', value: `${properties.PRES16R}` },
+                        { key: 'Independent Votes: ', value: `${properties.PRES16I}` }
+                    ]
+                };
+            case Constants.MAP_FILTER_CONGRESS_2016:
+                return {
+                    title: '2016 Congressional Election',
+                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    statistics: [
+                        { key: 'Democratic Votes: ', value: `${properties.SEN16R}` },
+                        { key: 'Republican Votes: ', value: `${properties.SEN16R}` }
+                    ]
+                };
+            case Constants.MAP_FILTER_CONGRESS_2018:
+                return {
+                    title: '2018 Congressional Election',
+                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    statistics: [
+                        { key: 'Democratic Votes: ', value: `${properties.PRES16D}` },
+                        { key: 'Republican Votes: ', value: `${properties.PRES16R}` },
+                    ]
+                };
+            default:
+                return {
+                    title: 'Precinct Data',
+                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    statistics: [
+                        { key: 'White Population: ', value: `${properties.NH_WHITE}` },
+                        { key: 'Black Population: ', value: `${properties.NH_BLACK}` },
+                        { key: 'Hispanic Population: ', value: `${properties.HISP}` },
+                        { key: 'Asian Population: ', value: `${properties.NH_ASIAN}` },
+                        { key: 'Native American Population: ', value: `${properties.NH_AMIN}` },
+                        { key: 'Pacific Islander Population: ', value: `${properties.NH_NHPI}` },
+                        { key: 'Other Population: ', value: `${properties.NH_OTHER}` },
+                        { key: 'Biracial Population: ', value: `${properties.NH_OTHER}` },
+                    ]
+                };
+        }
     }
 
     private getMajorityParty(

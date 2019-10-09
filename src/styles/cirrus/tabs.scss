@@ -119,3 +119,8 @@
     height: 100%;
     overflow: auto;
 }
+
+.react-tabs__tab:focus {
+    border-color: transparent;
+    box-shadow: none;
+}

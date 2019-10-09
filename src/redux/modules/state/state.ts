@@ -1,5 +1,5 @@
 import * as Constants from '../../../config/constants';
-import { StateBordersApi } from '../../../api/state-borders';
+import { StateBordersApi } from '../../../libs/state-borders';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';

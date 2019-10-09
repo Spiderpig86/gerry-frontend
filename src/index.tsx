@@ -13,7 +13,6 @@ import { stateReducer } from './redux/modules/state/state';
 import { mapTooltipReducer } from './redux/modules/maptooltip/maptooltip';
 
 import './styles/global.scss';
-import { StateBordersApi } from './api/state-borders';
 
 const rootReducer = combineReducers({users, stateReducer, mapTooltipReducer});
 const store = createStore(rootReducer, applyMiddleware(thunk));

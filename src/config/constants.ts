@@ -33,4 +33,4 @@ export const MAP_FILTER_CONGRESS_2016 = 'MAP_FILTER_CONGRESS_2016';
 export const MAP_FILTER_CONGRESS_2018 = 'MAP_FILTER_CONGRESS_2018';
 export const MAP_FILTER_DISTRICTS = 'MAP_FILTER_DISTRICTS';
 
-export const DISTRICT_COLORS = ['#0099cd', '#e31a1c', '#00cd99', '#ffca5d'];
+export const DISTRICT_COLORS = ['#0099cd', '#e31a1c', '#00cd99', '#ffca5d', '#ff7f00', '#99cd00', '#cd0099', '#9900cd', '#8dd3c7', '#bebada', '#fb8072', '#1f78b4'];
