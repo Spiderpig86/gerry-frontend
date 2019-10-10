@@ -568,17 +568,17 @@ export class MapViewComponent extends React.Component<
                 };
             default:
                 return {
-                    title: 'Precinct Data',
+                    title: 'Demographic Data',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'White Population: ', value: `${properties.NH_WHITE}` },
-                        { key: 'Black Population: ', value: `${properties.NH_BLACK}` },
-                        { key: 'Hispanic Population: ', value: `${properties.HISP}` },
-                        { key: 'Asian Population: ', value: `${properties.NH_ASIAN}` },
-                        { key: 'Native American Population: ', value: `${properties.NH_AMIN}` },
-                        { key: 'Pacific Islander Population: ', value: `${properties.NH_NHPI}` },
-                        { key: 'Other Population: ', value: `${properties.NH_OTHER}` },
-                        { key: 'Biracial Population: ', value: `${properties.NH_OTHER}` },
+                        { key: 'White Population: ', value: `${Math.round(properties.NH_WHITE)}` },
+                        { key: 'Black Population: ', value: `${Math.round(properties.NH_BLACK)}` },
+                        { key: 'Hispanic Population: ', value: `${Math.round(properties.HISP)}` },
+                        { key: 'Asian Population: ', value: `${Math.round(properties.NH_ASIAN)}` },
+                        { key: 'Native American Population: ', value: `${Math.round(properties.NH_AMIN)}` },
+                        { key: 'Pacific Islander Population: ', value: `${Math.round(properties.NH_NHPI)}` },
+                        { key: 'Other Population: ', value: `${Math.round(properties.NH_OTHER)}` },
+                        { key: 'Biracial Population: ', value: `${Math.round(properties.NH_OTHER)}` },
                     ]
                 };
         }

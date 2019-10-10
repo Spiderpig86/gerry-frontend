@@ -22,92 +22,8 @@ export class InputTabPanelComponent extends React.Component<
     {}
 > {
     render() {
-        const dropdownTitle = `Selected State: ${this.props.selectedState}`;
         return (
-            <div className="px-4" style={{ overflow: 'auto', height: '100%' }}>
-                <div className="py-3">
-                    <h4>Phase 0</h4>
-                    <h6>State Selection</h6>
-                    <DropdownButton
-                        id="dropdown-basic-button"
-                        title={dropdownTitle}
-                    >
-                        <Dropdown.Item
-                            onClick={() => this.props.setSelectedState('CA')}
-                        >
-                            California
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => this.props.setSelectedState('UT')}
-                        >
-                            Utah
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => this.props.setSelectedState('VA')}
-                        >
-                            Virginia
-                        </Dropdown.Item>
-                    </DropdownButton>
-                </div>
-
-                <div className="py-3">
-                    <h6>Demographic Bloc Voting Threshold</h6>
-                    <p className="alert alert-info">
-                        First, select the minimum percentage of a demographic
-                        must be populated in percinct to be considered.
-                    </p>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <DropdownButton
-                            className={'col-6'}
-                            id="dropdown-basic-button"
-                            title={'Bloc Demographic'}
-                        >
-                            <Dropdown.Item onClick={() => {}}>
-                                White
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {}}>
-                                African American
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {}}>
-                                Hispanic
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {}}>
-                                Asian
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {}}>
-                                Native American
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {}}>
-                                Pacific Islander
-                            </Dropdown.Item>
-                        </DropdownButton>
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                </div>
-
-                <div className="py-3">
-                    <p className="alert alert-info">
-                        Then, select the threshold for the minimum winning party
-                        percentage for the selected election to see if the
-                        demographic voted en masse for the winning party.
-                    </p>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className={'col-4'}>
-                            Winning Party:
-                        </Form.Label>
-                        <TooltipSlider
-                            className={'col-8'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                </div>
-
-                <br />
+            <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
 
                 <h4>Algorithm Options</h4>
                 <div className="mb-4">
@@ -217,7 +133,7 @@ export class InputTabPanelComponent extends React.Component<
                         />
                     </Form.Group>
 
-                    <h6 className="mt-3">Voter Cohesiveness</h6>
+                    {/* <h6 className="mt-3">Voter Cohesiveness</h6>
                     <p className="alert alert-info">
                         Set the threshold to consider when a demographic is
                         voting for a specific party. Set minimum threshold for
@@ -307,13 +223,13 @@ export class InputTabPanelComponent extends React.Component<
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />
-                    </Form.Group>
+                    </Form.Group> */}
                 </div>
 
                 <div className="mb-4">
                     <h4>Parameters</h4>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6">
+                        <Form.Label className="col-6 mb-0">
                             Population Equality
                         </Form.Label>
                         <TooltipSlider
@@ -325,7 +241,7 @@ export class InputTabPanelComponent extends React.Component<
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6">Compactness</Form.Label>
+                        <Form.Label className="col-6 mb-0">Compactness</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
                             defaultValue={0}
@@ -335,7 +251,7 @@ export class InputTabPanelComponent extends React.Component<
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6">
+                        <Form.Label className="col-6 mb-0">
                             Partisan Fairness
                         </Form.Label>
                         <TooltipSlider
@@ -347,7 +263,7 @@ export class InputTabPanelComponent extends React.Component<
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6">Contiguity</Form.Label>
+                        <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
                             defaultValue={0}
