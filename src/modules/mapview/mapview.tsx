@@ -82,6 +82,10 @@ export class MapViewComponent extends React.Component<
         }
     };
 
+    /**
+     * LIFECYCLE HOOKS
+     */
+
     async componentDidMount() {
         const statePopulator = new StateBordersApi();
         await Promise.all([
@@ -104,6 +108,10 @@ export class MapViewComponent extends React.Component<
 
         return true;
     }
+
+    /**
+     * LEAFLET EVENTS
+     */
 
     onEachFeatureDistrict(feature: any, layer: any) {
         layer.on({
@@ -134,77 +142,6 @@ export class MapViewComponent extends React.Component<
         });
     }
 
-    showPrecinctData(feature: any, layer: any) {
-        const properties = feature.target.feature.properties;
-        const electionsProps: IElectionsTabProps = {
-            presidentialResults: {
-                democraticVotes: properties.PRES16D,
-                republicanVotes: properties.PRES16R,
-                independentVotes: properties.PRES16I
-            },
-            senatorialResults: {
-                democraticVotes: properties.SEN16D,
-                republicanVotes: properties.SEN16R
-            },
-            gubernatorialResults: {
-                democraticVotes: properties.GOV16D,
-                republicanVotes: properties.GOV16R
-            }
-        };
-        const demographicsProps: IDemographicsTabProps = {
-            totalPopulation: properties.TOTPOP,
-            nonHispanicDemographics: {
-                White: properties.NH_WHITE,
-                AfricanAmerican: properties.NH_BLACK,
-                Asian: properties.NH_ASIAN,
-                NativeAmericans: properties.NH_AMIN,
-                PacificIslander: properties.NH_NHPI,
-                Other: properties.NH_OTHER,
-                Biracial: properties.NH_2MORE
-            },
-            hispanicDemographics: {
-                White: properties.H_WHITE,
-                AfricanAmerican: properties.H_BLACK,
-                Asian: properties.H_ASIAN,
-                NativeAmericans: properties.H_AMIN,
-                PacificIslander: properties.H_NHPI,
-                Other: properties.H_OTHER,
-                Biracial: properties.H_2MORE,
-                Hispanic: properties.HISP
-            }
-        };
-        const votingAgeProps: IVotingAgeTabProps = {
-            totalVotingPopulation: properties.VAP,
-            votingAgeDemographics: {
-                White: properties.WVAP,
-                AfricanAmerican: properties.BVAP,
-                Hispanic: properties.HVAP,
-                NativeAmericans: properties.AMINVAP,
-                Asian: properties.ASIANVAP,
-                PacificIslander: properties.NHPIVAP,
-                Other: properties.OTHERVAP,
-                Biracial: properties['2MOREVAP']
-            }
-        };
-        const precinctProps: IPrecinctPropertiesTabProps = {
-            precinctName: properties.PrcncID,
-            subPrecinctNumber: properties.SbPrcnc,
-            municipalityName: properties.AliasNm,
-            countyName: properties.cnty_nm,
-            jurisdictionName: properties.jrsdctn,
-            congressionalDistrictId: properties.CD
-        };
-        this.setState({
-            isOpen: true,
-            mapProps: {
-                electionsProps,
-                demographicsProps,
-                votingAgeProps,
-                precinctProps
-            }
-        });
-    }
-
     onMouseHover(layer: any) {
         const popupContent = ` <Popup><p>Congressional District Data</p><pre>Historic Vote: <br />${layer.layer.feature.properties.HistoricVote}</pre></Popup>`;
         layer.target.bindPopup(popupContent);
@@ -229,7 +166,7 @@ export class MapViewComponent extends React.Component<
         );
     }
 
-    onZoom(e) {
+    onZoom(e: any) {
         this.setState({
             zoom: this.state.map.viewport.zoom
         });
@@ -356,7 +293,78 @@ export class MapViewComponent extends React.Component<
         );
     }
 
-    getStateStyle(feature: any, layer: any): PathOptions {
+    private showPrecinctData(feature: any, layer: any) {
+        const properties = feature.target.feature.properties;
+        const electionsProps: IElectionsTabProps = {
+            presidentialResults: {
+                democraticVotes: properties.PRES16D,
+                republicanVotes: properties.PRES16R,
+                independentVotes: properties.PRES16I
+            },
+            senatorialResults: {
+                democraticVotes: properties.SEN16D,
+                republicanVotes: properties.SEN16R
+            },
+            gubernatorialResults: {
+                democraticVotes: properties.GOV16D,
+                republicanVotes: properties.GOV16R
+            }
+        };
+        const demographicsProps: IDemographicsTabProps = {
+            totalPopulation: properties.TOTPOP,
+            nonHispanicDemographics: {
+                White: properties.NH_WHITE,
+                AfricanAmerican: properties.NH_BLACK,
+                Asian: properties.NH_ASIAN,
+                NativeAmericans: properties.NH_AMIN,
+                PacificIslander: properties.NH_NHPI,
+                Other: properties.NH_OTHER,
+                Biracial: properties.NH_2MORE
+            },
+            hispanicDemographics: {
+                White: properties.H_WHITE,
+                AfricanAmerican: properties.H_BLACK,
+                Asian: properties.H_ASIAN,
+                NativeAmericans: properties.H_AMIN,
+                PacificIslander: properties.H_NHPI,
+                Other: properties.H_OTHER,
+                Biracial: properties.H_2MORE,
+                Hispanic: properties.HISP
+            }
+        };
+        const votingAgeProps: IVotingAgeTabProps = {
+            totalVotingPopulation: properties.VAP,
+            votingAgeDemographics: {
+                White: properties.WVAP,
+                AfricanAmerican: properties.BVAP,
+                Hispanic: properties.HVAP,
+                NativeAmericans: properties.AMINVAP,
+                Asian: properties.ASIANVAP,
+                PacificIslander: properties.NHPIVAP,
+                Other: properties.OTHERVAP,
+                Biracial: properties['2MOREVAP']
+            }
+        };
+        const precinctProps: IPrecinctPropertiesTabProps = {
+            precinctName: properties.PrcncID,
+            subPrecinctNumber: properties.SbPrcnc,
+            municipalityName: properties.AliasNm,
+            countyName: properties.cnty_nm,
+            jurisdictionName: properties.jrsdctn,
+            congressionalDistrictId: properties.CD
+        };
+        this.setState({
+            isOpen: true,
+            mapProps: {
+                electionsProps,
+                demographicsProps,
+                votingAgeProps,
+                precinctProps
+            }
+        });
+    }
+
+    private getStateStyle(feature: any, layer: any): PathOptions {
         return {
             color: 'rgb(51, 136, 255)',
             weight: 1,
@@ -365,53 +373,7 @@ export class MapViewComponent extends React.Component<
         };
     }
 
-    getDistrictStyle(feature: any, layer: any): PathOptions {
-        const majorityParty = this.getMajorityParty(feature.properties);
-        if (majorityParty.percent === NaN) {
-            majorityParty.party = '-';
-        }
-
-        switch (majorityParty.party) {
-            case 'D':
-                let partyColor: Color =
-                    majorityParty.percent >= 0.55
-                        ? Color.rgb([49, 117, 173]).saturate(
-                            majorityParty.percent / 100.0 - 0.55
-                        )
-                        : Color.rgb([49, 117, 173]).desaturate(
-                            0.75 - majorityParty.percent / 100.0
-                        );
-                return {
-                    color: '#1f2021',
-                    weight: 0.3,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            case 'R':
-                partyColor =
-                    majorityParty.percent >= 0.55
-                        ? Color.rgb([215, 110, 110]).saturate(
-                            majorityParty.percent / 100.0 - 0.55
-                        )
-                        : Color.rgb([215, 110, 110]).desaturate(
-                            0.75 - majorityParty.percent / 100.0
-                        );
-                return {
-                    color: '#1f2021',
-                    weight: 0.3,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            default:
-                return {
-                    color: '#1f2021',
-                    weight: 0.1,
-                    fillColor: '#fff2af'
-                };
-        }
-    }
-
-    getPrecinctStyle(feature: any, layer: any): PathOptions {
+    private getPrecinctStyle(feature: any, layer: any): PathOptions {
         if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
             return this.colorPolitical(feature, this.props.filter);
         } else if (this.props.filter === Constants.MAP_FILTER_DISTRICTS) {
@@ -553,7 +515,7 @@ export class MapViewComponent extends React.Component<
                     title: '2016 Congressional Election',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'Democratic Votes: ', value: `${properties.SEN16R}` },
+                        { key: 'Democratic Votes: ', value: `${properties.SEN16D}` },
                         { key: 'Republican Votes: ', value: `${properties.SEN16R}` }
                     ]
                 };
@@ -584,34 +546,44 @@ export class MapViewComponent extends React.Component<
         }
     }
 
-    private getMajorityParty(
-        properties: any
-    ): { party: string; percent: number } {
-        return properties.DemocratChance > properties.RepublicanChance
-            ? { party: 'D', percent: parseFloat(properties.DemocratChance) }
-            : { party: 'R', percent: parseFloat(properties.RepublicanChance) };
-    }
-
     private getMajorityPartyPrecinct(
         properties: any
     ): { party: string; percent: number } {
-        const totalVotes =
-            properties.PRES16R + properties.PRES16D + properties.PRES16I;
+
+        // Store the per party info based on election type
+        let democratVotes = 0, republicanVotes = 0, independentVotes = 0;
+
+        switch (this.props.filter) {
+            case Constants.MAP_FILTER_PRES_2016:
+                democratVotes = properties.PRES16D;
+                republicanVotes = properties.PRES16R;
+                independentVotes = properties.PRES16I;
+                break;
+            case Constants.MAP_FILTER_CONGRESS_2016:
+                democratVotes = properties.SEN16D;
+                republicanVotes = properties.SEN16R;
+                independentVotes = properties.SEN16I || 0;
+                break;
+            case Constants.MAP_FILTER_CONGRESS_2018:
+                break;
+        }
+
+        const totalVotes = democratVotes + republicanVotes + independentVotes;
 
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
         }
 
-        const republicanPercent = {
-            percent: properties.PRES16R / totalVotes,
-            party: 'R'
-        };
         const democratPercent = {
-            percent: properties.PRES16D / totalVotes,
+            percent: democratVotes / totalVotes,
             party: 'D'
         };
+        const republicanPercent = {
+            percent: republicanVotes / totalVotes,
+            party: 'R'
+        };
         const independentPercent = {
-            percent: properties.PRES16I / totalVotes,
+            percent: independentVotes / totalVotes,
             party: 'I'
         };
 

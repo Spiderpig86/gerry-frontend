@@ -126,7 +126,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                                     const demographic = demographics[~~(Math.random() * parties.length)];
                                     const party = parties[~~(Math.random() * parties.length)];
                                     return (
-                                        <tr>
+                                        <tr key={i}>
                                             <td>{i}</td>
                                             <td>{demographic}</td>
                                             <td>{demographicPercentage.toFixed(2)}%</td>
