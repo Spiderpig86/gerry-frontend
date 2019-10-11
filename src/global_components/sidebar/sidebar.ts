@@ -72,6 +72,7 @@ export const RightSidebarStyles = {
         fontSize: '1rem',
         width: '100%',
         maxWidth: '500px',
+        boxShadow: '-4px 0px 6px 0px rgba(0,0,0,0.12)'
     },
     bmMorphShape: {
         fill: '#373a47'

@@ -505,9 +505,9 @@ export class MapViewComponent extends React.Component<
                     title: '2016 Presidential Election',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'Democratic Votes: ', value: `${properties.PRES16D}` },
-                        { key: 'Republican Votes: ', value: `${properties.PRES16R}` },
-                        { key: 'Independent Votes: ', value: `${properties.PRES16I}` }
+                        { key: 'Democratic Votes', value: `${properties.PRES16D}` },
+                        { key: 'Republican Votes', value: `${properties.PRES16R}` },
+                        { key: 'Independent Votes', value: `${properties.PRES16I}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2016:
@@ -515,8 +515,8 @@ export class MapViewComponent extends React.Component<
                     title: '2016 Congressional Election',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'Democratic Votes: ', value: `${properties.SEN16D}` },
-                        { key: 'Republican Votes: ', value: `${properties.SEN16R}` }
+                        { key: 'Democratic Votes', value: `${properties.SEN16D}` },
+                        { key: 'Republican Votes', value: `${properties.SEN16R}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2018:
@@ -524,8 +524,8 @@ export class MapViewComponent extends React.Component<
                     title: '2018 Congressional Election',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'Democratic Votes: ', value: `${properties.PRES16D}` },
-                        { key: 'Republican Votes: ', value: `${properties.PRES16R}` },
+                        { key: 'Democratic Votes', value: `${properties.PRES16D}` },
+                        { key: 'Republican Votes', value: `${properties.PRES16R}` },
                     ]
                 };
             default:
@@ -533,14 +533,14 @@ export class MapViewComponent extends React.Component<
                     title: 'Demographic Data',
                     subtitle: `Precinct: ${properties.PrcncID}`,
                     statistics: [
-                        { key: 'White Population: ', value: `${Math.round(properties.NH_WHITE)}` },
-                        { key: 'Black Population: ', value: `${Math.round(properties.NH_BLACK)}` },
-                        { key: 'Hispanic Population: ', value: `${Math.round(properties.HISP)}` },
-                        { key: 'Asian Population: ', value: `${Math.round(properties.NH_ASIAN)}` },
-                        { key: 'Native American Population: ', value: `${Math.round(properties.NH_AMIN)}` },
-                        { key: 'Pacific Islander Population: ', value: `${Math.round(properties.NH_NHPI)}` },
-                        { key: 'Other Population: ', value: `${Math.round(properties.NH_OTHER)}` },
-                        { key: 'Biracial Population: ', value: `${Math.round(properties.NH_OTHER)}` },
+                        { key: 'White Population', value: `${Math.round(properties.NH_WHITE)}` },
+                        { key: 'Black Population', value: `${Math.round(properties.NH_BLACK)}` },
+                        { key: 'Hispanic Population', value: `${Math.round(properties.HISP)}` },
+                        { key: 'Asian Population', value: `${Math.round(properties.NH_ASIAN)}` },
+                        { key: 'Native American Population', value: `${Math.round(properties.NH_AMIN)}` },
+                        { key: 'Pacific Islander Population', value: `${Math.round(properties.NH_NHPI)}` },
+                        { key: 'Other Population', value: `${Math.round(properties.NH_OTHER)}` },
+                        { key: 'Biracial Population', value: `${Math.round(properties.NH_OTHER)}` },
                     ]
                 };
         }
