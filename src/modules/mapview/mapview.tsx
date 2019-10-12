@@ -297,61 +297,61 @@ export class MapViewComponent extends React.Component<
         const properties = feature.target.feature.properties;
         const electionsProps: IElectionsTabProps = {
             presidentialResults: {
-                democraticVotes: properties.PRES16D,
-                republicanVotes: properties.PRES16R,
-                independentVotes: properties.PRES16I
+                democraticVotes: properties.v16_dpres,
+                republicanVotes: properties.v16_rpres,
+                independentVotes: properties.v16_ipres
             },
             senatorialResults: {
-                democraticVotes: properties.SEN16D,
-                republicanVotes: properties.SEN16R
+                democraticVotes: properties.v16_dsenate,
+                republicanVotes: properties.v16_rsenate
             },
             gubernatorialResults: {
-                democraticVotes: properties.GOV16D,
-                republicanVotes: properties.GOV16R
+                democraticVotes: properties.v16_dgov,
+                republicanVotes: properties.v16_rgov
             }
         };
         const demographicsProps: IDemographicsTabProps = {
-            totalPopulation: properties.TOTPOP,
+            totalPopulation: properties.pop_total,
             nonHispanicDemographics: {
-                White: properties.NH_WHITE,
-                AfricanAmerican: properties.NH_BLACK,
-                Asian: properties.NH_ASIAN,
-                NativeAmericans: properties.NH_AMIN,
-                PacificIslander: properties.NH_NHPI,
-                Other: properties.NH_OTHER,
-                Biracial: properties.NH_2MORE
+                White: properties.pop_white_nh,
+                AfricanAmerican: properties.pop_black_nh,
+                Asian: properties.pop_asian_nh,
+                NativeAmericans: properties.pop_amin_nh,
+                PacificIslander: properties.pop_nhpi_nh,
+                Other: properties.pop_other_nh,
+                Biracial: properties.pop_2more_nh
             },
             hispanicDemographics: {
-                White: properties.H_WHITE,
-                AfricanAmerican: properties.H_BLACK,
-                Asian: properties.H_ASIAN,
-                NativeAmericans: properties.H_AMIN,
-                PacificIslander: properties.H_NHPI,
-                Other: properties.H_OTHER,
-                Biracial: properties.H_2MORE,
-                Hispanic: properties.HISP
+                Hispanic: properties.pop_hispanic,
+                White: properties.pop_white_h,
+                AfricanAmerican: properties.pop_black_h,
+                Asian: properties.pop_asian_h,
+                NativeAmericans: properties.pop_amin_h,
+                PacificIslander: properties.pop_nhpi_h,
+                Other: properties.pop_other_h,
+                Biracial: properties.pop_2more_h
             }
         };
         const votingAgeProps: IVotingAgeTabProps = {
-            totalVotingPopulation: properties.VAP,
+            totalVotingPopulation: properties.pop_total_voting,
             votingAgeDemographics: {
-                White: properties.WVAP,
-                AfricanAmerican: properties.BVAP,
-                Hispanic: properties.HVAP,
-                NativeAmericans: properties.AMINVAP,
-                Asian: properties.ASIANVAP,
-                PacificIslander: properties.NHPIVAP,
-                Other: properties.OTHERVAP,
-                Biracial: properties['2MOREVAP']
+                White: properties.pop_white_voting,
+                AfricanAmerican: properties.pop_black_voting,
+                Hispanic: properties.pop_hispanic_voting,
+                NativeAmericans: properties.pop_amin_voting,
+                Asian: properties.pop_asian_voting,
+                PacificIslander: properties.pop_nhpi_voting,
+                Other: properties.pop_other_voting,
+                Biracial: properties.pop_2more_voting
             }
         };
         const precinctProps: IPrecinctPropertiesTabProps = {
-            precinctName: properties.PrcncID,
+            precinctName: properties.precinct_name,
             subPrecinctNumber: properties.SbPrcnc,
             municipalityName: properties.AliasNm,
-            countyName: properties.cnty_nm,
+            countyName: properties.county_name,
             jurisdictionName: properties.jrsdctn,
-            congressionalDistrictId: properties.CD
+            congressionalDistrictId: properties.cd
         };
         this.setState({
             isOpen: true,
@@ -438,7 +438,7 @@ export class MapViewComponent extends React.Component<
                 .hex();
         }
 
-        if (properties.TOTPOP === 0) {
+        if (properties.pop_total === 0) {
             color = Color.rgb([0, 0, 0]).alpha(0).hex();
         }
 
@@ -454,7 +454,7 @@ export class MapViewComponent extends React.Component<
 
     private colorDistricts(feature: any, filter: string) {
         const properties = feature.properties;
-        const color = Constants.DISTRICT_COLORS[properties.CD - 1];
+        const color = Constants.DISTRICT_COLORS[properties.cd - 1];
 
         return {
             color: Color.default(color)
@@ -470,32 +470,32 @@ export class MapViewComponent extends React.Component<
         let demographicPopulation = 0;
         switch (filter) {
             case Constants.MAP_FILTER_WHITE_DENSITY:
-                demographicPopulation = properties.NH_WHITE
+                demographicPopulation = properties.pop_white_nh
                 break;
             case Constants.MAP_FILTER_BLACK_DENSITY:
-                demographicPopulation = properties.NH_BLACK;
+                demographicPopulation = properties.pop_black_nh;
                 break;
             case Constants.MAP_FILTER_ASIAN_DENSITY:
-                demographicPopulation = properties.NH_ASIAN;
+                demographicPopulation = properties.pop_asian_nh;
                 break;
             case Constants.MAP_FILTER_HISPANIC_DENSITY:
-                demographicPopulation = properties.HISP;
+                demographicPopulation = properties.pop_hispanic;
                 break;
             case Constants.MAP_FILTER_NATIVE_AMERICAN_DENSITY:
-                demographicPopulation = properties.NH_AMIN;
+                demographicPopulation = properties.pop_amin_nh;
                 break;
             case Constants.MAP_FILTER_PACIFIC_ISLANDER_DENSITY:
                 demographicPopulation = properties.NH_NHPI;
                 break;
             case Constants.MAP_FILTER_OTHER_DENSITY:
-                demographicPopulation = properties.NH_OTHER;
+                demographicPopulation = properties.pop_other_nh;
                 break;
             case Constants.MAP_FILTER_BIRACIAL_DENSITY:
-                demographicPopulation = properties.NH_2MORE;
+                demographicPopulation = properties.pop_2more_nh;
                 break;
         }
 
-        return demographicPopulation / properties.TOTPOP;
+        return demographicPopulation / properties.pop_total;
     }
 
     private getMapTooltipProps(filter: string, properties: any): IMapTooltipProps {
@@ -503,44 +503,45 @@ export class MapViewComponent extends React.Component<
             case Constants.MAP_FILTER_PRES_2016:
                 return {
                     title: '2016 Presidential Election',
-                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.PRES16D}` },
-                        { key: 'Republican Votes', value: `${properties.PRES16R}` },
-                        { key: 'Independent Votes', value: `${properties.PRES16I}` }
+                        { key: 'Democratic Votes', value: `${properties.v16_dpres}` },
+                        { key: 'Republican Votes', value: `${properties.v16_rpres}` },
+                        { key: 'Independent Votes', value: `${properties.v16_ipres || 0}` },
+                        { key: 'Other Votes', value: `${properties.v16_opres || 0}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2016:
                 return {
                     title: '2016 Congressional Election',
-                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.SEN16D}` },
-                        { key: 'Republican Votes', value: `${properties.SEN16R}` }
+                        { key: 'Democratic Votes', value: `${properties.v16_dsenate}` },
+                        { key: 'Republican Votes', value: `${properties.v16_rsenate}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2018:
                 return {
                     title: '2018 Congressional Election',
-                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.PRES16D}` },
-                        { key: 'Republican Votes', value: `${properties.PRES16R}` },
+                        { key: 'Democratic Votes', value: `${properties.v16_dpres}` },
+                        { key: 'Republican Votes', value: `${properties.v16_rpres}` },
                     ]
                 };
             default:
                 return {
                     title: 'Demographic Data',
-                    subtitle: `Precinct: ${properties.PrcncID}`,
+                    subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'White Population', value: `${Math.round(properties.NH_WHITE)}` },
-                        { key: 'Black Population', value: `${Math.round(properties.NH_BLACK)}` },
-                        { key: 'Hispanic Population', value: `${Math.round(properties.HISP)}` },
-                        { key: 'Asian Population', value: `${Math.round(properties.NH_ASIAN)}` },
-                        { key: 'Native American Population', value: `${Math.round(properties.NH_AMIN)}` },
-                        { key: 'Pacific Islander Population', value: `${Math.round(properties.NH_NHPI)}` },
-                        { key: 'Other Population', value: `${Math.round(properties.NH_OTHER)}` },
-                        { key: 'Biracial Population', value: `${Math.round(properties.NH_OTHER)}` },
+                        { key: 'White Population', value: `${Math.round(properties.pop_white_nh)}` },
+                        { key: 'Black Population', value: `${Math.round(properties.pop_black_nh)}` },
+                        { key: 'Hispanic Population', value: `${Math.round(properties.pop_hispanic)}` },
+                        { key: 'Asian Population', value: `${Math.round(properties.pop_asian_nh)}` },
+                        { key: 'Native American Population', value: `${Math.round(properties.pop_amin_nh)}` },
+                        { key: 'Pacific Islander Population', value: `${Math.round(properties.pop_nhpi_nh)}` },
+                        { key: 'Other Population', value: `${Math.round(properties.pop_other_nh)}` },
+                        { key: 'Biracial Population', value: `${Math.round(properties.pop_2more_nh)}` },
                     ]
                 };
         }
@@ -555,13 +556,13 @@ export class MapViewComponent extends React.Component<
 
         switch (this.props.filter) {
             case Constants.MAP_FILTER_PRES_2016:
-                democratVotes = properties.PRES16D;
-                republicanVotes = properties.PRES16R;
-                independentVotes = properties.PRES16I;
+                democratVotes = properties.v16_dpres;
+                republicanVotes = properties.v16_rpres;
+                independentVotes = properties.v16_ipres;
                 break;
             case Constants.MAP_FILTER_CONGRESS_2016:
-                democratVotes = properties.SEN16D;
-                republicanVotes = properties.SEN16R;
+                democratVotes = properties.v16_dsenate;
+                republicanVotes = properties.v16_rsenate;
                 independentVotes = properties.SEN16I || 0;
                 break;
             case Constants.MAP_FILTER_CONGRESS_2018:

@@ -7,6 +7,8 @@ export interface IPrecinctPropertiesTabProps {
     subPrecinctNumber?: number;
     municipalityName?: string;
     countyName?: string;
+    countyId?: string;
+    countyFips?: string;
     jurisdictionName?: string;
     congressionalDistrictId?: string;
 }

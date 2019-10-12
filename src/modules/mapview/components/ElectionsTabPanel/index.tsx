@@ -12,6 +12,7 @@ export interface IVoteData {
     republicanVotes: number;
     democraticVotes: number;
     independentVotes?: number;
+    otherVotes?: number;
 }
 
 export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {}> {
@@ -26,7 +27,8 @@ export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {
                 <p><b>Presidential</b></p>
                 <p>Democratic Votes: { this.props.presidentialResults.democraticVotes }</p>
                 <p>Republican Votes: { this.props.presidentialResults.republicanVotes }</p>
-                <p>Independent Votes: { this.props.presidentialResults.independentVotes }</p>
+                <p>Independent Votes: { this.props.presidentialResults.independentVotes || 0 }</p>
+                <p>Other Votes: { this.props.presidentialResults.otherVotes || 0 }</p>
                 <br/>
                 <p><b>Senatorial</b></p>
                 <p>Democratic Votes: { this.props.senatorialResults.democraticVotes }</p>
