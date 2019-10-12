@@ -52,7 +52,7 @@ class HomeComponent extends React.Component<
                         src="https://storage.coverr.co/videos/Merica_flag_waving?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTY5NjI0MjIyfQ.NmRPZoBuJt3Hzfk56R285EAkmaiNoVxPXgcn49-BMX4"
                         poster="https://storage.coverr.co/posters/Merica_flag_waving"
                     ></video>
-                    <Jumbotron className="jumbotron-fluid d-flex h-100">
+                    <Jumbotron id="splash" className="jumbotron-fluid d-flex h-100">
                         <Container className="justify-content-center text-center align-items-center d-flex flex-column">
                             <h1 className="display-1 font-weight-bold">
                                 Gerry.

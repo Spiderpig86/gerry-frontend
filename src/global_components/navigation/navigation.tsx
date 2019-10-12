@@ -11,9 +11,13 @@ import { Button, Form, FormControl, Navbar, Nav } from 'react-bootstrap';
 
 import * as userActionCreators from '../../redux/modules/users/users';
 
-interface INavigationComponentState {}
+interface INavigationComponentState {
+    activeClass: string;
+}
 
-const initialState: INavigationComponentState = {};
+const initialState: INavigationComponentState = {
+    activeClass: ''
+};
 
 interface INavigationComponentProps {
     history: any;
@@ -39,14 +43,23 @@ class NavigationComponent extends React.Component<
         super(props);
         this.state = initialState;
     }
+    componentDidMount() {
+        window.addEventListener('scroll', () => {
+         let activeClass = 'nav--dark';
+         if (window.scrollY < document.querySelector('#splash').clientHeight){
+             activeClass = '';
+         }
+        this.setState({ activeClass });
+      });
+    }
     render() {
         return (
-            <Navbar variant="dark" fixed='top'>
+            <Navbar className={this.state.activeClass + ' navigation'} variant="dark" fixed='top'>
                 <Navbar.Brand href="#home">Gerry</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="#what">What</Nav.Link>
-                    <Nav.Link href="#states">States</Nav.Link>
-                    <Nav.Link href="#developers">Developers</Nav.Link>
+                    <Nav.Link className='smoothScroll' href="#what">What</Nav.Link>
+                    <Nav.Link className='smoothScroll' href="#states">States</Nav.Link>
+                    <Nav.Link className='smoothScroll' href="#developers">Developers</Nav.Link>
                 </Nav>
                 <Nav className="ml-auto">
                     <Link to='/map'><Button variant="outline-light">Launch</Button></Link>
@@ -61,7 +74,8 @@ export const Navigation = connect(
         return {
             isAuthed: state.isAuthed,
             isFetching: state.isFetching,
-            error: state.error
+            error: state.error,
+            activeClass: ''
         };
     },
     dispatch => bindActionCreators(userActionCreators, dispatch)
