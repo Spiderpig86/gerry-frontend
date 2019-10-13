@@ -50,7 +50,7 @@ export const fetchAndHandleAuthentication = (history: any) => {
     authenticate().then((user: any) => {
       dispatch(fetchingUserSuccess(user.uid, user, new Date()));
       dispatch(authUser(user.uid));
-      history.push("/dashboard");
+      // history.push("/dashboard");
     }).catch((error) => dispatch(fetchingUserFailure(error)));
   };
 }
@@ -78,7 +78,6 @@ export const user = (state = initialUserState, action: any) => {
 const initialState = {
   isFetching: false,
   error: "",
-  isAuthed: false,
   authedId: "",
 }
 
@@ -87,13 +86,11 @@ export const users = (state = initialState, action: any) => {
     case AUTH_USER :
       return {
         ...state,
-        isAuthed: true,
         authedId: action.uid,
       }
     case UNAUTH_USER :
       return {
         ...state,
-        isAuthed: false,
         authedId: "",
       }
     case FETCHING_USER:

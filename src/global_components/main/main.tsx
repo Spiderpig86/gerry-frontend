@@ -10,22 +10,16 @@ import * as userActionCreators from "../../redux/modules/users/users";
 
 interface IMainContainerProps {
   component: any;
-  isAuthed: boolean;
   path?: string;
   exact?: boolean;
-  checkAuthentication: boolean;
 }
 
 const MainContainer: React.StatelessComponent<IMainContainerProps> = (props) => {
   const { component: Component, ...rest } = props;
   return <Route {...rest} render={matchProps =>
-    (props.checkAuthentication && !props.isAuthed) ?
-      (
-        <Redirect to="/" />
-      ) :
       (
         <div className="wrapper">
-          <Navigation history={matchProps.history} />
+          <Navigation/>
           <Component {...matchProps} />
           <div className="push"></div>
           <Footer />
@@ -36,7 +30,7 @@ const MainContainer: React.StatelessComponent<IMainContainerProps> = (props) => 
 
 export const Main = connect(
   (state: any) => {
-    return ({ isAuthed: state.isAuthed });
+    return ({ });
   },
   (dispatch) => bindActionCreators(userActionCreators, dispatch)
 )(MainContainer);

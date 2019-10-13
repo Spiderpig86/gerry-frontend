@@ -31,7 +31,6 @@ import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import * as Constants from '../../config/constants';
 
 import './mapview.scss';
-import * as UT_Districts from '../../data/UT-demo.json';
 
 interface IMapViewProps {
     selectedState: string;
@@ -336,7 +335,7 @@ export class MapViewComponent extends React.Component<
             totalVotingPopulation: properties.pop_total_voting,
             votingAgeDemographics: {
                 White: properties.pop_white_voting,
-                AfricanAmerican: properties.pop_black_voting,
+                AfricanAmerican: Number(properties.pop_black_voting),
                 Hispanic: properties.pop_hispanic_voting,
                 NativeAmericans: properties.pop_amin_voting,
                 Asian: properties.pop_asian_voting,
@@ -345,6 +344,7 @@ export class MapViewComponent extends React.Component<
                 Biracial: properties.pop_2more_voting
             }
         };
+        console.log(properties)
         const precinctProps: IPrecinctPropertiesTabProps = {
             precinctName: properties.precinct_name,
             subPrecinctNumber: properties.SbPrcnc,
@@ -389,30 +389,40 @@ export class MapViewComponent extends React.Component<
         switch (majorityParty.party) {
             case 'D':
                 let partyColor: Color = majorityParty.percent >= 0.75
-                    ? Color.rgb([16, 114, 195]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.rgb([16, 114, 195]).lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.default('#007abf').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default('#007abf').lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([16, 114, 195]).darken(.25).hex(),
+                    color: Color.default('#007abf').darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'R':
                 partyColor = majorityParty.percent >= 0.75
-                    ? Color.rgb([170, 57, 57]).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.rgb([170, 57, 57]).lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.default('#c03339').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default('#c03339').lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([170, 57, 57]).darken(.25).hex(),
+                    color: Color.default('#c03339').darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'I':
-                partyColor = majorityParty.percent >= 0.55
-                    ? Color.rgb([130, 182, 127]).saturate((majorityParty.percent - 0.55) * 3).darken((majorityParty.percent - 0.55))
-                    : Color.rgb([130, 182, 127]).lighten((0.55 - majorityParty.percent) * 3);
+                partyColor = majorityParty.percent >= 0.75
+                    ? Color.default('#2db82d').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default('#2db82d').lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.rgb([130, 182, 127]).darken(.25).hex(),
+                    color: Color.default('#2db82d').darken(.25).hex(),
+                    weight: 0.5,
+                    fillOpacity: 0.75,
+                    fillColor: partyColor.hex()
+                };
+            case 'O':
+                partyColor = majorityParty.percent >= 0.75
+                    ? Color.default('#6930be').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default('#2d6930beb82d').lighten((0.75 - majorityParty.percent) * 3);
+                return {
+                    color: Color.default('#6930be').darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
@@ -485,7 +495,7 @@ export class MapViewComponent extends React.Component<
                 demographicPopulation = properties.pop_amin_nh;
                 break;
             case Constants.MAP_FILTER_PACIFIC_ISLANDER_DENSITY:
-                demographicPopulation = properties.NH_NHPI;
+                demographicPopulation = properties.pop_nhpi_nh;
                 break;
             case Constants.MAP_FILTER_OTHER_DENSITY:
                 demographicPopulation = properties.pop_other_nh;
@@ -505,10 +515,10 @@ export class MapViewComponent extends React.Component<
                     title: '2016 Presidential Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.v16_dpres}` },
-                        { key: 'Republican Votes', value: `${properties.v16_rpres}` },
-                        { key: 'Independent Votes', value: `${properties.v16_ipres || 0}` },
-                        { key: 'Other Votes', value: `${properties.v16_opres || 0}` }
+                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dpres)}` },
+                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rpres)}` },
+                        { key: 'Independent Votes', value: `${Math.round(properties.v16_ipres) || 0}` },
+                        { key: 'Other Votes', value: `${Math.round(properties.v16_opres) || 0}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2016:
@@ -516,8 +526,8 @@ export class MapViewComponent extends React.Component<
                     title: '2016 Congressional Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.v16_dsenate}` },
-                        { key: 'Republican Votes', value: `${properties.v16_rsenate}` }
+                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dsenate)}` },
+                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rsenate)}` }
                     ]
                 };
             case Constants.MAP_FILTER_CONGRESS_2018:
@@ -525,8 +535,8 @@ export class MapViewComponent extends React.Component<
                     title: '2018 Congressional Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
-                        { key: 'Democratic Votes', value: `${properties.v16_dpres}` },
-                        { key: 'Republican Votes', value: `${properties.v16_rpres}` },
+                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dpres)}` },
+                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rpres)}` },
                     ]
                 };
             default:
@@ -552,24 +562,30 @@ export class MapViewComponent extends React.Component<
     ): { party: string; percent: number } {
 
         // Store the per party info based on election type
-        let democratVotes = 0, republicanVotes = 0, independentVotes = 0;
+        let democratVotes = 0, republicanVotes = 0, independentVotes = 0, otherVotes = 0;
 
         switch (this.props.filter) {
             case Constants.MAP_FILTER_PRES_2016:
                 democratVotes = properties.v16_dpres;
                 republicanVotes = properties.v16_rpres;
-                independentVotes = properties.v16_ipres;
+                independentVotes = properties.v16_ipres || 0;
+                otherVotes = properties.v16_opres || 0;
                 break;
             case Constants.MAP_FILTER_CONGRESS_2016:
                 democratVotes = properties.v16_dsenate;
                 republicanVotes = properties.v16_rsenate;
-                independentVotes = properties.SEN16I || 0;
+                independentVotes = properties.v16_isenate || 0;
+                otherVotes = properties.v16_osenate || 0;
                 break;
             case Constants.MAP_FILTER_CONGRESS_2018:
+                democratVotes = properties.v18_dsenate || 0;
+                republicanVotes = properties.v18_rsenate || 0;
+                independentVotes = properties.v18_isenate || 0;
+                otherVotes = properties.v18_osenate || 0;
                 break;
         }
 
-        const totalVotes = democratVotes + republicanVotes + independentVotes;
+        const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(independentVotes) + Number(otherVotes);
 
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
@@ -587,8 +603,12 @@ export class MapViewComponent extends React.Component<
             percent: independentVotes / totalVotes,
             party: 'I'
         };
+        const otherPercent = {
+            percent: otherVotes / totalVotes,
+            party: 'O'
+        };
 
-        return [republicanPercent, democratPercent, independentPercent].reduce(
+        return [republicanPercent, democratPercent, independentPercent, otherPercent].reduce(
             (prev: any, cur: any) => (prev.percent < cur.percent ? cur : prev)
         );
     }

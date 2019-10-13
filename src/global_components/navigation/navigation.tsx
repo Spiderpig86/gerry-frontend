@@ -20,12 +20,8 @@ const initialState: INavigationComponentState = {
 };
 
 interface INavigationComponentProps {
-    history: any;
-    isAuthed: boolean;
     isFetching: boolean;
     error: string;
-    unauthUser: () => void;
-    fetchAndHandleAuthentication: (history: any) => void;
 }
 
 class NavigationComponent extends React.Component<
@@ -33,11 +29,8 @@ class NavigationComponent extends React.Component<
     INavigationComponentState
 > {
     static propTypes = {
-        isAuthed: PropTypes.bool.isRequired,
         isFetching: PropTypes.bool.isRequired,
         error: PropTypes.string.isRequired,
-        unauthUser: PropTypes.func.isRequired,
-        fetchAndHandleAuthentication: PropTypes.func.isRequired
     };
     constructor(props: INavigationComponentProps) {
         super(props);
@@ -72,7 +65,6 @@ class NavigationComponent extends React.Component<
 export const Navigation = connect(
     (state: any) => {
         return {
-            isAuthed: state.isAuthed,
             isFetching: state.isFetching,
             error: state.error,
             activeClass: ''

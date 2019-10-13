@@ -15,9 +15,9 @@ export class StateBordersApi {
 
     public async fetchPrecincts(state: string): Promise<any> {
 
-        if (state === 'UT') {
+        if (state === 'UT' || state === 'VA') {
             try {
-                const data = await Axios.get(`./api/UT2.json`);
+                const data = await Axios.get(`./api/${state}.json`);
                 console.log(data);
                 return {
                     status: 'OK',
