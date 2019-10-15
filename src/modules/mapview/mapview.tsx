@@ -246,13 +246,6 @@ export class MapViewComponent extends React.Component<
                             ) {
                                 return (
                                     <div key={'selected'}>
-                                        {/* <GeoJSON
-                                            data={UT_Districts as GeoJsonObject}
-                                            // style={this.getDistrictStyle.bind(this)}
-                                            style={{ color: '#222' }}
-                                            onEachFeature={this.showPopup}
-                                            onMouseOver={this.onMouseHover}
-                                        /> */}
                                         <GeoJSON
                                             data={
                                                 this.props

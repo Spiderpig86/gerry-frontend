@@ -10,6 +10,7 @@ export const setSelectedState = (state: string) => {
         const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
+            dispatch(setPrecincts(null));
             dispatch(setPrecincts(precincts.data.geometry|| null));
         });
     }
