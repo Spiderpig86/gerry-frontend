@@ -4,6 +4,7 @@ import { StateBordersApi } from '../../../libs/state-borders';
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
 const SET_MAP_FILTER = 'SET_MAP_FILTER';
+const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
 
 export const setSelectedState = (state: string) => {
     return (dispatch: any) => {

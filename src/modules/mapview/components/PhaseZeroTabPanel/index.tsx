@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as mapActionCreators from '../../../../redux/modules/state/state';
 
-import { Dropdown, DropdownButton, Form, Table } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Form, Table, Button } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -104,6 +104,9 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
+                    <div className="d-flexpy-3">
+                        <Button className='w-100'>Analyze Districts</Button>
+                    </div>
                 </div>
 
                 <div className="py-3">

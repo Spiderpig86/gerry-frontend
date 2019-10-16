@@ -1,5 +1,5 @@
 export { LeftSidebar } from './LeftSidebar';
-export { InputTabPanel } from './InputTabPanel';
+export { PhaseOneTabPanel } from './PhaseOneTabPanel';
 export { PhaseZeroTabPanel } from './PhaseZeroTabPanel';
 export { FilterTabPanel } from './FilterTabPanel';
 export { LogsTabPanel } from './LogsTabPanel';

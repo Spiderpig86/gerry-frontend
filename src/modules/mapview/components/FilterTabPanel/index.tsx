@@ -18,6 +18,19 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
         return (
             <div className='px-4 py-3'>
                 <h4>Map Filter</h4>
+                <h5>Display Level</h5>
+                <Form className='mb-3'>
+                    <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                        <Form.Check defaultChecked name='displayLevel' custom type={'radio'} id={`displayLevelPrecinct`} label={`Precincts`} onClick={() => {}} />
+                    </Form.Group>
+                    <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelOldCd`} label={`Old Congressional Districts`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_OLD_DISTRICTS)} />
+                    </Form.Group>
+                    <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelNewCd`} label={`New Congressional Districts`} onClick={() => {}} />
+                    </Form.Group>
+                </Form>
+
                 <h6>Display Election Data</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked name='population' custom type={'radio'} id={`electionPres16`} label={`2016 Presidential Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_PRES_2016)} />
@@ -28,10 +41,6 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_CONGRESS_2018)} />
                 </Form.Group>
-                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`congressionalDistricts`} label={`Congressional Districts`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_DISTRICTS)} />
-                </Form.Group>
-
                 <br />
 
                 <h6>Display Minority Population Density</h6>

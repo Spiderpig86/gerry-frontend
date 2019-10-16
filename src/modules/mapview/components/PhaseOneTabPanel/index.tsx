@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as mapActionCreators from '../../../../redux/modules/state/state';
 
-import { Row, Dropdown, DropdownButton, Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip, Handle, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,43 +12,31 @@ import '../../../../styles/tooltip.scss';
 const TooltipRange = createSliderWithTooltip(Range);
 const TooltipSlider = createSliderWithTooltip(Slider);
 
-interface IInputTabPanelProps {
+interface IPhaseOneTabPanelProps {
     selectedState: string;
     setSelectedState: (state: string) => void;
 }
 
-export class InputTabPanelComponent extends React.Component<
-    IInputTabPanelProps,
+export class PhaseOneTabPanelComponent extends React.Component<
+IPhaseOneTabPanelProps,
     {}
 > {
     render() {
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
-
-                <h4>Algorithm Options</h4>
-                <div className="mb-4">
-                    {['PolsbyPopper', 'Schwartzberg'].map(
-                        (e: any, i: number) => {
-                            return (
-                                <Form.Group
-                                    key={`algoGroup${i}`}
-                                    className="w-100 py-2 row form-group d-flex align-items-center"
-                                >
-                                    <Form.Check
-                                        name="algorithm"
-                                        key={`algoOption${i}`}
-                                        custom
-                                        type={'radio'}
-                                        id={`algoOption${i}`}
-                                        label={`${e}`}
-                                    />
-                                </Form.Group>
-                            );
-                        }
-                    )}
-                </div>
-
                 <h4>District Properties</h4>
+                <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
+                    <Form.Label
+                        className={'col-6'}
+                        id={'numDistricts'}
+                    >Number of Districts to Generate</Form.Label>
+                    <Form.Control type={'number'}
+                        required
+                        className={'col-6'}
+                        min={1}
+                        defaultValue='5'
+                    />
+                </Form.Group>
 
                 <div className="mb-4">
                     <h6>Majority Minority District Threshold</h6>
@@ -132,102 +120,37 @@ export class InputTabPanelComponent extends React.Component<
                             label={'Other'}
                         />
                     </Form.Group>
+                </div>
 
-                    {/* <h6 className="mt-3">Voter Cohesiveness</h6>
-                    <p className="alert alert-info">
-                        Set the threshold to consider when a demographic is
-                        voting for a specific party. Set minimum threshold for
-                        each ethnic group that vote for the same party.
-                    </p>
-
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupWhite'}
-                            label={'White'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupCheckAfrican'}
-                            label={'African Americans'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupCheckAsian'}
-                            label={'Asians'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupCheckPacific'}
-                            label={'Pacific Islanders'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupCheckHispanic'}
-                            label={'Hispanics'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-6'}
-                            type={'checkbox'}
-                            id={'cohesiveGroupCheckNHWhite'}
-                            label={'Non-Hispanic Whites'}
-                        />
-                        <TooltipSlider
-                            className={'col-6'}
-                            defaultValue={0}
-                            tipFormatter={value => `${value}%`}
-                        />
-                    </Form.Group> */}
+                
+                <h4>Compactness Options</h4>
+                <p className="alert alert-info">
+                    Specify algorithm for measuring compactness.
+                </p>
+                <div className="mb-4">
+                    {['PolsbyPopper', 'Schwartzberg'].map(
+                        (e: any, i: number) => {
+                            return (
+                                <Form.Group
+                                    key={`algoGroup${i}`}
+                                    className="w-100 py-2 row form-group d-flex align-items-center"
+                                >
+                                    <Form.Check
+                                        name="algorithm"
+                                        key={`algoOption${i}`}
+                                        custom
+                                        type={'radio'}
+                                        id={`algoOption${i}`}
+                                        label={`${e}`}
+                                    />
+                                </Form.Group>
+                            );
+                        }
+                    )}
                 </div>
 
                 <div className="mb-4">
-                    <h4>Parameters</h4>
+                    <h4>Objective Function Weights</h4>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className="col-6 mb-0">
                             Population Equality
@@ -282,9 +205,9 @@ function mapStateToProps(state: any) {
     return { selectedState: state.stateReducer.selectedState };
 }
 
-export const InputTabPanel = connect(
+export const PhaseOneTabPanel = connect(
     (state: any) => {
         return mapStateToProps(state);
     },
     dispatch => bindActionCreators(mapActionCreators, dispatch)
-)(InputTabPanelComponent);
+)(PhaseOneTabPanelComponent);
