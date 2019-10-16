@@ -1,0 +1,7 @@
+.card .card-body .message {
+    padding-left: 80px;
+
+    &::after {
+        clear: both;
+    }
+}

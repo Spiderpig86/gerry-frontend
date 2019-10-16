@@ -23,6 +23,12 @@ export const setMapFilter = (filter: string) => {
     }
 }
 
+export const setMapLevel = (level: string) => {
+    return (dispatch: any) => {
+        dispatch(setLevel(level));
+    }
+}
+
 export const setPrecinctData = (precincts: any) => {
     return (dispatch: any) => {
         dispatch(setPrecincts(precincts));
@@ -50,10 +56,18 @@ export const setFilter = (filter: string) => {
     }
 }
 
+export const setLevel = (level: string) => {
+    return {
+        type: SET_VIEW_LEVEL,
+        level
+    }
+}
+
 const initialState = {
     selectedState: 'N/A',
     precincts: null,
-    filter: Constants.MAP_FILTER_PRES_2016
+    filter: Constants.MAP_FILTER_DEFAULT,
+    level: Constants.VIEW_LEVEL_PRECINCTS
 }
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -72,6 +86,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 filter: action.filter
+            }
+        case SET_VIEW_LEVEL:
+            return {
+                ...state,
+                level: action.level
             }
         default:
             return state;

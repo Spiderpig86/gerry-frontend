@@ -1,7 +1,10 @@
 import * as React from 'react';
 
-import { Dropdown, DropdownButton} from 'react-bootstrap';
+import { Col, Row, Dropdown, DropdownButton, Image} from 'react-bootstrap';
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
+import { Card } from 'react-bootstrap';
+
+import './styles.scss';
 
 export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
     render() {
@@ -18,6 +21,17 @@ export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
                 </DropdownButton>
 
                 <br />
+
+                <Card className='my-3'>
+                    <Card.Body>
+                        <Image className='float-left' style={{ width: '64px'}} roundedCircle src="https://www.wkar.org/sites/wkar/files/styles/medium/public/201905/IMG_7968.jpg" />
+
+                        <div className="message">
+                            <h5>Samuel Stanley</h5>
+                            <h6>Seawolf Party</h6>
+                        </div>
+                    </Card.Body>
+                </Card>
 
                 <p><b>Before</b></p>
                 <StatisticsAccordionComponent />

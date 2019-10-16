@@ -36,6 +36,7 @@ interface IMapViewProps {
     selectedState: string;
     precincts: any;
     filter: string;
+    level: string;
     store: any;
 }
 
@@ -272,7 +273,7 @@ export class MapViewComponent extends React.Component<
                                     <GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
-                                        style={this.getStateStyle.bind(this)}
+                                        style={this.getDefaultStyle.bind(this)}
                                         onEachFeature={this.onEachFeatureDistrict.bind(
                                             this
                                         )}
@@ -328,7 +329,7 @@ export class MapViewComponent extends React.Component<
             totalVotingPopulation: properties.pop_total_voting,
             votingAgeDemographics: {
                 White: properties.pop_white_voting,
-                AfricanAmerican: Number(properties.pop_black_voting),
+                AfricanAmerican: properties.pop_black_voting,
                 Hispanic: properties.pop_hispanic_voting,
                 NativeAmericans: properties.pop_amin_voting,
                 Asian: properties.pop_asian_voting,
@@ -337,7 +338,6 @@ export class MapViewComponent extends React.Component<
                 Biracial: properties.pop_2more_voting
             }
         };
-        console.log(properties)
         const precinctProps: IPrecinctPropertiesTabProps = {
             precinctName: properties.precinct_name,
             subPrecinctNumber: properties.SbPrcnc,
@@ -357,7 +357,7 @@ export class MapViewComponent extends React.Component<
         });
     }
 
-    private getStateStyle(feature: any, layer: any): PathOptions {
+    private getDefaultStyle(feature: any, layer: any): PathOptions {
         return {
             color: 'rgb(51, 136, 255)',
             weight: 1,
@@ -367,17 +367,18 @@ export class MapViewComponent extends React.Component<
     }
 
     private getPrecinctStyle(feature: any, layer: any): PathOptions {
+        const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
         if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
-            return this.colorPolitical(feature, this.props.filter);
-        } else if (this.props.filter === Constants.MAP_FILTER_OLD_DISTRICTS) {
-            return this.colorDistricts(feature, this.props.filter);
+            return this.colorPolitical(properties, this.props.filter);
+        } else if (this.props.filter === Constants.MAP_FILTER_DEFAULT) {
+            return this.colorDefault(properties, this.props.level);
         } else {
-            return this.colorDemographic(feature, this.props.filter);
+            return this.colorDemographic(properties, this.props.filter);
         }
     }
 
-    private colorPolitical(feature: any, filter: string) {
-        const majorityParty = this.getMajorityPartyPrecinct(feature.properties);
+    private colorPolitical(properties: any, filter: string) {
+        const majorityParty = this.getMajorityPartyPrecinct(properties);
 
         switch (majorityParty.party) {
             case 'D':
@@ -429,8 +430,7 @@ export class MapViewComponent extends React.Component<
         }
     }
 
-    private colorDemographic(feature: any, filter: string) {
-        const properties = feature.properties;
+    private colorDemographic(properties: any, filter: string) {
         const demographicPercent = this.getPopulationPercentByDemographic(properties, filter);
         let color = Color.rgb([252, 210, 122]).saturate((demographicPercent - 0.75) * 3)
             .darken(demographicPercent - 0.75)
@@ -455,18 +455,26 @@ export class MapViewComponent extends React.Component<
         };
     }
 
-    private colorDistricts(feature: any, filter: string) {
-        const properties = feature.properties;
-        const color = Constants.DISTRICT_COLORS[properties.cd - 1];
+    private colorDefault(properties: any, level: string): PathOptions {
+        if (level === Constants.VIEW_LEVEL_PRECINCTS) {
+            return {
+                color: 'rgb(51, 136, 255)',
+                weight: 1,
+                fillOpacity: 0.5,
+                fillColor: 'rgb(51, 136, 255)'
+            };
+        } else {
+            const color = Constants.DISTRICT_COLORS[properties.cd - 1];
 
-        return {
-            color: Color.default(color)
-                .darken(0.5)
-                .hex(),
-            weight: 0.5,
-            fillOpacity: 0.75,
-            fillColor: color
-        };
+            return {
+                color: Color.default(color)
+                    .darken(0.5)
+                    .hex(),
+                weight: 0.5,
+                fillOpacity: 0.75,
+                fillColor: color
+            };
+        }
     }
 
     private getPopulationPercentByDemographic(properties: any, filter: string): number {
@@ -612,6 +620,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         selectedState: state.stateReducer.selectedState,
         precincts: state.stateReducer.precincts,
         filter: state.stateReducer.filter,
+        level: state.stateReducer.level,
         store: ownProps.store
     };
 }
