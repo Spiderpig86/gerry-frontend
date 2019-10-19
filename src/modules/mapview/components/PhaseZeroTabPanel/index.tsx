@@ -94,6 +94,22 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         percentage for the selected election to see if the
                         demographic voted en masse for the winning party.
                     </p>
+
+                    <DropdownButton
+                        id='phase0Election'
+                        title='Select Election Data'
+                    >
+                        <Dropdown.Item onClick={() => {}}>
+                            Presidential 2016
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>
+                            Congressional 2016
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => {}}>
+                            Congressional 2018
+                        </Dropdown.Item>
+                    </DropdownButton>
+
                     <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className={'col-4'}>
                             Winning Party:

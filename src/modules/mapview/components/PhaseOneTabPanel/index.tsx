@@ -136,10 +136,34 @@ IPhaseOneTabPanelProps,
                                     className="w-100 py-2 row form-group d-flex align-items-center"
                                 >
                                     <Form.Check
-                                        name="algorithm"
                                         key={`algoOption${i}`}
                                         custom
-                                        type={'radio'}
+                                        type={'checkbox'}
+                                        id={`algoOption${i}`}
+                                        label={`${e}`}
+                                    />
+                                </Form.Group>
+                            );
+                        }
+                    )}
+                </div>
+
+                <h4>Political Fairness Options</h4>
+                <p className="alert alert-info">
+                    Specify factors for measuring political fairness.
+                </p>
+                <div className="mb-4">
+                    {['Efficiency Gap', 'Lopsided Margins', 'Mean-Median Difference'].map(
+                        (e: any, i: number) => {
+                            return (
+                                <Form.Group
+                                    key={`algoGroup${i}`}
+                                    className="w-100 py-2 row form-group d-flex align-items-center"
+                                >
+                                    <Form.Check
+                                        key={`algoOption${i}`}
+                                        custom
+                                        type={'checkbox'}
                                         id={`algoOption${i}`}
                                         label={`${e}`}
                                     />

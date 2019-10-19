@@ -1,10 +1,12 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
+import { PhaseZeroArgs } from '../../../models/phasezeroargs';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
 const SET_MAP_FILTER = 'SET_MAP_FILTER';
 const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
+const SET_PZERO_ARGS = 'SET_PZERO_ARGS';
 
 export const setSelectedState = (state: string) => {
     return (dispatch: any) => {
@@ -63,11 +65,23 @@ export const setLevel = (level: string) => {
     }
 }
 
+export const setPZeroArgs = (pZeroArgs: PhaseZeroArgs) => {
+    return {
+        type: SET_PZERO_ARGS,
+        pZeroArgs
+    }
+}
+
 const initialState = {
     selectedState: 'N/A',
     precincts: null,
     filter: Constants.MAP_FILTER_DEFAULT,
-    level: Constants.VIEW_LEVEL_PRECINCTS
+    level: Constants.VIEW_LEVEL_PRECINCTS,
+    pZeroArgs: {
+        demographicThreshold: 0.5,
+        selectetdElection: Constants.ELECTION_PRES_16,
+        partyThreshold: 0.5
+    }
 }
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -91,6 +105,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 level: action.level
+            }
+        case SET_PZERO_ARGS:
+            return {
+                ...state,
+                pZeroArgs: action.pZeroArgs
             }
         default:
             return state;
