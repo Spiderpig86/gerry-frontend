@@ -121,7 +121,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         />
                     </Form.Group>
                     <div className="d-flexpy-3">
-                        <Button className='w-100'>Analyze Districts</Button>
+                        <Button className='w-100'>Analyze Precincts</Button>
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>
-                                <th>District ID</th>
+                                <th>Precincts ID</th>
                                 <th colSpan={2}>Demographic</th>
                                 <th colSpan={2}>Party</th>
                             </tr>

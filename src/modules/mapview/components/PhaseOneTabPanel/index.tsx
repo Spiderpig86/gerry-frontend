@@ -132,14 +132,14 @@ IPhaseOneTabPanelProps,
                         (e: any, i: number) => {
                             return (
                                 <Form.Group
-                                    key={`algoGroup${i}`}
+                                    key={`compactGroup${i}`}
                                     className="w-100 py-2 row form-group d-flex align-items-center"
                                 >
                                     <Form.Check
-                                        key={`algoOption${i}`}
+                                        key={`compactGroup${i}`}
                                         custom
                                         type={'checkbox'}
-                                        id={`algoOption${i}`}
+                                        id={`compactGroup${i}`}
                                         label={`${e}`}
                                     />
                                 </Form.Group>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Color from 'color';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
@@ -28,11 +27,12 @@ import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
+import { Coloring } from './libs/coloring';
 import * as Constants from '../../config/constants';
 
 import './mapview.scss';
 
-interface IMapViewProps {
+export interface IMapViewProps {
     selectedState: string;
     precincts: any;
     filter: string;
@@ -61,7 +61,7 @@ interface IMapViewState {
 export class MapViewComponent extends React.Component<
     IMapViewProps,
     IMapViewState
-    > {
+> {
     state: IMapViewState = {
         stateBorders: [],
         selectedState: 'UT',
@@ -81,6 +81,13 @@ export class MapViewComponent extends React.Component<
             statistics: null
         }
     };
+
+    public coloring: Coloring;
+
+    constructor() {
+        super();
+        this.coloring = new Coloring();
+    }
 
     /**
      * LIFECYCLE HOOKS
@@ -150,7 +157,10 @@ export class MapViewComponent extends React.Component<
 
     onMouseHoverPrecinct(layer: any) {
         const properties: any = layer.layer.feature.properties;
-        const toolTipProps = this.getMapTooltipProps(this.props.filter, properties);
+        const toolTipProps = this.getMapTooltipProps(
+            this.props.filter,
+            properties
+        );
         this.props.store.dispatch(setTooltipData(toolTipProps));
     }
 
@@ -273,7 +283,9 @@ export class MapViewComponent extends React.Component<
                                     <GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
-                                        style={this.getDefaultStyle.bind(this)}
+                                        style={this.coloring.getDefaultStyle.bind(
+                                            this.coloring
+                                        )}
                                         onEachFeature={this.onEachFeatureDistrict.bind(
                                             this
                                         )}
@@ -357,208 +369,9 @@ export class MapViewComponent extends React.Component<
         });
     }
 
-    private getDefaultStyle(feature: any, layer: any): PathOptions {
-        return {
-            color: 'rgb(51, 136, 255)',
-            weight: 1,
-            fillOpacity: 0.5,
-            fillColor: 'rgb(51, 136, 255)'
-        };
-    }
-
-    private getPrecinctStyle(feature: any, layer: any): PathOptions {
-        const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
-        if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
-            return this.colorPolitical(properties, this.props.filter);
-        } else if (this.props.filter === Constants.MAP_FILTER_DEFAULT) {
-            return this.colorDefault(properties, this.props.level);
-        } else {
-            return this.colorDemographic(properties, this.props.filter);
-        }
-    }
-
-    private colorPolitical(properties: any, filter: string) {
-        const majorityParty = this.getMajorityPartyPrecinct(properties);
-
-        switch (majorityParty.party) {
-            case 'D':
-                let partyColor: Color = majorityParty.percent >= 0.75
-                    ? Color.default('#007abf').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#007abf').lighten((0.75 - majorityParty.percent) * 3);
-                return {
-                    color: Color.default('#007abf').darken(.25).hex(),
-                    weight: 0.5,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            case 'R':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#c03339').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#c03339').lighten((0.75 - majorityParty.percent) * 3);
-                return {
-                    color: Color.default('#c03339').darken(.25).hex(),
-                    weight: 0.5,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            case 'I':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#2db82d').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#2db82d').lighten((0.75 - majorityParty.percent) * 3);
-                return {
-                    color: Color.default('#2db82d').darken(.25).hex(),
-                    weight: 0.5,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            case 'O':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#6930be').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#2d6930beb82d').lighten((0.75 - majorityParty.percent) * 3);
-                return {
-                    color: Color.default('#6930be').darken(.25).hex(),
-                    weight: 0.5,
-                    fillOpacity: 0.75,
-                    fillColor: partyColor.hex()
-                };
-            default:
-                return {
-                    color: '#1f2021',
-                    weight: 0.3,
-                    fillOpacity: 0,
-                };
-        }
-    }
-
-    private colorDemographic(properties: any, filter: string) {
-        const demographicPercent = this.getPopulationPercentByDemographic(properties, filter);
-        let color = Color.rgb([252, 210, 122]).saturate((demographicPercent - 0.75) * 3)
-            .darken(demographicPercent - 0.75)
-            .hex();
-        if (demographicPercent < 0.75) {
-            color = Color.rgb([252, 210, 122])
-                .lighten(0.75 - demographicPercent)
-                .hex();
-        }
-
-        if (properties.pop_total === 0) {
-            color = Color.rgb([0, 0, 0]).alpha(0).hex();
-        }
-
-        return {
-            color: Color.rgb([252, 210, 122])
-                .darken(0.5)
-                .hex(),
-            weight: 0.5,
-            fillOpacity: 0.75,
-            fillColor: color
-        };
-    }
-
-    private colorDefault(properties: any, level: string): PathOptions {
-        if (level === Constants.VIEW_LEVEL_PRECINCTS) {
-            return {
-                color: 'rgb(51, 136, 255)',
-                weight: 1,
-                fillOpacity: 0.5,
-                fillColor: 'rgb(51, 136, 255)'
-            };
-        } else {
-            const color = Constants.DISTRICT_COLORS[properties.cd - 1];
-
-            return {
-                color: Color.default(color)
-                    .darken(0.5)
-                    .hex(),
-                weight: 0.5,
-                fillOpacity: 0.75,
-                fillColor: color
-            };
-        }
-    }
-
-    private getPopulationPercentByDemographic(properties: any, filter: string): number {
-        let demographicPopulation = 0;
-        switch (filter) {
-            case Constants.MAP_FILTER_WHITE_DENSITY:
-                demographicPopulation = properties.pop_white_nh
-                break;
-            case Constants.MAP_FILTER_BLACK_DENSITY:
-                demographicPopulation = properties.pop_black_nh;
-                break;
-            case Constants.MAP_FILTER_ASIAN_DENSITY:
-                demographicPopulation = properties.pop_asian_nh;
-                break;
-            case Constants.MAP_FILTER_HISPANIC_DENSITY:
-                demographicPopulation = properties.pop_hispanic;
-                break;
-            case Constants.MAP_FILTER_NATIVE_AMERICAN_DENSITY:
-                demographicPopulation = properties.pop_amin_nh;
-                break;
-            case Constants.MAP_FILTER_PACIFIC_ISLANDER_DENSITY:
-                demographicPopulation = properties.pop_nhpi_nh;
-                break;
-            case Constants.MAP_FILTER_OTHER_DENSITY:
-                demographicPopulation = properties.pop_other_nh;
-                break;
-            case Constants.MAP_FILTER_BIRACIAL_DENSITY:
-                demographicPopulation = properties.pop_2more_nh;
-                break;
-        }
-
-        return demographicPopulation / properties.pop_total;
-    }
-
-    private getMapTooltipProps(filter: string, properties: any): IMapTooltipProps {
-        switch (filter) {
-            case Constants.MAP_FILTER_PRES_2016:
-                return {
-                    title: '2016 Presidential Election',
-                    subtitle: `Precinct: ${properties.precinct_name}`,
-                    statistics: [
-                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dpres)}` },
-                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rpres)}` },
-                        { key: 'Independent Votes', value: `${Math.round(properties.v16_ipres) || 0}` },
-                        { key: 'Other Votes', value: `${Math.round(properties.v16_opres) || 0}` }
-                    ]
-                };
-            case Constants.MAP_FILTER_CONGRESS_2016:
-                return {
-                    title: '2016 Congressional Election',
-                    subtitle: `Precinct: ${properties.precinct_name}`,
-                    statistics: [
-                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dsenate)}` },
-                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rsenate)}` }
-                    ]
-                };
-            case Constants.MAP_FILTER_CONGRESS_2018:
-                return {
-                    title: '2018 Congressional Election',
-                    subtitle: `Precinct: ${properties.precinct_name}`,
-                    statistics: [
-                        { key: 'Democratic Votes', value: `${Math.round(properties.v16_dpres)}` },
-                        { key: 'Republican Votes', value: `${Math.round(properties.v16_rpres)}` },
-                    ]
-                };
-            default:
-                return {
-                    title: 'Demographic Data',
-                    subtitle: `Precinct: ${properties.precinct_name}`,
-                    statistics: [
-                        { key: 'White Population', value: `${Math.round(properties.pop_white_nh)}` },
-                        { key: 'Black Population', value: `${Math.round(properties.pop_black_nh)}` },
-                        { key: 'Hispanic Population', value: `${Math.round(properties.pop_hispanic)}` },
-                        { key: 'Asian Population', value: `${Math.round(properties.pop_asian_nh)}` },
-                        { key: 'Native American Population', value: `${Math.round(properties.pop_amin_nh)}` },
-                        { key: 'Pacific Islander Population', value: `${Math.round(properties.pop_nhpi_nh)}` },
-                        { key: 'Other Population', value: `${Math.round(properties.pop_other_nh)}` },
-                        { key: 'Biracial Population', value: `${Math.round(properties.pop_2more_nh)}` },
-                    ]
-                };
-        }
-    }
-
-    private getMajorityPartyPrecinct(
+    
+    
+    public getMajorityPartyPrecinct(
         properties: any
     ): { party: string; percent: number } {
 
@@ -612,6 +425,117 @@ export class MapViewComponent extends React.Component<
         return [republicanPercent, democratPercent, independentPercent, otherPercent].reduce(
             (prev: any, cur: any) => (prev.percent < cur.percent ? cur : prev)
         );
+    }
+
+    public getPrecinctStyle(feature: any, layer: any): PathOptions {
+        const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
+        if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
+            return this.coloring.colorPolitical(properties, this.props.filter, this.getMajorityPartyPrecinct(properties));
+        } else if (this.props.filter === Constants.MAP_FILTER_DEFAULT) {
+            return this.coloring.colorDefault(properties, this.props.level);
+        } else {
+            return this.coloring.colorDemographic(properties, this.props.filter);
+        }
+    }
+
+    private getMapTooltipProps(
+        filter: string,
+        properties: any
+    ): IMapTooltipProps {
+        switch (filter) {
+            case Constants.MAP_FILTER_PRES_2016:
+                return {
+                    title: '2016 Presidential Election',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'Democratic Votes',
+                            value: `${Math.round(properties.v16_dpres)}`
+                        },
+                        {
+                            key: 'Republican Votes',
+                            value: `${Math.round(properties.v16_rpres)}`
+                        },
+                        {
+                            key: 'Independent Votes',
+                            value: `${Math.round(properties.v16_ipres) || 0}`
+                        },
+                        {
+                            key: 'Other Votes',
+                            value: `${Math.round(properties.v16_opres) || 0}`
+                        }
+                    ]
+                };
+            case Constants.MAP_FILTER_CONGRESS_2016:
+                return {
+                    title: '2016 Congressional Election',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'Democratic Votes',
+                            value: `${Math.round(properties.v16_dsenate)}`
+                        },
+                        {
+                            key: 'Republican Votes',
+                            value: `${Math.round(properties.v16_rsenate)}`
+                        }
+                    ]
+                };
+            case Constants.MAP_FILTER_CONGRESS_2018:
+                return {
+                    title: '2018 Congressional Election',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'Democratic Votes',
+                            value: `${Math.round(properties.v16_dpres)}`
+                        },
+                        {
+                            key: 'Republican Votes',
+                            value: `${Math.round(properties.v16_rpres)}`
+                        }
+                    ]
+                };
+            default:
+                return {
+                    title: 'Demographic Data',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'White Population',
+                            value: `${Math.round(properties.pop_white_nh)}`
+                        },
+                        {
+                            key: 'Black Population',
+                            value: `${Math.round(properties.pop_black_nh)}`
+                        },
+                        {
+                            key: 'Hispanic Population',
+                            value: `${Math.round(properties.pop_hispanic)}`
+                        },
+                        {
+                            key: 'Asian Population',
+                            value: `${Math.round(properties.pop_asian_nh)}`
+                        },
+                        {
+                            key: 'Native American Population',
+                            value: `${Math.round(properties.pop_amin_nh)}`
+                        },
+                        {
+                            key: 'Pacific Islander Population',
+                            value: `${Math.round(properties.pop_nhpi_nh)}`
+                        },
+                        {
+                            key: 'Other Population',
+                            value: `${Math.round(properties.pop_other_nh)}`
+                        },
+                        {
+                            key: 'Biracial Population',
+                            value: `${Math.round(properties.pop_2more_nh)}`
+                        }
+                    ]
+                };
+        }
     }
 }
 
