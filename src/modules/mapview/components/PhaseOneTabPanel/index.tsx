@@ -136,9 +136,10 @@ IPhaseOneTabPanelProps,
                                     className="w-100 py-2 row form-group d-flex align-items-center"
                                 >
                                     <Form.Check
+                                        name={`compactnessAlgo`}
                                         key={`compactGroup${i}`}
                                         custom
-                                        type={'checkbox'}
+                                        type={'radio'}
                                         id={`compactGroup${i}`}
                                         label={`${e}`}
                                     />
@@ -161,9 +162,10 @@ IPhaseOneTabPanelProps,
                                     className="w-100 py-2 row form-group d-flex align-items-center"
                                 >
                                     <Form.Check
+                                        name={`politicalAlgo`}
                                         key={`algoOption${i}`}
                                         custom
-                                        type={'checkbox'}
+                                        type={'radio'}
                                         id={`algoOption${i}`}
                                         label={`${e}`}
                                     />
