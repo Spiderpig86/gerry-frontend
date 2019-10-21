@@ -301,18 +301,35 @@ export class MapViewComponent extends React.Component<
     private showPrecinctData(feature: any, layer: any) {
         const properties = feature.target.feature.properties;
         const electionsProps: IElectionsTabProps = {
-            presidentialResults: {
-                democraticVotes: properties.v16_dpres,
-                republicanVotes: properties.v16_rpres,
-                independentVotes: properties.v16_ipres
+            election2016: {
+                presidentialResults: {
+                    democraticVotes: properties.v16_dpres,
+                    republicanVotes: properties.v16_rpres,
+                    independentVotes: properties.v16_ipres,
+                    otherVotes: properties.v16_opres
+                },
+                senatorialResults: {
+                    democraticVotes: properties.v16_dsenate,
+                    republicanVotes: properties.v16_rsenate,
+                    otherVotes: properties.v16_opres
+                },
+                houseResults: {
+                    democraticVotes: properties.v16_dhouse,
+                    republicanVotes: properties.v16_rhouse,
+                    otherVotes: properties.v16_ohouse
+                }
             },
-            senatorialResults: {
-                democraticVotes: properties.v16_dsenate,
-                republicanVotes: properties.v16_rsenate
-            },
-            gubernatorialResults: {
-                democraticVotes: properties.v16_dgov,
-                republicanVotes: properties.v16_rgov
+            election2018: {
+                senatorialResults: {
+                    democraticVotes: properties.v18_dsenate,
+                    republicanVotes: properties.v18_rsenate,
+                    otherVotes: properties.v18_opres
+                },
+                houseResults: {
+                    democraticVotes: properties.v18_dhouse,
+                    republicanVotes: properties.v18_rhouse,
+                    otherVotes: properties.v18_ohouse
+                }
             }
         };
         const demographicsProps: IDemographicsTabProps = {
