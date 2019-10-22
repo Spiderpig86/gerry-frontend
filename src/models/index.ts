@@ -1,6 +1,7 @@
 export { IDemographics } from "./demographics";
 export { User } from "./user";
 export { PhaseZeroArgs } from './phasezeroargs';
-export { Precinct } from './precinct';
-export { ClusterNode } from './clusternode';
+export { IPrecinct } from './precinct';
+export { ICluster } from './clusternode';
 export { Properties } from './properties';
+export { IVoteData } from './vote';

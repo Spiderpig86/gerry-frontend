@@ -1,15 +1,17 @@
-import { Precinct } from './';
+import { IDemographics, IVoteData } from './index';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
  * 
  * @export
- * @interface ClusterNode
+ * @interface ICluster
  */
-export interface ClusterNode {
+export interface ICluster {
 
     name: string;
     id: string;
-    precinctNodes: Map<string, Precinct>;
+    precinctKeys: Set<string>;
+    demographicStats: IDemographics;
+    votingStats: IVoteData;
 
 }

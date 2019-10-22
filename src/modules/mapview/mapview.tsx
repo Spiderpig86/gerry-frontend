@@ -22,7 +22,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from './libs/coloring';
-import { Precinct, Properties } from '../../models';
+import { IPrecinct, Properties } from '../../models';
 import * as Constants from '../../config/constants';
 
 import './mapview.scss';
@@ -30,7 +30,7 @@ import './mapview.scss';
 export interface IMapViewProps {
     selectedState: string;
     precincts: any;
-    precinctMap: Map<string, Precinct>;
+    precinctMap: Map<string, IPrecinct>;
     filter: string;
     level: string;
     store: any;

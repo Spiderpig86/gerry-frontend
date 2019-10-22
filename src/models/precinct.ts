@@ -4,9 +4,9 @@ import { Properties } from './properties';
  * Interface for specifying how precinct objects should look.
  * 
  * @export
- * @interface Precinct
+ * @interface IPrecinct
  */
-export interface Precinct {
+export interface IPrecinct {
     
     geometry: any;
     properties: Properties;

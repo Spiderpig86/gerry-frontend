@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { round } from '../../libs/round';
+import { IVoteData } from '../../../../models';
 
 import { Placeholder } from '../../../../global_components';
 
@@ -13,13 +14,6 @@ export interface IElectionTypes {
     presidentialResults?: IVoteData;
     senatorialResults?: IVoteData;
     houseResults?: IVoteData;
-}
-
-export interface IVoteData {
-    republicanVotes: number;
-    democraticVotes: number;
-    independentVotes?: number;
-    otherVotes?: number;
 }
 
 export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {}> {

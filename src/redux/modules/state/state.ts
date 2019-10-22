@@ -1,6 +1,6 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, Precinct } from '../../../models';
+import { PhaseZeroArgs, IPrecinct } from '../../../models';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -15,7 +15,7 @@ export const setSelectedState = (state: string) => {
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
             const shapeData: any[] = precincts.data.geometry.features;
-            const map = new Map<string, Precinct>();
+            const map = new Map<string, IPrecinct>();
             (async() => {
                 for (const shape of shapeData) {
                     const key = shape.properties.precinct_name;
@@ -61,7 +61,7 @@ export const setPrecincts = (precincts: any) => {
     }
 }
 
-export const setPrecinctMap = (precinctMap: Map<string, Precinct>) => {
+export const setPrecinctMap = (precinctMap: Map<string, IPrecinct>) => {
     return {
         type: SET_PRECINCT_MAP,
         precinctMap
@@ -92,7 +92,7 @@ export const setPZeroArgs = (pZeroArgs: PhaseZeroArgs) => {
 interface State {
     selectedState: string;
     precincts: any;
-    precinctMap: Map<string, Precinct>;
+    precinctMap: Map<string, IPrecinct>;
     filter: string;
     level: string;
     pZeroArgs: PhaseZeroArgs
@@ -101,7 +101,7 @@ interface State {
 const initialState: State = {
     selectedState: 'N/A',
     precincts: null,
-    precinctMap: new Map<string, Precinct>(),
+    precinctMap: new Map<string, IPrecinct>(),
     filter: Constants.MAP_FILTER_DEFAULT,
     level: Constants.VIEW_LEVEL_PRECINCTS,
     pZeroArgs: {
