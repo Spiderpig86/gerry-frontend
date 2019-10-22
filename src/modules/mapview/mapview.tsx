@@ -2,13 +2,7 @@ import * as React from 'react';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
-import {
-    Map,
-    TileLayer,
-    GeoJSON,
-    LayersControl,
-    ZoomControl
-} from 'react-leaflet';
+import * as ReactLeaflet from 'react-leaflet';
 import { LatLng, PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import { connect } from 'react-redux';
@@ -28,6 +22,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from './libs/coloring';
+import { Precinct, Properties } from '../../models';
 import * as Constants from '../../config/constants';
 
 import './mapview.scss';
@@ -35,6 +30,7 @@ import './mapview.scss';
 export interface IMapViewProps {
     selectedState: string;
     precincts: any;
+    precinctMap: Map<string, Precinct>;
     filter: string;
     level: string;
     store: any;
@@ -42,9 +38,7 @@ export interface IMapViewProps {
 
 interface IMapViewState {
     stateBorders: any[];
-    selectedState: string;
-    precincts: any;
-    map: Map;
+    map: ReactLeaflet.Map;
     isOpen: boolean;
     zoom: number;
 
@@ -64,8 +58,6 @@ export class MapViewComponent extends React.Component<
 > {
     state: IMapViewState = {
         stateBorders: [],
-        selectedState: 'UT',
-        precincts: null,
         isOpen: false,
         map: null,
         zoom: 5,
@@ -120,7 +112,7 @@ export class MapViewComponent extends React.Component<
      * LEAFLET EVENTS
      */
 
-    onEachFeatureDistrict(feature: any, layer: any) {
+    onEachFeatureState(feature: any, layer: any) {
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
@@ -156,7 +148,7 @@ export class MapViewComponent extends React.Component<
     }
 
     onMouseHoverPrecinct(layer: any) {
-        const properties: any = layer.layer.feature.properties;
+        const properties: Properties = layer.layer.feature.properties;
         const toolTipProps = this.getMapTooltipProps(
             this.props.filter,
             properties
@@ -194,7 +186,7 @@ export class MapViewComponent extends React.Component<
                     isOpen={this.state.isOpen}
                 />
 
-                <Map
+                <ReactLeaflet.Map
                     className="row flex-fill"
                     ref={ref => {
                         this.state.map = ref;
@@ -206,48 +198,48 @@ export class MapViewComponent extends React.Component<
                     easeLinearly={true}
                     onZoomEnd={this.onZoom.bind(this)}
                 >
-                    <TileLayer
+                    <ReactLeaflet.TileLayer
                         url={MAP_BOX_ENDPOINT + MAP_BOX_TOKEN}
                         attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
                     />
-                    <LayersControl position="bottomright">
-                        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-                            <TileLayer
+                    <ReactLeaflet.LayersControl position="bottomright">
+                        <ReactLeaflet.LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
+                            <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                             />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
-                            <TileLayer
+                        </ReactLeaflet.LayersControl.BaseLayer>
+                        <ReactLeaflet.LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
+                            <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer checked name="Mapbox Light">
-                            <TileLayer
+                        </ReactLeaflet.LayersControl.BaseLayer>
+                        <ReactLeaflet.LayersControl.BaseLayer checked name="Mapbox Light">
+                            <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
                             />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="Mapbox Dark">
-                            <TileLayer
+                        </ReactLeaflet.LayersControl.BaseLayer>
+                        <ReactLeaflet.LayersControl.BaseLayer name="Mapbox Dark">
+                            <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
                             />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="Mapbox Streets">
-                            <TileLayer
+                        </ReactLeaflet.LayersControl.BaseLayer>
+                        <ReactLeaflet.LayersControl.BaseLayer name="Mapbox Streets">
+                            <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
                             />
-                        </LayersControl.BaseLayer>
-                    </LayersControl>
+                        </ReactLeaflet.LayersControl.BaseLayer>
+                    </ReactLeaflet.LayersControl>
 
                     <Control position="bottomleft">
                         <MapTooltip {...this.state.mapTooltip} />
                     </Control>
 
-                    <ZoomControl position={'bottomright'} />
+                    <ReactLeaflet.ZoomControl position={'bottomright'} />
                     {this.state.stateBorders &&
                         this.state.stateBorders.map((data: any, i: number) => {
                             if (
@@ -257,7 +249,7 @@ export class MapViewComponent extends React.Component<
                             ) {
                                 return (
                                     <div key={'selected'}>
-                                        <GeoJSON
+                                        <ReactLeaflet.GeoJSON
                                             data={
                                                 this.props
                                                     .precincts as GeoJsonObject
@@ -280,26 +272,31 @@ export class MapViewComponent extends React.Component<
                                 );
                             } else {
                                 return (
-                                    <GeoJSON
+                                    <ReactLeaflet.GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
                                         style={this.coloring.getDefaultStyle.bind(
                                             this.coloring
                                         )}
-                                        onEachFeature={this.onEachFeatureDistrict.bind(
+                                        onEachFeature={this.onEachFeatureState.bind(
                                             this
                                         )}
                                     />
                                 );
                             }
                         })}
-                </Map>
+                </ReactLeaflet.Map>
             </div>
         );
     }
 
     private showPrecinctData(feature: any, layer: any) {
+
         const properties = feature.target.feature.properties;
+        const precinct = this.props.precinctMap.get(properties.precinct_name);
+        precinct.properties.v16_ipres += 16;
+        console.log(precinct);
+
         const electionsProps: IElectionsTabProps = {
             election2016: {
                 presidentialResults: {
@@ -560,6 +557,7 @@ function mapStatetoProps(state: any, ownProps: any) {
     return {
         selectedState: state.stateReducer.selectedState,
         precincts: state.stateReducer.precincts,
+        precinctMap: state.stateReducer.precinctMap,
         filter: state.stateReducer.filter,
         level: state.stateReducer.level,
         store: ownProps.store

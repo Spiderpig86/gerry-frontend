@@ -54,33 +54,12 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         First, select the minimum percentage of a demographic
                         must be populated in percinct to be considered.
                     </p>
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <DropdownButton
-                            className={'col-6 px-0'}
-                            id="dropdown-basic-button"
-                            title={'Bloc Demographic'}
-                        >
-                            <Dropdown.Item onClick={() => { }}>
-                                White
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { }}>
-                                African American
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { }}>
-                                Hispanic
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { }}>
-                                Asian
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { }}>
-                                Native American
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { }}>
-                                Pacific Islander
-                            </Dropdown.Item>
-                        </DropdownButton>
+                    <Form.Group className="form-group d-flex align-items-center py-2">
+                        <Form.Label className={'col-4'}>
+                            Majority Party:
+                        </Form.Label>
                         <TooltipSlider
-                            className={'col-6 px-0'}
+                            className={'col-8'}
                             defaultValue={0}
                             tipFormatter={value => `${value}%`}
                         />

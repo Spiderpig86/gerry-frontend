@@ -10,5 +10,5 @@ export const authenticate = () => {
 }
 
 export const checkIfAuthenticated = (store: any) => {
-    return store.getState().isAuthed;
+    // return store.getState().isAuthed;
 }

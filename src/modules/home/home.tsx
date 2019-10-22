@@ -16,7 +16,7 @@ const initialState: IHomeComponentState = {};
 
 interface IHomeComponentProps {
     history: any;
-    isAuthed: boolean;
+    // isAuthed: boolean;
     isFetching: boolean;
     error: string;
     fetchAndHandleAuthentication: (history: any) => void;
@@ -27,10 +27,10 @@ class HomeComponent extends React.Component<
     IHomeComponentState
 > {
     static propTypes = {
-        isAuthed: PropTypes.bool.isRequired,
-        isFetching: PropTypes.bool.isRequired,
-        error: PropTypes.string.isRequired,
-        fetchAndHandleAuthentication: PropTypes.func.isRequired
+        // isAuthed: PropTypes.bool.isRequired,
+        // isFetching: PropTypes.bool.isRequired,
+        // error: PropTypes.string.isRequired,
+        // fetchAndHandleAuthentication: PropTypes.func.isRequired
     };
     constructor(props: IHomeComponentProps) {
         super(props);
@@ -157,7 +157,7 @@ export const Home = connect(
         return {
             isFetching: state.isFetching,
             error: state.error,
-            isAuthed: state.isAuthed
+            // isAuthed: state.isAuthed
         };
     },
     dispatch => bindActionCreators(userActionCreators, dispatch)

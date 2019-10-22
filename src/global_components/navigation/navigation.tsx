@@ -20,7 +20,7 @@ const initialState: INavigationComponentState = {
 };
 
 interface INavigationComponentProps {
-    isFetching: boolean;
+    // isFetching: boolean;
     error: string;
 }
 
@@ -29,8 +29,8 @@ class NavigationComponent extends React.Component<
     INavigationComponentState
 > {
     static propTypes = {
-        isFetching: PropTypes.bool.isRequired,
-        error: PropTypes.string.isRequired,
+        // isFetching: PropTypes.bool.isRequired,
+        // error: PropTypes.string.isRequired,
     };
     constructor(props: INavigationComponentProps) {
         super(props);
@@ -65,7 +65,7 @@ class NavigationComponent extends React.Component<
 export const Navigation = connect(
     (state: any) => {
         return {
-            isFetching: state.isFetching,
+            // isFetching: state.isFetching,
             error: state.error,
             activeClass: ''
         };
