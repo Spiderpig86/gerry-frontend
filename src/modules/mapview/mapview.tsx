@@ -495,7 +495,22 @@ export class MapViewComponent extends React.Component<
                 };
             case Constants.MAP_FILTER_HOUSE_2016:
                 return {
-                    title: '2016 Congressional Election',
+                    title: '2016 House Election',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'Democratic Votes',
+                            value: `${Math.round(properties.v16_dhouse)}`
+                        },
+                        {
+                            key: 'Republican Votes',
+                            value: `${Math.round(properties.v16_rhouse)}`
+                        }
+                    ]
+                };
+            case Constants.MAP_FILTER_SENATE_2016:
+                return {
+                    title: '2016 Senate Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
                         {
@@ -510,16 +525,31 @@ export class MapViewComponent extends React.Component<
                 };
             case Constants.MAP_FILTER_HOUSE_2018:
                 return {
-                    title: '2018 Congressional Election',
+                    title: '2018 House Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v16_dpres)}`
+                            value: `${Math.round(properties.v18_dhouse)}`
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v16_rpres)}`
+                            value: `${Math.round(properties.v18_rhouse)}`
+                        }
+                    ]
+                };
+            case Constants.MAP_FILTER_SENATE_2018:
+                return {
+                    title: '2018 Senate Election',
+                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    statistics: [
+                        {
+                            key: 'Democratic Votes',
+                            value: `${Math.round(properties.v18_dsenate)}`
+                        },
+                        {
+                            key: 'Republican Votes',
+                            value: `${Math.round(properties.v18_rsenate)}`
                         }
                     ]
                 };
