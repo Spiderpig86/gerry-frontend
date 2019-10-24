@@ -43,10 +43,16 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                     <Form.Check name='population' custom type={'radio'} id={`electionPres16`} label={`2016 Presidential Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_PRES_2016)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionHouse16`} label={`2016 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_CONGRESS_2016)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionHouse16`} label={`2016 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HOUSE_2016)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_CONGRESS_2018)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionSenate16`} label={`2016 Senate Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_SENATE_2016)} />
+                </Form.Group>
+                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                    <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HOUSE_2018)} />
+                </Form.Group>
+                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                    <Form.Check name='population' custom type={'radio'} id={`electionSenate18`} label={`2018 Senate Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_SENATE_2018)} />
                 </Form.Group>
                 <br />
 

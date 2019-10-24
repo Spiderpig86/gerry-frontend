@@ -294,7 +294,8 @@ export class MapViewComponent extends React.Component<
 
         const properties = feature.target.feature.properties;
         const precinct = this.props.precinctMap.get(properties.precinct_name);
-        precinct.properties.v16_ipres += 16;
+        console.log(properties);
+        // precinct.properties.v16_ipres += 16;
         console.log(precinct);
 
         const electionsProps: IElectionsTabProps = {
@@ -399,13 +400,25 @@ export class MapViewComponent extends React.Component<
                 independentVotes = properties.v16_ipres || 0;
                 otherVotes = properties.v16_opres || 0;
                 break;
-            case Constants.MAP_FILTER_CONGRESS_2016:
-                democratVotes = properties.v16_dsenate;
-                republicanVotes = properties.v16_rsenate;
+            case Constants.MAP_FILTER_HOUSE_2016:
+                democratVotes = properties.v16_dhouse;
+                republicanVotes = properties.v16_rhouse;
+                independentVotes = properties.v16_ihouse || 0;
+                otherVotes = properties.v16_ohouse || 0;
+                break;
+            case Constants.MAP_FILTER_SENATE_2016:
+                democratVotes = properties.v16_dsenate || 0;
+                republicanVotes = properties.v16_rsenate || 0;
                 independentVotes = properties.v16_isenate || 0;
                 otherVotes = properties.v16_osenate || 0;
                 break;
-            case Constants.MAP_FILTER_CONGRESS_2018:
+            case Constants.MAP_FILTER_HOUSE_2018:
+                democratVotes = properties.v18_dhouse || 0;
+                republicanVotes = properties.v18_rhouse || 0;
+                independentVotes = properties.v18_ihouse || 0;
+                otherVotes = properties.v18_ohouse || 0;
+                break;
+            case Constants.MAP_FILTER_SENATE_2018:
                 democratVotes = properties.v18_dsenate || 0;
                 republicanVotes = properties.v18_rsenate || 0;
                 independentVotes = properties.v18_isenate || 0;
@@ -443,7 +456,7 @@ export class MapViewComponent extends React.Component<
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
-        if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2016 || this.props.filter === Constants.MAP_FILTER_CONGRESS_2018) {
+        if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_HOUSE_2016 || this.props.filter === Constants.MAP_FILTER_SENATE_2016 || this.props.filter === Constants.MAP_FILTER_HOUSE_2018 || this.props.filter === Constants.MAP_FILTER_SENATE_2018) {
             return this.coloring.colorPolitical(properties, this.props.filter, this.getMajorityPartyPrecinct(properties));
         } else if (this.props.filter === Constants.MAP_FILTER_DEFAULT) {
             return this.coloring.colorDefault(properties, this.props.level);
@@ -480,7 +493,7 @@ export class MapViewComponent extends React.Component<
                         }
                     ]
                 };
-            case Constants.MAP_FILTER_CONGRESS_2016:
+            case Constants.MAP_FILTER_HOUSE_2016:
                 return {
                     title: '2016 Congressional Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
@@ -495,7 +508,7 @@ export class MapViewComponent extends React.Component<
                         }
                     ]
                 };
-            case Constants.MAP_FILTER_CONGRESS_2018:
+            case Constants.MAP_FILTER_HOUSE_2018:
                 return {
                     title: '2018 Congressional Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,

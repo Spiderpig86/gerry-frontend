@@ -8,6 +8,7 @@ import * as Color from 'color';
 import * as Constants from '../../../config/constants';
 
 import { PathOptions } from 'leaflet';
+import { Properties } from '../../../models';
 
 export class Coloring {
 
@@ -20,7 +21,7 @@ export class Coloring {
         };
     }
 
-    public colorPolitical(properties: any, filter: string, majorityParty: { party: string; percent: number }) {
+    public colorPolitical(properties: Properties, filter: string, majorityParty: { party: string; percent: number }) {
 
         switch (majorityParty.party) {
             case 'D':

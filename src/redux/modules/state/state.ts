@@ -16,12 +16,10 @@ export const setSelectedState = (state: string) => {
         statePopulator.fetchPrecincts(state).then(precincts => {
             const shapeData: any[] = precincts.data.geometry.features;
             const map = new Map<string, IPrecinct>();
-            (async() => {
-                for (const shape of shapeData) {
-                    const key = shape.properties.precinct_name;
-                    map.set(key, shape);
-                }
-            });
+            for (const shape of shapeData) {
+                const key = shape.properties.precinct_name;
+                map.set(key, shape);
+            }
             dispatch(setPrecincts(null));
             dispatch(setPrecincts(precincts.data.geometry));
             dispatch(setPrecinctMap(map));
