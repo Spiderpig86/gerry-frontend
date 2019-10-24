@@ -1,6 +1,6 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, IPrecinct } from '../../../models';
+import { PhaseZeroArgs, IPrecinct, ICluster } from '../../../models';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -15,16 +15,34 @@ export const setSelectedState = (state: string) => {
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
             const shapeData: any[] = precincts.data.geometry.features;
+
+            const test: any = {
+                features: [],
+                type: "FeatureCollection"
+            };
+
             const map = new Map<string, IPrecinct>();
-            for (const shape of shapeData) {
-                const key = shape.properties.precinct_name;
-                map.set(key, shape);
-            }
             dispatch(setPrecincts(null));
-            dispatch(setPrecincts(precincts.data.geometry));
+            (async () => {
+                for (const shape of shapeData) {
+                    const key = shape.properties.precinct_name;
+                    map.set(key, shape);
+                    test.features.push(shape);
+                    dispatch(setPrecincts(test));
+                    console.log('test')
+                    
+                }
+                // dispatch(setPrecincts(test));
+            })();
+            dispatch(setPrecincts(test));
+            console.log(test.features);
             dispatch(setPrecinctMap(map));
         });
     }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export const setMapFilter = (filter: string) => {
@@ -93,7 +111,8 @@ interface State {
     precinctMap: Map<string, IPrecinct>;
     filter: string;
     level: string;
-    pZeroArgs: PhaseZeroArgs
+    pZeroArgs: PhaseZeroArgs;
+    clusterMap: Map<string, ICluster>; // Map the cluster Ids to Cluster object
 };
 
 const initialState: State = {
@@ -106,7 +125,8 @@ const initialState: State = {
         demographicThreshold: 0.5,
         selectedElection: Constants.ELECTION_PRES_16,
         partyThreshold: 0.5
-    }
+    },
+    clusterMap: new Map<string, ICluster>()
 }
 
 export const stateReducer = (state = initialState, action: any) => {

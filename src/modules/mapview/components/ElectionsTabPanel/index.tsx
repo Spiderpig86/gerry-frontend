@@ -39,7 +39,7 @@ export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {
                 <p><b>House</b></p>
                 <p>Democratic Votes: { round(this.props.election2016.houseResults.democraticVotes) }</p>
                 <p>Republican Votes: { round(this.props.election2016.houseResults.republicanVotes) }</p>
-                <p>Other Votes: { round(this.props.election2016.houseResults.otherVotes)|| 'N/A'  }</p>
+                <p>Other Votes: { round(this.props.election2016.houseResults.otherVotes) || 'N/A'  }</p>
                 <br/>
                 <br/>
                 <h4>2018 Election</h4>

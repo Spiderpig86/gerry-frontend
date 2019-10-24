@@ -90,12 +90,13 @@ export class MapViewComponent extends React.Component<
         await Promise.all([
             statePopulator.fetchStateBorder(States.CA),
             statePopulator.fetchStateBorder(States.UT),
-            statePopulator.fetchStateBorder(States.VA)
+            statePopulator.fetchStateBorder(States.VA),
         ]).then(data =>
             this.setState({
                 stateBorders: data
             })
         );
+        await statePopulator.fetchPrecincts('blank');
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -248,8 +249,8 @@ export class MapViewComponent extends React.Component<
                                 this.state.zoom > 5
                             ) {
                                 return (
-                                    <div key={'selected'}>
                                         <ReactLeaflet.GeoJSON
+                                            key={'precincts'}
                                             data={
                                                 this.props
                                                     .precincts as GeoJsonObject
@@ -267,8 +268,7 @@ export class MapViewComponent extends React.Component<
                                             onEachFeature={this.onEachFeaturePrecinct.bind(
                                                 this
                                             )}
-                                        />
-                                    </div>
+                                        />  
                                 );
                             } else {
                                 return (
