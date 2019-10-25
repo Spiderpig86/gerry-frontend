@@ -9,8 +9,8 @@ import { Properties } from './properties';
 export interface IPrecinct {
     
     geometry: any;
-    originalCd: any;
-    newCd: any;
+    originalCdId: any;
+    newCdId: any;
     properties: Properties;
 
 }

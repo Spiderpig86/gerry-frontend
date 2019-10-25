@@ -21,7 +21,7 @@ import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
-import { Coloring } from './libs/coloring';
+import { Coloring } from '../../libs/coloring';
 import { IPrecinct, Properties } from '../../models';
 import * as Constants from '../../config/constants';
 
@@ -459,7 +459,7 @@ export class MapViewComponent extends React.Component<
         if (this.props.filter === Constants.MAP_FILTER_PRES_2016 || this.props.filter === Constants.MAP_FILTER_HOUSE_2016 || this.props.filter === Constants.MAP_FILTER_SENATE_2016 || this.props.filter === Constants.MAP_FILTER_HOUSE_2018 || this.props.filter === Constants.MAP_FILTER_SENATE_2018) {
             return this.coloring.colorPolitical(properties, this.props.filter, this.getMajorityPartyPrecinct(properties));
         } else if (this.props.filter === Constants.MAP_FILTER_DEFAULT) {
-            return this.coloring.colorDefault(properties, this.props.level);
+            return this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap);
         } else {
             return this.coloring.colorDemographic(properties, this.props.filter);
         }

@@ -6,11 +6,11 @@
  */
 import * as Color from 'color';
 import distinctColors from 'distinct-colors';
-
-import * as Constants from '../../../config/constants';
-
 import { PathOptions } from 'leaflet';
-import { Properties } from '../../../models';
+
+import * as Constants from '../config/constants';
+import { Properties, IPrecinct } from '../models';
+import { hashPrecinct } from './hash';
 
 export class Coloring {
 
@@ -24,8 +24,8 @@ export class Coloring {
         return {
             color: 'rgb(51, 136, 255)',
             weight: 0.75,
-            fillOpacity: 0.5,
-            fillColor: 'rgb(51, 136, 255)'
+            // fillOpacity: 0.5,
+            // fillColor: 'rgb(51, 136, 255)'
         };
     }
 
@@ -106,27 +106,34 @@ export class Coloring {
         };
     }
 
-    public colorDefault(properties: any, level: string): PathOptions {
-        if (level === Constants.VIEW_LEVEL_PRECINCTS) {
-            return {
-                color: 'rgb(51, 136, 255)',
-                weight: 1,
-                fillOpacity: 0.5,
-                fillColor: 'rgb(51, 136, 255)'
-            };
-        } else {
-            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
-            const color = Color.rgb(this.colors[properties.cd - 1]._rgb).hex();
+    public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>): PathOptions {
 
-            return {
-                color: Color.default(color)
-                    .darken(0.5)
-                    .hex(),
-                weight: 0.5,
-                fillOpacity: 0.75,
-                fillColor: color
-            };
+        const colorConfig = {
+            color: 'rgb(51, 136, 255)',
+            weight: 1,
+            fillOpacity: 0.5,
+            fillColor: 'rgb(51, 136, 255)'
+        };
+        
+        if (level === Constants.VIEW_LEVEL_OLD_DISTRICTS) {
+            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
+            const precinct = precinctMap.get(hashPrecinct(properties));
+            if (!precinct) {
+                return colorConfig;
+            }
+
+            const cdId = level === Constants.VIEW_LEVEL_OLD_DISTRICTS ? precinct.originalCdId - 1 : precinct.newCdId - 1;
+
+            const color = Color.rgb(this.colors[cdId]._rgb).hex();
+            colorConfig.color = Color.default(color)
+                                .darken(0.5)
+                                .hex();
+            colorConfig.weight = 0.75;
+            colorConfig.fillOpacity = 0.75;
+            colorConfig.fillColor = color;
         }
+
+        return colorConfig;
     }
 
     public getPopulationPercentByDemographic(properties: any, filter: string): number {

@@ -1,6 +1,7 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
 import { PhaseZeroArgs, IPrecinct } from '../../../models';
+import { hashPrecinct } from '../../../libs/hash';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -11,17 +12,19 @@ const SET_PZERO_ARGS = 'SET_PZERO_ARGS';
 
 export const setSelectedState = (oldState: string, state: string) => {
     return (dispatch: any) => {
+        // Selecting already loaded state
         if (oldState === state) {
             return;
         }
+
+        // Fetch state data
         const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
             const shapeData: any[] = precincts.data.geometry.features;
             const map = new Map<string, IPrecinct>();
             for (const shape of shapeData) {
-                const key = shape.properties.precinct_name;
-                map.set(key, shape);
+                map.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
             }
             dispatch(setPrecincts(null));
             dispatch(setPrecincts(precincts.data.geometry));
@@ -147,4 +150,6 @@ export const stateReducer = (state = initialState, action: any) => {
         default:
             return state;
     }
+
+    
 }
