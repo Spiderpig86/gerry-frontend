@@ -118,7 +118,7 @@ export class MapViewComponent extends React.Component<
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
                 this.props.store.dispatch(
-                    mapActionCreators.setSelectedState(feature.state)
+                    mapActionCreators.setSelectedState(this.props.selectedState, feature.state)
                 );
             }
         });

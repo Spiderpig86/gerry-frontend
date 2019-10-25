@@ -13,7 +13,7 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseZeroTabPanelProps {
     selectedState: string;
-    setSelectedState: (state: string) => void;
+    setSelectedState: (oldState: string, state: string) => void;
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<
@@ -32,17 +32,17 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                     title={dropdownTitle}
                 >
                     <Dropdown.Item
-                        onClick={() => this.props.setSelectedState('CA')}
+                        onClick={() => this.props.setSelectedState(this.props.selectedState, 'CA')}
                     >
                         California
                         </Dropdown.Item>
                     <Dropdown.Item
-                        onClick={() => this.props.setSelectedState('UT')}
+                        onClick={() => this.props.setSelectedState(this.props.selectedState, 'UT')}
                     >
                         Utah
                         </Dropdown.Item>
                     <Dropdown.Item
-                        onClick={() => this.props.setSelectedState('VA')}
+                        onClick={() => this.props.setSelectedState(this.props.selectedState, 'VA')}
                     >
                         Virginia
                         </Dropdown.Item>

@@ -9,8 +9,11 @@ const SET_MAP_FILTER = 'SET_MAP_FILTER';
 const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
 const SET_PZERO_ARGS = 'SET_PZERO_ARGS';
 
-export const setSelectedState = (state: string) => {
+export const setSelectedState = (oldState: string, state: string) => {
     return (dispatch: any) => {
+        if (oldState === state) {
+            return;
+        }
         const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {

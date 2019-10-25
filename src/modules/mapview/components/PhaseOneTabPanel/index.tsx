@@ -14,7 +14,7 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseOneTabPanelProps {
     selectedState: string;
-    setSelectedState: (state: string) => void;
+    setSelectedState: (oldState: string, state: string) => void;
 }
 
 export class PhaseOneTabPanelComponent extends React.Component<

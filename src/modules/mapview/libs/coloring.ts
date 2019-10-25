@@ -5,6 +5,8 @@
  * @class Coloring
  */
 import * as Color from 'color';
+import distinctColors from 'distinct-colors';
+
 import * as Constants from '../../../config/constants';
 
 import { PathOptions } from 'leaflet';
@@ -12,10 +14,16 @@ import { Properties } from '../../../models';
 
 export class Coloring {
 
+    public colors: any[];
+
+    constructor() {
+        this.colors = distinctColors({ count: 30});
+    }
+
     public getDefaultStyle(feature: any, layer: any): PathOptions {
         return {
             color: 'rgb(51, 136, 255)',
-            weight: 1,
+            weight: 0.75,
             fillOpacity: 0.5,
             fillColor: 'rgb(51, 136, 255)'
         };
@@ -107,7 +115,8 @@ export class Coloring {
                 fillColor: 'rgb(51, 136, 255)'
             };
         } else {
-            const color = Constants.DISTRICT_COLORS[properties.cd - 1];
+            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
+            const color = Color.rgb(this.colors[properties.cd - 1]._rgb).hex();
 
             return {
                 color: Color.default(color)
@@ -150,5 +159,16 @@ export class Coloring {
         }
 
         return demographicPopulation / properties.pop_total;
+    }
+
+    public getRandomColor(): string {
+        const h = this.randomInt(0, 360);
+        const s = this.randomInt(42, 98);
+        const l = this.randomInt(38, 90);
+        return Color.hsl([h, s, l]).hex();
+    }
+
+    private randomInt(min, max): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
