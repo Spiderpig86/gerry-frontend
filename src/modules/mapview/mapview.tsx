@@ -17,6 +17,7 @@ import {
     IMapTooltipProps
 } from './components';
 import { StateBordersApi, States } from '../../libs/state-borders';
+import { hashPrecinct } from '../../libs/hash';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
@@ -50,6 +51,7 @@ interface IMapViewState {
     };
 
     mapTooltip: IMapTooltipProps;
+    selectedPrecinctId: string;
 }
 
 export class MapViewComponent extends React.Component<
@@ -71,7 +73,8 @@ export class MapViewComponent extends React.Component<
             title: null,
             subtitle: null,
             statistics: null
-        }
+        },
+        selectedPrecinctId: null,
     };
 
     public coloring: Coloring;
@@ -129,7 +132,12 @@ export class MapViewComponent extends React.Component<
 
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
-            click: this.showPrecinctData.bind(this),
+            click: () => {
+                this.showPrecinctData(feature, layer);
+                this.state.map.leafletElement.fitBounds(layer.getBounds());
+                this.setState({ selectedPrecinctId: hashPrecinct(feature.properties) })
+                console.log(this.state.selectedPrecinctId);
+            },
             mouseover: () => {
                 layer.setStyle({
                     weight: 5,
@@ -138,7 +146,7 @@ export class MapViewComponent extends React.Component<
             },
             mouseout: () => {
                 layer.setStyle({
-                    weight: 0.5,
+                    weight: (this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(feature.properties) ? 5 : 0.75),
                     color: layer.options.color
                 });
             }
@@ -181,6 +189,7 @@ export class MapViewComponent extends React.Component<
                 <RightSidebar
                     {...this.state.mapProps}
                     mapView={this}
+                    resetSelectedPrecinctHandler={this.resetSelectedPrecinctHandler.bind(this)}
                     isOpen={this.state.isOpen}
                 />
 
@@ -289,11 +298,11 @@ export class MapViewComponent extends React.Component<
     }
 
     private showPrecinctData(feature: any, layer: any) {
-        const properties = feature.target.feature.properties;
-        const precinct = this.props.precinctMap.get(properties.precinct_name);
-        console.log(properties);
-        // precinct.properties.v16_ipres += 16;
-        console.log(precinct);
+        console.log(feature);
+        const properties = feature.properties;
+        // const precinct = this.props.precinctMap.get(hashPrecinct(properties));
+        // precinct.properties.v16_opres = (parseInt(precinct.properties.v16_opres) + 100).toString();
+        // console.log(precinct);
 
         const electionsProps: IElectionsTabProps = {
             election2016: {
@@ -462,6 +471,7 @@ export class MapViewComponent extends React.Component<
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
+        let style = { };
         if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
             this.props.filter === MapFilterEnum.HOUSE_2016 ||
@@ -469,22 +479,29 @@ export class MapViewComponent extends React.Component<
             this.props.filter === MapFilterEnum.HOUSE_2018 ||
             this.props.filter === MapFilterEnum.SENATE_2018
         ) {
-            return this.coloring.colorPolitical(
+            style = this.coloring.colorPolitical(
                 properties,
                 this.props.filter,
                 this.getMajorityPartyPrecinct(properties)
             );
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
-            return this.coloring.colorDefault(
+            style = this.coloring.colorDefault(
                 properties,
                 this.props.level,
                 this.props.precinctMap
             );
         } else {
-            return this.coloring.colorDemographic(
+            style = this.coloring.colorDemographic(
                 properties,
                 this.props.filter
             );
+        }
+        if (this.state.selectedPrecinctId === hashPrecinct(properties)) {
+            console.log('erg');
+        }
+        return {
+            ...style,
+            weight: (this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75)
         }
     }
 
@@ -616,6 +633,10 @@ export class MapViewComponent extends React.Component<
                     ]
                 };
         }
+    }
+
+    private resetSelectedPrecinctHandler() {
+        this.setState({ selectedPrecinctId: null });
     }
 }
 

@@ -65,7 +65,7 @@ export class Coloring {
             case 'O':
                 partyColor = majorityParty.percent >= 0.75
                     ? Color.default('#6930be').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#2d6930beb82d').lighten((0.75 - majorityParty.percent) * 3);
+                    : Color.default('#6930be').lighten((0.75 - majorityParty.percent) * 3);
                 return {
                     color: Color.default('#6930be').darken(.25).hex(),
                     weight: 0.5,

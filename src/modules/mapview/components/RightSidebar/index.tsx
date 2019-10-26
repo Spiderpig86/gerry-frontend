@@ -20,6 +20,7 @@ interface IRightSidebarProps {
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
     votingAgeProps: IVotingAgeTabProps;
+    resetSelectedPrecinctHandler: () => void;
 }
 
 export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
@@ -27,6 +28,7 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
     menuHandler(state: any) {
         if (!state.isOpen) {
             this.props.mapView.setState({ isOpen: false });
+            this.props.resetSelectedPrecinctHandler();
         }
     }
 
