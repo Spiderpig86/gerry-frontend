@@ -13,6 +13,13 @@ export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
                 <br />
                 <h4>Statistics</h4>
 
+                <h6>State Statistics</h6>
+
+                <p>Total Population: {Math.round(Math.random() * 10000) + 1000000}</p>
+                <StatisticsAccordionComponent />
+
+                <br/>
+
                 <h6>District Statistics</h6>
                 <DropdownButton id="dropdown-basic-button" title='Selected District: N/A'>
                     <Dropdown.Item onClick={() => {}}>District 1</Dropdown.Item>
