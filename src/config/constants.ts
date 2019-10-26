@@ -12,37 +12,4 @@ export const MAP_BOX_THEME_LIGHT = 'mapbox.light';
 export const MAP_BOX_THEME_DARK = 'mapbox.dark';
 export const MAP_BOX_THEME_STREETS = 'mapbox.streets';
 
-// TEST FIELDS
-export const HISTORIC_VOTE = 'HistoricVote';
-export const ETHNICITY = 'Ethnicity';
-export const REP_CHANCE = 'RepublicanChance';
-export const DEM_CHANCE = 'DemocratChance';
-export const MINORITY_REP_CHANCE = 'MinorityRepChance';
-
-// MAP FILTERS
-export const MAP_FILTER_WHITE_DENSITY = 'WHITE_DENSITY';
-export const MAP_FILTER_BLACK_DENSITY = 'BLACK_DENSITY';
-export const MAP_FILTER_HISPANIC_DENSITY = 'HISPANIC_DENSITY';
-export const MAP_FILTER_ASIAN_DENSITY = 'ASIAN_DENSITY';
-export const MAP_FILTER_NATIVE_AMERICAN_DENSITY = 'NATIVE_AMERICAN_DENSITY';
-export const MAP_FILTER_PACIFIC_ISLANDER_DENSITY = 'PACIFIC_ISLANDER_DENSITY';
-export const MAP_FILTER_OTHER_DENSITY = 'OTHER_DENSITY';
-export const MAP_FILTER_BIRACIAL_DENSITY = 'BIRACIAL_DENSITY';
-export const MAP_FILTER_PRES_2016 = 'MAP_FILTER_PRES_2016';
-export const MAP_FILTER_HOUSE_2016 = 'MAP_FILTER_HOUSE_2016';
-export const MAP_FILTER_HOUSE_2018 = 'MAP_FILTER_HOUSE_2018';
-export const MAP_FILTER_SENATE_2016 = 'MAP_FILTER_SENATE_2016';
-export const MAP_FILTER_SENATE_2018 = 'MAP_FILTER_SENATE_2018';
-export const MAP_FILTER_DEFAULT = 'MAP_FILTER_PLAIN';
-
-// VIEW LEVELS
-export const VIEW_LEVEL_PRECINCTS = 'VIEW_LEVEL_PRECINCTS';
-export const VIEW_LEVEL_OLD_DISTRICTS = 'VIEW_LEVEL_OLD_DISTRICTS';
-export const VIEW_LEVEL_NEW_DISTRICTS = 'VIEW_LEVEL_NEW_DISTRICTS';
-
-// ELECTION TYPES
-export const ELECTION_PRES_16 = 'ELECTION_PRES_16';
-export const ELECTION_HOUSE_16 = 'ELECTION_HOUSE_16';
-export const ELECTION_HOUSE_18 = 'ELECTION_HOUSE_18';
-
 export const DISTRICT_COLORS = ['#0099cd', '#e31a1c', '#00cd99', '#ffca5d', '#ff7f00', '#99cd00', '#cd0099', '#9900cd', '#8dd3c7', '#bebada', '#fb8072', '#1f78b4'];

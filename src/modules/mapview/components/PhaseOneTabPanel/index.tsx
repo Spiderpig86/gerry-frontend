@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as mapActionCreators from '../../../../redux/modules/state/state';
 
 import { Form } from 'react-bootstrap';
-import Slider, { createSliderWithTooltip, Handle, Range } from 'rc-slider';
+import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

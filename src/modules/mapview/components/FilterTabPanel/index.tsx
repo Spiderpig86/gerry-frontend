@@ -1,11 +1,12 @@
 import * as React from 'react';
+import * as Constants from '../../../../config/constants';
 import * as mapActionCreators from '../../../../redux/modules/state/state';
 
 import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as Constants from '../../../../config/constants';
+import { MapFilterEnum, ViewLevelEnum } from '../../../../models';
 
 interface IFilterProps {
     filter: string;
@@ -22,64 +23,64 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                 <h5>Display Level</h5>
                 <Form className='mb-3'>
                     <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                        <Form.Check defaultChecked name='displayLevel' custom type={'radio'} id={`displayLevelPrecinct`} label={`Precincts`} onClick={() => this.props.setMapLevel(Constants.VIEW_LEVEL_PRECINCTS)} />
+                        <Form.Check defaultChecked name='displayLevel' custom type={'radio'} id={`displayLevelPrecinct`} label={`Precincts`} onClick={() => this.props.setMapLevel(ViewLevelEnum.PRECINCTS)} />
                     </Form.Group>
                     <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelOldCd`} label={`Old Congressional Districts`} onClick={() => this.props.setMapLevel(Constants.VIEW_LEVEL_OLD_DISTRICTS)} />
+                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelOldCd`} label={`Old Congressional Districts`} onClick={() => this.props.setMapLevel(ViewLevelEnum.OLD_DISTRICTS)} />
                     </Form.Group>
                     <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelNewCd`} label={`New Congressional Districts`} onClick={() => this.props.setMapLevel(Constants.VIEW_LEVEL_NEW_DISTRICTS)} />
+                        <Form.Check name='displayLevel' custom type={'radio'} id={`displayLevelNewCd`} label={`New Congressional Districts`} onClick={() => this.props.setMapLevel(ViewLevelEnum.NEW_DISTRICTS)} />
                     </Form.Group>
                 </Form>
                 
                 <h6>Display Misc.</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check defaultChecked name='population' custom type={'radio'} id={`displayDefault`} label={`Default Filter`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_DEFAULT)} />
+                    <Form.Check defaultChecked name='population' custom type={'radio'} id={`displayDefault`} label={`Default Filter`} onClick={() => this.props.setMapFilter(MapFilterEnum.DEFAULT)} />
                 </Form.Group>
                 <br />
 
                 <h6>Display Election Data</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionPres16`} label={`2016 Presidential Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_PRES_2016)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionPres16`} label={`2016 Presidential Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.PRES_2016)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionHouse16`} label={`2016 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HOUSE_2016)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionHouse16`} label={`2016 House Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.HOUSE_2016)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionSenate16`} label={`2016 Senate Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_SENATE_2016)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionSenate16`} label={`2016 Senate Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.SENATE_2016)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HOUSE_2018)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.HOUSE_2018)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`electionSenate18`} label={`2018 Senate Election`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_SENATE_2018)} />
+                    <Form.Check name='population' custom type={'radio'} id={`electionSenate18`} label={`2018 Senate Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.SENATE_2018)} />
                 </Form.Group>
                 <br />
 
                 <h6>Display Minority Population Density</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`whiteDensity`} label={`Non-Hispanic White Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_WHITE_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`whiteDensity`} label={`Non-Hispanic White Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.WHITE_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`hispanicDensity`} label={`Hispanic Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_HISPANIC_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`hispanicDensity`} label={`Hispanic Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.HISPANIC_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`blackDensity`} label={`Non-Hispanic African American Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_BLACK_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`blackDensity`} label={`Non-Hispanic African American Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.BLACK_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`asianDensity`} label={`Non-Hispanic Asian Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_ASIAN_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`asianDensity`} label={`Non-Hispanic Asian Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.ASIAN_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`nativeAmericanDensity`} label={`Non-Hispanic Native American Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_NATIVE_AMERICAN_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`nativeAmericanDensity`} label={`Non-Hispanic Native American Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.NATIVE_AMERICAN_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`pacificIslanderDensity`} label={`Non-Hispanic Pacific Islander Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_PACIFIC_ISLANDER_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`pacificIslanderDensity`} label={`Non-Hispanic Pacific Islander Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.PACIFIC_ISLANDER_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`otherDensity`} label={`Other Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_OTHER_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`otherDensity`} label={`Other Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.OTHER_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check name='population' custom type={'radio'} id={`biracialDensity`} label={`Biracial Density`} onClick={() => this.props.setMapFilter(Constants.MAP_FILTER_BIRACIAL_DENSITY)} />
+                    <Form.Check name='population' custom type={'radio'} id={`biracialDensity`} label={`Biracial Density`} onClick={() => this.props.setMapFilter(MapFilterEnum.BIRACIAL_DENSITY)} />
                 </Form.Group>
             </div>
         )
