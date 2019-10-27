@@ -7,6 +7,5 @@
 export interface IVoteData {
     republicanVotes: number;
     democraticVotes: number;
-    independentVotes?: number;
     otherVotes?: number;
 }

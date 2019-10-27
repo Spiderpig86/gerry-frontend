@@ -303,13 +303,12 @@ export class MapViewComponent extends React.Component<
                 presidentialResults: {
                     democraticVotes: properties.v16_dpres,
                     republicanVotes: properties.v16_rpres,
-                    independentVotes: properties.v16_ipres,
                     otherVotes: properties.v16_opres
                 },
                 senatorialResults: {
                     democraticVotes: properties.v16_dsenate,
                     republicanVotes: properties.v16_rsenate,
-                    otherVotes: properties.v16_opres
+                    otherVotes: properties.v16_osenate
                 },
                 houseResults: {
                     democraticVotes: properties.v16_dhouse,
@@ -321,7 +320,7 @@ export class MapViewComponent extends React.Component<
                 senatorialResults: {
                     democraticVotes: properties.v18_dsenate,
                     republicanVotes: properties.v18_rsenate,
-                    otherVotes: properties.v18_opres
+                    otherVotes: properties.v18_oseante
                 },
                 houseResults: {
                     democraticVotes: properties.v18_dhouse,
@@ -391,42 +390,37 @@ export class MapViewComponent extends React.Component<
     ): { party: string; percent: number } {
 
         // Store the per party info based on election type
-        let democratVotes = 0, republicanVotes = 0, independentVotes = 0, otherVotes = 0;
+        let democratVotes = 0, republicanVotes = 0, otherVotes = 0;
 
         switch (this.props.filter) {
             case Constants.MAP_FILTER_PRES_2016:
                 democratVotes = properties.v16_dpres;
                 republicanVotes = properties.v16_rpres;
-                independentVotes = properties.v16_ipres || 0;
                 otherVotes = properties.v16_opres || 0;
                 break;
             case Constants.MAP_FILTER_HOUSE_2016:
                 democratVotes = properties.v16_dhouse;
                 republicanVotes = properties.v16_rhouse;
-                independentVotes = properties.v16_ihouse || 0;
                 otherVotes = properties.v16_ohouse || 0;
                 break;
             case Constants.MAP_FILTER_SENATE_2016:
                 democratVotes = properties.v16_dsenate || 0;
                 republicanVotes = properties.v16_rsenate || 0;
-                independentVotes = properties.v16_isenate || 0;
                 otherVotes = properties.v16_osenate || 0;
                 break;
             case Constants.MAP_FILTER_HOUSE_2018:
                 democratVotes = properties.v18_dhouse || 0;
                 republicanVotes = properties.v18_rhouse || 0;
-                independentVotes = properties.v18_ihouse || 0;
                 otherVotes = properties.v18_ohouse || 0;
                 break;
             case Constants.MAP_FILTER_SENATE_2018:
                 democratVotes = properties.v18_dsenate || 0;
                 republicanVotes = properties.v18_rsenate || 0;
-                independentVotes = properties.v18_isenate || 0;
                 otherVotes = properties.v18_osenate || 0;
                 break;
         }
 
-        const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(independentVotes) + Number(otherVotes);
+        const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(otherVotes);
 
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
@@ -440,16 +434,12 @@ export class MapViewComponent extends React.Component<
             percent: republicanVotes / totalVotes,
             party: 'R'
         };
-        const independentPercent = {
-            percent: independentVotes / totalVotes,
-            party: 'I'
-        };
         const otherPercent = {
             percent: otherVotes / totalVotes,
             party: 'O'
         };
 
-        return [republicanPercent, democratPercent, independentPercent, otherPercent].reduce(
+        return [republicanPercent, democratPercent, otherPercent].reduce(
             (prev: any, cur: any) => (prev.percent < cur.percent ? cur : prev)
         );
     }
@@ -482,10 +472,6 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Republican Votes',
                             value: `${Math.round(properties.v16_rpres)}`
-                        },
-                        {
-                            key: 'Independent Votes',
-                            value: `${Math.round(properties.v16_ipres) || 0}`
                         },
                         {
                             key: 'Other Votes',

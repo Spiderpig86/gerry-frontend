@@ -9,7 +9,6 @@ export type DemographicType = 'White'
 
 export type PoliticalParty = 'Democrat'
                            | 'Republican'
-                           | 'Independent'
                            | 'Other';
 
 export type ElectionType = 'Presidential2016'
