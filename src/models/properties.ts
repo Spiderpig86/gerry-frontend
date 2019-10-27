@@ -29,17 +29,18 @@ export interface Properties {
     pop_white_nh: number;
     pop_white_voting: number;
     precinct_name: string;
-    v16_dhouse: string;
     v16_dpres: string;
-    v16_ohouse: string;
-    v16_opres: string;
-    v16_rhouse: string;
     v16_rpres: string;
-    v18_dhouse: string;
+    v16_ipres: string;
+    v16_opres: string;
+    v16_dhouse: string;
+    v16_rhouse: string;
+    v16_ohouse: string;
     v18_dsenate: string;
     v18_isenate: string;
-    v18_ohouse: string;
+    v18_dhouse: string;
     v18_rhouse: string;
+    v18_ohouse: string;
     v18_rsenate: string;
 
     [x: string]: any;

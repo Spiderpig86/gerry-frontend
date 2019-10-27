@@ -6,11 +6,11 @@
  */
 import * as Color from 'color';
 import distinctColors from 'distinct-colors';
-
-import * as Constants from '../../../config/constants';
-
 import { PathOptions } from 'leaflet';
-import { Properties } from '../../../models';
+
+import * as Constants from '../config/constants';
+import { Properties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
+import { hashPrecinct } from './hash';
 
 export class Coloring {
 
@@ -24,8 +24,8 @@ export class Coloring {
         return {
             color: 'rgb(51, 136, 255)',
             weight: 0.75,
-            fillOpacity: 0.5,
-            fillColor: 'rgb(51, 136, 255)'
+            // fillOpacity: 0.5,
+            // fillColor: 'rgb(51, 136, 255)'
         };
     }
 
@@ -65,7 +65,7 @@ export class Coloring {
             case 'O':
                 partyColor = majorityParty.percent >= 0.75
                     ? Color.default('#6930be').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#2d6930beb82d').lighten((0.75 - majorityParty.percent) * 3);
+                    : Color.default('#6930be').lighten((0.75 - majorityParty.percent) * 3);
                 return {
                     color: Color.default('#6930be').darken(.25).hex(),
                     weight: 0.5,
@@ -106,54 +106,61 @@ export class Coloring {
         };
     }
 
-    public colorDefault(properties: any, level: string): PathOptions {
-        if (level === Constants.VIEW_LEVEL_PRECINCTS) {
-            return {
-                color: 'rgb(51, 136, 255)',
-                weight: 1,
-                fillOpacity: 0.5,
-                fillColor: 'rgb(51, 136, 255)'
-            };
-        } else {
-            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
-            const color = Color.rgb(this.colors[properties.cd - 1]._rgb).hex();
+    public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>): PathOptions {
 
-            return {
-                color: Color.default(color)
-                    .darken(0.5)
-                    .hex(),
-                weight: 0.5,
-                fillOpacity: 0.75,
-                fillColor: color
-            };
+        const colorConfig = {
+            color: 'rgb(51, 136, 255)',
+            weight: 1,
+            fillOpacity: 0.5,
+            fillColor: 'rgb(51, 136, 255)'
+        };
+        
+        if (level === ViewLevelEnum.OLD_DISTRICTS) {
+            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
+            const precinct = precinctMap.get(hashPrecinct(properties));
+            if (!precinct) {
+                return colorConfig;
+            }
+
+            const cdId = level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId - 1 : precinct.newCdId - 1;
+
+            const color = Color.rgb(this.colors[cdId]._rgb).hex();
+            colorConfig.color = Color.default(color)
+                                .darken(0.5)
+                                .hex();
+            colorConfig.weight = 0.75;
+            colorConfig.fillOpacity = 0.75;
+            colorConfig.fillColor = color;
         }
+
+        return colorConfig;
     }
 
     public getPopulationPercentByDemographic(properties: any, filter: string): number {
         let demographicPopulation = 0;
         switch (filter) {
-            case Constants.MAP_FILTER_WHITE_DENSITY:
+            case MapFilterEnum.WHITE_DENSITY:
                 demographicPopulation = properties.pop_white_nh
                 break;
-            case Constants.MAP_FILTER_BLACK_DENSITY:
+            case MapFilterEnum.BLACK_DENSITY:
                 demographicPopulation = properties.pop_black_nh;
                 break;
-            case Constants.MAP_FILTER_ASIAN_DENSITY:
+            case MapFilterEnum.ASIAN_DENSITY:
                 demographicPopulation = properties.pop_asian_nh;
                 break;
-            case Constants.MAP_FILTER_HISPANIC_DENSITY:
+            case MapFilterEnum.HISPANIC_DENSITY:
                 demographicPopulation = properties.pop_hispanic;
                 break;
-            case Constants.MAP_FILTER_NATIVE_AMERICAN_DENSITY:
+            case MapFilterEnum.NATIVE_AMERICAN_DENSITY:
                 demographicPopulation = properties.pop_amin_nh;
                 break;
-            case Constants.MAP_FILTER_PACIFIC_ISLANDER_DENSITY:
+            case MapFilterEnum.PACIFIC_ISLANDER_DENSITY:
                 demographicPopulation = properties.pop_nhpi_nh;
                 break;
-            case Constants.MAP_FILTER_OTHER_DENSITY:
+            case MapFilterEnum.OTHER_DENSITY:
                 demographicPopulation = properties.pop_other_nh;
                 break;
-            case Constants.MAP_FILTER_BIRACIAL_DENSITY:
+            case MapFilterEnum.BIRACIAL_DENSITY:
                 demographicPopulation = properties.pop_2more_nh;
                 break;
         }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { round } from '../../libs/round';
+import { round } from '../../../../libs/round';
 import { IVoteData } from '../../../../models';
 
 import { Placeholder } from '../../../../global_components';

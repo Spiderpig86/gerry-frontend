@@ -1,5 +1,7 @@
+import { ElectionEnum } from './enums';
+
 export interface PhaseZeroArgs {
     demographicThreshold: number;
-    selectedElection: string;
+    selectedElection: ElectionEnum;
     partyThreshold: number;
 }

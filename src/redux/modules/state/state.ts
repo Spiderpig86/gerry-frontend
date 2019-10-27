@@ -1,6 +1,7 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, IPrecinct } from '../../../models';
+import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum } from '../../../models';
+import { hashPrecinct } from '../../../libs/hash';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -11,17 +12,19 @@ const SET_PZERO_ARGS = 'SET_PZERO_ARGS';
 
 export const setSelectedState = (oldState: string, state: string) => {
     return (dispatch: any) => {
+        // Selecting already loaded state
         if (oldState === state) {
             return;
         }
+
+        // Fetch state data
         const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
             const shapeData: any[] = precincts.data.geometry.features;
             const map = new Map<string, IPrecinct>();
             for (const shape of shapeData) {
-                const key = shape.properties.precinct_name;
-                map.set(key, shape);
+                map.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
             }
             dispatch(setPrecincts(null));
             dispatch(setPrecincts(precincts.data.geometry));
@@ -94,8 +97,8 @@ interface State {
     selectedState: string;
     precincts: any;
     precinctMap: Map<string, IPrecinct>;
-    filter: string;
-    level: string;
+    filter: MapFilterEnum;
+    level: ViewLevelEnum;
     pZeroArgs: PhaseZeroArgs
 };
 
@@ -103,11 +106,11 @@ const initialState: State = {
     selectedState: 'N/A',
     precincts: null,
     precinctMap: new Map<string, IPrecinct>(),
-    filter: Constants.MAP_FILTER_DEFAULT,
-    level: Constants.VIEW_LEVEL_PRECINCTS,
+    filter: MapFilterEnum.DEFAULT,
+    level: ViewLevelEnum.PRECINCTS,
     pZeroArgs: {
         demographicThreshold: 0.5,
-        selectedElection: Constants.ELECTION_PRES_16,
+        selectedElection: ElectionEnum.PRES_16,
         partyThreshold: 0.5
     }
 }
@@ -147,4 +150,6 @@ export const stateReducer = (state = initialState, action: any) => {
         default:
             return state;
     }
+
+    
 }
