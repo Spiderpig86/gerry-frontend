@@ -15,5 +15,15 @@ export interface ICluster {
     adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
     demographicStats: IDemographics;
     votingStats: IVoteData;
+    objectiveFunctionScores: IObjectiveFunctionScores;
+
+}
+
+// TODO: Map in state for each election and newly generated districts containing ICluster with objective function scores
+export interface IObjectiveFunctionScores {
+
+    efficiencyGap: number;
+    lopsidedMargins: number;
+    meanMedianDifference: number;
 
 }

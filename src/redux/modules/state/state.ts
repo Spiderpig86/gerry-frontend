@@ -1,6 +1,6 @@
 import * as Constants from '../../../config/constants';
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum } from '../../../models';
+import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster } from '../../../models';
 import { hashPrecinct } from '../../../libs/hash';
 
 const SET_STATE = 'SET_STATE';
@@ -97,6 +97,8 @@ interface State {
     selectedState: string;
     precincts: any;
     precinctMap: Map<string, IPrecinct>;
+    clusterMap: Map<string, ICluster>;
+    oldClusterMap: Map<string, ICluster>;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
     pZeroArgs: PhaseZeroArgs
@@ -106,6 +108,8 @@ const initialState: State = {
     selectedState: 'N/A',
     precincts: null,
     precinctMap: new Map<string, IPrecinct>(),
+    clusterMap: new Map<string, ICluster>(),
+    oldClusterMap: new Map<string, ICluster>(),
     filter: MapFilterEnum.DEFAULT,
     level: ViewLevelEnum.PRECINCTS,
     pZeroArgs: {

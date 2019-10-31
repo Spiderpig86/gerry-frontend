@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as mapActionCreators from '../../../../redux/modules/state/state';
 
-import { Form } from 'react-bootstrap';
+import { Form, DropdownButton, Dropdown } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -25,7 +25,7 @@ IPhaseOneTabPanelProps,
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>District Properties</h4>
-                <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
+                <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                     <Form.Label
                         className={'col-6'}
                         id={'numDistricts'}
@@ -36,6 +36,33 @@ IPhaseOneTabPanelProps,
                         min={1}
                         defaultValue='5'
                     />
+                </Form.Group>
+                <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
+                    <Form.Label
+                        className={'col-6'}
+                        id={'electionData'}
+                    >Election Data to Use</Form.Label>
+                    
+                    <DropdownButton
+                        id="dropdown-basic-button"
+                        title='Election Data'
+                    >
+                            <Dropdown.Item
+                            onClick={() => {}}
+                        >
+                            Presidential 2016
+                            </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {}}
+                        >
+                            Congressional 2016
+                            </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {}}
+                        >
+                            Congressional 2018
+                            </Dropdown.Item>
+                    </DropdownButton>
                 </Form.Group>
 
                 <div className="mb-4">

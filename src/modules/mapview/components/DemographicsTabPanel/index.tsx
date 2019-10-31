@@ -15,7 +15,7 @@ export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabPr
             return <Placeholder></Placeholder>;
         }
         return (
-            <div style={{ maxHeight: '80vh', overflow: 'auto', padding: '0 1.5rem' }}>
+            <div style={{ padding: '0 1.5rem' }}>
                 <br />
                 <h4>Demographics</h4>
 
