@@ -26,3 +26,9 @@ export enum ElectionEnum {
     HOUSE_16 = 'ELECTION_HOUSE_16',
     HOUSE_18 = 'ELECTION_HOUSE_18'
 }
+
+export enum StateEnum {
+    CA = 'CA',
+    UT = 'UT',
+    VA = 'VA'
+}

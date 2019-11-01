@@ -6,20 +6,34 @@ import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { PhaseZeroArgs, ElectionEnum, StateEnum } from '../../../../models';
+
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseZeroTabPanelProps {
-    selectedState: string;
-    setSelectedState: (oldState: string, state: string) => void;
+    selectedState: StateEnum;
+    phaseZeroArgs: PhaseZeroArgs;
+    setSelectedState: (oldState: string, state: string) => void;setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
+}
+
+interface IPhaseZeroTabPanelState {
+    phaseZeroArgs: PhaseZeroArgs;
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<
     IPhaseZeroTabPanelProps,
-    {}
+    IPhaseZeroTabPanelState
     > {
+
+    componentWillMount() {
+        this.setState({
+            phaseZeroArgs: this.props.phaseZeroArgs
+        });
+    }
+
     render() {
         const dropdownTitle = `Selected State: ${this.props.selectedState}`;
         return (
@@ -56,11 +70,12 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                     </p>
                     <Form.Group className="form-group d-flex align-items-center py-2">
                         <Form.Label className={'col-4'}>
-                            Majority Party:
+                            Majority Demographic:
                         </Form.Label>
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={0}
+                            onAfterChange={this.setDemographicThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
@@ -78,13 +93,13 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         id='phase0Election'
                         title='Select Election Data'
                     >
-                        <Dropdown.Item onClick={() => {}}>
+                        <Dropdown.Item onClick={() => { this.setElectionData(ElectionEnum.PRES_16) }}>
                             Presidential 2016
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => {}}>
+                        <Dropdown.Item onClick={() => { this.setElectionData(ElectionEnum.HOUSE_16) }}>
                             Congressional 2016
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => {}}>
+                        <Dropdown.Item onClick={() => {this.setElectionData(ElectionEnum.HOUSE_18)}}>
                             Congressional 2018
                         </Dropdown.Item>
                     </DropdownButton>
@@ -96,10 +111,11 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={0}
+                            onAfterChange={this.setPartyThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <div className="d-flexpy-3">
+                    <div className="d-flex py-3">
                         <Button className='w-100'>Analyze Precincts</Button>
                     </div>
                 </div>
@@ -140,10 +156,45 @@ export class PhaseZeroTabPanelComponent extends React.Component<
             </div>
         );
     }
+
+    private setDemographicThreshold(value: number): void {
+        console.log(value);
+        this.setState({
+            phaseZeroArgs: {
+                ...this.state.phaseZeroArgs,
+                demographicThreshold: value / 100.0
+            }
+        }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
+    }
+    
+    private setElectionData(value: ElectionEnum): void {
+        console.log(value);
+        this.setState({
+            phaseZeroArgs: {
+                ...this.state.phaseZeroArgs,
+                selectedElection: value
+            }
+        }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
+    }
+
+    private setPartyThreshold(value: number): void {
+        console.log(value);
+        this.setState({
+            phaseZeroArgs: {
+                ...this.state.phaseZeroArgs,
+                partyThreshold: value / 100.0
+            }
+        }, 
+        () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
+    }
 }
 
 function mapStateToProps(state: any) {
-    return { selectedState: state.stateReducer.selectedState };
+    return { 
+        selectedState: state.stateReducer.selectedState,
+        phaseZeroArgs: state.stateReducer.phaseZeroArgs,
+        setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs
+     };
 }
 
 export const PhaseZeroTabPanel = connect(

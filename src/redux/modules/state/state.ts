@@ -8,7 +8,9 @@ const SET_PRECINCTS = 'SET_PRECINCTS';
 const SET_PRECINCT_MAP = 'SET_PRECINCT_MAP';
 const SET_MAP_FILTER = 'SET_MAP_FILTER';
 const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
-const SET_PZERO_ARGS = 'SET_PZERO_ARGS';
+
+const SET_PHASE_ZERO_ARGS = 'SET_PHASE_ZERO_ARGS';
+const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
 
 export const setSelectedState = (oldState: string, state: string) => {
     return (dispatch: any) => {
@@ -21,6 +23,7 @@ export const setSelectedState = (oldState: string, state: string) => {
         const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
         statePopulator.fetchPrecincts(state).then(precincts => {
+            console.log(precincts);
             const shapeData: any[] = precincts.data.geometry.features;
             const map = new Map<string, IPrecinct>();
             for (const shape of shapeData) {
@@ -86,10 +89,10 @@ export const setLevel = (level: string) => {
     }
 }
 
-export const setPZeroArgs = (pZeroArgs: PhaseZeroArgs) => {
+export const setPhaseZeroArgs = (phaseZeroArgs: PhaseZeroArgs) => {
     return {
-        type: SET_PZERO_ARGS,
-        pZeroArgs
+        type: SET_PHASE_ZERO_ARGS,
+        phaseZeroArgs
     }
 }
 
@@ -101,7 +104,7 @@ interface State {
     oldClusterMap: Map<string, ICluster>;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
-    pZeroArgs: PhaseZeroArgs
+    phaseZeroArgs: PhaseZeroArgs
 };
 
 const initialState: State = {
@@ -112,7 +115,7 @@ const initialState: State = {
     oldClusterMap: new Map<string, ICluster>(),
     filter: MapFilterEnum.DEFAULT,
     level: ViewLevelEnum.PRECINCTS,
-    pZeroArgs: {
+    phaseZeroArgs: {
         demographicThreshold: 0.5,
         selectedElection: ElectionEnum.PRES_16,
         partyThreshold: 0.5
@@ -146,14 +149,12 @@ export const stateReducer = (state = initialState, action: any) => {
                 ...state,
                 level: action.level
             }
-        case SET_PZERO_ARGS:
+        case SET_PHASE_ZERO_ARGS:
             return {
                 ...state,
-                pZeroArgs: action.pZeroArgs
+                phaseZeroArgs: action.phaseZeroArgs
             }
         default:
             return state;
     }
-
-    
 }

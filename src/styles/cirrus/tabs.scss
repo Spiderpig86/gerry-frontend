@@ -20,6 +20,8 @@
     flex-grow: 1;
     list-style: none;
     padding-inline-start: 0;
+    overflow: hidden;
+    overflow-x: auto;
 }
 
 .tab-container li {
@@ -48,7 +50,6 @@
 }
 
 .tab-container li.react-tabs__tab--selected {
-    overflow: auto;
     border-radius: 0;
     border-bottom: 2px solid #f03d4d;
     transition: all .3s;

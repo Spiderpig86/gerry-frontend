@@ -14,7 +14,6 @@ export enum States {
 export class StateBordersApi {
 
     public async fetchPrecincts(state: string): Promise<any> {
-
         if (state === 'UT' || state === 'VA' || state === 'blank') {
             try {
                 const data = await Axios.get(`./api/${state}.json`);

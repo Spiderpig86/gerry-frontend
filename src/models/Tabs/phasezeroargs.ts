@@ -1,4 +1,4 @@
-import { ElectionEnum } from './enums';
+import { ElectionEnum } from '../enums';
 
 export interface PhaseZeroArgs {
     demographicThreshold: number;
