@@ -1,7 +1,10 @@
-import * as Constants from '../../../config/constants';
+/** 
+ * Main container for application state. Only a single class to avoid fragmentation of data store.
+ */
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster } from '../../../models';
+import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum } from '../../../models';
 import { hashPrecinct } from '../../../libs/hash';
+import { PoliticalFairnessEnum } from '../../../models';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -96,6 +99,13 @@ export const setPhaseZeroArgs = (phaseZeroArgs: PhaseZeroArgs) => {
     }
 }
 
+export const setPhaseOneArgs = (phaseOneArgs: PhaseOneArgs) => {
+    return {
+        type: SET_PHASE_ONE_ARGS,
+        phaseOneArgs
+    }
+}
+
 interface State {
     selectedState: string;
     precincts: any;
@@ -104,7 +114,8 @@ interface State {
     oldClusterMap: Map<string, ICluster>;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
-    phaseZeroArgs: PhaseZeroArgs
+    phaseZeroArgs: PhaseZeroArgs;
+    phaseOneArgs: PhaseOneArgs;
 };
 
 const initialState: State = {
@@ -119,6 +130,20 @@ const initialState: State = {
         demographicThreshold: 0.5,
         selectedElection: ElectionEnum.PRES_16,
         partyThreshold: 0.5
+    },
+    phaseOneArgs: {
+        numDistricts: 5,
+        electionData: ElectionEnum.PRES_16,
+        minPopulationPercent: .5,
+        maxPopulationPercent: .5,
+        selectedDemographics: new Set<DemographicEnum>(),
+        compactnessOption: CompactnessEnum.POLSBY_POPPER,
+        politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
+        objectivePopulationEquality: 0.0,
+        objectiveCompactness: 0.0,
+        objectivePartisanFairness: 0.0,
+        objectiveContiguity: 0.0,
+        intermediateResults: false
     }
 }
 
@@ -153,6 +178,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 phaseZeroArgs: action.phaseZeroArgs
+            }
+        case SET_PHASE_ONE_ARGS:
+            return  {
+                ...state,
+                phaseOneArgs: action.phaseOneArgs
             }
         default:
             return state;

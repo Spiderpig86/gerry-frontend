@@ -16,7 +16,8 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 interface IPhaseZeroTabPanelProps {
     selectedState: StateEnum;
     phaseZeroArgs: PhaseZeroArgs;
-    setSelectedState: (oldState: string, state: string) => void;setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
+    setSelectedState: (oldState: string, state: string) => void;
+    setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
 }
 
 interface IPhaseZeroTabPanelState {

@@ -1,14 +1,13 @@
-import { ElectionEnum } from '../enums';
-import { DemographicType } from '../types';
+import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum } from '../enums';
 
 export interface PhaseOneArgs {
     numDistricts: number;
     electionData: ElectionEnum;
     minPopulationPercent: number;
     maxPopulationPercent: number;
-    selectedDemographics: DemographicType[];
-    compactnessOption: string; // TODO: Enum
-    politicalFairnessOption: string;
+    selectedDemographics: Set<DemographicEnum>;
+    compactnessOption: CompactnessEnum;
+    politicalFairnessOption: PoliticalFairnessEnum;
     objectivePopulationEquality: number;
     objectiveCompactness: number;
     objectivePartisanFairness: number;

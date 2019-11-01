@@ -6,6 +6,8 @@ import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum } from '../../../../models';
+
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
 
@@ -13,15 +15,35 @@ const TooltipRange = createSliderWithTooltip(Range);
 const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseOneTabPanelProps {
+    phaseOneArgs: PhaseOneArgs;
     selectedState: string;
-    setSelectedState: (oldState: string, state: string) => void;
+    setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
+}
+
+interface IPhaseZeroTabPanelState {
+    phaseOneArgs: PhaseOneArgs;
 }
 
 export class PhaseOneTabPanelComponent extends React.Component<
-IPhaseOneTabPanelProps,
-    {}
-> {
+    IPhaseOneTabPanelProps,
+    IPhaseZeroTabPanelState
+    > {
+
+    private electionMap: Map<ElectionEnum, string>;
+
+    componentWillMount() {
+        this.electionMap = new Map([
+            [ElectionEnum.PRES_16, 'Presidential 2016'],
+            [ElectionEnum.HOUSE_16, 'Congressional 2016'],
+            [ElectionEnum.HOUSE_18, 'Congressional 2018'],
+        ])
+        this.setState({
+            phaseOneArgs: this.props.phaseOneArgs
+        });
+    }
+
     render() {
+        console.log(this.state.phaseOneArgs.numDistricts.toString())
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>District Properties</h4>
@@ -34,7 +56,8 @@ IPhaseOneTabPanelProps,
                         required
                         className={'col-6'}
                         min={1}
-                        defaultValue='5'
+                        defaultValue={this.state.phaseOneArgs.numDistricts.toString()}
+                        onChange={(e: any) => this.setNumberDistricts(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
@@ -45,20 +68,20 @@ IPhaseOneTabPanelProps,
                     
                     <DropdownButton
                         id="dropdown-basic-button"
-                        title='Election Data'
+                        title={this.electionMap.get(this.state.phaseOneArgs.electionData)}
                     >
                             <Dropdown.Item
-                            onClick={() => {}}
+                            onClick={() => this.setElectionData(ElectionEnum.PRES_16) }
                         >
                             Presidential 2016
                             </Dropdown.Item>
                         <Dropdown.Item
-                            onClick={() => {}}
+                            onClick={() => this.setElectionData(ElectionEnum.HOUSE_16)}
                         >
                             Congressional 2016
                             </Dropdown.Item>
                         <Dropdown.Item
-                            onClick={() => {}}
+                            onClick={() => this.setElectionData(ElectionEnum.HOUSE_18)}
                         >
                             Congressional 2018
                             </Dropdown.Item>
@@ -74,13 +97,10 @@ IPhaseOneTabPanelProps,
                         collectively as minorities.
                     </p>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
+                        <Form.Label
                             className={'col-6'}
-                            type={'checkbox'}
-                            id={'majorityMinoritySlider'}
-                            label={'Min/Max Minority Percentage of Population'}
-                        />
+                            title={'Min/Max Minority Percentage of Population'}
+                        >Min/Max Minority Percentage of Population</Form.Label>
                         <TooltipRange
                             className={'col-6'}
                             count={1}
@@ -88,8 +108,9 @@ IPhaseOneTabPanelProps,
                             pushable={false}
                             min={50}
                             max={100}
-                            defaultValue={[50, 50]}
+                            defaultValue={[this.state.phaseOneArgs.minPopulationPercent, this.state.phaseOneArgs.maxPopulationPercent]}
                             tipFormatter={value => `${value}%`}
+                            onAfterChange={this.setMajorityMinorityThreshold.bind(this)}
                         />
                     </Form.Group>
 
@@ -100,6 +121,8 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupCheckAfrican'}
                             label={'African Americans'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.BLACK)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BLACK, e.target.checked)}
                         />
                     </Form.Group>
                     <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
@@ -109,6 +132,8 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupCheckAsian'}
                             label={'Asians'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.ASIAN)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.ASIAN, e.target.checked)}
                         />
                     </Form.Group>
                     <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
@@ -118,6 +143,8 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupCheckPacific'}
                             label={'Pacific Islanders'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.PACIFIC_ISLANDER)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.PACIFIC_ISLANDER, e.target.checked)}
                         />
                     </Form.Group>
                     <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
@@ -127,6 +154,8 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupCheckHispanic'}
                             label={'Hispanics'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.HISPANIC)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.HISPANIC, e.target.checked)}
                         />
                     </Form.Group>
                     <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
@@ -136,6 +165,19 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupCheckNHWhite'}
                             label={'Non-Hispanic Whites'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.WHITE)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.WHITE, e.target.checked)}
+                        />
+                    </Form.Group>
+                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                        <Form.Check
+                            custom
+                            className={'col-12'}
+                            type={'checkbox'}
+                            id={'biracialGroupOther'}
+                            label={'Biracial'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.BIRACIAL)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BIRACIAL, e.target.checked)}
                         />
                     </Form.Group>
                     <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
@@ -145,6 +187,8 @@ IPhaseOneTabPanelProps,
                             type={'checkbox'}
                             id={'minorityGroupOther'}
                             label={'Other'}
+                            defaultChecked={this.containsDemographic(DemographicEnum.OTHER)}
+                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.OTHER, e.target.checked)}
                         />
                     </Form.Group>
                 </div>
@@ -155,7 +199,7 @@ IPhaseOneTabPanelProps,
                     Specify algorithm for measuring compactness.
                 </p>
                 <div className="mb-4">
-                    {['PolsbyPopper', 'Schwartzberg'].map(
+                    {[{name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER}, {name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG}].map(
                         (e: any, i: number) => {
                             return (
                                 <Form.Group
@@ -164,11 +208,17 @@ IPhaseOneTabPanelProps,
                                 >
                                     <Form.Check
                                         name={`compactnessAlgo`}
-                                        key={`compactGroup${i}`}
+                                        algo-option={e.key}
+                                        key={e.key}
                                         custom
                                         type={'radio'}
                                         id={`compactGroup${i}`}
-                                        label={`${e}`}
+                                        label={`${e.name}`}
+                                        defaultChecked={e.key === this.state.phaseOneArgs.compactnessOption}
+                                        onChange={(e) => {
+                                            console.log(e.target.algo-option);
+                                            this.setCompactness(e.target.algo-option);
+                                        }}
                                     />
                                 </Form.Group>
                             );
@@ -252,10 +302,117 @@ IPhaseOneTabPanelProps,
             </div>
         );
     }
+
+    private setNumberDistricts(numDistricts: number): void {
+        console.log(numDistricts);
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                numDistricts
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setElectionData(electionData: ElectionEnum): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                electionData
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setMajorityMinorityThreshold(values: number[]): void {
+        console.log(values);
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                minPopulationPercent: values[0],
+                maxPopulationPercent: values[1]
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private toggleSelectedDemographics(demographic: DemographicEnum, insert: boolean): void {
+        const demographics = this.state.phaseOneArgs.selectedDemographics;
+        if (insert) {
+            demographics.add(demographic);
+        } else {
+            demographics.delete(demographic);
+        }
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                selectedDemographics: demographics
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private containsDemographic(demographic: DemographicEnum): boolean {
+        return this.state.phaseOneArgs.selectedDemographics.has(demographic);
+    }
+    
+    private setCompactness(compactnessOption: CompactnessEnum): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                compactnessOption
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+    
+    private setPoliticalFairness(politicalFairnessOption: PoliticalFairnessEnum): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                politicalFairnessOption
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setObjectivePopulationEquality(objectivePopulationEquality: number): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                objectivePopulationEquality
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+    
+    private setObjectiveCompactness(objectiveCompactness: number): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                objectiveCompactness
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setObjectivePartisanFairness(objectivePartisanFairness: number): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                objectivePartisanFairness
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setObjectiveContiguity(objectiveContiguity: number): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                objectiveContiguity
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
 }
 
 function mapStateToProps(state: any) {
-    return { selectedState: state.stateReducer.selectedState };
+    return { 
+        selectedState: state.stateReducer.selectedState ,
+        phaseOneArgs: state.stateReducer.phaseOneArgs,
+        setPhaseOneArgs: state.stateReducer.setPhase
+    };
 }
 
 export const PhaseOneTabPanel = connect(

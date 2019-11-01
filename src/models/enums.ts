@@ -27,6 +27,28 @@ export enum ElectionEnum {
     HOUSE_18 = 'ELECTION_HOUSE_18'
 }
 
+export enum CompactnessEnum {
+    POLSBY_POPPER = 'POLSBY_POPPER',
+    SCHWARTZBERG = 'SCHWARTZBERG'
+}
+
+export enum PoliticalFairnessEnum {
+    EFFICIENCY_GAP = 'EFFICIENCY_GAP',
+    LOPSIDED_MARGINS = 'LOPSIDED_MARGINS',
+    MEAN_MEDIAN_DIFFERENCE = 'MEAN_MEDIAN_DIFFERENCE'
+}
+
+export enum DemographicEnum {
+    WHITE = 'WHITE',
+    BLACK = 'BLACK',
+    ASIAN = 'ASIAN',
+    HISPANIC = 'HISPANIC',
+    PACIFIC_ISLANDER = 'PACIFIC_ISLANDER',
+    NATIVE_AMERICAN = 'NATIVE_AMERICAN',
+    BIRACIAL = 'BIRACIAL',
+    OTHER = 'OTHER',
+}
+
 export enum StateEnum {
     CA = 'CA',
     UT = 'UT',
