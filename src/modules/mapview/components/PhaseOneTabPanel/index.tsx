@@ -29,21 +29,16 @@ export class PhaseOneTabPanelComponent extends React.Component<
     IPhaseZeroTabPanelState
     > {
 
-    private electionMap: Map<ElectionEnum, string>;
-
-    componentWillMount() {
-        this.electionMap = new Map([
-            [ElectionEnum.PRES_16, 'Presidential 2016'],
-            [ElectionEnum.HOUSE_16, 'Congressional 2016'],
-            [ElectionEnum.HOUSE_18, 'Congressional 2018'],
-        ])
-        this.setState({
-            phaseOneArgs: this.props.phaseOneArgs
-        });
-    }
+    private electionMap: Map<ElectionEnum, string> = new Map([
+        [ElectionEnum.PRES_16, 'Presidential 2016'],
+        [ElectionEnum.HOUSE_16, 'Congressional 2016'],
+        [ElectionEnum.HOUSE_18, 'Congressional 2018'],
+    ]);
+    state = {
+        phaseOneArgs: this.props.phaseOneArgs
+    };
 
     render() {
-        console.log(this.state.phaseOneArgs.numDistricts.toString())
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>District Properties</h4>
@@ -208,17 +203,14 @@ export class PhaseOneTabPanelComponent extends React.Component<
                                 >
                                     <Form.Check
                                         name={`compactnessAlgo`}
-                                        algo-option={e.key}
+                                        data-compactness={e.key}
                                         key={e.key}
                                         custom
                                         type={'radio'}
                                         id={`compactGroup${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseOneArgs.compactnessOption}
-                                        onChange={(e) => {
-                                            console.log(e.target.algo-option);
-                                            this.setCompactness(e.target.algo-option);
-                                        }}
+                                        onChange={(e) => this.setCompactness(e.target.getAttribute('data-compactness'))}
                                     />
                                 </Form.Group>
                             );
@@ -231,7 +223,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     Specify factors for measuring political fairness.
                 </p>
                 <div className="mb-4">
-                    {['Efficiency Gap', 'Lopsided Margins', 'Mean-Median Difference'].map(
+                    {[{name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP}, {name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS}, {name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE}].map(
                         (e: any, i: number) => {
                             return (
                                 <Form.Group
@@ -240,11 +232,14 @@ export class PhaseOneTabPanelComponent extends React.Component<
                                 >
                                     <Form.Check
                                         name={`politicalAlgo`}
-                                        key={`algoOption${i}`}
+                                        key={e.key}
+                                        data-political={e.key}
                                         custom
                                         type={'radio'}
                                         id={`algoOption${i}`}
-                                        label={`${e}`}
+                                        label={`${e.name}`}
+                                        defaultChecked={e.key === this.state.phaseOneArgs.politicalFairnessOption}
+                                        onChange={(e) => this.setPoliticalFairness(e.target.getAttribute('data-political'))}
                                     />
                                 </Form.Group>
                             );
@@ -260,20 +255,22 @@ export class PhaseOneTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-6'}
-                            defaultValue={0}
                             min={0}
                             max={100}
+                            defaultValue={this.state.phaseOneArgs.objectivePopulationEquality}
                             tipFormatter={value => `${value}%`}
+                            onAfterChange={this.setObjectivePopulationEquality.bind(this)}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className="col-6 mb-0">Compactness</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
-                            defaultValue={0}
                             min={0}
                             max={100}
+                            defaultValue={this.state.phaseOneArgs.objectiveCompactness}
                             tipFormatter={value => `${value}%`}
+                            onAfterChange={this.setObjectiveCompactness.bind(this)}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -282,20 +279,22 @@ export class PhaseOneTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-6'}
-                            defaultValue={0}
                             min={0}
                             max={100}
+                            defaultValue={this.state.phaseOneArgs.objectivePartisanFairness}
                             tipFormatter={value => `${value}%`}
+                            onAfterChange={this.setObjectivePartisanFairness.bind(this)}
                         ></TooltipSlider>
                     </Form.Group>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
                         <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
                         <TooltipSlider
                             className={'col-6'}
-                            defaultValue={0}
                             min={0}
                             max={100}
+                            defaultValue={this.state.phaseOneArgs.objectiveContiguity}
                             tipFormatter={value => `${value}%`}
+                            onAfterChange={this.setObjectiveContiguity.bind(this)}
                         ></TooltipSlider>
                     </Form.Group>
                 </div>
@@ -304,7 +303,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
     }
 
     private setNumberDistricts(numDistricts: number): void {
-        console.log(numDistricts);
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
@@ -323,7 +321,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
     }
 
     private setMajorityMinorityThreshold(values: number[]): void {
-        console.log(values);
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
