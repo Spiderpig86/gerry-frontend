@@ -52,12 +52,13 @@ interface IMapViewState {
 
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
+    precincts: any;
 }
 
 export class MapViewComponent extends React.Component<
     IMapViewProps,
     IMapViewState
-> {
+    > {
     state: IMapViewState = {
         stateBorders: [],
         isOpen: false,
@@ -75,9 +76,11 @@ export class MapViewComponent extends React.Component<
             statistics: null
         },
         selectedPrecinctId: null,
+        precincts: null
     };
 
     public coloring: Coloring;
+    public ws = new WebSocket(`ws://localhost:9001/`);
 
     constructor() {
         super();
@@ -100,6 +103,42 @@ export class MapViewComponent extends React.Component<
             })
         );
         await statePopulator.fetchPrecincts('blank');
+
+        this.props.store.dispatch(
+            mapActionCreators.setSelectedState('N/A', 'blank')
+        );
+
+
+        this.ws.onopen = () => {
+            // on connecting, do nothing but log it to the console
+            console.log('connected')
+        }
+        this.ws = new WebSocket(`ws://localhost:9001/`)
+        this.ws.onmessage = evt => {
+            // listen to data sent from the websocket server
+            const message = JSON.parse(evt.data);
+            // console.log(message);
+            console.log(this.state.precincts);
+            this.props.precincts.features.push(message);
+            let p = Object.assign([], this.props.precincts.features);
+            const n = {
+                ...this.props.precincts,
+                features: p
+            };
+            this.setState({
+                ...this.state,
+                precincts: n
+            })
+            this.props.store.dispatch(
+                mapActionCreators.setPrecinctData(n)
+            );
+        }
+
+        this.ws.onclose = () => {
+            console.log('disconnected')
+            // automatically try to reconnect on connection loss
+
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -182,6 +221,7 @@ export class MapViewComponent extends React.Component<
 
     render() {
         const position = new LatLng(40.3, -96.0);
+        console.log(this.props.precincts);
 
         return (
             <div className="container-fluid d-flex">
@@ -250,19 +290,20 @@ export class MapViewComponent extends React.Component<
                     </Control>
 
                     <ReactLeaflet.ZoomControl position={'bottomright'} />
+
                     {this.state.stateBorders &&
                         this.state.stateBorders.map((data: any, i: number) => {
                             if (
-                                data.state === this.props.selectedState &&
+                                // data.state === this.props.selectedState &&
                                 this.props.precincts &&
                                 this.state.zoom > 5
                             ) {
                                 return (
                                     <ReactLeaflet.GeoJSON
-                                        key={'precincts'}
+                                        key={`precinct${Math.random() * 100}`}
                                         data={
-                                            this.props
-                                                .precincts as GeoJsonObject
+                                            this.state
+                                                .precincts
                                         }
                                         preferCanvas={true}
                                         style={this.getPrecinctStyle.bind(this)}
@@ -298,7 +339,6 @@ export class MapViewComponent extends React.Component<
     }
 
     private showPrecinctData(feature: any, layer: any) {
-        console.log(feature);
         const properties = feature.properties;
         // const precinct = this.props.precinctMap.get(hashPrecinct(properties));
         // precinct.properties.v16_opres = (parseInt(precinct.properties.v16_opres) + 100).toString();
@@ -449,7 +489,7 @@ export class MapViewComponent extends React.Component<
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
-        let style = { };
+        let style = {};
         if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
             this.props.filter === MapFilterEnum.HOUSE_2016 ||
@@ -473,9 +513,6 @@ export class MapViewComponent extends React.Component<
                 properties,
                 this.props.filter
             );
-        }
-        if (this.state.selectedPrecinctId === hashPrecinct(properties)) {
-            console.log('erg');
         }
         return {
             ...style,
