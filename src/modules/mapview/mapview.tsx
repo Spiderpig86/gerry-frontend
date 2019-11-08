@@ -108,7 +108,6 @@ export class MapViewComponent extends React.Component<
             mapActionCreators.setSelectedState('N/A', 'blank')
         );
 
-
         this.ws.onopen = () => {
             // on connecting, do nothing but log it to the console
             console.log('connected')
@@ -129,9 +128,9 @@ export class MapViewComponent extends React.Component<
                 ...this.state,
                 precincts: n
             })
-            this.props.store.dispatch(
-                mapActionCreators.setPrecinctData(n)
-            );
+            // this.props.store.dispatch(
+            //     mapActionCreators.setPrecinctData(n)
+            // );
         }
 
         this.ws.onclose = () => {
@@ -221,7 +220,7 @@ export class MapViewComponent extends React.Component<
 
     render() {
         const position = new LatLng(40.3, -96.0);
-        console.log(this.props.precincts);
+        console.log('test')
 
         return (
             <div className="container-fluid d-flex">
@@ -294,8 +293,8 @@ export class MapViewComponent extends React.Component<
                     {this.state.stateBorders &&
                         this.state.stateBorders.map((data: any, i: number) => {
                             if (
-                                // data.state === this.props.selectedState &&
-                                this.props.precincts &&
+                                data.state === this.props.selectedState &&
+                                this.state.precincts &&
                                 this.state.zoom > 5
                             ) {
                                 return (
@@ -303,7 +302,7 @@ export class MapViewComponent extends React.Component<
                                         key={`precinct${Math.random() * 100}`}
                                         data={
                                             this.state
-                                                .precincts
+                                                .precincts as GeoJsonObject
                                         }
                                         preferCanvas={true}
                                         style={this.getPrecinctStyle.bind(this)}
