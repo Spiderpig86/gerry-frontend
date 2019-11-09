@@ -29,6 +29,12 @@ export class PhaseZeroTabPanelComponent extends React.Component<
     IPhaseZeroTabPanelState
     > {
 
+    private electionMap: Map<ElectionEnum, string> = new Map([
+        [ElectionEnum.PRES_16, 'Presidential 2016'],
+        [ElectionEnum.HOUSE_16, 'Congressional 2016'],
+        [ElectionEnum.HOUSE_18, 'Congressional 2018'],
+    ]);
+
     componentWillMount() {
         this.setState({
             phaseZeroArgs: this.props.phaseZeroArgs
@@ -75,7 +81,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-8'}
-                            defaultValue={0}
+                            defaultValue={this.props.phaseZeroArgs.demographicThreshold}
                             onAfterChange={this.setDemographicThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -92,7 +98,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
 
                     <DropdownButton
                         id='phase0Election'
-                        title='Select Election Data'
+                        title={this.electionMap.get(this.state.phaseZeroArgs.selectedElection)}
                     >
                         <Dropdown.Item onClick={() => { this.setElectionData(ElectionEnum.PRES_16) }}>
                             Presidential 2016
@@ -111,7 +117,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-8'}
-                            defaultValue={0}
+                            defaultValue={this.props.phaseZeroArgs.partyThreshold}
                             onAfterChange={this.setPartyThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -163,7 +169,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
-                demographicThreshold: value / 100.0
+                demographicThreshold: value
             }
         }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
     }
@@ -183,7 +189,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
-                partyThreshold: value / 100.0
+                partyThreshold: value
             }
         }, 
         () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
