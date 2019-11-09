@@ -6,9 +6,8 @@
  */
 import * as Color from 'color';
 import distinctColors from 'distinct-colors';
-import { PathOptions } from 'leaflet';
 
-import * as Constants from '../config/constants';
+import { PathOptions } from 'leaflet';
 import { Properties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
 import { hashPrecinct } from './hash';
 
@@ -24,8 +23,6 @@ export class Coloring {
         return {
             color: 'rgb(51, 136, 255)',
             weight: 0.75,
-            // fillOpacity: 0.5,
-            // fillColor: 'rgb(51, 136, 255)'
         };
     }
 

@@ -25,7 +25,7 @@ module.exports = {
         port: 3001,
         proxy: [
             {
-                path: "/api/*",
+                path: "/server/*",
                 target: "http://localhost:8000/"
             }
         ],

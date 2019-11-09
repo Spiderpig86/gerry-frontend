@@ -12,4 +12,19 @@ export const MAP_BOX_THEME_LIGHT = 'mapbox.light';
 export const MAP_BOX_THEME_DARK = 'mapbox.dark';
 export const MAP_BOX_THEME_STREETS = 'mapbox.streets';
 
-export const DISTRICT_COLORS = ['#0099cd', '#e31a1c', '#00cd99', '#ffca5d', '#ff7f00', '#99cd00', '#cd0099', '#9900cd', '#8dd3c7', '#bebada', '#fb8072', '#1f78b4'];
+export const DISTRICT_COLORS = [
+    '#0099cd',
+    '#e31a1c',
+    '#00cd99',
+    '#ffca5d',
+    '#ff7f00',
+    '#99cd00',
+    '#cd0099',
+    '#9900cd',
+    '#8dd3c7',
+    '#bebada',
+    '#fb8072',
+    '#1f78b4'
+];
+
+export const EMPTY_PRECINCTS = { type: 'FeatureCollection', features: [] };

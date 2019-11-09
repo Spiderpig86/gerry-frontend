@@ -16,7 +16,7 @@ export class StateBordersApi {
     public async fetchPrecincts(state: string): Promise<any> {
         if (state === 'UT' || state === 'VA' || state === 'blank') {
             try {
-                const data = await Axios.get(`./api/${state}.json`);
+                const data = await Axios.get(`./server/${state}.json`);
                 console.log(data);
                 return {
                     status: 'OK',
@@ -42,7 +42,7 @@ export class StateBordersApi {
             };
         }
     }
-
+    
     public async fetchStateBorder(state: States): Promise<any> {
         try {
             const data = await Axios.get(`https://raw.githubusercontent.com/unitedstates/districts/gh-pages/states/${state}/shape.geojson`);

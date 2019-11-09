@@ -80,7 +80,6 @@ export class MapViewComponent extends React.Component<
     };
 
     public coloring: Coloring;
-    public ws = new WebSocket(`ws://localhost:9001/`);
 
     constructor() {
         super();
@@ -102,42 +101,6 @@ export class MapViewComponent extends React.Component<
                 stateBorders: data
             })
         );
-        await statePopulator.fetchPrecincts('blank');
-
-        this.props.store.dispatch(
-            mapActionCreators.setSelectedState('N/A', 'blank')
-        );
-
-        this.ws.onopen = () => {
-            // on connecting, do nothing but log it to the console
-            console.log('connected')
-        }
-        this.ws = new WebSocket(`ws://localhost:9001/`)
-        this.ws.onmessage = evt => {
-            // listen to data sent from the websocket server
-            const message = JSON.parse(evt.data);
-            // console.log(message);
-            console.log(this.state.precincts);
-            this.props.precincts.features.push(message);
-            let p = Object.assign([], this.props.precincts.features);
-            const n = {
-                ...this.props.precincts,
-                features: p
-            };
-            this.setState({
-                ...this.state,
-                precincts: n
-            })
-            // this.props.store.dispatch(
-            //     mapActionCreators.setPrecinctData(n)
-            // );
-        }
-
-        this.ws.onclose = () => {
-            console.log('disconnected')
-            // automatically try to reconnect on connection loss
-
-        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -220,7 +183,6 @@ export class MapViewComponent extends React.Component<
 
     render() {
         const position = new LatLng(40.3, -96.0);
-        console.log('test')
 
         return (
             <div className="container-fluid d-flex">
@@ -294,14 +256,14 @@ export class MapViewComponent extends React.Component<
                         this.state.stateBorders.map((data: any, i: number) => {
                             if (
                                 data.state === this.props.selectedState &&
-                                this.state.precincts &&
+                                this.props.precincts &&
                                 this.state.zoom > 5
                             ) {
                                 return (
                                     <ReactLeaflet.GeoJSON
-                                        key={`precinct${Math.random() * 100}`}
+                                        key={`precinct${this.props.precincts.features.length}`}
                                         data={
-                                            this.state
+                                            this.props
                                                 .precincts as GeoJsonObject
                                         }
                                         preferCanvas={true}
