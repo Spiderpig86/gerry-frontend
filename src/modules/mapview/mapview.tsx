@@ -52,7 +52,6 @@ interface IMapViewState {
 
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
-    precincts: any;
 }
 
 export class MapViewComponent extends React.Component<
@@ -75,8 +74,7 @@ export class MapViewComponent extends React.Component<
             subtitle: null,
             statistics: null
         },
-        selectedPrecinctId: null,
-        precincts: null
+        selectedPrecinctId: null
     };
 
     public coloring: Coloring;
@@ -136,8 +134,7 @@ export class MapViewComponent extends React.Component<
             click: () => {
                 this.showPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.setState({ selectedPrecinctId: hashPrecinct(feature.properties) })
-                console.log(this.state.selectedPrecinctId);
+                this.setState({ selectedPrecinctId: hashPrecinct(feature.properties) });
             },
             mouseover: () => {
                 layer.setStyle({
@@ -617,8 +614,8 @@ function mapStatetoProps(state: any, ownProps: any) {
         selectedState: state.stateReducer.selectedState,
         precincts: state.stateReducer.precincts,
         precinctMap: state.stateReducer.precinctMap,
-        filter: state.stateReducer.filter,
-        level: state.stateReducer.level,
+        filter: state.stateReducer.filterArgs.mapFilter,
+        level: state.stateReducer.filterArgs.viewLevel,
         store: ownProps.store
     };
 }

@@ -7,5 +7,6 @@ export { IVoteData } from './vote';
 
 export { PhaseZeroArgs } from './Tabs/phasezeroargs';
 export { PhaseOneArgs } from './Tabs/phaseoneargs';
+export { FilterArgs } from './Tabs/filterargs'
 
 export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum } from './enums';

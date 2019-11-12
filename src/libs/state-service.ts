@@ -27,11 +27,14 @@ export class StateService {
         return `ws://localhost:9001/${state}`;
     }
 
-    private onOpen(): void {}
+    private onOpen(): void {
+        this.precincts = Object.assign({}, Constants.EMPTY_PRECINCTS);
+    }
 
     private onMessage(event: any): void {
         const message = JSON.parse(event.data);
         this.precincts.features = this.precincts.features.concat(message);
+        console.log(this.precincts.features.length);
         message.forEach(shape => {
             this.precinctMap.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
         });

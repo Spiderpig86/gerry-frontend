@@ -4,7 +4,7 @@
 import * as Constants from '../../../config/constants';
 
 import { StateBordersApi } from '../../../libs/state-borders';
-import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum } from '../../../models';
+import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs } from '../../../models';
 import { hashPrecinct } from '../../../libs/hash';
 import { PoliticalFairnessEnum } from '../../../models';
 import { StateService } from '../../../libs/state-service';
@@ -26,22 +26,10 @@ export const setSelectedState = (oldState: string, state: string) => {
         }
 
         // Fetch state data
-        const statePopulator = new StateBordersApi();
         dispatch(selectState(state));
-        // statePopulator.fetchPrecincts(state).then(precincts => {
-        //     console.log(precincts);
-        //     const shapeData: any[] = precincts.data.geometry.features;
-        //     const map = new Map<string, IPrecinct>();
-        //     for (const shape of shapeData) {
-        //         map.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
-        //     }
-        //     dispatch(setPrecincts(null));
-        //     dispatch(setPrecincts(precincts.data.geometry));
-        //     dispatch(setPrecinctMap(map));
-        // });
-        //
-        
-        const service: StateService = new StateService(state as StateEnum, dispatch);
+        dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
+        dispatch(() => new StateService(state as StateEnum, dispatch));
+        // const service: StateService = new StateService(state as StateEnum, dispatch);
     }
 }
 
@@ -118,10 +106,9 @@ interface State {
     precinctMap: Map<string, IPrecinct>;
     clusterMap: Map<string, ICluster>;
     oldClusterMap: Map<string, ICluster>;
-    filter: MapFilterEnum;
-    level: ViewLevelEnum;
     phaseZeroArgs: PhaseZeroArgs;
     phaseOneArgs: PhaseOneArgs;
+    filterArgs: FilterArgs;
 };
 
 const initialState: State = {
@@ -130,8 +117,6 @@ const initialState: State = {
     precinctMap: new Map<string, IPrecinct>(),
     clusterMap: new Map<string, ICluster>(),
     oldClusterMap: new Map<string, ICluster>(),
-    filter: MapFilterEnum.DEFAULT,
-    level: ViewLevelEnum.PRECINCTS,
     phaseZeroArgs: {
         demographicThreshold: 0.5,
         selectedElection: ElectionEnum.PRES_16,
@@ -150,6 +135,10 @@ const initialState: State = {
         objectivePartisanFairness: 0.0,
         objectiveContiguity: 0.0,
         intermediateResults: false
+    },
+    filterArgs: {
+        viewLevel: ViewLevelEnum.PRECINCTS,
+        mapFilter: MapFilterEnum.DEFAULT
     }
 }
 
@@ -173,12 +162,18 @@ export const stateReducer = (state = initialState, action: any) => {
         case SET_MAP_FILTER:
             return {
                 ...state,
-                filter: action.filter
+                filterArgs: {
+                    ...state.filterArgs,
+                    mapFilter: action.filter
+                }
             }
         case SET_VIEW_LEVEL:
             return {
                 ...state,
-                level: action.level
+                filterArgs: {
+                    ...state.filterArgs,
+                    viewLevel: action.level
+                }
             }
         case SET_PHASE_ZERO_ARGS:
             return {
