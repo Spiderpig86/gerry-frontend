@@ -406,7 +406,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
 function mapStateToProps(state: any) {
     return { 
-        selectedState: state.stateReducer.selectedState ,
+        selectedState: state.stateReducer.selectedState,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         setPhaseOneArgs: state.stateReducer.setPhase
     };

@@ -29,7 +29,6 @@ export const setSelectedState = (oldState: string, state: string) => {
         dispatch(selectState(state));
         dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
         dispatch(() => new StateService(state as StateEnum, dispatch));
-        // const service: StateService = new StateService(state as StateEnum, dispatch);
     }
 }
 
@@ -100,7 +99,7 @@ export const setPhaseOneArgs = (phaseOneArgs: PhaseOneArgs) => {
     }
 }
 
-interface State {
+export interface State {
     selectedState: string;
     precincts: any;
     precinctMap: Map<string, IPrecinct>;

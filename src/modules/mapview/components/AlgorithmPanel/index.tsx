@@ -1,11 +1,22 @@
 import * as React from 'react';
+import * as mapActionCreators from '../../../../redux/modules/state/state';
 
 import { Row, Button, ButtonGroup, Form} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas, faPlay, faPause, faSquare } from '@fortawesome/free-solid-svg-icons';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
+import { PhaseOneArgs } from '../../../../models';
 
-export class AlgorithmPanel extends React.PureComponent {
+interface IAlgorithmPanelProps {
+    phaseOneArgs: PhaseOneArgs;
+}
+
+export class AlgorithmPanelComponent extends React.PureComponent<
+        IAlgorithmPanelProps,
+        {}
+    >{
     render() {
         return (
             <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
@@ -21,3 +32,16 @@ export class AlgorithmPanel extends React.PureComponent {
         );
     }
 }
+
+function mapStateToProps(state: any) {
+    return {
+        phaseOneArgs: state.stateReducer.phaseOneArgs
+    };
+}
+
+export const AlgorithmPanel = connect(
+    (state: any) => {
+        return mapStateToProps(state);
+    },
+    dispatch => bindActionCreators(mapActionCreators, dispatch)
+)(AlgorithmPanelComponent);

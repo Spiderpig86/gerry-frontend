@@ -7,13 +7,13 @@ import { hashPrecinct } from './hash';
 
 export class StateService {
     private dispatch: any;
-    private ws: WebSocketHandler;
+    private handler: WebSocketHandler;
     private precincts: any;
     private precinctMap: Map<string, IPrecinct>;
 
     constructor(state: StateEnum, dispatch: any) {
         this.dispatch = dispatch;
-        this.ws = new WebSocketHandler(
+        this.handler = new WebSocketHandler(
             this.generateUrl(state),
             this.onOpen.bind(this),
             this.onMessage.bind(this),
@@ -34,7 +34,6 @@ export class StateService {
     private onMessage(event: any): void {
         const message = JSON.parse(event.data);
         this.precincts.features = this.precincts.features.concat(message);
-        console.log(this.precincts.features.length);
         message.forEach(shape => {
             this.precinctMap.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
         });
