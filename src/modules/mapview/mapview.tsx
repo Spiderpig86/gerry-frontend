@@ -482,6 +482,29 @@ export class MapViewComponent extends React.Component<
         filter: string,
         properties: any
     ): IMapTooltipProps {
+
+        // If we selected a district view, just display the important district stats
+        if (this.props.level === ViewLevelEnum.OLD_DISTRICTS) {
+            return {
+                title: 'District Data',
+                subtitle: 'District information',
+                statistics: [
+                    {
+                        key: 'Democratic Vote',
+                        value: 120000
+                    },
+                    {
+                        key: 'Republican Vote',
+                        value: 120000
+                    },
+                    {
+                        key: 'White Population',
+                        value: 1000
+                    }
+                ]
+            }
+        }
+
         switch (filter) {
             case MapFilterEnum.PRES_2016:
                 return {
@@ -490,30 +513,31 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v16_dpres)}`
+                            value: Math.round(properties.v16_dpres)
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v16_rpres)}`
+                            value: Math.round(properties.v16_rpres)
                         },
                         {
                             key: 'Other Votes',
-                            value: `${Math.round(properties.v16_opres) || 0}`
+                            value: Math.round(properties.v16_opres) || 0
                         }
                     ]
                 };
             case MapFilterEnum.HOUSE_2016:
+                const total = properties.v16_house + properties.v16_rhouse;
                 return {
                     title: '2016 House Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v16_dhouse)}`
+                            value: Math.round(properties.v16_dhouse),
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v16_rhouse)}`
+                            value: Math.round(properties.v16_rhouse),
                         }
                     ]
                 };
@@ -524,11 +548,11 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v16_dsenate)}`
+                            value: Math.round(properties.v16_dsenate),
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v16_rsenate)}`
+                            value: Math.round(properties.v16_rsenate),
                         }
                     ]
                 };
@@ -539,11 +563,11 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v18_dhouse)}`
+                            value: Math.round(properties.v18_dhouse),
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v18_rhouse)}`
+                            value: Math.round(properties.v18_rhouse),
                         }
                     ]
                 };
@@ -554,11 +578,11 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: `${Math.round(properties.v18_dsenate)}`
+                            value: Math.round(properties.v18_dsenate),
                         },
                         {
                             key: 'Republican Votes',
-                            value: `${Math.round(properties.v18_rsenate)}`
+                            value: Math.round(properties.v18_rsenate),
                         }
                     ]
                 };
@@ -569,35 +593,35 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'White Population',
-                            value: `${Math.round(properties.pop_white_nh)}`
+                            value: Math.round(properties.pop_white_nh),
                         },
                         {
                             key: 'Black Population',
-                            value: `${Math.round(properties.pop_black_nh)}`
+                            value: Math.round(properties.pop_black_nh),
                         },
                         {
                             key: 'Hispanic Population',
-                            value: `${Math.round(properties.pop_hispanic)}`
+                            value: Math.round(properties.pop_hispanic),
                         },
                         {
                             key: 'Asian Population',
-                            value: `${Math.round(properties.pop_asian_nh)}`
+                            value: Math.round(properties.pop_asian_nh),
                         },
                         {
                             key: 'Native American Population',
-                            value: `${Math.round(properties.pop_amin_nh)}`
+                            value: Math.round(properties.pop_amin_nh),
                         },
                         {
                             key: 'Pacific Islander Population',
-                            value: `${Math.round(properties.pop_nhpi_nh)}`
+                            value: Math.round(properties.pop_nhpi_nh),
                         },
                         {
                             key: 'Other Population',
-                            value: `${Math.round(properties.pop_other_nh)}`
+                            value: Math.round(properties.pop_other_nh),
                         },
                         {
                             key: 'Biracial Population',
-                            value: `${Math.round(properties.pop_2more_nh)}`
+                            value: Math.round(properties.pop_2more_nh),
                         }
                     ]
                 };

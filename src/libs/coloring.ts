@@ -16,7 +16,7 @@ export class Coloring {
     public colors: any[];
 
     constructor() {
-        this.colors = distinctColors({ count: 30});
+        this.colors = distinctColors({ count: 30 });
     }
 
     public getDefaultStyle(feature: any, layer: any): PathOptions {
@@ -30,6 +30,7 @@ export class Coloring {
 
         switch (majorityParty.party) {
             case 'D':
+                    // 3383c0
                 let partyColor: Color = majorityParty.percent >= 0.75
                     ? Color.default('#007abf').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
                     : Color.default('#007abf').lighten((0.75 - majorityParty.percent) * 3);

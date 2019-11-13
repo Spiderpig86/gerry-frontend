@@ -9,12 +9,17 @@ import './styles.scss';
 export interface IMapTooltipProps {
     title: string;
     subtitle: string;
-    statistics: { key: string; value: string }[];
+    statistics: { key: string; value: number }[];
+}
+
+export interface IMapTooltipState {
+    total: number;
 }
 
 class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
 
     render() {
+        const total = this.props.statistics ? this.props.statistics.reduce((total, obj) => total + Number(obj.value), 0) : 1;
         return (
             <div className="map-tooltip">
                 <h6>{ this.props.title || 'Statistics' }</h6>
@@ -22,7 +27,7 @@ class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
                 {
                     this.props.statistics && this.props.statistics.map((stat: any, i: number) => {
                         return (
-                            <p key={i}>{ stat.key }: { stat.value }</p>
+                            <p key={i}>{ stat.key }: { stat.value.toLocaleString() } ({ (stat.value * 100 / total).toFixed(2) }%)</p>
                         )
                     })
                 }
