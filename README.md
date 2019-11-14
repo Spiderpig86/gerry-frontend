@@ -1,42 +1,27 @@
-# TypeScript React Redux Bootstrap Sass Webpack Starter
+# Gerry-Frontend
 
-This repository 
-* is a single page application with React and Redux using TypeScript
-* uses Bootstrap framework and Sass as preprocessor
-* testing with Jest and Enzyme
-* uses webpack as module bundler
+This repository contains the front-end application used by Gerry.
 
-# Install python
+## Demo
 
-node-sass uses python, so please install python using
+A live preview can be seen [here](https://gerryapp.netlify.com/).
 
-```shell
-npm --add-python-to-path='true' --debug install --global windows-build-tools
+## Testing Locally
+
+First, install all needed dependencies.
+
+```sh
+npm i
 ```
 
-# Running application locally
+Then, start the application.
 
-```shell
-npm install
-```
-NOTE: Without performing Install python step, npm install would fail
-
-```shell
-npm run build:dev
+```sh
+npm start
 ```
 
-```shell
-npm run start
-```
-NOTE: Will start the application in localhost:3001 using webpack dev server
+To test with a mock webserver, `cd` to `./server` and start the server.
 
-# Testing the project
-
-Updating snapshot
-```shell
-npm run test:update-snapshot
-```
-
-```shell
-npm run test
+```sh
+cd ./server && npm start
 ```

@@ -16,7 +16,6 @@ const initialState: IHomeComponentState = {};
 
 interface IHomeComponentProps {
     history: any;
-    // isAuthed: boolean;
     isFetching: boolean;
     error: string;
     fetchAndHandleAuthentication: (history: any) => void;
@@ -89,7 +88,7 @@ class HomeComponent extends React.Component<
                     <p className='lead font-weight-normal'>This project is developed for our CSE 308 class at Stony Brook University.</p>
 
                     <Row className='py-5'>
-                      <Col xs='3' className='developer-col'>
+                      <Col md='3' className='developer-col py-2'>
                         <Card>
                           <img src='' />
                           <Card.Title>Andy Liang</Card.Title>
@@ -98,7 +97,7 @@ class HomeComponent extends React.Component<
                           </Card.Text>
                         </Card>
                       </Col>
-                      <Col xs='3' className='developer-col'>
+                      <Col md='3' className='developer-col py-2'>
                         <Card>
                           <img src='' />
                           <Card.Title>Johnny So</Card.Title>
@@ -107,7 +106,7 @@ class HomeComponent extends React.Component<
                           </Card.Text>
                         </Card>
                       </Col>
-                      <Col xs='3' className='developer-col'>
+                      <Col md='3' className='developer-col py-2'>
                         <Card>
                           <img src='' />
                           <Card.Title>Mikey Gulati</Card.Title>
@@ -116,7 +115,7 @@ class HomeComponent extends React.Component<
                           </Card.Text>
                         </Card>
                       </Col>
-                      <Col xs='3' className='developer-col'>
+                      <Col md='3' className='developer-col py-2'>
                         <Card>
                           <img src='' />
                           <Card.Title>Stanley Lim</Card.Title>
