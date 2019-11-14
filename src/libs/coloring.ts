@@ -5,6 +5,8 @@
  * @class Coloring
  */
 import * as Color from 'color';
+import * as Constants from '../config/constants';
+
 import distinctColors from 'distinct-colors';
 
 import { PathOptions } from 'leaflet';
@@ -21,7 +23,7 @@ export class Coloring {
 
     public getDefaultStyle(feature: any, layer: any): PathOptions {
         return {
-            color: 'rgb(51, 136, 255)',
+            color: Constants.COLOR_DEFAULT,
             weight: 0.75,
         };
     }
@@ -32,30 +34,30 @@ export class Coloring {
             case 'D':
                     // 3383c0
                 let partyColor: Color = majorityParty.percent >= 0.75
-                    ? Color.default('#007abf').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#007abf').lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.default(Constants.COLOR_DEMOCRAT).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default(Constants.COLOR_DEMOCRAT).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.default('#007abf').darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_DEMOCRAT).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'R':
                 partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#c03339').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#c03339').lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.default(Constants.COLOR_REPUBLICAN).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default(Constants.COLOR_REPUBLICAN).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.default('#c03339').darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_REPUBLICAN).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()
                 };
             case 'I':
                 partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#2db82d').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#2db82d').lighten((0.75 - majorityParty.percent) * 3);
+                    ? Color.default(Constants.COLOR_INDEPENDENT).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
+                    : Color.default(Constants.COLOR_INDEPENDENT).lighten((0.75 - majorityParty.percent) * 3);
                 return {
-                    color: Color.default('#2db82d').darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_INDEPENDENT).darken(.25).hex(),
                     weight: 0.5,
                     fillOpacity: 0.75,
                     fillColor: partyColor.hex()

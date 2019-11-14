@@ -133,7 +133,7 @@ export class MapViewComponent extends React.Component<
         layer.on({
             click: () => {
                 this.showPrecinctData(feature, layer);
-                this.state.map.leafletElement.fitBounds(layer.getBounds());
+                this.state.map.leafletElement.fitBounds(layer.getBounds(), { paddingBottomRight: [500, 0]});
                 this.setState({ selectedPrecinctId: hashPrecinct(feature.properties) });
             },
             mouseover: () => {
@@ -161,15 +161,7 @@ export class MapViewComponent extends React.Component<
     }
 
     onMouseLeavePrecinct(layer: any) {
-        this.props.store.dispatch(
-            setTooltipData({
-                mapTooltip: {
-                    title: null,
-                    subtitle: null,
-                    statistics: null
-                }
-            })
-        );
+        
     }
 
     onZoom(e: any) {
@@ -492,7 +484,8 @@ export class MapViewComponent extends React.Component<
                     {
                         key: 'Democratic Vote',
                         value: 120000,
-                        needsPercent: true
+                        needsPercent: true,
+                        barColor: Constants.COLOR_DEMOCRAT
                     },
                     {
                         key: 'Republican Vote',
@@ -532,17 +525,20 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v16_dpres),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_DEMOCRAT
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v16_rpres),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_REPUBLICAN
                         },
                         {
                             key: 'Other Votes',
                             value: Math.round(properties.v16_opres) || 0,
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_INDEPENDENT
                         }
                     ]
                 };
@@ -555,12 +551,14 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v16_dhouse),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_DEMOCRAT
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v16_rhouse),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_REPUBLICAN
                         }
                     ]
                 };
@@ -572,12 +570,14 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v16_dsenate),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_DEMOCRAT
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v16_rsenate),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_REPUBLICAN
                         }
                     ]
                 };
@@ -589,12 +589,14 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v18_dhouse),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_DEMOCRAT
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v18_rhouse),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_REPUBLICAN
                         }
                     ]
                 };
@@ -606,12 +608,14 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v18_dsenate),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_DEMOCRAT
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v18_rsenate),
-                            needsPercent: true
+                            needsPercent: true,
+                            barColor: Constants.COLOR_REPUBLICAN
                         }
                     ]
                 };

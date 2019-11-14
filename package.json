@@ -39,6 +39,7 @@
     "react-dom": "^16.9.0",
     "react-leaflet-choropleth": "^2.0.0",
     "react-leaflet-control": "^2.1.1",
+    "react-progressbar": "^15.4.1",
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
     "react-spinners": "^0.6.1",

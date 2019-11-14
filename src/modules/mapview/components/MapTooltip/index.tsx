@@ -5,11 +5,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import './styles.scss';
+import { ProgressBar } from 'react-bootstrap';
+
+type ProgressBarVariant = "success" | "danger" | "warning" | "info"
 
 export interface IMapTooltipProps {
     title: string;
     subtitle: string;
-    statistics: { key: string; value: number, needsPercent?: boolean }[];
+    statistics: { key: string; value: number, needsPercent?: boolean, barColor?: string }[];
 }
 
 export interface IMapTooltipState {
@@ -27,13 +30,15 @@ class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
                 {
                     this.props.statistics && this.props.statistics.map((stat: any, i: number) => {
                         return (
-                            <p key={i}>
-                                { stat.key }: { stat.value.toLocaleString() }
+                            <div key={i}>
+                                <p>{ stat.key }: { stat.value.toLocaleString() } &nbsp;</p>
                                 {
-                                    stat.needsPercent &&
-                                    <> ({ (stat.value * 100 / total).toFixed(2) }%)</>
+                                    stat.needsPercent && stat.value !== null &&
+                                    <>
+                                        <ProgressBar animated now={(stat.value * 100 / total)} label={`${(stat.value * 100 / total).toFixed(2)}%`} />
+                                    </>
                                 }
-                            </p>
+                            </div>
                         )
                     })
                 }
