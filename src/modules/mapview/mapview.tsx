@@ -27,6 +27,7 @@ import { IPrecinct, Properties, MapFilterEnum, ViewLevelEnum } from '../../model
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
+import { WebSocketHandler } from '../../libs/ws';
 
 export interface IMapViewProps {
     selectedState: string;
@@ -89,6 +90,8 @@ export class MapViewComponent extends React.Component<
      */
 
     async componentDidMount() {
+        const ws = new WebSocketHandler(`ws://localhost:8080/ws/precincts`);
+
         const statePopulator = new StateBordersApi();
         await Promise.all([
             statePopulator.fetchStateBorder(States.CA),

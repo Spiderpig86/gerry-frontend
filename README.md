@@ -8,6 +8,9 @@ A live preview can be seen [here](https://gerryapp.netlify.com/).
 
 ## Testing Locally
 
+### React Setup
+
+Skip this setup if you are viewing the app through Netlify.
 First, install all needed dependencies.
 
 ```sh
@@ -20,8 +23,16 @@ Then, start the application.
 npm start
 ```
 
+### Server Setup
+
 To test with a mock webserver, `cd` to `./server` and start the server.
 
 ```sh
-cd ./server && npm start
+cd ./server && npm i
+```
+
+Then, start the server.
+
+```sh
+npm start
 ```
