@@ -9,7 +9,7 @@ import './styles.scss';
 export interface IMapTooltipProps {
     title: string;
     subtitle: string;
-    statistics: { key: string; value: number }[];
+    statistics: { key: string; value: number, needsPercent?: boolean }[];
 }
 
 export interface IMapTooltipState {
@@ -19,7 +19,7 @@ export interface IMapTooltipState {
 class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
 
     render() {
-        const total = this.props.statistics ? this.props.statistics.reduce((total, obj) => total + Number(obj.value), 0) : 1;
+        const total = this.props.statistics ? this.props.statistics.reduce((total, obj) => (obj.needsPercent ? total + Number(obj.value) : total), 0) : 1;
         return (
             <div className="map-tooltip">
                 <h6>{ this.props.title || 'Statistics' }</h6>
@@ -27,7 +27,13 @@ class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
                 {
                     this.props.statistics && this.props.statistics.map((stat: any, i: number) => {
                         return (
-                            <p key={i}>{ stat.key }: { stat.value.toLocaleString() } ({ (stat.value * 100 / total).toFixed(2) }%)</p>
+                            <p key={i}>
+                                { stat.key }: { stat.value.toLocaleString() }
+                                {
+                                    stat.needsPercent &&
+                                    <> ({ (stat.value * 100 / total).toFixed(2) }%)</>
+                                }
+                            </p>
                         )
                     })
                 }

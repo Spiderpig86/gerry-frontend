@@ -484,23 +484,41 @@ export class MapViewComponent extends React.Component<
     ): IMapTooltipProps {
 
         // If we selected a district view, just display the important district stats
-        if (this.props.level === ViewLevelEnum.OLD_DISTRICTS) {
+        if (this.props.level === ViewLevelEnum.OLD_DISTRICTS || this.props.level === ViewLevelEnum.NEW_DISTRICTS) {
             return {
                 title: 'District Data',
                 subtitle: 'District information',
                 statistics: [
                     {
                         key: 'Democratic Vote',
-                        value: 120000
+                        value: 120000,
+                        needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: 120000
+                        value: 120000,
+                        needsPercent: true
                     },
                     {
-                        key: 'White Population',
-                        value: 1000
-                    }
+                        key: 'Total District Population',
+                        value: 240000,
+                    },
+                    {
+                        key: 'Political Fairness Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Population Equality Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Compactness Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Contiguity Score',
+                        value: 0.6
+                    },
                 ]
             }
         }
@@ -513,15 +531,18 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'Democratic Votes',
-                            value: Math.round(properties.v16_dpres)
+                            value: Math.round(properties.v16_dpres),
+                            needsPercent: true
                         },
                         {
                             key: 'Republican Votes',
-                            value: Math.round(properties.v16_rpres)
+                            value: Math.round(properties.v16_rpres),
+                            needsPercent: true
                         },
                         {
                             key: 'Other Votes',
-                            value: Math.round(properties.v16_opres) || 0
+                            value: Math.round(properties.v16_opres) || 0,
+                            needsPercent: true
                         }
                     ]
                 };
@@ -534,10 +555,12 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v16_dhouse),
+                            needsPercent: true
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v16_rhouse),
+                            needsPercent: true
                         }
                     ]
                 };
@@ -549,10 +572,12 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v16_dsenate),
+                            needsPercent: true
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v16_rsenate),
+                            needsPercent: true
                         }
                     ]
                 };
@@ -564,10 +589,12 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v18_dhouse),
+                            needsPercent: true
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v18_rhouse),
+                            needsPercent: true
                         }
                     ]
                 };
@@ -579,10 +606,12 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'Democratic Votes',
                             value: Math.round(properties.v18_dsenate),
+                            needsPercent: true
                         },
                         {
                             key: 'Republican Votes',
                             value: Math.round(properties.v18_rsenate),
+                            needsPercent: true
                         }
                     ]
                 };
@@ -594,34 +623,42 @@ export class MapViewComponent extends React.Component<
                         {
                             key: 'White Population',
                             value: Math.round(properties.pop_white_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Black Population',
                             value: Math.round(properties.pop_black_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Hispanic Population',
                             value: Math.round(properties.pop_hispanic),
+                            needsPercent: true
                         },
                         {
                             key: 'Asian Population',
                             value: Math.round(properties.pop_asian_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Native American Population',
                             value: Math.round(properties.pop_amin_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Pacific Islander Population',
                             value: Math.round(properties.pop_nhpi_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Other Population',
                             value: Math.round(properties.pop_other_nh),
+                            needsPercent: true
                         },
                         {
                             key: 'Biracial Population',
                             value: Math.round(properties.pop_2more_nh),
+                            needsPercent: true
                         }
                     ]
                 };
