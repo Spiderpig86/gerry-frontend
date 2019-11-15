@@ -90,8 +90,6 @@ export class MapViewComponent extends React.Component<
      */
 
     async componentDidMount() {
-        const ws = new WebSocketHandler(`ws://localhost:8080/ws/precincts`);
-
         const statePopulator = new StateBordersApi();
         await Promise.all([
             statePopulator.fetchStateBorder(States.CA),
