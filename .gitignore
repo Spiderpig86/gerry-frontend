@@ -4,4 +4,5 @@ src/**/*.js
 src/**/*.js.map
 node_modules
 .vscode
-public
+public/index.html
+public/bundle-dev.js
