@@ -35,7 +35,7 @@ class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
                                 {
                                     stat.needsPercent && stat.value !== null &&
                                     <>
-                                        <ProgressBar animated now={(stat.value * 100 / total)} label={`${(stat.value * 100 / total).toFixed(2)}%`} />
+                                        <ProgressBar animated now={(stat.value * 100 / total) || 0} label={`${(stat.value * 100 / total).toFixed(2) || '0'}%`} />
                                     </>
                                 }
                             </div>
