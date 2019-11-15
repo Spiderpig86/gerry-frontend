@@ -3,6 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const url = require('url');
 
+const CA = JSON.parse(fs.readFileSync('./CA.json', 'utf8'));
 const UT = JSON.parse(fs.readFileSync('./UT.json', 'utf8'));
 const VA = JSON.parse(fs.readFileSync('./VA.json', 'utf8'));
 
@@ -22,6 +23,9 @@ wsServer.on('request', req => {
     let state = UT;
 
     switch (location) {
+        case `CA`:
+            state = CA;
+            break;
         case `UT`:
             state = UT;
             break;

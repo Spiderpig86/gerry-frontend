@@ -1,5 +1,4 @@
 export interface Properties {
-
     cd: number;
     county_name: string;
     district_number: string;
@@ -44,5 +43,4 @@ export interface Properties {
     v18_rsenate: string;
 
     [x: string]: any;
-
 }

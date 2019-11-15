@@ -140,28 +140,28 @@ export class Coloring {
         let demographicPopulation = 0;
         switch (filter) {
             case MapFilterEnum.WHITE_DENSITY:
-                demographicPopulation = properties.pop_white_nh
+                demographicPopulation = properties.pop_white_nh || 0;
                 break;
             case MapFilterEnum.BLACK_DENSITY:
-                demographicPopulation = properties.pop_black_nh;
+                demographicPopulation = properties.pop_black_nh || 0;
                 break;
             case MapFilterEnum.ASIAN_DENSITY:
-                demographicPopulation = properties.pop_asian_nh;
+                demographicPopulation = properties.pop_asian_nh || 0;
                 break;
             case MapFilterEnum.HISPANIC_DENSITY:
-                demographicPopulation = properties.pop_hispanic;
+                demographicPopulation = properties.pop_hispanic || 0;
                 break;
             case MapFilterEnum.NATIVE_AMERICAN_DENSITY:
-                demographicPopulation = properties.pop_amin_nh;
+                demographicPopulation = properties.pop_amin_nh || 0;
                 break;
             case MapFilterEnum.PACIFIC_ISLANDER_DENSITY:
-                demographicPopulation = properties.pop_nhpi_nh;
+                demographicPopulation = properties.pop_nhpi_nh || 0;
                 break;
             case MapFilterEnum.OTHER_DENSITY:
-                demographicPopulation = properties.pop_other_nh;
+                demographicPopulation = properties.pop_other_nh || 0;
                 break;
             case MapFilterEnum.BIRACIAL_DENSITY:
-                demographicPopulation = properties.pop_2more_nh;
+                demographicPopulation = properties.pop_2more_nh || 0;
                 break;
         }
 

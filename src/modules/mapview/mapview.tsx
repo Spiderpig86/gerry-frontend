@@ -627,42 +627,42 @@ export class MapViewComponent extends React.Component<
                     statistics: [
                         {
                             key: 'White Population',
-                            value: Math.round(properties.pop_white_nh),
+                            value: Math.round(properties.pop_white_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Black Population',
-                            value: Math.round(properties.pop_black_nh),
+                            value: Math.round(properties.pop_black_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Hispanic Population',
-                            value: Math.round(properties.pop_hispanic),
+                            value: Math.round(properties.pop_hispanic || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Asian Population',
-                            value: Math.round(properties.pop_asian_nh),
+                            value: Math.round(properties.pop_asian_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Native American Population',
-                            value: Math.round(properties.pop_amin_nh),
+                            value: Math.round(properties.pop_amin_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Pacific Islander Population',
-                            value: Math.round(properties.pop_nhpi_nh),
+                            value: Math.round(properties.pop_nhpi_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Other Population',
-                            value: Math.round(properties.pop_other_nh),
+                            value: Math.round(properties.pop_other_nh || 0),
                             needsPercent: true
                         },
                         {
                             key: 'Biracial Population',
-                            value: Math.round(properties.pop_2more_nh),
+                            value: Math.round(properties.pop_2more_nh || 0),
                             needsPercent: true
                         }
                     ]

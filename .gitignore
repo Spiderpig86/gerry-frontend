@@ -6,3 +6,4 @@ node_modules
 .vscode
 public/index.html
 public/bundle-dev.js
+server/CA.json
