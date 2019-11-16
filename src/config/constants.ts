@@ -27,4 +27,4 @@ export const COLOR_LOWER_THRESHOLD = 0.25;
 export const COLOR_AMPLIFY_FACTOR = 3;
 export const COLOR_DARKEN_FACTOR = 0.25;
 export const COLOR_FILL_OPACITY = 0.75;
-export const COLOR_FILL_OPACITY_STATE = 0.75;
+export const COLOR_FILL_OPACITY_STATE = 0.25;
