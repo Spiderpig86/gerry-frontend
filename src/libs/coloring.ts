@@ -18,77 +18,69 @@ export class Coloring {
     public colors: any[];
 
     constructor() {
-        this.colors = distinctColors({ count: 30 });
+        this.colors = distinctColors({ count: Constants.COLOR_COUNT });
     }
 
-    public getDefaultStyle(feature: any, layer: any): PathOptions {
-        return {
-            color: Constants.COLOR_DEFAULT,
-            weight: 0.75,
-        };
-    }
-
-    public colorPolitical(properties: Properties, filter: string, majorityParty: { party: string; percent: number }) {
-
+    public getPoliticalStyle(properties: Properties, filter: string, majorityParty: { party: string; percent: number }) {
         switch (majorityParty.party) {
             case 'D':
                     // 3383c0
-                let partyColor: Color = majorityParty.percent >= 0.75
-                    ? Color.default(Constants.COLOR_DEMOCRAT).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default(Constants.COLOR_DEMOCRAT).lighten((0.75 - majorityParty.percent) * 3);
+                let partyColor: Color = majorityParty.percent >= Constants.COLOR_UPPER_THRESHOLD
+                    ? Color.default(Constants.COLOR_DEMOCRAT).saturate((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR).darken((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD))
+                    : Color.default(Constants.COLOR_DEMOCRAT).lighten((Constants.COLOR_UPPER_THRESHOLD - majorityParty.percent) * Constants.COLOR_AMPLIFY_FACTOR);
                 return {
-                    color: Color.default(Constants.COLOR_DEMOCRAT).darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_DEMOCRAT).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: 0.75,
+                    fillOpacity: Constants.COLOR_FILL_OPACITY,
                     fillColor: partyColor.hex()
                 };
             case 'R':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default(Constants.COLOR_REPUBLICAN).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default(Constants.COLOR_REPUBLICAN).lighten((0.75 - majorityParty.percent) * 3);
+                partyColor = majorityParty.percent >= Constants.COLOR_UPPER_THRESHOLD
+                    ? Color.default(Constants.COLOR_REPUBLICAN).saturate((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR).darken((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD))
+                    : Color.default(Constants.COLOR_REPUBLICAN).lighten((Constants.COLOR_UPPER_THRESHOLD - majorityParty.percent) * Constants.COLOR_AMPLIFY_FACTOR);
                 return {
-                    color: Color.default(Constants.COLOR_REPUBLICAN).darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_REPUBLICAN).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: 0.75,
+                    fillOpacity: Constants.COLOR_FILL_OPACITY,
                     fillColor: partyColor.hex()
                 };
             case 'I':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default(Constants.COLOR_INDEPENDENT).saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default(Constants.COLOR_INDEPENDENT).lighten((0.75 - majorityParty.percent) * 3);
+                partyColor = majorityParty.percent >= Constants.COLOR_UPPER_THRESHOLD
+                    ? Color.default(Constants.COLOR_INDEPENDENT).saturate((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR).darken((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD))
+                    : Color.default(Constants.COLOR_INDEPENDENT).lighten((Constants.COLOR_UPPER_THRESHOLD - majorityParty.percent) * Constants.COLOR_AMPLIFY_FACTOR);
                 return {
-                    color: Color.default(Constants.COLOR_INDEPENDENT).darken(.25).hex(),
+                    color: Color.default(Constants.COLOR_INDEPENDENT).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: 0.75,
+                    fillOpacity: Constants.COLOR_FILL_OPACITY,
                     fillColor: partyColor.hex()
                 };
             case 'O':
-                partyColor = majorityParty.percent >= 0.75
-                    ? Color.default('#6930be').saturate((majorityParty.percent - 0.75) * 3).darken((majorityParty.percent - 0.75))
-                    : Color.default('#6930be').lighten((0.75 - majorityParty.percent) * 3);
+                partyColor = majorityParty.percent >= Constants.COLOR_UPPER_THRESHOLD
+                    ? Color.default('#6930be').saturate((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR).darken((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD))
+                    : Color.default('#6930be').lighten((Constants.COLOR_UPPER_THRESHOLD - majorityParty.percent) * Constants.COLOR_AMPLIFY_FACTOR);
                 return {
-                    color: Color.default('#6930be').darken(.25).hex(),
+                    color: Color.default('#6930be').darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: 0.75,
+                    fillOpacity: Constants.COLOR_FILL_OPACITY,
                     fillColor: partyColor.hex()
                 };
             default:
                 return {
-                    color: '#1f2021',
-                    weight: 0.3,
+                    color: '#ccc',
+                    weight: 0.1,
                     fillOpacity: 0,
                 };
         }
     }
 
-    public colorDemographic(properties: any, filter: string) {
+    public getDemographicStyle(properties: any, filter: string) {
         const demographicPercent = this.getPopulationPercentByDemographic(properties, filter);
-        let color = Color.rgb([252, 210, 122]).saturate((demographicPercent - 0.75) * 3)
-            .darken(demographicPercent - 0.75)
+        let color = Color.default(Constants.COLOR_DEMOGRAPHIC).saturate((demographicPercent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR)
+            .darken(demographicPercent - Constants.COLOR_UPPER_THRESHOLD)
             .hex();
-        if (demographicPercent < 0.75) {
-            color = Color.rgb([252, 210, 122])
-                .lighten(0.75 - demographicPercent)
+        if (demographicPercent < Constants.COLOR_UPPER_THRESHOLD) {
+            color = Color.default(Constants.COLOR_DEMOGRAPHIC)
+                .lighten(Constants.COLOR_UPPER_THRESHOLD - demographicPercent)
                 .hex();
         }
 
@@ -97,42 +89,38 @@ export class Coloring {
         }
 
         return {
-            color: Color.rgb([252, 210, 122])
+            color: Color.default(Constants.COLOR_DEMOGRAPHIC)
                 .darken(0.5)
                 .hex(),
             weight: 0.5,
-            fillOpacity: 0.75,
+            fillOpacity: Constants.COLOR_FILL_OPACITY,
             fillColor: color
         };
     }
 
     public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>): PathOptions {
-
         const colorConfig = {
-            color: 'rgb(51, 136, 255)',
+            color: Constants.COLOR_DEFAULT_RGB,
             weight: 1,
-            fillOpacity: 0.5,
-            fillColor: 'rgb(51, 136, 255)'
+            fillOpacity: Constants.COLOR_FILL_OPACITY_STATE,
+            fillColor: Constants.COLOR_DEFAULT_RGB
         };
         
         if (level === ViewLevelEnum.OLD_DISTRICTS) {
-            // const color = Constants.DISTRICT_COLORS[properties.cd - 1];
             const precinct = precinctMap.get(hashPrecinct(properties));
             if (!precinct) {
                 return colorConfig;
             }
-
-            const cdId = level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId - 1 : precinct.newCdId - 1;
+            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId - 1 : precinct.newCdId - 1);
 
             const color = Color.rgb(this.colors[cdId]._rgb).hex();
             colorConfig.color = Color.default(color)
-                                .darken(0.5)
+                                .darken(Constants.COLOR_DARKEN_FACTOR)
                                 .hex();
-            colorConfig.weight = 0.75;
-            colorConfig.fillOpacity = 0.75;
+            colorConfig.weight = Constants.BORDER_WEIGHT_NORMAL;
+            colorConfig.fillOpacity = Constants.COLOR_FILL_OPACITY;
             colorConfig.fillColor = color;
         }
-
         return colorConfig;
     }
 
@@ -164,18 +152,6 @@ export class Coloring {
                 demographicPopulation = properties.pop_2more_nh || 0;
                 break;
         }
-
         return demographicPopulation / properties.pop_total;
-    }
-
-    public getRandomColor(): string {
-        const h = this.randomInt(0, 360);
-        const s = this.randomInt(42, 98);
-        const l = this.randomInt(38, 90);
-        return Color.hsl([h, s, l]).hex();
-    }
-
-    private randomInt(min, max): number {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

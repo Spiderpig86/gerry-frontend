@@ -10,12 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
 
-import {
-    LeftSidebar,
-    RightSidebar,
-    MapTooltip,
-    IMapTooltipProps
-} from './components';
+import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
 import { StateBordersApi, States } from '../../libs/state-borders';
 import { hashPrecinct } from '../../libs/hash';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
@@ -27,7 +22,6 @@ import { IPrecinct, Properties, MapFilterEnum, ViewLevelEnum } from '../../model
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
-import { WebSocketHandler } from '../../libs/ws';
 
 export interface IMapViewProps {
     selectedState: string;
@@ -43,22 +37,17 @@ interface IMapViewState {
     map: ReactLeaflet.Map;
     isOpen: boolean;
     zoom: number;
-
     mapProps: {
         demographicsProps: IDemographicsTabProps;
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
         votingAgeProps: IVotingAgeTabProps;
     };
-
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
 }
 
-export class MapViewComponent extends React.Component<
-    IMapViewProps,
-    IMapViewState
-    > {
+export class MapViewComponent extends React.Component<IMapViewProps, IMapViewState> {
     state: IMapViewState = {
         stateBorders: [],
         isOpen: false,
@@ -77,7 +66,6 @@ export class MapViewComponent extends React.Component<
         },
         selectedPrecinctId: null
     };
-
     public coloring: Coloring;
 
     constructor() {
@@ -88,7 +76,6 @@ export class MapViewComponent extends React.Component<
     /**
      * LIFECYCLE HOOKS
      */
-
     async componentDidMount() {
         const statePopulator = new StateBordersApi();
         await Promise.all([
@@ -103,12 +90,9 @@ export class MapViewComponent extends React.Component<
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (
-            this.state.mapTooltip.statistics !== nextState.mapTooltip.statistics
-        ) {
+        if (this.state.mapTooltip.statistics !== nextState.mapTooltip.statistics) {
             return false;
         }
-
         return true;
     }
 
@@ -120,12 +104,7 @@ export class MapViewComponent extends React.Component<
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.props.store.dispatch(
-                    mapActionCreators.setSelectedState(
-                        this.props.selectedState,
-                        feature.state
-                    )
-                );
+                this.props.store.dispatch(mapActionCreators.setSelectedState(this.props.selectedState, feature.state));
             }
         });
     }
@@ -133,11 +112,16 @@ export class MapViewComponent extends React.Component<
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                this.showPrecinctData(feature, layer);
-                this.state.map.leafletElement.fitBounds(layer.getBounds(), { paddingBottomRight: [500, 0]});
-                this.setState({ selectedPrecinctId: hashPrecinct(feature.properties) });
+                this.fetchPrecinctData(feature, layer);
+                this.state.map.leafletElement.fitBounds(layer.getBounds(), {
+                    paddingBottomRight: [500, 0]
+                });
+                this.setState({
+                    selectedPrecinctId: hashPrecinct(feature.properties)
+                });
             },
             mouseover: () => {
+                console.log(layer);
                 layer.setStyle({
                     weight: 5,
                     color: layer.options.color
@@ -145,7 +129,11 @@ export class MapViewComponent extends React.Component<
             },
             mouseout: () => {
                 layer.setStyle({
-                    weight: (this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(feature.properties) ? 5 : 0.75),
+                    weight:
+                        this.state.selectedPrecinctId &&
+                        this.state.selectedPrecinctId === hashPrecinct(feature.properties)
+                            ? 5
+                            : 0.75,
                     color: layer.options.color
                 });
             }
@@ -154,15 +142,8 @@ export class MapViewComponent extends React.Component<
 
     onMouseHoverPrecinct(layer: any) {
         const properties: Properties = layer.layer.feature.properties;
-        const toolTipProps = this.getMapTooltipProps(
-            this.props.filter,
-            properties
-        );
+        const toolTipProps = this.getMapTooltipProps(this.props.filter, properties);
         this.props.store.dispatch(setTooltipData(toolTipProps));
-    }
-
-    onMouseLeavePrecinct(layer: any) {
-        
     }
 
     onZoom(e: any) {
@@ -180,7 +161,7 @@ export class MapViewComponent extends React.Component<
                 <RightSidebar
                     {...this.state.mapProps}
                     mapView={this}
-                    resetSelectedPrecinctHandler={this.resetSelectedPrecinctHandler.bind(this)}
+                    resetSelectedPrecinctHandler={this.resetSelectedPrecinct.bind(this)}
                     isOpen={this.state.isOpen}
                 />
 
@@ -213,10 +194,7 @@ export class MapViewComponent extends React.Component<
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                         </ReactLeaflet.LayersControl.BaseLayer>
-                        <ReactLeaflet.LayersControl.BaseLayer
-                            checked
-                            name="Mapbox Light"
-                        >
+                        <ReactLeaflet.LayersControl.BaseLayer checked name="Mapbox Light">
                             <ReactLeaflet.TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic3BpZGVycGlnODYiLCJhIjoiY2swaXV5amZhMDQwbjNob2M4ZDlkaTdpeCJ9.qSP-Dad2FIXnIJ7eAwaq6A"
@@ -252,21 +230,11 @@ export class MapViewComponent extends React.Component<
                                 return (
                                     <ReactLeaflet.GeoJSON
                                         key={`precinct${this.props.precincts.features.length}`}
-                                        data={
-                                            this.props
-                                                .precincts as GeoJsonObject
-                                        }
+                                        data={this.props.precincts as GeoJsonObject}
                                         preferCanvas={true}
                                         style={this.getPrecinctStyle.bind(this)}
-                                        onMouseOver={this.onMouseHoverPrecinct.bind(
-                                            this
-                                        )}
-                                        onMouseOut={this.onMouseLeavePrecinct.bind(
-                                            this
-                                        )}
-                                        onEachFeature={this.onEachFeaturePrecinct.bind(
-                                            this
-                                        )}
+                                        onMouseOver={this.onMouseHoverPrecinct.bind(this)}
+                                        onEachFeature={this.onEachFeaturePrecinct.bind(this)}
                                     />
                                 );
                             } else {
@@ -274,12 +242,8 @@ export class MapViewComponent extends React.Component<
                                     <ReactLeaflet.GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
-                                        style={this.coloring.getDefaultStyle.bind(
-                                            this.coloring
-                                        )}
-                                        onEachFeature={this.onEachFeatureState.bind(
-                                            this
-                                        )}
+                                        style={this.coloring.colorDefault.bind(this.coloring)}
+                                        onEachFeature={this.onEachFeatureState.bind(this)}
                                     />
                                 );
                             }
@@ -289,12 +253,8 @@ export class MapViewComponent extends React.Component<
         );
     }
 
-    private showPrecinctData(feature: any, layer: any) {
+    private fetchPrecinctData(feature: any, layer: any) {
         const properties = feature.properties;
-        // const precinct = this.props.precinctMap.get(hashPrecinct(properties));
-        // precinct.properties.v16_opres = (parseInt(precinct.properties.v16_opres) + 100).toString();
-        // console.log(precinct);
-
         const electionsProps: IElectionsTabProps = {
             election2016: {
                 presidentialResults: {
@@ -380,12 +340,10 @@ export class MapViewComponent extends React.Component<
         });
     }
 
-    public getMajorityPartyPrecinct(
-        properties: any
-    ): { party: string; percent: number } {
-        // Store the per party info based on election type
-        let democratVotes = 0, republicanVotes = 0, otherVotes = 0;
-
+    public getMajorityPartyInPrecinct(properties: any): { party: string; percent: number } {
+        let democratVotes = 0,
+            republicanVotes = 0,
+            otherVotes = 0;
         switch (this.props.filter) {
             case MapFilterEnum.PRES_2016:
                 democratVotes = properties.v16_dpres;
@@ -413,13 +371,10 @@ export class MapViewComponent extends React.Component<
                 otherVotes = properties.v18_osenate || 0;
                 break;
         }
-
         const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(otherVotes);
-
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
         }
-
         const democratPercent = {
             percent: democratVotes / totalVotes,
             party: 'D'
@@ -432,91 +387,39 @@ export class MapViewComponent extends React.Component<
             percent: otherVotes / totalVotes,
             party: 'O'
         };
-
-        return [republicanPercent, democratPercent, otherPercent].reduce(
-            (prev: any, cur: any) => (prev.percent < cur.percent ? cur : prev)
+        return [republicanPercent, democratPercent, otherPercent].reduce((prev: any, cur: any) =>
+            prev.percent < cur.percent ? cur : prev
         );
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
-        const properties = feature.properties; // TODO: Extract different properties based on if district or precinct views are selected
+        const properties = feature.properties;
         let style = {};
-        if (
-            this.props.filter === MapFilterEnum.PRES_2016 ||
-            this.props.filter === MapFilterEnum.HOUSE_2016 ||
-            this.props.filter === MapFilterEnum.SENATE_2016 ||
-            this.props.filter === MapFilterEnum.HOUSE_2018 ||
-            this.props.filter === MapFilterEnum.SENATE_2018
-        ) {
-            style = this.coloring.colorPolitical(
-                properties,
-                this.props.filter,
-                this.getMajorityPartyPrecinct(properties)
-            );
+        if (this.props.filter === MapFilterEnum.PRES_2016 || this.props.filter === MapFilterEnum.HOUSE_2016 ||
+            this.props.filter === MapFilterEnum.SENATE_2016 || this.props.filter === MapFilterEnum.HOUSE_2018 ||
+            this.props.filter === MapFilterEnum.SENATE_2018) {
+            style = this.coloring.getPoliticalStyle(properties, this.props.filter,
+                this.getMajorityPartyInPrecinct(properties));
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
-            style = this.coloring.colorDefault(
-                properties,
-                this.props.level,
-                this.props.precinctMap
-            );
+            style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap);
         } else {
-            style = this.coloring.colorDemographic(
-                properties,
-                this.props.filter
-            );
+            style = this.coloring.getDemographicStyle(properties, this.props.filter);
         }
         return {
             ...style,
-            weight: (this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75)
+            weight: this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75
+        };
+    }
+
+    private getMapTooltipProps(filter: string, properties: any): IMapTooltipProps {
+        if (this.props.level === ViewLevelEnum.OLD_DISTRICTS || this.props.level === ViewLevelEnum.NEW_DISTRICTS) {
+            return this.fetchDistrictProperties(filter, properties);
+        } else {
+            return this.fetchPrecinctProperties(filter, properties);
         }
     }
 
-    private getMapTooltipProps(
-        filter: string,
-        properties: any
-    ): IMapTooltipProps {
-
-        // If we selected a district view, just display the important district stats
-        if (this.props.level === ViewLevelEnum.OLD_DISTRICTS || this.props.level === ViewLevelEnum.NEW_DISTRICTS) {
-            return {
-                title: 'District Data',
-                subtitle: 'District information',
-                statistics: [
-                    {
-                        key: 'Democratic Vote',
-                        value: 120000,
-                        needsPercent: true,
-                        barColor: Constants.COLOR_DEMOCRAT
-                    },
-                    {
-                        key: 'Republican Vote',
-                        value: 120000,
-                        needsPercent: true
-                    },
-                    {
-                        key: 'Total District Population',
-                        value: 240000,
-                    },
-                    {
-                        key: 'Political Fairness Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Population Equality Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Compactness Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Contiguity Score',
-                        value: 0.6
-                    },
-                ]
-            }
-        }
-
+    private fetchPrecinctProperties(filter: string, properties: any): IMapTooltipProps {
         switch (filter) {
             case MapFilterEnum.PRES_2016:
                 return {
@@ -667,10 +570,50 @@ export class MapViewComponent extends React.Component<
                         }
                     ]
                 };
-        }
+        } 
     }
 
-    private resetSelectedPrecinctHandler() {
+    private fetchDistrictProperties(filter: string, properties: any): IMapTooltipProps {
+        return {
+            title: 'District Data',
+            subtitle: 'District information',
+            statistics: [
+                {
+                    key: 'Democratic Vote',
+                    value: 120000,
+                    needsPercent: true,
+                    barColor: Constants.COLOR_DEMOCRAT
+                },
+                {
+                    key: 'Republican Vote',
+                    value: 120000,
+                    needsPercent: true
+                },
+                {
+                    key: 'Total District Population',
+                    value: 240000
+                },
+                {
+                    key: 'Political Fairness Score',
+                    value: 0.6
+                },
+                {
+                    key: 'Population Equality Score',
+                    value: 0.6
+                },
+                {
+                    key: 'Compactness Score',
+                    value: 0.6
+                },
+                {
+                    key: 'Contiguity Score',
+                    value: 0.6
+                }
+            ]
+        };
+    }
+
+    private resetSelectedPrecinct() {
         this.setState({ selectedPrecinctId: null });
     }
 }
