@@ -38,6 +38,12 @@ export enum PoliticalFairnessEnum {
     MEAN_MEDIAN_DIFFERENCE = 'MEAN_MEDIAN_DIFFERENCE'
 }
 
+export enum PartyEnum {
+    DEMOCRAT = 'DEMOCRAT',
+    REPUBLICAN = 'REPUBLICAN',
+    OTHER = 'OTHER'
+}
+
 export enum DemographicEnum {
     WHITE = 'WHITE',
     BLACK = 'BLACK',
@@ -53,4 +59,15 @@ export enum StateEnum {
     CA = 'CA',
     UT = 'UT',
     VA = 'VA'
+}
+
+export enum AlgorithmEnum {
+    PHASE_0 = 'PHASE_0',
+    PHASE_1 = 'PHASE_1',
+    PHASE_2 = 'PHASE_2'
+}
+
+export enum ResponseEnum {
+    OK = 'OK',
+    ERROR = 'ERR'
 }

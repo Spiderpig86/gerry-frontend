@@ -1,35 +1,18 @@
 import Axios from 'axios';
-
-/**
- * Test class for fetching geojson for state outlines
- */
-export enum States {
-    CA = 'CA',
-    MI = 'MI',
-    RI = 'RI',
-    UT = 'UT',
-    VA = 'VA'
-}
+import { StateEnum, ResponseEnum } from '../models';
+import { formatResponse } from './functions/response';
 
 export class StateBorderService {
-    public async fetchStateBorder(state: States): Promise<any> {
+    public async fetchStateBorder(state: StateEnum): Promise<any> {
         try {
-            const data = await Axios.get(`https://raw.githubusercontent.com/unitedstates/districts/gh-pages/states/${state}/shape.geojson`);
-            return {
-                status: 'OK',
-                state,
-                data: {
-                    type: 'Feature',
-                    geometry: data.data,
-                    state
-                }
-            };
+            const data = await Axios.get(`https://raw.githubusercontent.com/unitedstates/districts/gh-pages/states/${state.toString()}/shape.geojson`);
+            return formatResponse(ResponseEnum.OK, {
+                type: 'Feature',
+                geometry: data.data,
+                state
+            }, {state});
         } catch (e) {
-            return {
-                status: 'ERR',
-                state,
-                data: null
-            };
+            return formatResponse(ResponseEnum.ERROR, null, [state]);
         }
     }
 }

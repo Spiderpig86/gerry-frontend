@@ -8,7 +8,6 @@ import { Home, MapView } from '../../modules';
 export class Routes extends React.Component<any, {}> {
 
     render() {
-        console.log(this.props);
         return (
             <Router>
                 <Switch>

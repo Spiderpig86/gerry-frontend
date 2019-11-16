@@ -5,7 +5,7 @@ import * as Constants from '../../../config/constants';
 
 import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs } from '../../../models';
 import { PoliticalFairnessEnum } from '../../../models';
-import { PrecinctService } from '../../../libs/state-service';
+import { PrecinctService } from '../../../libs/precinct-service';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';

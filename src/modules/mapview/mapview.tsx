@@ -11,14 +11,14 @@ import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
 
 import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
-import { StateBorderService, States } from '../../libs/state-borders';
-import { hashPrecinct } from '../../libs/hash';
+import { StateBorderService } from '../../libs/state-borders';
+import { hashPrecinct } from '../../libs/functions/hash';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
-import { IPrecinct, Properties, MapFilterEnum, ViewLevelEnum } from '../../models';
+import { IPrecinct, Properties, MapFilterEnum, ViewLevelEnum, StateEnum } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
@@ -79,14 +79,14 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
     async componentDidMount() {
         const statePopulator = new StateBorderService();
         await Promise.all([
-            statePopulator.fetchStateBorder(States.CA),
-            statePopulator.fetchStateBorder(States.UT),
-            statePopulator.fetchStateBorder(States.VA)
-        ]).then(data =>
+            statePopulator.fetchStateBorder(StateEnum.CA),
+            statePopulator.fetchStateBorder(StateEnum.UT),
+            statePopulator.fetchStateBorder(StateEnum.VA)
+        ]).then(data => {
             this.setState({
                 stateBorders: data
             })
-        );
+        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -121,7 +121,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                 });
             },
             mouseover: () => {
-                console.log(layer);
                 layer.setStyle({
                     weight: 5,
                     color: layer.options.color

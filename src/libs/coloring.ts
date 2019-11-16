@@ -11,7 +11,7 @@ import distinctColors from 'distinct-colors';
 
 import { PathOptions } from 'leaflet';
 import { Properties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
-import { hashPrecinct } from './hash';
+import { hashPrecinct } from './functions/hash';
 
 export class Coloring {
 

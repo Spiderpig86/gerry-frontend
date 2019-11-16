@@ -3,7 +3,7 @@ import * as Constants from '../config/constants';
 
 import { WebSocketHandler } from './ws';
 import { StateEnum, IPrecinct } from '../models';
-import { hashPrecinct } from './hash';
+import { hashPrecinct } from './functions/hash';
 
 export class PrecinctService {
     private dispatch: any;

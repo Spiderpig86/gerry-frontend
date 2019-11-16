@@ -1,4 +1,4 @@
-import { Properties } from '../models';
+import { Properties } from '../../models';
 
 /**
  * Takes a given precinct's properties and generates key for mapping.

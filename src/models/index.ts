@@ -5,8 +5,8 @@ export { ICluster } from './clusternode';
 export { Properties } from './properties';
 export { IVoteData } from './vote';
 
-export { PhaseZeroArgs } from './Tabs/phasezeroargs';
+export { PhaseZeroArgs, PhaseZeroResult } from './Tabs/phasezeroargs';
 export { PhaseOneArgs } from './Tabs/phaseoneargs';
 export { FilterArgs } from './Tabs/filterargs'
 
-export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum } from './enums';
+export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum } from './enums';

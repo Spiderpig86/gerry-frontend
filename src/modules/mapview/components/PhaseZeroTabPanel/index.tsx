@@ -6,7 +6,8 @@ import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseZeroArgs, ElectionEnum, StateEnum } from '../../../../models';
+import { PhaseZeroArgs, ElectionEnum, StateEnum, PhaseZeroResult } from '../../../../models';
+import { PhaseZeroService } from '../../../../libs/phase-zero-service';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
@@ -22,6 +23,7 @@ interface IPhaseZeroTabPanelProps {
 
 interface IPhaseZeroTabPanelState {
     phaseZeroArgs: PhaseZeroArgs;
+    phaseZeroResults: PhaseZeroResult[];
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<
@@ -34,10 +36,17 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         [ElectionEnum.HOUSE_16, 'Congressional 2016'],
         [ElectionEnum.HOUSE_18, 'Congressional 2018'],
     ]);
+    private service: PhaseZeroService;
+
+    constructor() {
+        super();
+        this.service = new PhaseZeroService();
+    }
 
     componentWillMount() {
         this.setState({
-            phaseZeroArgs: this.props.phaseZeroArgs
+            phaseZeroArgs: this.props.phaseZeroArgs,
+            phaseZeroResults: []
         });
     }
 
@@ -123,49 +132,18 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         />
                     </Form.Group>
                     <div className="d-flex py-3">
-                        <Button className='w-100'>Analyze Precincts</Button>
+                        <Button className='w-100' onClick={async () => {await this.fetchPrecinctBlocs()}} >Analyze Precincts</Button>
                     </div>
                 </div>
 
                 <div className="py-3">
                     <h6>Voting Bloc Precincts</h6>
-                    <Table striped bordered hover responsive>
-                        <thead>
-                            <tr>
-                                <th>Precincts ID</th>
-                                <th colSpan={2}>Demographic</th>
-                                <th colSpan={2}>Party</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                [1, 2, 3, 4, 5].map((e: any, i: number) => {
-                                    const demographicPercentage = Math.random() * 30 + 70;
-                                    const partyPercentage = Math.random() * 30 + 70;
-                                    const demographics = ['White', 'African American', 'Hispanic', 'Asian', 'Native American', 'Pacific Islander'];
-                                    const parties = ['Democratic', 'Republican'];
-                                    const demographic = demographics[~~(Math.random() * parties.length)];
-                                    const party = parties[~~(Math.random() * parties.length)];
-                                    return (
-                                        <tr key={i}>
-                                            <td>{i}</td>
-                                            <td>{demographic}</td>
-                                            <td>{demographicPercentage.toFixed(2)}%</td>
-                                            <td>{party}</td>
-                                            <td>{partyPercentage.toFixed(2)}%</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </Table>
                 </div>
             </div>
         );
     }
 
     private setDemographicThreshold(value: number): void {
-        console.log(value);
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
@@ -175,7 +153,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<
     }
     
     private setElectionData(value: ElectionEnum): void {
-        console.log(value);
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
@@ -185,7 +162,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<
     }
 
     private setPartyThreshold(value: number): void {
-        console.log(value);
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
@@ -193,6 +169,15 @@ export class PhaseZeroTabPanelComponent extends React.Component<
             }
         }, 
         () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
+    }
+
+    private async fetchPrecinctBlocs(): Promise<void> {
+        const blocPrecincts = await this.service.fetchPrecinctBlocs(this.state.phaseZeroArgs);
+        if (blocPrecincts) {
+            this.setState({
+                phaseZeroResults: blocPrecincts
+            });
+        }
     }
 }
 
