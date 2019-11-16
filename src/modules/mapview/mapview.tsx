@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
 
 import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
-import { StateBordersApi, States } from '../../libs/state-borders';
+import { StateBorderService, States } from '../../libs/state-borders';
 import { hashPrecinct } from '../../libs/hash';
 import { IDemographicsTabProps } from './components/DemographicsTabPanel';
 import { IElectionsTabProps } from './components/ElectionsTabPanel';
@@ -77,7 +77,7 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
      * LIFECYCLE HOOKS
      */
     async componentDidMount() {
-        const statePopulator = new StateBordersApi();
+        const statePopulator = new StateBorderService();
         await Promise.all([
             statePopulator.fetchStateBorder(States.CA),
             statePopulator.fetchStateBorder(States.UT),

@@ -11,38 +11,7 @@ export enum States {
     VA = 'VA'
 }
 
-export class StateBordersApi {
-
-    public async fetchPrecincts(state: string): Promise<any> {
-        if (state === 'UT' || state === 'VA' || state === 'blank') {
-            try {
-                const data = await Axios.get(`./server/${state}.json`);
-                console.log(data);
-                return {
-                    status: 'OK',
-                    data: {
-                        type: 'Feature',
-                        geometry: data.data
-                    }
-                };
-            } catch (e) {
-                return {
-                    status: 'ERR',
-                    data: {
-                        geometry: null
-                    }
-                };
-            }
-        } else {
-            return {
-                status: 'ERR',
-                data: {
-                    geometry: null
-                }
-            };
-        }
-    }
-    
+export class StateBorderService {
     public async fetchStateBorder(state: States): Promise<any> {
         try {
             const data = await Axios.get(`https://raw.githubusercontent.com/unitedstates/districts/gh-pages/states/${state}/shape.geojson`);
@@ -63,5 +32,4 @@ export class StateBordersApi {
             };
         }
     }
-
 }

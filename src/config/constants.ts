@@ -12,9 +12,19 @@ export const MAP_BOX_THEME_STREETS = 'mapbox.streets';
 
 // Default Geojson
 export const EMPTY_PRECINCTS = { type: 'FeatureCollection', features: [] };
+export const BORDER_WEIGHT_NORMAL = 0.5;
+export const BORDER_WEIGHT_HOVER = 5;
 
 // Default colors
-export const COLOR_DEFAULT = 'rgb(51, 136, 255)';
+export const COLOR_DEFAULT_RGB = 'rgb(51, 136, 255)';
 export const COLOR_DEMOCRAT = '#007abf';
 export const COLOR_REPUBLICAN = '#c03339';
 export const COLOR_INDEPENDENT = '#2db82d';
+export const COLOR_DEMOGRAPHIC = '#fcd27a';
+export const COLOR_COUNT = 30;
+export const COLOR_UPPER_THRESHOLD = 0.75;
+export const COLOR_LOWER_THRESHOLD = 0.25;
+export const COLOR_AMPLIFY_FACTOR = 3;
+export const COLOR_DARKEN_FACTOR = 0.25;
+export const COLOR_FILL_OPACITY = 0.75;
+export const COLOR_FILL_OPACITY_STATE = 0.75;

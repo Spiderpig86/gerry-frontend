@@ -3,11 +3,9 @@
  */
 import * as Constants from '../../../config/constants';
 
-import { StateBordersApi } from '../../../libs/state-borders';
 import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs } from '../../../models';
-import { hashPrecinct } from '../../../libs/hash';
 import { PoliticalFairnessEnum } from '../../../models';
-import { StateService } from '../../../libs/state-service';
+import { PrecinctService } from '../../../libs/state-service';
 
 const SET_STATE = 'SET_STATE';
 const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -20,15 +18,12 @@ const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
 
 export const setSelectedState = (oldState: string, state: string) => {
     return (dispatch: any) => {
-        // Selecting already loaded state
         if (oldState === state) {
             return;
         }
-
-        // Fetch state data
         dispatch(selectState(state));
         dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
-        dispatch(() => new StateService(state as StateEnum, dispatch));
+        dispatch(() => new PrecinctService(state as StateEnum, dispatch));
     }
 }
 

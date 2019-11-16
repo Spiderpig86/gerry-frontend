@@ -5,7 +5,7 @@ import { WebSocketHandler } from './ws';
 import { StateEnum, IPrecinct } from '../models';
 import { hashPrecinct } from './hash';
 
-export class StateService {
+export class PrecinctService {
     private dispatch: any;
     private handler: WebSocketHandler;
     private precincts: any;
