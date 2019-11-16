@@ -6,23 +6,11 @@ import * as Constants from '../config/constants';
 import { PhaseZeroArgs, ResponseEnum } from '../models';
 import { formatResponse } from './functions/response';
 
-const MockAxios = new MockAdapter(Axios.create());
-
-export class PhaseZeroService {
-    public async fetchPrecinctBlocs(phaseZeroArgs: PhaseZeroArgs) {
-        try {
-            const response = await Axios.post(`${Constants.APP_API}/phase0`, {
-                data: phaseZeroArgs
-            });
-            return formatResponse(ResponseEnum.OK, { data: response.data.blocData });
-        } catch (e) {
-            return formatResponse(ResponseEnum.ERROR, null);
-        }
-    }
-}
+const mock = Axios.create();
+const MockAxios = new MockAdapter(mock);
 
 // CODE FOR DEMONSTRATION PURPOSES ONLY
-MockAxios.onGet(`${Constants.APP_API}/phase0`).reply(200, {
+MockAxios.onPost(`${Constants.APP_API}/phase0`).reply(200, {
     blocData: [1, 2, 3, 4, 5].map((e: any, i: number) => {
         const demographicPercentage = Math.random() * 30 + 70;
         const partyPercentage = Math.random() * 30 + 70;
@@ -33,3 +21,17 @@ MockAxios.onGet(`${Constants.APP_API}/phase0`).reply(200, {
         return {i, demographic, demographicPercentage, party, partyPercentage};
     })
 });
+
+export class PhaseZeroService {
+    public async fetchPrecinctBlocs(phaseZeroArgs: PhaseZeroArgs) {
+        try {
+            const response = await mock.post(`${Constants.APP_API}/phase0`, {
+                phaseZeroArgs
+            });
+            return formatResponse(ResponseEnum.OK, response.data.blocData );
+        } catch (e) {
+            console.log(e);
+            return formatResponse(ResponseEnum.ERROR, null);
+        }
+    }
+}

@@ -51,7 +51,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
     }
 
     render() {
-        const dropdownTitle = `Selected State: ${this.props.selectedState}`;
+        const dropdownTitle = `Selected State: ${this.props.selectedState === null ? 'N/A' : this.props.selectedState}`;
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>Phase 0</h4>
@@ -132,12 +132,36 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         />
                     </Form.Group>
                     <div className="d-flex py-3">
-                        <Button className='w-100' onClick={async () => {await this.fetchPrecinctBlocs()}} >Analyze Precincts</Button>
+                        <Button disabled={!this.props.selectedState} className='w-100' onClick={async () => {await this.fetchPrecinctBlocs()}} >Analyze Precincts</Button>
                     </div>
                 </div>
 
                 <div className="py-3">
                     <h6>Voting Bloc Precincts</h6>
+                    <Table striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                <th>Precincts ID</th>
+                                <th colSpan={2}>Demographic</th>
+                                <th colSpan={2}>Party</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.phaseZeroResults && this.state.phaseZeroResults.map((e: any, i: number) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td>{e.i}</td>
+                                            <td>{e.demographic}</td>
+                                            <td>{e.demographicPercentage.toFixed(2)}%</td>
+                                            <td>{e.party}</td>
+                                            <td>{e.partyPercentage.toFixed(2)}%</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </Table>
                 </div>
             </div>
         );
@@ -173,9 +197,10 @@ export class PhaseZeroTabPanelComponent extends React.Component<
 
     private async fetchPrecinctBlocs(): Promise<void> {
         const blocPrecincts = await this.service.fetchPrecinctBlocs(this.state.phaseZeroArgs);
+        console.log(blocPrecincts);
         if (blocPrecincts) {
             this.setState({
-                phaseZeroResults: blocPrecincts
+                phaseZeroResults: blocPrecincts.data
             });
         }
     }

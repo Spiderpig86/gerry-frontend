@@ -1,5 +1,5 @@
 // Server
-export const APP_API = `localhost:8080`;
+export const APP_API = `http://localhost:8080`;
 
 // Map Values
 export const OPEN_STREET_MAP_ENDPOINT = `https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`;
