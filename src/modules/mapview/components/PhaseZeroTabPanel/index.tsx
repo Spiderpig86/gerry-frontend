@@ -90,7 +90,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-8'}
-                            defaultValue={this.props.phaseZeroArgs.demographicThreshold}
+                            defaultValue={this.props.phaseZeroArgs.populationThreshold}
                             onAfterChange={this.setDemographicThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -107,7 +107,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
 
                     <DropdownButton
                         id='phase0Election'
-                        title={this.electionMap.get(this.state.phaseZeroArgs.selectedElection)}
+                        title={this.electionMap.get(this.state.phaseZeroArgs.electionType)}
                     >
                         <Dropdown.Item onClick={() => { this.setElectionData(ElectionEnum.PRES_16) }}>
                             Presidential 2016
@@ -126,7 +126,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         </Form.Label>
                         <TooltipSlider
                             className={'col-8'}
-                            defaultValue={this.props.phaseZeroArgs.partyThreshold}
+                            defaultValue={this.props.phaseZeroArgs.voteThreshold}
                             onAfterChange={this.setPartyThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -167,11 +167,20 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         );
     }
 
+    private setSelectedState(state: StateEnum): void {
+        this.setState({
+            phaseZeroArgs: {
+                ...this.state.phaseZeroArgs,
+                stateType: state
+            }
+        }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
+    }
+
     private setDemographicThreshold(value: number): void {
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
-                demographicThreshold: value
+                populationThreshold: value
             }
         }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
     }
@@ -180,7 +189,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
-                selectedElection: value
+                electionType: value
             }
         }, () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
     }
@@ -189,7 +198,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
         this.setState({
             phaseZeroArgs: {
                 ...this.state.phaseZeroArgs,
-                partyThreshold: value
+                voteThreshold: value
             }
         }, 
         () => this.props.setPhaseZeroArgs(this.state.phaseZeroArgs));
@@ -197,7 +206,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<
 
     private async fetchPrecinctBlocs(): Promise<void> {
         const blocPrecincts = await this.service.fetchPrecinctBlocs(this.state.phaseZeroArgs);
-        console.log(blocPrecincts);
         if (blocPrecincts) {
             this.setState({
                 phaseZeroResults: blocPrecincts.data

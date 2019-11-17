@@ -58,7 +58,8 @@ export enum DemographicEnum {
 export enum StateEnum {
     CA = 'CA',
     UT = 'UT',
-    VA = 'VA'
+    VA = 'VA',
+    NOT_SET = 'NOT_SET'
 }
 
 export enum AlgorithmEnum {

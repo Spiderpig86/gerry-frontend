@@ -1,13 +1,18 @@
-import { ElectionEnum, DemographicEnum, PartyEnum } from '../enums';
+import { ElectionEnum, DemographicEnum, PartyEnum, StateEnum } from '../enums';
 
 export interface PhaseZeroArgs {
-    demographicThreshold: number;
-    selectedElection: ElectionEnum;
-    partyThreshold: number;
+    populationThreshold: number;
+    electionType: ElectionEnum;
+    voteThreshold: number;
+    stateType: StateEnum;
 }
 
 export interface PhaseZeroResult {
+    precinctId: string,
     demographic: DemographicEnum,
-    demographicPercentage: number,
-    party: PartyEnum
+    demographicPopulation: number,
+    totalPopulation: number,
+    party: PartyEnum,
+    partyVoteCount: number,
+    voteTotal: number
 }

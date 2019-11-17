@@ -120,9 +120,10 @@
      clusterMap: new Map<string, ICluster>(),
      oldClusterMap: new Map<string, ICluster>(),
      phaseZeroArgs: {
-         demographicThreshold: Constants.DEFAULT_THRESHOLD,
-         selectedElection: ElectionEnum.PRES_16,
-         partyThreshold: Constants.DEFAULT_THRESHOLD
+         populationThreshold: Constants.DEFAULT_THRESHOLD,
+         electionType: ElectionEnum.PRES_16,
+         voteThreshold: Constants.DEFAULT_THRESHOLD,
+         stateType: StateEnum.NOT_SET
      },
      phaseOneArgs: {
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
