@@ -111,8 +111,7 @@ export class Coloring {
             if (!precinct) {
                 return colorConfig;
             }
-            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId - 1 : precinct.newCdId - 1);
-
+            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId);
             const color = Color.rgb(this.colors[cdId]._rgb).hex();
             colorConfig.color = Color.default(color)
                                 .darken(Constants.COLOR_DARKEN_FACTOR)

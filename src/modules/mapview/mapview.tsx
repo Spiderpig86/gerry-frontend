@@ -328,6 +328,7 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
             jurisdictionName: properties.jrsdctn,
             congressionalDistrictId: properties.cd
         };
+        console.log(properties);
         this.setState({
             isOpen: true,
             mapProps: {
