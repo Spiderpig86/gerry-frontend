@@ -91,6 +91,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={this.props.phaseZeroArgs.populationThreshold}
+                            min={50}
                             onAfterChange={this.setDemographicThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -127,6 +128,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={this.props.phaseZeroArgs.voteThreshold}
+                            min={50}
                             onAfterChange={this.setPartyThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />

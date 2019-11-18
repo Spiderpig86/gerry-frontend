@@ -22,6 +22,7 @@ export const COLOR_INDEPENDENT = '#2db82d';
 export const COLOR_DEMOGRAPHIC = '#fcd27a';
 export const COLOR_COUNT = 55;
 export const COLOR_UPPER_THRESHOLD = 0.75;
+export const COLOR_MIDDLE_THRESHOLD = 0.5;
 export const COLOR_LOWER_THRESHOLD = 0.25;
 export const COLOR_AMPLIFY_FACTOR = 3;
 export const COLOR_DARKEN_FACTOR = 0.25;

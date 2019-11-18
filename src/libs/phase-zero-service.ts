@@ -25,7 +25,7 @@ export class PhaseZeroService {
 
 // CODE FOR DEMONSTRATION PURPOSES ONLY
 MockAxios.onPost(`${Constants.APP_API}/phase0`).reply(200, {
-    blocData: [1, 2, 3, 4, 5].map((e: any, i: number) => {
+    blocData: [1, 1, 2, 3, 3, 4, 5].map((e: any, i: number) => {
         const demographicPercentage = Math.random() * 30 + 70;
         const partyPercentage = Math.random() * 30 + 70;
         const demographics = ['White', 'African American', 'Hispanic', 'Asian', 'Native American', 'Pacific Islander'];
