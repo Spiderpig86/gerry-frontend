@@ -152,8 +152,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
     }
 
     render() {
-        const position = new LatLng(40.3, -96.0);
-
         return (
             <div className="container-fluid d-flex">
                 <LeftSidebar />
@@ -169,7 +167,7 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                     ref={ref => {
                         this.state.map = ref;
                     }}
-                    center={position}
+                    center={Constants.MAP_CENTER}
                     zoomControl={false}
                     zoom={4}
                     animate={true}

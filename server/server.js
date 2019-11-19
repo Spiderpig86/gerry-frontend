@@ -7,13 +7,15 @@ const CA = JSON.parse(fs.readFileSync('./CA.json', 'utf8'));
 const UT = JSON.parse(fs.readFileSync('./UT.json', 'utf8'));
 const VA = JSON.parse(fs.readFileSync('./VA.json', 'utf8'));
 
-const CHUNK = 100;
+const CHUNK = 1000;
 const port = 9001;
 const server = http.createServer();
 
 server.listen(port);
 const wsServer = new socket({
-    httpServer: server
+    httpServer: server,
+    disableNagleAlgorithm: true,
+    assembleFragments: false
 });
 
 wsServer.on('request', req => {
@@ -35,20 +37,32 @@ wsServer.on('request', req => {
         default:
     }
 
-    for (
-        let i = 0;
-        i < state.features.length;
-        i += Math.min(CHUNK, state.features.length - i + 1)
-    ) {
-        let payload = [];
-        for (
-            let j = i;
-            j < Math.min(CHUNK, state.features.length - i) + i;
-            j++
-        ) {
-            payload.push(state.features[j]);
-        }
+    // for (
+    //     let i = 0;
+    //     i < state.features.length;
+    //     i += Math.min(CHUNK, state.features.length - i + 1)
+    // ) {
+    //     let payload = [];
+        
+    //     for (
+    //         let j = i;
+    //         j < Math.min(CHUNK, state.features.length - i) + i;
+    //         j++
+    //     ) {
+    //         payload.push(state.features[j]);
+    //     }
+    //     sendMessage(connection, JSON.stringify(payload));
+    // }
+
+    let features = state.features;
+    let i = 0;
+    while (features.length > 0) {
+        const capacity = Math.min(CHUNK, state.features.length);
+        let payload = features.slice(0, capacity);
         sendMessage(connection, JSON.stringify(payload));
+        features = features.slice(capacity);
+        console.log(i);
+        i++;
     }
     connection.close();
 });

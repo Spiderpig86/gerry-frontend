@@ -20,6 +20,8 @@ export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
 
                 <br/>
 
+                <h6>Old District Statistics</h6>
+
                 <Card className='my-3'>
                     <Card.Body>
                         <Image className='float-left' style={{ width: '64px'}} roundedCircle src="https://www.wkar.org/sites/wkar/files/styles/medium/public/201905/IMG_7968.jpg" />
@@ -32,8 +34,6 @@ export class StatisticsTabPanel extends React.PureComponent<{}, {}> {
                 </Card>
 
                 <br />
-
-                <h6>Old District Statistics</h6>
                 <DropdownButton id="dropdown-basic-button" title='Selected District: N/A'>
                     <Dropdown.Item onClick={() => {}}>District 1</Dropdown.Item>
                     <Dropdown.Item onClick={() => {}}>District 2</Dropdown.Item>

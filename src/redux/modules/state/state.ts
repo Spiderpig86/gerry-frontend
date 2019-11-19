@@ -3,7 +3,7 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult } from '../../../models';
  import { PoliticalFairnessEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  
@@ -13,6 +13,7 @@
  const SET_MAP_FILTER = 'SET_MAP_FILTER';
  const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
  const SET_PHASE_ZERO_ARGS = 'SET_PHASE_ZERO_ARGS';
+ const SET_PHASE_ZERO_RESULTS = 'SET_PHASE_ZERO_RESULTS';
  const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
  
@@ -86,6 +87,13 @@
          phaseZeroArgs
      }
  }
+
+ export const setPhaseZeroResults = (phaseZeroResults: PhaseZeroResult[]) => {
+     return {
+        type: SET_PHASE_ZERO_RESULTS,
+        phaseZeroResults
+     }
+ }
  
  export const setPhaseOneArgs = (phaseOneArgs: PhaseOneArgs) => {
      return {
@@ -108,6 +116,7 @@
      clusterMap: Map<string, ICluster>;
      oldClusterMap: Map<string, ICluster>;
      phaseZeroArgs: PhaseZeroArgs;
+     phaseZeroResults: PhaseZeroResult[];
      phaseOneArgs: PhaseOneArgs;
      filterArgs: FilterArgs;
      algorithmPhase: AlgorithmEnum;
@@ -125,6 +134,7 @@
          voteThreshold: Constants.DEFAULT_THRESHOLD,
          stateType: StateEnum.NOT_SET
      },
+     phaseZeroResults: [],
      phaseOneArgs: {
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
          electionData: ElectionEnum.PRES_16,
@@ -183,6 +193,11 @@
              return {
                  ...state,
                  phaseZeroArgs: action.phaseZeroArgs
+             }
+         case SET_PHASE_ZERO_RESULTS:
+             return {
+                 ...state,
+                 phaseZeroResults: action.phaseZeroResults
              }
          case SET_PHASE_ONE_ARGS:
              return  {

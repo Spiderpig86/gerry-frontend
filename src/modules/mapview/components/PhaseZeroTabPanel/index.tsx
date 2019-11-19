@@ -19,6 +19,7 @@ interface IPhaseZeroTabPanelProps {
     phaseZeroArgs: PhaseZeroArgs;
     setSelectedState: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
+    setPhaseZeroResults: (phaseZeroResults: PhaseZeroResult[]) => void;
 }
 
 interface IPhaseZeroTabPanelState {
@@ -207,11 +208,11 @@ export class PhaseZeroTabPanelComponent extends React.Component<
     }
 
     private async fetchPrecinctBlocs(): Promise<void> {
-        const blocPrecincts = await this.service.fetchPrecinctBlocs(this.state.phaseZeroArgs);
+        const blocPrecincts = await this.service.runPhaseZero(this.state.phaseZeroArgs);
         if (blocPrecincts) {
             this.setState({
                 phaseZeroResults: blocPrecincts.data
-            });
+            }, () => this.props.setPhaseZeroResults(this.state.phaseZeroResults));
         }
     }
 }
@@ -220,7 +221,8 @@ function mapStateToProps(state: any) {
     return { 
         selectedState: state.stateReducer.selectedState,
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
-        setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs
+        setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
+        setPhaseZeroResults: state.stateReducer.setPhaseZeroResults
      };
 }
 

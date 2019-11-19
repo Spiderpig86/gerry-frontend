@@ -1,3 +1,5 @@
+import { LatLng } from 'leaflet';
+
 // Server
 export const APP_API = `http://localhost:8080`;
 
@@ -34,3 +36,5 @@ export const DEFAULT_THRESHOLD = 0.5;
 export const DEFAULT_NUM_DISTRICTS = 5;
 export const DEFAULT_POP_PRECENT = 0.5;
 export const DEFAULT_OF_VALUE = 0.0;
+
+export const MAP_CENTER = new LatLng(40.3, -96.0);

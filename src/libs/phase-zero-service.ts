@@ -10,7 +10,7 @@ const mock = Axios.create();
 const MockAxios = new MockAdapter(mock);
 
 export class PhaseZeroService {
-    public async fetchPrecinctBlocs(phaseZeroArgs: PhaseZeroArgs) {
+    public async runPhaseZero(phaseZeroArgs: PhaseZeroArgs) {
         try {
             const response = await mock.post(`${Constants.APP_API}/phase0`, {
                 phaseZeroArgs
