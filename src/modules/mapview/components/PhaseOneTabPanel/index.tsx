@@ -103,7 +103,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             pushable={false}
                             min={50}
                             max={100}
-                            defaultValue={[this.state.phaseOneArgs.minPopulationPercent, this.state.phaseOneArgs.maxPopulationPercent]}
+                            defaultValue={[this.state.phaseOneArgs.minPopulationPercent * 100, this.state.phaseOneArgs.maxPopulationPercent * 100]}
                             tipFormatter={value => `${value}%`}
                             onAfterChange={this.setMajorityMinorityThreshold.bind(this)}
                         />

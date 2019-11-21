@@ -138,8 +138,8 @@
      phaseOneArgs: {
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
          electionData: ElectionEnum.PRES_16,
-         minPopulationPercent: Constants.DEFAULT_POP_PRECENT,
-         maxPopulationPercent: Constants.DEFAULT_POP_PRECENT,
+         minPopulationPercent: Constants.DEFAULT_POP_PRECENT_MIN,
+         maxPopulationPercent: Constants.DEFAULT_POP_PRECENT_MAX,
          selectedDemographics: new Set<DemographicEnum>(),
          compactnessOption: CompactnessEnum.POLSBY_POPPER,
          politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
