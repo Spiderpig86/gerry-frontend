@@ -150,7 +150,7 @@
          intermediateResults: false
      },
      filterArgs: {
-         viewLevel: ViewLevelEnum.PRECINCTS,
+         viewLevel: ViewLevelEnum.OLD_DISTRICTS,
          mapFilter: MapFilterEnum.DEFAULT
      },
      algorithmPhase: AlgorithmEnum.PHASE_0

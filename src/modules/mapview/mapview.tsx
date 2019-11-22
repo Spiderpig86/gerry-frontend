@@ -2,10 +2,9 @@ import * as React from 'react';
 import * as mapActionCreators from '../../redux/modules/state/state';
 
 import * as ReactLeaflet from 'react-leaflet';
-import * as GeoJSONCanvas from 'leaflet-canvas-geojson';
 import * as Constants from '../../config/constants';
 
-import { LatLng, PathOptions } from 'leaflet';
+import { PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -164,8 +163,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     center={Constants.MAP_CENTER}
                     zoomControl={false}
                     zoom={4}
+                    zoomSnap={0.1}
                     animate={true}
                     easeLinearly={true}
+                    preferCanvas={true}
                     onZoomEnd={this.onZoom.bind(this)}
                 >
                     <ReactLeaflet.TileLayer
@@ -222,7 +223,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                     <ReactLeaflet.GeoJSON
                                         key={`precinct${this.props.precincts.features.length}`}
                                         data={this.props.precincts as GeoJsonObject}
-                                        preferCanvas={true}
                                         style={this.getPrecinctStyle.bind(this)}
                                         onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                         onEachFeature={this.onEachFeaturePrecinct.bind(this)}

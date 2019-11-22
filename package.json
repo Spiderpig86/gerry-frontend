@@ -31,7 +31,6 @@
     "geojson-vt": "^3.2.1",
     "jquery": "3.3.1",
     "leaflet": "^1.5.1",
-    "leaflet-canvas-geojson": "0.0.8",
     "prop-types": "15.6.2",
     "rc-slider": "^8.7.1",
     "rc-tooltip": "^3.7.3",
