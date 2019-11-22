@@ -18,8 +18,8 @@ export class PrecinctService {
             this.onOpen.bind(this),
             this.onMessage.bind(this),
             this.onClose.bind(this)
-        );
-        this.precincts = Constants.EMPTY_PRECINCTS;
+        ); 
+        this.precincts = Object.assign({}, Constants.EMPTY_PRECINCTS);
         this.precinctMap = new Map<string, IPrecinct>();
     }
 
@@ -28,19 +28,24 @@ export class PrecinctService {
     }
 
     private onOpen(): void {
-        this.precincts = Object.assign({}, Constants.EMPTY_PRECINCTS);
+        this.precincts.features = [];
     }
 
     private onMessage(event: any): void {
         const message = JSON.parse(event.data);
-        this.precincts.features = this.precincts.features.concat(message);
-        message.forEach(shape => {
-            this.precinctMap.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
-        });
-        this.dispatch(stateReducer.setPrecinctData(this.precincts));
+        Array.prototype.push.apply(this.precincts.features, message);
+        console.log(this.precincts.features.length)
+        new Promise((resolve: any) => resolve(this.updateStateReducerPrecincts(message)));
     }
 
     private onClose(): void {
+        this.dispatch(stateReducer.setPrecinctData(this.precincts));
         this.dispatch(stateReducer.setPrecinctMap(this.precinctMap));
+    }
+
+    private updateStateReducerPrecincts(message: any): void {
+        message.forEach(shape => {
+            this.precinctMap.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
+        });
     }
 }

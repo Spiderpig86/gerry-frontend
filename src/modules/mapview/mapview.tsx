@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as mapActionCreators from '../../redux/modules/state/state';
 
 import * as ReactLeaflet from 'react-leaflet';
+import * as GeoJSONCanvas from 'leaflet-canvas-geojson';
 import * as Constants from '../../config/constants';
 
 import { LatLng, PathOptions } from 'leaflet';
@@ -24,7 +25,7 @@ import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 import './mapview.scss';
 
 export interface IMapViewProps {
-    selectedState: string;
+    selectedState: StateEnum;
     precincts: any;
     precinctMap: Map<string, IPrecinct>;
     filter: MapFilterEnum;
@@ -47,7 +48,7 @@ interface IMapViewState {
     selectedPrecinctId: string;
 }
 
-export class MapViewComponent extends React.Component<IMapViewProps, IMapViewState> {
+export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapViewState> {
     state: IMapViewState = {
         stateBorders: [],
         isOpen: false,
@@ -87,13 +88,6 @@ export class MapViewComponent extends React.Component<IMapViewProps, IMapViewSta
                 stateBorders: data
             })
         });
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.mapTooltip.statistics !== nextState.mapTooltip.statistics) {
-            return false;
-        }
-        return true;
     }
 
     /**

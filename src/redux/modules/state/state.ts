@@ -17,14 +17,14 @@
  const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
  
- export const setSelectedState = (oldState: string, state: string) => {
+ export const setSelectedState = (oldState: StateEnum, state: StateEnum) => {
      return (dispatch: any) => {
          if (oldState === state) {
              return;
          }
          dispatch(selectState(state));
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
-         dispatch(() => new PrecinctService(state as StateEnum, dispatch));
+         dispatch(() => new PrecinctService(state, dispatch));
      }
  }
  
