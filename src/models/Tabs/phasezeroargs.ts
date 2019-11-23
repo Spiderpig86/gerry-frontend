@@ -8,12 +8,13 @@ export interface PhaseZeroArgs {
 }
 
 export interface PhaseZeroResult {
+    precinctBlocs: Map<PartyEnum, PhaseZeroResult[]>;
+}
+
+export interface tPrecinctBlocSummary {
     precinctCount: number,
     partyType: PartyEnum,
     demographicType: DemographicEnum,
     meanDemographicPercentage: number,
-    meanPartyPercentage: number,
-    minPrecinctPop: number,
-    maxPrecinctPop: number,
-    meanPrecinctPop: number
+    meanPartyPercentage: number
 }

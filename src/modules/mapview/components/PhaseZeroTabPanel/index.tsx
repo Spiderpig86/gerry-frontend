@@ -20,12 +20,12 @@ interface IPhaseZeroTabPanelProps {
     phaseZeroArgs: PhaseZeroArgs;
     setSelectedState: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
-    setPhaseZeroResults: (phaseZeroResults: Map<PartyEnum, PhaseZeroResult[]>) => void;
+    setPhaseZeroResults: (phaseZeroResult: PhaseZeroResult) => void;
 }
 
 interface IPhaseZeroTabPanelState {
     phaseZeroArgs: PhaseZeroArgs;
-    phaseZeroResults: Map<PartyEnum, PhaseZeroResult[]>;
+    phaseZeroResults: PhaseZeroResult;
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPanelProps, IPhaseZeroTabPanelState> {
@@ -49,9 +49,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     }
 
     render() {
-        if (this.state.phaseZeroResults) {
-            console.log(Object.keys(this.state.phaseZeroResults));
-        }
         const dropdownTitle = `Selected State: ${this.props.selectedState === null ? 'N/A' : this.props.selectedState}`;
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
@@ -147,11 +144,13 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
                 <div className="py-3">
                     <h6>Voting Bloc Precincts</h6>
+                    {
+                        console.log(this.state.phaseZeroResults)
+                    }
                     {this.state.phaseZeroResults &&
-                        Object.keys(this.state.phaseZeroResults).map((key: any) => {
-                            console.log(this.state.phaseZeroResults[key]);
+                        Object.keys(this.state.phaseZeroResults.precinctBlocs).map((key: any) => {
                             return (
-                                <BlocItem key={key} party={key} phaseZeroResults={this.state.phaseZeroResults[key]} />
+                                <BlocItem key={key} party={key} phaseZeroResults={this.state.phaseZeroResults.precinctBlocs[key]} />
                             );
                         })}
                 </div>
@@ -211,12 +210,12 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     }
 
     private async fetchPrecinctBlocs(): Promise<void> {
-        const blocPrecincts = await this.service.runPhaseZero(this.state.phaseZeroArgs);
-        console.log(blocPrecincts)
-        if (blocPrecincts) {
+        const phaseZeroResult = await this.service.runPhaseZero(this.state.phaseZeroArgs);
+        console.log(phaseZeroResult)
+        if (phaseZeroResult) {
             this.setState(
                 {
-                    phaseZeroResults: blocPrecincts.data
+                    phaseZeroResults: phaseZeroResult.data
                 },
                 () => this.props.setPhaseZeroResults(this.state.phaseZeroResults)
             );

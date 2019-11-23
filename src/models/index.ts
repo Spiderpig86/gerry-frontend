@@ -5,7 +5,7 @@ export { ICluster } from './clusternode';
 export { Properties } from './properties';
 export { IVoteData } from './vote';
 
-export { PhaseZeroArgs, PhaseZeroResult } from './Tabs/phasezeroargs';
+export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phasezeroargs';
 export { PhaseOneArgs } from './Tabs/phaseoneargs';
 export { FilterArgs } from './Tabs/filterargs'
 
