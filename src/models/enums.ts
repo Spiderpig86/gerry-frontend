@@ -39,7 +39,7 @@ export enum PoliticalFairnessEnum {
 }
 
 export enum PartyEnum {
-    DEMOCRAT = 'DEMOCRAT',
+    DEMOCRATIC = 'DEMOCRATIC',
     REPUBLICAN = 'REPUBLICAN',
     OTHER = 'OTHER'
 }

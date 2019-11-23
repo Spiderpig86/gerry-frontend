@@ -3,8 +3,7 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult } from '../../../models';
- import { PoliticalFairnessEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  
  const SET_STATE = 'SET_STATE';
@@ -88,7 +87,7 @@
      }
  }
 
- export const setPhaseZeroResults = (phaseZeroResults: PhaseZeroResult[]) => {
+ export const setPhaseZeroResults = (phaseZeroResults: Map<PartyEnum, PhaseZeroResult[]>) => {
      return {
         type: SET_PHASE_ZERO_RESULTS,
         phaseZeroResults

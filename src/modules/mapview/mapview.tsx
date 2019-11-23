@@ -163,9 +163,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     center={Constants.MAP_CENTER}
                     zoomControl={false}
                     zoom={4}
-                    zoomSnap={0.1}
-                    animate={true}
-                    easeLinearly={true}
+                    zoomSnap={1}
+                    animate={false}
+                    easeLinearly={false}
+                    zoomAnimate={false}
                     preferCanvas={true}
                     onZoomEnd={this.onZoom.bind(this)}
                 >

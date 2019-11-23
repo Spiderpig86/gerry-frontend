@@ -8,11 +8,12 @@ export interface PhaseZeroArgs {
 }
 
 export interface PhaseZeroResult {
-    precinctId: string,
-    demographic: DemographicEnum,
-    demographicPopulation: number,
-    totalPopulation: number,
-    party: PartyEnum,
-    partyVoteCount: number,
-    voteTotal: number
+    precinctCount: number,
+    partyType: PartyEnum,
+    demographicType: DemographicEnum,
+    meanDemographicPercentage: number,
+    meanPartyPercentage: number,
+    minPrecinctPop: number,
+    maxPrecinctPop: number,
+    meanPrecinctPop: number
 }
