@@ -48,7 +48,6 @@ function generatePhaseZeroResultItem(party, demographic): PrecinctBlocSummary {
     const precinctCount = Math.round(Math.random() * 180 + 1);
     const meanPopulationPercentage = Math.random() * 30 + 70;
     const meanPartyPercentage = Math.random() * 30 + 70;
-    const meanPrecinctPop = Math.round(Math.random() * 1500 + 30);
 
     return {
         precinctCount,

@@ -11,7 +11,7 @@ export interface PhaseZeroResult {
     precinctBlocs: Map<PartyEnum, PhaseZeroResult[]>;
 }
 
-export interface tPrecinctBlocSummary {
+export interface PrecinctBlocSummary {
     precinctCount: number,
     partyType: PartyEnum,
     demographicType: DemographicEnum,
