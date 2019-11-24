@@ -18,7 +18,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
-import { IPrecinct, Properties, MapFilterEnum, ViewLevelEnum, StateEnum } from '../../models';
+import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
@@ -133,7 +133,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     onMouseHoverPrecinct(layer: any) {
-        const properties: Properties = layer.layer.feature.properties;
+        const properties: PrecinctProperties = layer.layer.feature.properties;
         const toolTipProps = this.getMapTooltipProps(this.props.filter, properties);
         this.props.store.dispatch(setTooltipData(toolTipProps));
     }

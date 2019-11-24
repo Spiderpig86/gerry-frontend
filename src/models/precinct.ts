@@ -1,4 +1,4 @@
-import { Properties } from './properties';
+import { PrecinctProperties } from './properties';
 
 /**
  * Interface for specifying how precinct objects should look.
@@ -11,6 +11,6 @@ export interface IPrecinct {
     geometry: any;
     originalCdId: any;
     newCdId: any;
-    properties: Properties;
+    properties: PrecinctProperties;
 
 }

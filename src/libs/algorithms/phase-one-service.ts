@@ -2,16 +2,18 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 
 import { WebSocketHandler } from '../ws';
-import { IPrecinct, AlgorithmEnum } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs } from '../../models';
 
 export class PhaseOneService {
     private dispatch: any;
     private handler: WebSocketHandler;
     private precinctMap: Map<string, IPrecinct>;
+    private phaseOneArgs: PhaseOneArgs;
 
-    constructor(precinctMap: Map<string, IPrecinct>, dispatch: any) {
+    constructor(precinctMap: Map<string, IPrecinct>, dispatch: any, phaseOneArgs: PhaseOneArgs) {
         this.precinctMap = precinctMap;
         this.dispatch = dispatch;
+        this.phaseOneArgs = phaseOneArgs;
         this.handler = new WebSocketHandler(
             this.generateUrl(),
             this.onOpen.bind(this),
@@ -29,7 +31,11 @@ export class PhaseOneService {
     }
 
     private onMessage(event: any): void {
-        // TODO: Process changes
+        if (this.phaseOneArgs.intermediateResults) {
+            
+        } else {
+
+        }
     }
 
     private onClose(): void {

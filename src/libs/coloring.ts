@@ -10,7 +10,7 @@ import * as Constants from '../config/constants';
 import distinctColors from 'distinct-colors';
 
 import { PathOptions } from 'leaflet';
-import { Properties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
+import { PrecinctProperties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
 import { hashPrecinct } from './functions/hash';
 
 export class Coloring {
@@ -21,7 +21,7 @@ export class Coloring {
         this.colors = distinctColors({ count: Constants.COLOR_COUNT });
     }
 
-    public getPoliticalStyle(properties: Properties, filter: string, majorityParty: { party: string; percent: number }) {
+    public getPoliticalStyle(properties: PrecinctProperties, filter: string, majorityParty: { party: string; percent: number }) {
         switch (majorityParty.party) {
             case 'D':
                     // 3383c0

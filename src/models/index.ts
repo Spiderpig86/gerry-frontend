@@ -2,7 +2,7 @@ export { IDemographics } from './demographics';
 export { User } from './user';
 export { IPrecinct } from './precinct';
 export { ICluster } from './clusternode';
-export { Properties } from './properties';
+export { PrecinctProperties } from './properties';
 export { IVoteData } from './vote';
 
 export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phasezeroargs';

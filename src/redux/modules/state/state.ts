@@ -152,7 +152,7 @@
          viewLevel: ViewLevelEnum.OLD_DISTRICTS,
          mapFilter: MapFilterEnum.DEFAULT
      },
-     algorithmPhase: AlgorithmEnum.PHASE_0
+     algorithmPhase: AlgorithmEnum.PHASE_0_1
  }
  
  export const stateReducer = (state = initialState, action: any) => {

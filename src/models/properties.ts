@@ -1,4 +1,4 @@
-export interface Properties {
+export interface PrecinctProperties {
     cd: number;
     county_name: string;
     district_number: string;

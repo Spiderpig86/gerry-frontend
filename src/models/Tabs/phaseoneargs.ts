@@ -1,4 +1,5 @@
 import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum } from '../enums';
+import { ICluster } from '../clusternode';
 
 export interface PhaseOneArgs {
     numDistricts: number;
@@ -13,4 +14,14 @@ export interface PhaseOneArgs {
     objectivePartisanFairness: number;
     objectiveContiguity: number;
     intermediateResults: boolean;
+}
+
+export interface PhaseOneResult {
+    deltas: PhaseOneMergeDelta[];
+}
+
+export interface PhaseOneMergeDelta {
+    iteration: number;
+    changedNodes: { oldDistrictId1: string, newDistrictId: string }[]; // Holds the new district ids for each precinct for iteration 0
+    newDistricts: { newDistrictId: string, districtNode: ICluster }[]; // Holds the final mapping of new districts every iteration (intermediate stats), for non-iterative it will contain the final stats for each district
 }
