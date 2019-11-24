@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PhaseZeroResult, PartyEnum, PrecinctBlocSummary } from '../../../../models';
 import { Table } from 'react-bootstrap';
+import { EnumNameMapper } from '../../../../libs/enum-name';
 
 interface BlocItemProps {
     party: PartyEnum;
@@ -29,7 +30,7 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
                                     <tr key={i}>
                                         <td>{e.precinctCount}</td>
                                         <td>{e.meanPartyPercentage.toFixed(2)}%</td>
-                                        <td>{e.demographicType}</td>
+                                        <td>{EnumNameMapper.getDemographicName(e.demographicType)}</td>
                                         <td>{e.meanDemographicPercentage.toFixed(2)}%</td>
                                     </tr>
                                 );

@@ -46,15 +46,15 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.HOUSE_2016} name='population' custom type={'radio'} id={`electionHouse16`} label={`2016 House Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.HOUSE_2016)} />
                 </Form.Group>
-                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                {/* <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.SENATE_2016} name='population' custom type={'radio'} id={`electionSenate16`} label={`2016 Senate Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.SENATE_2016)} />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.HOUSE_2018} name='population' custom type={'radio'} id={`electionHouse18`} label={`2018 House Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.HOUSE_2018)} />
                 </Form.Group>
-                <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
+                {/* <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.SENATE_2018} name='population' custom type={'radio'} id={`electionSenate18`} label={`2018 Senate Election`} onClick={() => this.props.setMapFilter(MapFilterEnum.SENATE_2018)} />
-                </Form.Group>
+                </Form.Group> */}
                 <br />
 
                 <h6>Display Minority Population Density</h6>

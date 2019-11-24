@@ -1,10 +1,10 @@
 import Axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import * as Constants from '../config/constants';
+import * as Constants from '../../config/constants';
 
-import { PhaseZeroArgs, ResponseEnum, PartyEnum, PhaseZeroResult, DemographicEnum, PrecinctBlocSummary } from '../models';
-import { formatResponse } from './functions/response';
+import { PhaseZeroArgs, ResponseEnum, PartyEnum, PhaseZeroResult, DemographicEnum, PrecinctBlocSummary } from '../../models';
+import { formatResponse } from '../functions/response';
 
 const mock = Axios.create();
 const MockAxios = new MockAdapter(mock);

@@ -109,7 +109,6 @@
  }
  
  export interface State {
-     selectedState: string;
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
      clusterMap: Map<string, ICluster>;
@@ -122,7 +121,6 @@
  };
  
  const initialState: State = {
-     selectedState: null,
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
      clusterMap: new Map<string, ICluster>(),

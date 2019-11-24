@@ -6,17 +6,17 @@ import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseZeroArgs, ElectionEnum, StateEnum, PhaseZeroResult, PartyEnum } from '../../../../models';
-import { PhaseZeroService } from '../../../../libs/phase-zero-service';
+import { PhaseZeroArgs, ElectionEnum, StateEnum, PhaseZeroResult } from '../../../../models';
+import { PhaseZeroService } from '../../../../libs/algorithms/phase-zero-service';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
 import { BlocItem } from './blocitem';
+import { EnumNameMapper } from '../../../../libs/enum-name';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseZeroTabPanelProps {
-    selectedState: StateEnum;
     phaseZeroArgs: PhaseZeroArgs;
     setSelectedState: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
@@ -29,11 +29,6 @@ interface IPhaseZeroTabPanelState {
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPanelProps, IPhaseZeroTabPanelState> {
-    private electionMap: Map<ElectionEnum, string> = new Map([
-        [ElectionEnum.PRES_16, 'Presidential 2016'],
-        [ElectionEnum.HOUSE_16, 'Congressional 2016'],
-        [ElectionEnum.HOUSE_18, 'Congressional 2018']
-    ]);
     private service: PhaseZeroService;
 
     constructor() {
@@ -49,13 +44,12 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     }
 
     render() {
-        const dropdownTitle = `Selected State: ${this.props.selectedState === null ? 'N/A' : this.props.selectedState}`;
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>Phase 0</h4>
 
                 <h6>State Selection</h6>
-                <DropdownButton id="dropdown-basic-button" title={dropdownTitle}>
+                <DropdownButton id="dropdown-basic-button" title={`Selected State: ${EnumNameMapper.getStateName(this.props.phaseZeroArgs.stateType)}`}>
                     <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.CA)}>
                         California
                     </Dropdown.Item>
@@ -92,9 +86,13 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         see if the demographic voted en masse for the winning party.
                     </p>
 
+                    {
+                        console.log(this.props.phaseZeroArgs.stateType)
+                    }
+
                     <DropdownButton
                         id="phase0Election"
-                        title={this.electionMap.get(this.state.phaseZeroArgs.electionType)}
+                        title={EnumNameMapper.getElectionName(this.state.phaseZeroArgs.electionType)}
                     >
                         <Dropdown.Item
                             onClick={() => {
@@ -131,7 +129,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Form.Group>
                     <div className="d-flex py-3">
                         <Button
-                            disabled={!this.props.selectedState}
+                            disabled={!this.props.phaseZeroArgs.stateType}
                             className="w-100"
                             onClick={async () => {
                                 await this.fetchPrecinctBlocs();
@@ -144,9 +142,10 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
                 <div className="py-3">
                     <h6>Voting Bloc Precincts</h6>
-                    {
-                        console.log(this.state.phaseZeroResults)
-                    }
+                    <p className="alert alert-info">
+                        This will analyze all precincts within the state to find which ones have a demographic and political make up above the threshold set above.
+                        It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 50%).
+                    </p>
                     {this.state.phaseZeroResults &&
                         Object.keys(this.state.phaseZeroResults.precinctBlocs).map((key: any) => {
                             return (
@@ -167,7 +166,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 }
             },
             () => {
-                this.props.setSelectedState(this.props.selectedState, state);
+                this.props.setSelectedState(this.props.phaseZeroArgs.stateType, state);
                 this.props.setPhaseZeroArgs(this.state.phaseZeroArgs);
             }
         );
@@ -211,7 +210,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
     private async fetchPrecinctBlocs(): Promise<void> {
         const phaseZeroResult = await this.service.runPhaseZero(this.state.phaseZeroArgs);
-        console.log(phaseZeroResult)
         if (phaseZeroResult) {
             this.setState(
                 {
@@ -225,7 +223,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
 function mapStateToProps(state: any) {
     return {
-        selectedState: state.stateReducer.selectedState,
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
         setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
         setPhaseZeroResults: state.stateReducer.setPhaseZeroResults

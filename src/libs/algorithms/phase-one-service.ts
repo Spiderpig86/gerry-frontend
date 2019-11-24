@@ -1,6 +1,6 @@
-import { WebSocketHandler } from './ws';
-import { IPrecinct } from '../models';
-import * as Constants from '../config/constants';
+import { WebSocketHandler } from '../ws';
+import { IPrecinct } from '../../models';
+import * as Constants from '../../config/constants';
 
 export class PhaseOneService {
     private dispatch: any;
