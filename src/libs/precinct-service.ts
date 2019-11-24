@@ -24,7 +24,7 @@ export class PrecinctService {
     }
 
     private generateUrl(state: StateEnum): string {
-        return `ws://localhost:9001/${state}`;
+        return `${Constants.APP_API_WS}/${state}`;
     }
 
     private onOpen(): void {

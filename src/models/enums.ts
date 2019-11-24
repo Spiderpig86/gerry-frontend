@@ -63,8 +63,7 @@ export enum StateEnum {
 }
 
 export enum AlgorithmEnum {
-    PHASE_0 = 'PHASE_0',
-    PHASE_1 = 'PHASE_1',
+    PHASE_0_1 = 'PHASE_0_1',
     PHASE_2 = 'PHASE_2'
 }
 

@@ -111,6 +111,7 @@
  export interface State {
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
+     algorithmState: AlgorithmEnum;
      clusterMap: Map<string, ICluster>;
      oldClusterMap: Map<string, ICluster>;
      phaseZeroArgs: PhaseZeroArgs;
@@ -123,6 +124,7 @@
  const initialState: State = {
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
+     algorithmState: AlgorithmEnum.PHASE_0_1,
      clusterMap: new Map<string, ICluster>(),
      oldClusterMap: new Map<string, ICluster>(),
      phaseZeroArgs: {

@@ -1,6 +1,8 @@
-import { WebSocketHandler } from '../ws';
-import { IPrecinct } from '../../models';
 import * as Constants from '../../config/constants';
+import * as mapActionCreators from '../../redux/modules/state/state';
+
+import { WebSocketHandler } from '../ws';
+import { IPrecinct, AlgorithmEnum } from '../../models';
 
 export class PhaseOneService {
     private dispatch: any;
@@ -19,7 +21,7 @@ export class PhaseOneService {
     }
     
     private generateUrl(): string {
-        return `${Constants.APP_API}/ws/algorithms/phase1`;
+        return `${Constants.APP_API_WS}/ws/algorithms/phase1`;
     }
 
     private onOpen(): void {
@@ -27,10 +29,10 @@ export class PhaseOneService {
     }
 
     private onMessage(event: any): void {
-        
+        // TODO: Process changes
     }
 
     private onClose(): void {
-        
+        mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2);
     }
 }

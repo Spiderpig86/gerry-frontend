@@ -2,6 +2,7 @@ import { LatLng } from 'leaflet';
 
 // Server
 export const APP_API = `http://localhost:8080`;
+export const APP_API_WS = `ws://localhost:9001`;
 
 // Map Values
 export const OPEN_STREET_MAP_ENDPOINT = `https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`;
