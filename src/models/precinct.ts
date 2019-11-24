@@ -13,4 +13,6 @@ export interface IPrecinct {
     newCdId: any;
     properties: PrecinctProperties;
 
+    [x: string]: any;
+
 }

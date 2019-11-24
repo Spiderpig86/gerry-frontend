@@ -1,4 +1,4 @@
-import { IDemographics, IVoteData } from './index';
+import { IDemographics as IDemographicData, IVoteData as IElectionData } from './index';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
@@ -9,22 +9,26 @@ import { IDemographics, IVoteData } from './index';
  */
 export interface ICluster {
 
-    name: string;
+    // name: string;
     id: string;
     incumbent: string;
     precinctKeys: Set<string>;
-    adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
-    demographicStats: IDemographics;
-    votingStats: IVoteData;
+    counties: Set<string>;
+    // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
+    demographicData: IDemographicData;
+    electionData: IElectionData;
     objectiveFunctionScores: IObjectiveFunctionScores;
+
+    [x: string]: any;
 
 }
 
 // TODO: Map in state for each election and newly generated districts containing ICluster with objective function scores
 export interface IObjectiveFunctionScores {
 
-    efficiencyGap: number;
-    lopsidedMargins: number;
-    meanMedianDifference: number;
+    politicalFairness: number;
+    populationEquality: number;
+    compactness: number;
+    contiguity: number;
 
 }
