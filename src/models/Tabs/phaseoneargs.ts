@@ -22,6 +22,6 @@ export interface PhaseOneResult {
 
 export interface PhaseOneMergeDelta {
     iteration: number;
-    changedNodes: { oldDistrictId1: string, newDistrictId: string }[]; // Holds the new district ids for each precinct for iteration 0
-    newDistricts: { newDistrictId: string, districtNode: ICluster }[]; // Holds the final mapping of new districts every iteration (intermediate stats), for non-iterative it will contain the final stats for each district
+    changedNodes: Map<string, string>; // Holds the new district ids for each precinct for iteration 0
+    newDistricts: Map<string, ICluster>; // Holds the final mapping of new districts every iteration (intermediate stats), for non-iterative it will contain the final stats for each district
 }

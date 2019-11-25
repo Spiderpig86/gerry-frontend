@@ -33,10 +33,12 @@ export class PhaseOneService {
     private onMessage(event: any): void {
         // Assign the new district ID to each precinct (this is the final one)
         const data = JSON.parse(event.data);
-        const changedNodes: Map<string, string> = data.changedNodes;
-        const newDistricts: Map<string, ICluster> = data.newDistricts; // Note: any could be converted to ICluster
+        const changedNodes: Map<string, string> = new Map(Object.entries(data.changedNodes));
+        const newDistricts: Map<string, ICluster> = new Map(Object.entries(data.newDistricts)); // Note: any could be converted to ICluster
         changedNodes.forEach((districtId: string, precinctId: string) => {
-            this.precincts.get(precinctId).newCdId = districtId;
+            if (this.precincts.has(districtId)) {
+                this.precincts.get(precinctId).newCdId = districtId;
+            }
         });
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
 
