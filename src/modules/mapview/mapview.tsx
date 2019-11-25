@@ -97,7 +97,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.props.store.dispatch(mapActionCreators.setSelectedState(this.props.selectedState, feature.state));
+                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state));
             }
         });
     }
@@ -321,7 +321,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             jurisdictionName: properties.jrsdctn,
             congressionalDistrictId: properties.cd
         };
-        console.log(properties);
         this.setState({
             isOpen: true,
             mapProps: {
@@ -616,6 +615,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         selectedState: state.stateReducer.selectedState,
         precincts: state.stateReducer.precincts,
         precinctMap: state.stateReducer.precinctMap,
+        clusters: state.stateReducer.newClusters,
         filter: state.stateReducer.filterArgs.mapFilter,
         level: state.stateReducer.filterArgs.viewLevel,
         store: ownProps.store

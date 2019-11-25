@@ -5,18 +5,22 @@
 
  import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
+import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  
  const SET_STATE = 'SET_STATE';
  const SET_PRECINCTS = 'SET_PRECINCTS';
  const SET_PRECINCT_MAP = 'SET_PRECINCT_MAP';
+ const SET_OLD_CLUSTERS = 'SET_OLD_CLUSTERS';
+ const SET_NEW_CLUSTERS = 'SET_NEW_CLUSTERS';
  const SET_MAP_FILTER = 'SET_MAP_FILTER';
  const SET_VIEW_LEVEL = 'SET_VIEW_LEVEL';
  const SET_PHASE_ZERO_ARGS = 'SET_PHASE_ZERO_ARGS';
  const SET_PHASE_ZERO_RESULTS = 'SET_PHASE_ZERO_RESULTS';
  const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
+ const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
  
- export const setSelectedState = (oldState: StateEnum, state: StateEnum) => {
+ export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
      return (dispatch: any) => {
          if (oldState === state) {
              return;
@@ -27,21 +31,28 @@
      }
  }
  
- export const setMapFilter = (filter: string) => {
+ export const setMapFilterCreator = (filter: string) => {
      return (dispatch: any) => {
          dispatch(setFilter(filter));
      }
  }
  
- export const setMapLevel = (level: string) => {
+ export const setMapLevelCreator = (level: string) => {
      return (dispatch: any) => {
          dispatch(setLevel(level));
      }
  }
  
- export const setPrecinctData = (precincts: any) => {
+ export const setPrecinctDataCreator = (precincts: any) => {
      return (dispatch: any) => {
          dispatch(setPrecincts(precincts));
+     }
+ }
+
+ export const setPhaseOneServiceCreator = () => {
+     return (dispatch: any) => {
+         const phaseOneService = new PhaseOneService(initialState.precinctMap, dispatch, initialState.newClusters);
+         dispatch(setPhaseOneService(phaseOneService));
      }
  }
  
@@ -107,26 +118,48 @@
          algorithmPhase
      }
  }
+
+ export const setOldClusters = (oldClusters: Map<string, ICluster>) => {
+     return {
+         type: SET_OLD_CLUSTERS,
+         oldClusters
+     }
+ }
+
+ export const setNewClusters = (newClusters: Map<string, ICluster>) => {
+     return {
+         type: SET_NEW_CLUSTERS,
+         newClusters
+     }
+ }
+ 
+ export const setPhaseOneService = (phaseOneService: PhaseOneService) => {
+     return {
+        type: SET_PHASE_ONE_SERVICE,
+        phaseOneService
+     }
+ }
  
  export interface State {
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
      algorithmState: AlgorithmEnum;
-     clusterMap: Map<string, ICluster>;
-     oldClusterMap: Map<string, ICluster>;
+     oldClusters: Map<string, ICluster>;
+     newClusters: Map<string, ICluster>;
      phaseZeroArgs: PhaseZeroArgs;
      phaseZeroResults: PhaseZeroResult[];
      phaseOneArgs: PhaseOneArgs;
      filterArgs: FilterArgs;
      algorithmPhase: AlgorithmEnum;
+     phaseOneService: PhaseOneService;
  };
  
  const initialState: State = {
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
      algorithmState: AlgorithmEnum.PHASE_0_1,
-     clusterMap: new Map<string, ICluster>(),
-     oldClusterMap: new Map<string, ICluster>(),
+     oldClusters: new Map<string, ICluster>(),
+     newClusters: new Map<string, ICluster>(),
      phaseZeroArgs: {
          populationThreshold: Constants.DEFAULT_THRESHOLD,
          electionType: ElectionEnum.PRES_16,
@@ -152,7 +185,8 @@
          viewLevel: ViewLevelEnum.OLD_DISTRICTS,
          mapFilter: MapFilterEnum.DEFAULT
      },
-     algorithmPhase: AlgorithmEnum.PHASE_0_1
+     algorithmPhase: AlgorithmEnum.PHASE_0_1,
+     phaseOneService: null
  }
  
  export const stateReducer = (state = initialState, action: any) => {
@@ -202,6 +236,21 @@
              return  {
                  ...state,
                  phaseOneArgs: action.phaseOneArgs
+             }
+         case SET_OLD_CLUSTERS:
+             return {
+                 ...state,
+                 oldClusters: action.oldClusters
+             }
+         case SET_NEW_CLUSTERS:
+             return {
+                 ...state,
+                 newClusters: action.newClusters
+             }
+         case SET_PHASE_ONE_SERVICE:
+             return {
+                 ...state,
+                 phaseOneService: action.phaseOneService
              }
          default:
              return state;

@@ -39,7 +39,7 @@ export class PrecinctService {
     }
 
     private onClose(): void {
-        this.dispatch(stateReducer.setPrecinctData(this.precincts));
+        this.dispatch(stateReducer.setPrecinctDataCreator(this.precincts));
         this.dispatch(stateReducer.setPrecinctMap(this.precinctMap));
     }
 

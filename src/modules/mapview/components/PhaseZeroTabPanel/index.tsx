@@ -18,7 +18,7 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseZeroTabPanelProps {
     phaseZeroArgs: PhaseZeroArgs;
-    setSelectedState: (oldState: string, state: string) => void;
+    setSelectedStateCreator: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
     setPhaseZeroResults: (phaseZeroResult: PhaseZeroResult) => void;
 }
@@ -85,11 +85,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         Then, select the threshold for the minimum winning party percentage for the selected election to
                         see if the demographic voted en masse for the winning party.
                     </p>
-
-                    {
-                        console.log(this.props.phaseZeroArgs.stateType)
-                    }
-
+                    
                     <DropdownButton
                         id="phase0Election"
                         title={EnumNameMapper.getElectionName(this.state.phaseZeroArgs.electionType)}
@@ -166,7 +162,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 }
             },
             () => {
-                this.props.setSelectedState(this.props.phaseZeroArgs.stateType, state);
+                this.props.setSelectedStateCreator(this.props.phaseZeroArgs.stateType, state);
                 this.props.setPhaseZeroArgs(this.state.phaseZeroArgs);
             }
         );
@@ -224,6 +220,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 function mapStateToProps(state: any) {
     return {
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
+        setSelectedStateCreator: state.stateReducer.setSelectedStateCreator,
         setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
         setPhaseZeroResults: state.stateReducer.setPhaseZeroResults
     };

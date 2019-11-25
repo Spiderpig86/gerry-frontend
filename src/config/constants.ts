@@ -4,6 +4,10 @@ import { LatLng } from 'leaflet';
 export const APP_API = `http://localhost:8080`;
 export const APP_API_WS = `ws://localhost:9001`;
 
+export const PHASE_ONE_REQUEST = {
+    action: 'REQUEST_NEXT_STEP'
+};
+
 // Map Values
 export const OPEN_STREET_MAP_ENDPOINT = `https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`;
 export const MAP_BOX_ENDPOINT = `https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=`;

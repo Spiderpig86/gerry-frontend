@@ -9,10 +9,13 @@ import { connect } from 'react-redux';
 
 import { PhaseOneArgs, AlgorithmEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
+import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
     phaseOneArgs: PhaseOneArgs;
+    setPhaseOneServiceCreator: () => void;
+    phaseOneService: PhaseOneService;
 }
 
 export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
@@ -22,7 +25,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                 <ButtonGroup>
                     <OverlayTrigger
                         placement="top"
-                        delay={{ show: 0, hide: 300 }}
+                        delay={{ show: 250, hide: 400 }}
                         overlay={props =>
                             this.renderTooltip(
                                 props,
@@ -30,14 +33,14 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                             )
                         }
                     >
-                        <Button id="btnPlay">
+                        <Button id="btnPlay" onClick={this.startPhaseOne.bind(this)}>
                             <FontAwesomeIcon icon={faPlay} />
                         </Button>
                     </OverlayTrigger>
 
                     <OverlayTrigger
                         placement="top"
-                        delay={{ show: 0, hide: 300 }}
+                        delay={{ show: 250, hide: 400 }}
                         overlay={props =>
                             this.renderTooltip(
                                 props,
@@ -51,10 +54,10 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                     </OverlayTrigger>
                     <OverlayTrigger
                         placement="top"
-                        delay={{ show: 0, hide: 300 }}
+                        delay={{ show: 250, hide: 400 }}
                         overlay={props => this.renderTooltip(props, `Step Forward`)}
                     >
-                        <Button>
+                        <Button disabled={!this.props.phaseOneService} onClick={this.stepForward.bind(this)}>
                             <FontAwesomeIcon icon={faStepForward} />
                         </Button>
                     </OverlayTrigger>
@@ -76,14 +79,24 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
             ...props.style,
             zIndex: 99999
         };
-        return <Tooltip {...props}>{text}</Tooltip>;
+        return <Tooltip {...props} show={props.show.toString()}>{text}</Tooltip>;
+    }
+
+    private startPhaseOne(): void {
+        this.props.setPhaseOneServiceCreator();
+    }
+
+    private stepForward(): void {
+        this.props.phaseOneService.fetchNextStep();
     }
 }
 
 function mapStateToProps(state: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
-        phaseOneArgs: state.stateReducer.phaseOneArgs
+        phaseOneArgs: state.stateReducer.phaseOneArgs,
+        setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
+        phaseOneService: state.stateReducer.phaseOneService
     };
 }
 
