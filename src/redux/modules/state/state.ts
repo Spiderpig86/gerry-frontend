@@ -141,6 +141,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  }
  
  export interface State {
+     selectedState: StateEnum;
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
      algorithmState: AlgorithmEnum;
@@ -155,6 +156,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  };
  
  const initialState: State = {
+     selectedState: StateEnum.NOT_SET,
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
      algorithmState: AlgorithmEnum.PHASE_0_1,
@@ -194,6 +196,10 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
          case SET_STATE:
              return {
                  ...state,
+                 phaseZeroArgs: {
+                     ...state.phaseZeroArgs,
+                     stateType: action.selectedState
+                 },
                  selectedState: action.selectedState
              }
          case SET_PRECINCTS:

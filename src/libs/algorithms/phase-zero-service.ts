@@ -50,7 +50,7 @@ function generatePhaseZeroResultItem(party, demographic): PrecinctBlocSummary {
     const meanPartyPercentage = Math.random() * 30 + 70;
 
     return {
-        precinctCount,
+        votingBlocCount: precinctCount,
         partyType: party,
         demographicType: demographic,
         meanPartyPercentage,

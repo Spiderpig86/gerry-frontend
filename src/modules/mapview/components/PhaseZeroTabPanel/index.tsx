@@ -17,6 +17,7 @@ import { EnumNameMapper } from '../../../../libs/enum-name';
 const TooltipSlider = createSliderWithTooltip(Slider);
 
 interface IPhaseZeroTabPanelProps {
+    selectedState: StateEnum;
     phaseZeroArgs: PhaseZeroArgs;
     setSelectedStateCreator: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
@@ -49,7 +50,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 <h4>Phase 0</h4>
 
                 <h6>State Selection</h6>
-                <DropdownButton id="dropdown-basic-button" title={`Selected State: ${EnumNameMapper.getStateName(this.props.phaseZeroArgs.stateType)}`}>
+                <DropdownButton id="dropdown-basic-button" title={`Selected State: ${EnumNameMapper.getStateName(this.props.selectedState)}`}>
                     <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.CA)}>
                         California
                     </Dropdown.Item>
@@ -219,6 +220,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
 function mapStateToProps(state: any) {
     return {
+        selectedState: state.stateReducer.selectedState,
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
         setSelectedStateCreator: state.stateReducer.setSelectedStateCreator,
         setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
