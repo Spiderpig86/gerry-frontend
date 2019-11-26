@@ -12,20 +12,18 @@ const MockAxios = new MockAdapter(mock);
 export class PhaseZeroService {
     public async runPhaseZero(phaseZeroArgs: PhaseZeroArgs) {
         try {
-            const response = await mock.post(`${Constants.APP_API}/phase0`, {
+            const response = await mock.post(`${Constants.APP_API}/algorithm/phase0`, {
                 phaseZeroArgs
             });
-            console.log(response);
             return formatResponse(ResponseEnum.OK, response.data.blocData );
         } catch (e) {
-            console.log(e);
             return formatResponse(ResponseEnum.ERROR, null);
         }
     }
 }
 
 // CODE FOR DEMONSTRATION PURPOSES ONLY
-MockAxios.onPost(`${Constants.APP_API}/phase0`).reply(200, {
+MockAxios.onPost(`${Constants.APP_API}/algorithm/phase0`).reply(200, {
     blocData: generatePhaseZeroResult()
 });
 

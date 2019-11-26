@@ -126,7 +126,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Form.Group>
                     <div className="d-flex py-3">
                         <Button
-                            disabled={!this.props.phaseZeroArgs.stateType}
+                            disabled={this.props.selectedState === StateEnum.NOT_SET}
                             className="w-100"
                             onClick={async () => {
                                 await this.fetchPrecinctBlocs();
