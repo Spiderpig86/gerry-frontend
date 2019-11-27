@@ -76,7 +76,7 @@ export class Coloring {
     public getDemographicStyle(properties: any, filter: string) {
         const demographicPercent = this.getPopulationPercentByDemographic(properties, filter);
         let color = Color.default(Constants.COLOR_DEMOGRAPHIC).saturate((demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR)
-            .darken(demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD)
+            .darken(demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD * 1.2)
             .hex();
         if (demographicPercent < Constants.COLOR_MIDDLE_THRESHOLD) {
             color = Color.default(Constants.COLOR_DEMOGRAPHIC)

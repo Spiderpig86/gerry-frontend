@@ -98,7 +98,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
      }
  }
 
- export const setPhaseZeroResults = (phaseZeroResults: Map<PartyEnum, PhaseZeroResult[]>) => {
+ export const setPhaseZeroResults = (phaseZeroResults: PhaseZeroResult) => {
      return {
         type: SET_PHASE_ZERO_RESULTS,
         phaseZeroResults
@@ -148,7 +148,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
      oldClusters: Map<string, ICluster>;
      newClusters: Map<string, ICluster>;
      phaseZeroArgs: PhaseZeroArgs;
-     phaseZeroResults: PhaseZeroResult[];
+     phaseZeroResults: PhaseZeroResult;
      phaseOneArgs: PhaseOneArgs;
      filterArgs: FilterArgs;
      algorithmPhase: AlgorithmEnum;
@@ -168,7 +168,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
          voteThreshold: Constants.DEFAULT_THRESHOLD,
          stateType: StateEnum.NOT_SET
      },
-     phaseZeroResults: [],
+     phaseZeroResults: null,
      phaseOneArgs: {
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
          electionData: ElectionEnum.PRES_16,

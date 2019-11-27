@@ -73,7 +73,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={this.props.phaseZeroArgs.populationThreshold}
-                            min={1}
+                            min={51}
                             onAfterChange={this.setDemographicThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -86,7 +86,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         Then, select the threshold for the minimum winning party percentage for the selected election to
                         see if the demographic voted en masse for the winning party.
                     </p>
-                    
+
                     <DropdownButton
                         id="phase0Election"
                         title={EnumNameMapper.getElectionName(this.state.phaseZeroArgs.electionType)}
@@ -119,7 +119,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         <TooltipSlider
                             className={'col-8'}
                             defaultValue={this.props.phaseZeroArgs.voteThreshold}
-                            min={1}
+                            min={51}
                             onAfterChange={this.setPartyThreshold.bind(this)}
                             tipFormatter={value => `${value}%`}
                         />
@@ -143,6 +143,11 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         This will analyze all precincts within the state to find which ones have a demographic and political make up above the threshold set above.
                         It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 50%).
                     </p>
+                    {
+                        this.state.phaseZeroResults && (
+                            <p><b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}</p>
+                        )
+                    }
                     {this.state.phaseZeroResults &&
                         Object.keys(this.state.phaseZeroResults.precinctBlocs).map((key: any) => {
                             return (

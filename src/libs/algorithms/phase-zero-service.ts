@@ -10,12 +10,12 @@ const mock = Axios.create();
 const MockAxios = new MockAdapter(mock);
 
 export class PhaseZeroService {
-    public async runPhaseZero(phaseZeroArgs: PhaseZeroArgs) {
+    public async runPhaseZero(phaseZeroArgs: PhaseZeroArgs): Promise<any> {
         try {
             const response = await mock.post(`${Constants.APP_API}/algorithm/phase0`, {
                 phaseZeroArgs
             });
-            return formatResponse(ResponseEnum.OK, response.data.blocData );
+            return formatResponse(ResponseEnum.OK, {...response.data.blocData} );
         } catch (e) {
             return formatResponse(ResponseEnum.ERROR, null);
         }
@@ -30,16 +30,19 @@ MockAxios.onPost(`${Constants.APP_API}/algorithm/phase0`).reply(200, {
 function generatePhaseZeroResult() {
     const data: Map<PartyEnum, PrecinctBlocSummary[]> = new Map();
     const demographics = [DemographicEnum.WHITE, DemographicEnum.BLACK, DemographicEnum.HISPANIC, DemographicEnum.ASIAN, DemographicEnum.NATIVE_AMERICAN, DemographicEnum.PACIFIC_ISLANDER, DemographicEnum.OTHER, DemographicEnum.BIRACIAL];
+    let total = 0;
     for (let party of [PartyEnum.DEMOCRATIC, PartyEnum.REPUBLICAN, PartyEnum.OTHER]) {
         const demographicCount = Math.floor(Math.random() * demographics.length + 1);
         data[party] = [];
         const shuffled = demographics.sort(() => 0.5 - Math.random());
         for (let i = 0; i < demographicCount; i++) {
             const demographic = shuffled[i];
-            data[party].push(generatePhaseZeroResultItem(party, demographic));
+            const precinctBlocSummary = generatePhaseZeroResultItem(party, demographic);
+            data[party].push(precinctBlocSummary);
+            total += precinctBlocSummary.votingBlocCount;
         }
     }
-    return { precinctBlocs: data };
+    return { precinctBlocs: data, totalVoteBlocCount: total };
 }
 
 function generatePhaseZeroResultItem(party, demographic): PrecinctBlocSummary {

@@ -2,7 +2,7 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 
 import { WebSocketHandler } from '../ws';
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing } from '../../models';
 
 export class PhaseOneService {
     private dispatch: any;
@@ -23,7 +23,8 @@ export class PhaseOneService {
     }
     
     private generateUrl(): string {
-        return `wss://echo.websocket.org`;
+        // return `wss://echo.websocket.org`;
+        return `${Constants.APP_API_WS}/ws/phase1`;
     }
 
     private onOpen(): void {
@@ -54,6 +55,9 @@ export class PhaseOneService {
     }
 
     public fetchNextStep() {
-        this.handler.ws.send(JSON.stringify(Constants.PHASE_ONE_REQUEST));
+        this.handler.ws.send(JSON.stringify({
+            action: 'REQUEST_NEXT_STEP',
+            value: null
+        } as WebSocketPing));
     }
 }

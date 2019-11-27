@@ -6,7 +6,8 @@ export { PrecinctProperties } from './properties';
 export { IVoteData } from './vote';
 
 export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phasezeroargs';
-export { PhaseOneArgs } from './Tabs/phaseoneargs';
+export { PhaseOneArgs, PhaseOneMergeDelta, PhaseOneResult } from './Tabs/phaseoneargs';
 export { FilterArgs } from './Tabs/filterargs'
 
 export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum } from './enums';
+export { WebSocketPing } from './websocket-ping';
