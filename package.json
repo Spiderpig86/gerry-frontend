@@ -45,6 +45,7 @@
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
     "react-spinners": "^0.6.1",
+    "react-table": "^6.10.0",
     "react-tabs": "^3.0.0",
     "redux": "4.0.0",
     "redux-thunk": "2.3.0"
@@ -58,6 +59,7 @@
     "@types/rc-slider": "^8.6.5",
     "@types/react-burger-menu": "^2.2.5",
     "@types/react-leaflet": "^2.4.0",
+    "@types/react-table": "^6.8.5",
     "@types/react-tabs": "^2.3.1",
     "bootstrap-loader": "^3.0.0",
     "bootstrap-sass": "^3.3.7",
