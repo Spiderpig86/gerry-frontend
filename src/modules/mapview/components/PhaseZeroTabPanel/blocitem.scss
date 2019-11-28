@@ -1,0 +1,11 @@
+.ReactTable .rt-tbody tr:nth-child(even) {
+    background-color: rgba(0,0,0,.05);
+}
+
+.ReactTable .rt-tbody .rt-td {
+    padding: .5rem;
+}
+
+.ReactTable .rt-thead .rt-th.-cursor-pointer, .ReactTable .rt-thead .rt-td.-cursor-pointer {
+    padding: .75rem;
+}

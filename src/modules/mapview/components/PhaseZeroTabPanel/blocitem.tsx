@@ -5,6 +5,8 @@ import { PhaseZeroResult, PartyEnum, PrecinctBlocSummary } from '../../../../mod
 import { Table } from 'react-bootstrap';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
+import './blocitem.scss';
+
 interface BlocItemProps {
     party: PartyEnum;
     phaseZeroResults: PrecinctBlocSummary[];
