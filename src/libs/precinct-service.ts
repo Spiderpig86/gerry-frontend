@@ -35,7 +35,7 @@ export class PrecinctService {
         const message = JSON.parse(event.data);
         Array.prototype.push.apply(this.precincts.features, message);
         console.log(this.precincts.features.length)
-        new Promise((resolve: any) => resolve(this.updateStateReducerPrecincts(message)));
+        this.updateStateReducerPrecincts(message);
     }
 
     private onClose(): void {

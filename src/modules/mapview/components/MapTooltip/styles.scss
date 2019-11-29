@@ -1,5 +1,7 @@
 .map-tooltip {
     background-color: rgba(225, 225, 225, 0.75);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
     border-radius: 0.25rem;
     padding: 1rem;
     p {
