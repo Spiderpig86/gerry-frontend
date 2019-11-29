@@ -96,8 +96,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeatureState(feature: any, layer: any) {
         layer.on({
             click: () => {
+                console.log(feature);
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state));
+                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.properties.state));
             }
         });
     }
@@ -234,7 +235,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                     <ReactLeaflet.GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
-                                        style={this.coloring.colorDefault.bind(this.coloring)}
+                                        style={this.getDistrictStyle.bind(this)}
                                         onEachFeature={this.onEachFeatureState.bind(this)}
                                     />
                                 );
@@ -382,6 +383,11 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         return [republicanPercent, democratPercent, otherPercent].reduce((prev: any, cur: any) =>
             prev.percent < cur.percent ? cur : prev
         );
+    }
+
+    public getDistrictStyle(feature: any, layer: any): PathOptions {
+        const properties = feature.properties;
+        return this.coloring.colorDefaultDistrict(properties);
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {

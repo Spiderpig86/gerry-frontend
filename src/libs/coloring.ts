@@ -98,6 +98,20 @@ export class Coloring {
         };
     }
 
+    public colorDefaultDistrict(properties: any): PathOptions {
+        const cdId = properties.cd;
+        const fillColor = Color.rgb(this.colors[cdId]._rgb).hex();
+        const color = Color.default(fillColor)
+                .darken(Constants.COLOR_DARKEN_FACTOR)
+                .hex();
+        return {
+            color,
+            weight: Constants.BORDER_WEIGHT_NORMAL,
+            fillOpacity: Constants.COLOR_FILL_OPACITY,
+            fillColor: fillColor
+        };
+    }
+
     public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>): PathOptions {
         const colorConfig = {
             color: Constants.COLOR_DEFAULT_RGB,

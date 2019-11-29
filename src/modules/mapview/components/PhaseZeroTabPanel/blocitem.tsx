@@ -2,7 +2,6 @@ import * as React from 'react';
 import ReactTable from 'react-table'
 
 import { PhaseZeroResult, PartyEnum, PrecinctBlocSummary } from '../../../../models';
-import { Table } from 'react-bootstrap';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
 import './blocitem.scss';
