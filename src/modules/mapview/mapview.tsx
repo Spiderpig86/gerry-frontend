@@ -18,7 +18,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
-import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum } from '../../models';
+import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
@@ -29,6 +29,8 @@ export interface IMapViewProps {
     precinctMap: Map<string, IPrecinct>;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
+    oldClusters: Map<string, ICluster>;
+    newClusters: Map<string, ICluster>;
     store: any;
 }
 
@@ -107,17 +109,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                console.log(hashPrecinct(feature.properties));
-                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                this.setState({
-                    neighborPrecincts: neighbors.split(',')
-                }, () => {
-                    this.state.neighborPrecincts.forEach(element => {
-                        // console.log(element);
-                        console.log(this.props.precinctMap.get(element));
-                        this.props.precinctMap.get(element).properties.v16_opres += 1000;
-                    });
-                });
+                // console.log(hashPrecinct(feature.properties));
+                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                // this.setState({
+                //     neighborPrecincts: neighbors.split(',')
+                // }, () => {
+                //     this.state.neighborPrecincts.forEach(element => {
+                //         // console.log(element);
+                //         console.log(this.props.precinctMap.get(element));
+                //         this.props.precinctMap.get(element).properties.v16_opres += 1000;
+                //     });
+                // });
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -421,7 +423,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         };
     }
 
-    private getMapTooltipProps(filter: string, properties: any): IMapTooltipProps {
+    private getMapTooltipProps(filter: MapFilterEnum, properties: any): IMapTooltipProps {
         if (this.props.level === ViewLevelEnum.OLD_DISTRICTS || this.props.level === ViewLevelEnum.NEW_DISTRICTS) {
             return this.fetchDistrictProperties(filter, properties);
         } else {
@@ -429,7 +431,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         }
     }
 
-    private fetchPrecinctProperties(filter: string, properties: any): IMapTooltipProps {
+    private fetchPrecinctProperties(filter: MapFilterEnum, properties: any): IMapTooltipProps {
         switch (filter) {
             case MapFilterEnum.PRES_2016:
                 return {
@@ -583,7 +585,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } 
     }
 
-    private fetchDistrictProperties(filter: string, properties: any): IMapTooltipProps {
+    private fetchDistrictProperties(filter: MapFilterEnum, properties: any): IMapTooltipProps {
         return {
             title: 'District Data',
             subtitle: 'District information',
@@ -621,6 +623,16 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 }
             ]
         };
+        // switch (filter) {
+        //     case MapFilterEnum.PRES_2016:
+
+        //     case MapFilterEnum.HOUSE_2016:
+
+        //     case MapFilterEnum.HOUSE_2018:
+
+        //     default:
+        // }
+        
     }
 
     private resetSelectedPrecinct() {
@@ -636,7 +648,9 @@ function mapStatetoProps(state: any, ownProps: any) {
         clusters: state.stateReducer.newClusters,
         filter: state.stateReducer.filterArgs.mapFilter,
         level: state.stateReducer.filterArgs.viewLevel,
-        store: ownProps.store
+        oldClusters: state.stateReducer.oldClusters,
+        newClusters: state.stateReducer.newClusters,
+        store: ownProps.store,
     };
 }
 
