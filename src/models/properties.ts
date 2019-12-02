@@ -1,3 +1,6 @@
+/**
+ * Directly maps to geojson of precinct.
+ */
 export interface PrecinctProperties {
     cd: number;
     county_name: string;

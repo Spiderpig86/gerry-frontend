@@ -7,12 +7,10 @@ import { bindActionCreators } from 'redux';
 import './styles.scss';
 import { ProgressBar } from 'react-bootstrap';
 
-type ProgressBarVariant = "success" | "danger" | "warning" | "info"
-
 export interface IMapTooltipProps {
     title: string;
     subtitle: string;
-    statistics: { key: string; value: number, needsPercent?: boolean, barColor?: string }[];
+    statistics: { key: string; value: number; needsPercent?: boolean; barColor?: string; }[];
 }
 
 export interface IMapTooltipState {

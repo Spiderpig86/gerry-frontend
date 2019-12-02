@@ -299,7 +299,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 White: properties.pop_white_nh,
                 AfricanAmerican: properties.pop_black_nh,
                 Asian: properties.pop_asian_nh,
-                NativeAmericans: properties.pop_amin_nh,
+                NativeAmerican: properties.pop_amin_nh,
                 PacificIslander: properties.pop_nhpi_nh,
                 Other: properties.pop_other_nh,
                 Biracial: properties.pop_2more_nh
@@ -309,7 +309,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 White: properties.pop_white_h,
                 AfricanAmerican: properties.pop_black_h,
                 Asian: properties.pop_asian_h,
-                NativeAmericans: properties.pop_amin_h,
+                NativeAmerican: properties.pop_amin_h,
                 PacificIslander: properties.pop_nhpi_h,
                 Other: properties.pop_other_h,
                 Biracial: properties.pop_2more_h
@@ -321,7 +321,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 White: properties.pop_white_voting,
                 AfricanAmerican: properties.pop_black_voting,
                 Hispanic: properties.pop_hispanic_voting,
-                NativeAmericans: properties.pop_amin_voting,
+                NativeAmerican: properties.pop_amin_voting,
                 Asian: properties.pop_asian_voting,
                 PacificIslander: properties.pop_nhpi_voting,
                 Other: properties.pop_other_voting,
@@ -425,7 +425,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
     private getMapTooltipProps(filter: MapFilterEnum, properties: any): IMapTooltipProps {
         if (this.props.level === ViewLevelEnum.OLD_DISTRICTS || this.props.level === ViewLevelEnum.NEW_DISTRICTS) {
-            return this.fetchDistrictProperties(filter, properties);
+            return this.fetchDistrictProperties(filter, this.props.level, properties);
         } else {
             return this.fetchPrecinctProperties(filter, properties);
         }
@@ -585,22 +585,15 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } 
     }
 
-    private fetchDistrictProperties(filter: MapFilterEnum, properties: any): IMapTooltipProps {
-        return {
+    private fetchDistrictProperties(filter: MapFilterEnum, level: ViewLevelEnum, properties: any): IMapTooltipProps {
+        // Find the correct district statistics
+        const precinct: IPrecinct = this.props.precinctMap.get(properties.precinct_id);
+        const cdData = (level === ViewLevelEnum.OLD_DISTRICTS) ? this.props.oldClusters.get(precinct.originalCdId) : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
+
+        const response: IMapTooltipProps = {
             title: 'District Data',
             subtitle: 'District information',
             statistics: [
-                {
-                    key: 'Democratic Vote',
-                    value: 120000,
-                    needsPercent: true,
-                    barColor: Constants.COLOR_DEMOCRAT
-                },
-                {
-                    key: 'Republican Vote',
-                    value: 120000,
-                    needsPercent: true
-                },
                 {
                     key: 'Total District Population',
                     value: 240000
@@ -623,16 +616,126 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 }
             ]
         };
-        // switch (filter) {
-        //     case MapFilterEnum.PRES_2016:
-
-        //     case MapFilterEnum.HOUSE_2016:
-
-        //     case MapFilterEnum.HOUSE_2018:
-
-        //     default:
-        // }
+        switch (filter) {
+            case MapFilterEnum.PRES_2016:
+                response.statistics.concat([
+                    {
+                        key: 'Democratic Vote',
+                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 120000,
+                        needsPercent: true,
+                    },
+                    {
+                        key: 'Republican Vote',
+                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Other Vote',
+                        value: cdData ? cdData.electionData.presidential16.otherVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Total District Population',
+                        value: 240000
+                    },
+                ]);
+                break;
+            case MapFilterEnum.HOUSE_2016:
+                    response.statistics.concat([
+                        {
+                            key: 'Democratic Vote',
+                            value: cdData ? cdData.electionData.house16.democraticVotes : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Republican Vote',
+                            value: cdData ? cdData.electionData.house16.republicanVotes : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Other Vote',
+                            value: cdData ? cdData.electionData.house16.otherVotes : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Total District Population',
+                            value: 240000
+                        },
+                    ]);
+                break;
+            case MapFilterEnum.HOUSE_2018:
+                    response.statistics.concat([
+                        {
+                            key: 'Democratic Vote',
+                            value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
+                            needsPercent: true,
+                        },
+                        {
+                            key: 'Republican Vote',
+                            value: cdData ? cdData.electionData.house18.republicanVotes : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Other Vote',
+                            value: cdData ? cdData.electionData.house18.otherVotes : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Total District Population',
+                            value: 240000
+                        },
+                    ]);
+                break;
+            default:
+                    response.statistics.concat([
+                        {
+                            key: 'African American',
+                            value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
+                            needsPercent: true,
+                        },
+                        {
+                            key: 'Asian',
+                            value: cdData ? cdData.demographicData.Asian : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Hispanic',
+                            value: cdData ? cdData.demographicData.Hispanic : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'White',
+                            value: cdData ? cdData.demographicData.White : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Pacific Islander',
+                            value: cdData ? cdData.demographicData.PacificIslander : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Native American',
+                            value: cdData ? cdData.demographicData.NativeAmerican : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Biracial',
+                            value: cdData ? cdData.demographicData.Biracial : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Other',
+                            value: cdData ? cdData.demographicData.Other : 120000,
+                            needsPercent: true
+                        },
+                        {
+                            key: 'Total District Population',
+                            value: 240000
+                        },
+                    ]);
+        }
         
+        return response;
     }
 
     private resetSelectedPrecinct() {
