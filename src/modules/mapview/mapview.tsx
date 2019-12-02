@@ -618,7 +618,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         };
         switch (filter) {
             case MapFilterEnum.PRES_2016:
-                response.statistics.concat([
+                response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
                         value: cdData ? cdData.electionData.presidential16.democraticVotes : 120000,
@@ -641,98 +641,98 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 ]);
                 break;
             case MapFilterEnum.HOUSE_2016:
-                    response.statistics.concat([
-                        {
-                            key: 'Democratic Vote',
-                            value: cdData ? cdData.electionData.house16.democraticVotes : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Republican Vote',
-                            value: cdData ? cdData.electionData.house16.republicanVotes : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Other Vote',
-                            value: cdData ? cdData.electionData.house16.otherVotes : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Total District Population',
-                            value: 240000
-                        },
-                    ]);
+                response.statistics = response.statistics.concat([
+                    {
+                        key: 'Democratic Vote',
+                        value: cdData ? cdData.electionData.house16.democraticVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Republican Vote',
+                        value: cdData ? cdData.electionData.house16.republicanVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Other Vote',
+                        value: cdData ? cdData.electionData.house16.otherVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Total District Population',
+                        value: 240000
+                    },
+                ]);
                 break;
             case MapFilterEnum.HOUSE_2018:
-                    response.statistics.concat([
-                        {
-                            key: 'Democratic Vote',
-                            value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
-                            needsPercent: true,
-                        },
-                        {
-                            key: 'Republican Vote',
-                            value: cdData ? cdData.electionData.house18.republicanVotes : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Other Vote',
-                            value: cdData ? cdData.electionData.house18.otherVotes : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Total District Population',
-                            value: 240000
-                        },
-                    ]);
+                response.statistics = response.statistics.concat([
+                    {
+                        key: 'Democratic Vote',
+                        value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
+                        needsPercent: true,
+                    },
+                    {
+                        key: 'Republican Vote',
+                        value: cdData ? cdData.electionData.house18.republicanVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Other Vote',
+                        value: cdData ? cdData.electionData.house18.otherVotes : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Total District Population',
+                        value: 240000
+                    },
+                ]);
                 break;
             default:
-                    response.statistics.concat([
-                        {
-                            key: 'African American',
-                            value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
-                            needsPercent: true,
-                        },
-                        {
-                            key: 'Asian',
-                            value: cdData ? cdData.demographicData.Asian : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Hispanic',
-                            value: cdData ? cdData.demographicData.Hispanic : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'White',
-                            value: cdData ? cdData.demographicData.White : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Pacific Islander',
-                            value: cdData ? cdData.demographicData.PacificIslander : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Native American',
-                            value: cdData ? cdData.demographicData.NativeAmerican : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Biracial',
-                            value: cdData ? cdData.demographicData.Biracial : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Other',
-                            value: cdData ? cdData.demographicData.Other : 120000,
-                            needsPercent: true
-                        },
-                        {
-                            key: 'Total District Population',
-                            value: 240000
-                        },
-                    ]);
+                response.statistics = response.statistics.concat([
+                    {
+                        key: 'African American',
+                        value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
+                        needsPercent: true,
+                    },
+                    {
+                        key: 'Asian',
+                        value: cdData ? cdData.demographicData.Asian : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Hispanic',
+                        value: cdData ? cdData.demographicData.Hispanic : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'White',
+                        value: cdData ? cdData.demographicData.White : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Pacific Islander',
+                        value: cdData ? cdData.demographicData.PacificIslander : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Native American',
+                        value: cdData ? cdData.demographicData.NativeAmerican : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Biracial',
+                        value: cdData ? cdData.demographicData.Biracial : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Other',
+                        value: cdData ? cdData.demographicData.Other : 120000,
+                        needsPercent: true
+                    },
+                    {
+                        key: 'Total District Population',
+                        value: 240000
+                    },
+                ]);
         }
         
         return response;

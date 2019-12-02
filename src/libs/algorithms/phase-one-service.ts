@@ -54,6 +54,9 @@ export class PhaseOneService {
         mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2);
     }
 
+    /**
+     * Triggered by hitting the next step button for phase 1
+     */
     public fetchNextStep() {
         this.handler.ws.send(JSON.stringify({
             action: 'REQUEST_NEXT_STEP',
