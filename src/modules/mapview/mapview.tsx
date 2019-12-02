@@ -45,6 +45,7 @@ interface IMapViewState {
     };
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
+    neighborPrecincts: string[]; // TESTING
 }
 
 export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapViewState> {
@@ -64,7 +65,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             subtitle: null,
             statistics: null
         },
-        selectedPrecinctId: null
+        selectedPrecinctId: null,
+        neighborPrecincts: []
     };
     public coloring: Coloring;
 
@@ -96,7 +98,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeatureState(feature: any, layer: any) {
         layer.on({
             click: () => {
-                console.log(feature);
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
                 this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.properties.state));
             }
@@ -106,6 +107,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
+                console.log(hashPrecinct(feature.properties));
+                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                this.setState({
+                    neighborPrecincts: neighbors.split(',')
+                }, () => {
+                    this.state.neighborPrecincts.forEach(element => {
+                        // console.log(element);
+                        console.log(this.props.precinctMap.get(element));
+                        this.props.precinctMap.get(element).properties.v16_opres += 1000;
+                    });
+                });
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -422,7 +434,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             case MapFilterEnum.PRES_2016:
                 return {
                     title: '2016 Presidential Election',
-                    subtitle: `Precinct: ${properties.precinct_name}`,
+                    subtitle: `Precinct: ${properties.precinct_name || properties.precinct_id}`,
                     statistics: [
                         {
                             key: 'Democratic Votes',

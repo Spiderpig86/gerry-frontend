@@ -10,6 +10,7 @@ import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, Political
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
+import { EnumNameMapper } from '../../../../libs/enum-name';
 
 const TooltipRange = createSliderWithTooltip(Range);
 const TooltipSlider = createSliderWithTooltip(Slider);
@@ -29,11 +30,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
     IPhaseZeroTabPanelState
     > {
 
-    private electionMap: Map<ElectionEnum, string> = new Map([
-        [ElectionEnum.PRES_16, 'Presidential 2016'],
-        [ElectionEnum.HOUSE_16, 'Congressional 2016'],
-        [ElectionEnum.HOUSE_18, 'Congressional 2018'],
-    ]);
     state = {
         phaseOneArgs: this.props.phaseOneArgs
     };
@@ -63,7 +59,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     
                     <DropdownButton
                         id="dropdown-basic-button"
-                        title={this.electionMap.get(this.state.phaseOneArgs.electionData)}
+                        title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
                     >
                             <Dropdown.Item
                             onClick={() => this.setElectionData(ElectionEnum.PRES_16) }

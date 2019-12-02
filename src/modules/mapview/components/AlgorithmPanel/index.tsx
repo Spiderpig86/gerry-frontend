@@ -15,6 +15,7 @@ interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
     phaseOneArgs: PhaseOneArgs;
     setPhaseOneServiceCreator: () => void;
+    setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
     phaseOneService: PhaseOneService;
 }
 
@@ -67,11 +68,20 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         custom
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
-                        label={'Display Intermediate Results'}
+                        label={'Display Intermediate Results (Phase 2)'}
+                        defaultChecked={this.props.phaseOneArgs.intermediateResults}
+                        onChange={(e) => this.toggleIntermediateUpdates(e.target.checked)}
                     />
                 </Form.Group>
             </Row>
         );
+    }
+
+    private toggleIntermediateUpdates(e: boolean) {
+        this.props.setPhaseOneArgs({
+            ...this.props.phaseOneArgs,
+            intermediateResults: e
+        });
     }
 
     private renderTooltip(props: any, text: string) {
@@ -96,6 +106,7 @@ function mapStateToProps(state: any) {
         algorithmState: state.stateReducer.algorithmState,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
+        setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
         phaseOneService: state.stateReducer.phaseOneService
     };
 }

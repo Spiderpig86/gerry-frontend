@@ -6,5 +6,5 @@ import { PrecinctProperties } from '../../models';
  * @param properties - properties object associated with precinct.
  */
 export function hashPrecinct(properties: PrecinctProperties) {
-    return `${properties.precinct_name}#${properties.county_name}`;
+    return properties.precinct_id;
 }

@@ -27,7 +27,7 @@ export interface PrecinctProperties {
     pop_white_h: number;
     pop_white_nh: number;
     pop_white_voting: number;
-    precinct_name: string;
+    precinct_id: string;
     v16_dpres: string;
     v16_rpres: string;
     v16_ipres: string;
