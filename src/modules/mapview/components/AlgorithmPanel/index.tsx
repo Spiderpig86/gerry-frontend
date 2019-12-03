@@ -58,7 +58,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         delay={{ show: 250, hide: 400 }}
                         overlay={props => this.renderTooltip(props, `Step Forward`)}
                     >
-                        <Button disabled={!this.props.phaseOneService} onClick={this.stepForward.bind(this)}>
+                        <Button disabled={!this.props.phaseOneService && this.props.phaseOneArgs.intermediateResults} onClick={this.stepForward.bind(this)}>
                             <FontAwesomeIcon icon={faStepForward} />
                         </Button>
                     </OverlayTrigger>
@@ -68,7 +68,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         custom
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
-                        label={'Display Intermediate Results (Phase 2)'}
+                        label={'Display Intermediate Results (Phase 1)'}
                         defaultChecked={this.props.phaseOneArgs.intermediateResults}
                         onChange={(e) => this.toggleIntermediateUpdates(e.target.checked)}
                     />
