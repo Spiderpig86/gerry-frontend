@@ -34,6 +34,9 @@ export class PhaseOneTabPanelComponent extends React.Component<
         phaseOneArgs: this.props.phaseOneArgs
     };
 
+    private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }];
+    private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan', key: PoliticalFairnessEnum.PARTISAN }];
+
     render() {
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
@@ -56,13 +59,13 @@ export class PhaseOneTabPanelComponent extends React.Component<
                         className={'col-6'}
                         id={'electionData'}
                     >Election Data to Use</Form.Label>
-                    
+
                     <DropdownButton
                         id="dropdown-basic-button"
                         title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
                     >
-                            <Dropdown.Item
-                            onClick={() => this.setElectionData(ElectionEnum.PRES_16) }
+                        <Dropdown.Item
+                            onClick={() => this.setElectionData(ElectionEnum.PRES_16)}
                         >
                             Presidential 2016
                             </Dropdown.Item>
@@ -184,13 +187,14 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     </Form.Group>
                 </div>
 
-                
+
                 <h4>Compactness Options</h4>
                 <p className="alert alert-info">
                     Specify algorithm for measuring compactness.
                 </p>
                 <div className="mb-4">
-                    {[{name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER}, {name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG}].map(
+                    {
+                        this.compactnessOptions.map(
                         (e: any, i: number) => {
                             return (
                                 <Form.Group
@@ -219,7 +223,8 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     Specify factors for measuring political fairness.
                 </p>
                 <div className="mb-4">
-                    {[{name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP}, {name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS}, {name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE}].map(
+                    {
+                        this.politicalFairnessOptions.map(
                         (e: any, i: number) => {
                             return (
                                 <Form.Group
@@ -344,7 +349,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
     private containsDemographic(demographic: DemographicEnum): boolean {
         return this.state.phaseOneArgs.selectedDemographics.has(demographic);
     }
-    
+
     private setCompactness(compactnessOption: CompactnessEnum): void {
         this.setState({
             phaseOneArgs: {
@@ -353,7 +358,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
-    
+
     private setPoliticalFairness(politicalFairnessOption: PoliticalFairnessEnum): void {
         this.setState({
             phaseOneArgs: {
@@ -371,7 +376,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
-    
+
     private setObjectiveCompactness(objectiveCompactness: number): void {
         this.setState({
             phaseOneArgs: {
@@ -401,7 +406,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
 }
 
 function mapStateToProps(state: any) {
-    return { 
+    return {
         selectedState: state.stateReducer.selectedState,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         setPhaseOneArgs: state.stateReducer.setPhase

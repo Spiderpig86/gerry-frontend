@@ -58,7 +58,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         delay={{ show: 250, hide: 400 }}
                         overlay={props => this.renderTooltip(props, `Step Forward`)}
                     >
-                        <Button disabled={!this.props.phaseOneService && this.props.phaseOneArgs.intermediateResults} onClick={this.stepForward.bind(this)}>
+                        <Button disabled={!this.props.phaseOneService || !this.props.phaseOneArgs.intermediateResults} onClick={this.stepForward.bind(this)}>
                             <FontAwesomeIcon icon={faStepForward} />
                         </Button>
                     </OverlayTrigger>
