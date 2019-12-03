@@ -12,7 +12,7 @@ export interface IDemographicsTabProps {
 export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabProps, {}> {
     render() {
         if (!this.props.hispanicDemographics || !this.props.nonHispanicDemographics) {
-            return <Placeholder></Placeholder>;
+            return <Placeholder title='No jurisdiction selected.' subtitle='Select a congressional district or precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>

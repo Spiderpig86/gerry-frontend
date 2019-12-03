@@ -22,34 +22,44 @@ export enum ViewLevelEnum {
 }
 
 export enum ElectionEnum {
-    PRES_16 = 'ELECTION_PRES_16',
-    HOUSE_16 = 'ELECTION_HOUSE_16',
-    HOUSE_18 = 'ELECTION_HOUSE_18'
+    PRES_16 = 'pres_16',
+    HOUSE_16 = 'house_16',
+    HOUSE_18 = 'house_18'
 }
 
 export enum CompactnessEnum {
-    GRAPH_THEORETICAL = 'GRAPH_THEORETICAL',
-    POLSBY_POPPER = 'POLSBY_POPPER',
-    SCHWARTZBERG = 'SCHWARTZBERG'
+    GRAPH_THEORETICAL = 'graph_theoretical',
+    POLSBY_POPPER = 'polsby_popper',
+    SCHWARTZBERG = 'schwartzberg',
+    REOCK = 'reock',
+    CONVEX_HULL = 'convex_hull'
 }
 
 export enum PoliticalCompetitivenessEnum {
-    MARGIN_OF_VICTORY = 'MARGIN_OF_VICTORY',
+    MARGIN_OF_VICTORY = 'margin_of_victory',
 }
 
 export enum PoliticalFairnessEnum {
-    EFFICIENCY_GAP = 'EFFICIENCY_GAP',
-    GERRYMANDER_DEMOCRAT = 'GERRYMANDER_DEMOCRAT',
-    GERRYMANDER_REPUBLICAN = 'GERRYMANDER_REPUBLICAN',
-    LOPSIDED_MARGINS = 'LOPSIDED_MARGINS',
-    MEAN_MEDIAN_DIFFERENCE = 'MEAN_MEDIAN_DIFFERENCE',
-    PARTISAN = 'PARTISAN'
+    EFFICIENCY_GAP = 'efficiency_gap',
+    GERRYMANDER_DEMOCRAT = 'gerrymander_democrat',
+    GERRYMANDER_REPUBLICAN = 'gerrymander_republican',
+    LOPSIDED_MARGINS = 'lopsided_margins',
+    MEAN_MEDIAN_DIFFERENCE = 'mean_median',
+    PARTISAN_DEMOCRAT = 'partisan_democrat',
+    PARTISAN_REPUBLICAN = 'partisan_republican'
+}
+
+export enum PopulationEqualityEnum {
+    MOST_TO_LEAST = 'most_to_least',
+    IDEAL = 'ideal'
 }
 
 export enum PartyEnum {
-    DEMOCRATIC = 'DEMOCRATIC',
-    REPUBLICAN = 'REPUBLICAN',
-    OTHER = 'OTHER'
+    DEMOCRATIC = 'democratic',
+    REPUBLICAN = 'republican',
+    OTHER = 'other',
+    TIE = 'tie',
+    NOT_SET = 'not_set'
 }
 
 export enum DemographicEnum {

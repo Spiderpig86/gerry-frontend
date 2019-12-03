@@ -16,7 +16,7 @@ export interface IPrecinctPropertiesTabProps {
 export class PrecinctPropertiesTabPanel extends React.PureComponent<IPrecinctPropertiesTabProps, {}> {
     render() {
         if (!this.props) {
-            return <Placeholder></Placeholder>;
+            return <Placeholder title='No jurisdiction selected.' subtitle='Select a congressional district or precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>

@@ -8,11 +8,12 @@ import { bindActionCreators } from 'redux';
 
 import { PhaseZeroArgs, ElectionEnum, StateEnum, PhaseZeroResult } from '../../../../models';
 import { PhaseZeroService } from '../../../../libs/algorithms/phase-zero-service';
+import { Placeholder } from '../../../../global_components/placeholder/placeholder';
+import { BlocItem } from './blocitem';
+import { EnumNameMapper } from '../../../../libs/enum-name';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
-import { BlocItem } from './blocitem';
-import { EnumNameMapper } from '../../../../libs/enum-name';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 
@@ -141,19 +142,22 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     <h6>Voting Bloc Precincts</h6>
                     <p className="alert alert-info">
                         This will analyze all precincts within the state to find which ones have a demographic and political make up above the threshold set above.
-                        It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 50%).
+                        It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 80%).
                     </p>
                     {
                         this.state.phaseZeroResults && (
                             <p><b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}</p>
                         )
                     }
-                    {this.state.phaseZeroResults &&
+                    {this.state.phaseZeroResults ?
                         Object.keys(this.state.phaseZeroResults.precinctBlocs).map((key: any) => {
                             return (
                                 <BlocItem key={key} party={key} phaseZeroResults={this.state.phaseZeroResults.precinctBlocs[key]} />
                             );
-                        })}
+                        }) :
+                        <div className='mt-5'>
+                            <Placeholder title='No Data' subtitle='Please select a state and click "Analyze Precincts".'></Placeholder>
+                        </div>}
                 </div>
             </div>
         );

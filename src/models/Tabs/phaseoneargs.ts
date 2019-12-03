@@ -1,4 +1,4 @@
-import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum } from '../enums';
+import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum, PopulationEqualityEnum } from '../enums';
 import { ICluster } from '../clusternode';
 
 export interface PhaseOneArgs {
@@ -9,6 +9,7 @@ export interface PhaseOneArgs {
     selectedDemographics: Set<DemographicEnum>;
     compactnessOption: CompactnessEnum;
     politicalFairnessOption: PoliticalFairnessEnum;
+    populationEqualityOption: PopulationEqualityEnum;
     objectivePopulationEquality: number;
     objectiveCompactness: number;
     objectivePartisanFairness: number;

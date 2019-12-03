@@ -19,7 +19,7 @@ export interface IElectionTypes {
 export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {}> {
     render() {
         if (!this.props.election2016 || !this.props.election2018) {
-            return <Placeholder></Placeholder>;
+            return <Placeholder title='No jurisdiction selected.' subtitle='Select a congressional district or precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>

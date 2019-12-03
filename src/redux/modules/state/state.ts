@@ -3,7 +3,7 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  
@@ -175,8 +175,9 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
          minPopulationPercent: Constants.DEFAULT_POP_PRECENT_MIN,
          maxPopulationPercent: Constants.DEFAULT_POP_PRECENT_MAX,
          selectedDemographics: new Set<DemographicEnum>(),
-         compactnessOption: CompactnessEnum.POLSBY_POPPER,
+         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
          politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
+         populationEqualityOption: PopulationEqualityEnum.IDEAL,
          objectivePopulationEquality: Constants.DEFAULT_OF_VALUE,
          objectiveCompactness: Constants.DEFAULT_OF_VALUE,
          objectivePartisanFairness: Constants.DEFAULT_OF_VALUE,

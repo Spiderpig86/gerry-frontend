@@ -6,7 +6,7 @@ import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum } from '../../../../models';
+import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum } from '../../../../models';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
@@ -34,8 +34,9 @@ export class PhaseOneTabPanelComponent extends React.Component<
         phaseOneArgs: this.props.phaseOneArgs
     };
 
-    private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }];
-    private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan', key: PoliticalFairnessEnum.PARTISAN }];
+    private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }, { name: 'Reock', key: CompactnessEnum.REOCK }, { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }];
+    private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT }, { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }];
+    private populationEqualityOptions = [{ name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST }, { name: 'Ideal', key: PopulationEqualityEnum.IDEAL }]
 
     render() {
         return (
@@ -88,7 +89,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                         The minimum is to prevent cracking (low thresholds will
                         dilute voters). The maximum is to prevent packing.
                         Select the demographics you want to consider
-                        collectively as minorities.
+                        collectively as minorities. It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 80%).
                     </p>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Label
@@ -100,7 +101,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             count={1}
                             allowCross={false}
                             pushable={false}
-                            min={50}
+                            min={51}
                             max={100}
                             defaultValue={[this.state.phaseOneArgs.minPopulationPercent, this.state.phaseOneArgs.maxPopulationPercent]}
                             tipFormatter={value => `${value}%`}
@@ -248,6 +249,36 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     )}
                 </div>
 
+                <h4>Population Equality Options</h4>
+                <p className="alert alert-info">
+                    Specify measurements for population equality.
+                </p>
+                <div className="mb-4">
+                    {
+                        this.populationEqualityOptions.map(
+                        (e: any, i: number) => {
+                            return (
+                                <Form.Group
+                                    key={`popGroup${i}`}
+                                    className="w-100 py-2 row form-group d-flex align-items-center"
+                                >
+                                    <Form.Check
+                                        name={`populationAlgo`}
+                                        key={e.key}
+                                        data-population={e.key}
+                                        custom
+                                        type={'radio'}
+                                        id={`popOption${i}`}
+                                        label={`${e.name}`}
+                                        defaultChecked={e.key === this.state.phaseOneArgs.populationEqualityOption}
+                                        onChange={(e) => this.setPopulationEquality(e.target.getAttribute('data-population'))}
+                                    />
+                                </Form.Group>
+                            );
+                        }
+                    )}
+                </div>
+
                 <div className="mb-4">
                     <h4>Objective Function Weights</h4>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -364,6 +395,15 @@ export class PhaseOneTabPanelComponent extends React.Component<
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
                 politicalFairnessOption
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setPopulationEquality(populationEqualityOption: PopulationEqualityEnum): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                populationEqualityOption
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }

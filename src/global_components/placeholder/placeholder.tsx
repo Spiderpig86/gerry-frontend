@@ -3,7 +3,12 @@ import * as React from 'react';
 import { Container } from 'react-bootstrap';
 import { GridLoader } from 'react-spinners';
 
-export class Placeholder extends React.PureComponent {
+interface PlaceholderProps {
+    title: string,
+    subtitle: string
+}
+
+export class Placeholder extends React.PureComponent<PlaceholderProps, {}> {
 
     render() {
         return (
@@ -18,8 +23,8 @@ export class Placeholder extends React.PureComponent {
                             margin={'2'}
                         />
                     </div> 
-                    <h3>No jurisdiction selected.</h3>
-                    <p>Select a congressional district or precinct to view data.</p>
+                    <h3>{this.props.title}</h3>
+                    <p>{this.props.subtitle}</p>
                 </Container>
             </>
         );
