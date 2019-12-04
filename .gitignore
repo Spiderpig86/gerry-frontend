@@ -7,3 +7,4 @@ node_modules
 public/index.html
 public/bundle-dev.js
 server/CA.json
+server/CA-old.json
