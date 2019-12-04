@@ -593,30 +593,32 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         const response: IMapTooltipProps = {
             title: 'District Data',
             subtitle: 'District information',
-            statistics: [
-                {
-                    key: 'Total District Population',
-                    value: 240000
-                },
-                {
-                    key: 'Political Fairness Score',
-                    value: 0.6
-                },
-                {
-                    key: 'Population Equality Score',
-                    value: 0.6
-                },
-                {
-                    key: 'Compactness Score',
-                    value: 0.6
-                },
-                {
-                    key: 'Contiguity Score',
-                    value: 0.6
-                }
-            ]
+            statistics: []
         };
         switch (filter) {
+            case MapFilterEnum.DEFAULT:
+                response.statistics = response.statistics.concat(
+                    {
+                        key: 'Total District Population',
+                        value: 240000
+                    },
+                    {
+                        key: 'Political Fairness Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Population Equality Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Compactness Score',
+                        value: 0.6
+                    },
+                    {
+                        key: 'Contiguity Score',
+                        value: 0.6
+                    });
+                break;
             case MapFilterEnum.PRES_2016:
                 response.statistics = response.statistics.concat([
                     {

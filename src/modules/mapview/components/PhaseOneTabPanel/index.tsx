@@ -6,7 +6,7 @@ import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum } from '../../../../models';
+import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../../models';
 
 import '../../../../styles/slider.scss';
 import '../../../../styles/tooltip.scss';
@@ -37,6 +37,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
     private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }, { name: 'Reock', key: CompactnessEnum.REOCK }, { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }];
     private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT }, { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }];
     private populationEqualityOptions = [{ name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST }, { name: 'Ideal', key: PopulationEqualityEnum.IDEAL }]
+    private depthOptions = [{ name: 'Standard', key: PhaseTwoDepthEnum.STANDARD }, { name: 'Level', key: PhaseTwoDepthEnum.LEVEL }, { name: 'Tree', key: PhaseTwoDepthEnum.TREE }]
 
     render() {
         return (
@@ -279,6 +280,50 @@ export class PhaseOneTabPanelComponent extends React.Component<
                     )}
                 </div>
 
+                <h4>Phase Two Depth Heuristics</h4>
+                <div className="mb-4">
+                    {
+                        this.depthOptions.map(
+                        (e: any, i: number) => {
+                            return (
+                                <Form.Group
+                                    key={`depthGroup${i}`}
+                                    className="w-100 py-2 row form-group d-flex align-items-center"
+                                >
+                                    <Form.Check
+                                        name={`depthAlgo`}
+                                        key={e.key}
+                                        data-depth={e.key}
+                                        custom
+                                        type={'radio'}
+                                        id={`dpethOption${i}`}
+                                        label={`${e.name}`}
+                                        defaultChecked={e.key === this.state.phaseOneArgs.phaseTwoDepthHeuristic}
+                                        onChange={(e) => this.setPhaseTwoDepthHeuristic(e.target.getAttribute('data-depth'))}
+                                    />
+                                </Form.Group>
+                            );
+                        }
+                    )}
+                </div>
+
+                <h4>Phase Two Simulated Annealing Retries</h4>
+                <div className="mb-4">
+                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                        <Form.Label
+                            className={'col-6'}
+                            id={'numRetries'}
+                        >Maximum Number of Retries</Form.Label>
+                        <Form.Control type={'number'}
+                            required
+                            className={'col-6'}
+                            min={1}
+                            defaultValue={this.state.phaseOneArgs.numRetries.toString()}
+                            onChange={(e: any) => this.setNumberRetries(e.target.value)}
+                        />
+                    </Form.Group>
+                </div>
+
                 <div className="mb-4">
                     <h4>Objective Function Weights</h4>
                     <Form.Group className="row form-group d-flex align-items-center py-2">
@@ -404,6 +449,24 @@ export class PhaseOneTabPanelComponent extends React.Component<
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
                 populationEqualityOption
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setPhaseTwoDepthHeuristic(phaseTwoDepthHeuristic: PhaseTwoDepthEnum): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                phaseTwoDepthHeuristic
+            }
+        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+    }
+
+    private setNumberRetries(numRetries: number): void {
+        this.setState({
+            phaseOneArgs: {
+                ...this.state.phaseOneArgs,
+                numRetries
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }

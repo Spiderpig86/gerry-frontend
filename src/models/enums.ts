@@ -62,6 +62,12 @@ export enum PartyEnum {
     NOT_SET = 'not_set'
 }
 
+export enum PhaseTwoDepthEnum {
+    STANDARD = 'standard',
+    LEVEL = 'level',
+    TREE = 'tree'
+}
+
 export enum DemographicEnum {
     WHITE = 'WHITE',
     BLACK = 'BLACK',
@@ -77,7 +83,7 @@ export enum StateEnum {
     CA = 'CA',
     UT = 'UT',
     VA = 'VA',
-    NOT_SET = 'NOT_SET'
+    NOT_SET = 'not_set'
 }
 
 export enum AlgorithmEnum {

@@ -1,5 +1,9 @@
-import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum, PopulationEqualityEnum } from '../enums';
+import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../enums';
 import { ICluster } from '../clusternode';
+
+/**
+ * Note that this will encompass args for phase 1 and 2 as they are very intertwined.
+ */
 
 export interface PhaseOneArgs {
     numDistricts: number;
@@ -10,6 +14,8 @@ export interface PhaseOneArgs {
     compactnessOption: CompactnessEnum;
     politicalFairnessOption: PoliticalFairnessEnum;
     populationEqualityOption: PopulationEqualityEnum;
+    phaseTwoDepthHeuristic: PhaseTwoDepthEnum;
+    numRetries: number;
     objectivePopulationEquality: number;
     objectiveCompactness: number;
     objectivePartisanFairness: number;

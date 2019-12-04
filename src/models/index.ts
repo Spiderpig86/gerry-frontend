@@ -10,5 +10,5 @@ export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phas
 export { PhaseOneArgs, PhaseOneMergeDelta, PhaseOneResult } from './Tabs/phaseoneargs';
 export { FilterArgs } from './Tabs/filterargs'
 
-export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum, PopulationEqualityEnum } from './enums';
+export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from './enums';
 export { WebSocketPing } from './websocket-ping';

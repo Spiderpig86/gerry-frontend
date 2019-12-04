@@ -38,5 +38,6 @@ export const DEFAULT_NUM_DISTRICTS = 5;
 export const DEFAULT_POP_PRECENT_MIN = 80;
 export const DEFAULT_POP_PRECENT_MAX = 90;
 export const DEFAULT_OF_VALUE = 0.0;
+export const DEFAULT_PHASE_TWO_RETRIES = 10;
 
 export const MAP_CENTER = new LatLng(40.3, -96.0);

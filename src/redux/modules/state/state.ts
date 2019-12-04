@@ -3,7 +3,7 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  
@@ -178,6 +178,8 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
          compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
          politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
          populationEqualityOption: PopulationEqualityEnum.IDEAL,
+         phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
+         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
          objectivePopulationEquality: Constants.DEFAULT_OF_VALUE,
          objectiveCompactness: Constants.DEFAULT_OF_VALUE,
          objectivePartisanFairness: Constants.DEFAULT_OF_VALUE,
