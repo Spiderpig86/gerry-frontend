@@ -5,7 +5,7 @@
 
  import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
-import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
+ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  
  const SET_STATE = 'SET_STATE';
  const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -19,6 +19,7 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
  const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
  const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
+ const SET_LOGS = 'SET_LOGS';
  
  export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
      return (dispatch: any) => {
@@ -140,8 +141,16 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
      }
  }
  
+ export const setLogs = (logs: string[]) => {
+     return {
+        type: SET_PHASE_ONE_SERVICE,
+        logs
+     }
+ }
+ 
  export interface State {
      selectedState: StateEnum;
+     stateId: string;
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
      algorithmState: AlgorithmEnum;
@@ -153,10 +162,12 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
      filterArgs: FilterArgs;
      algorithmPhase: AlgorithmEnum;
      phaseOneService: PhaseOneService;
+     logs: string[];
  };
  
  const initialState: State = {
      selectedState: StateEnum.NOT_SET,
+     stateId: null,
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
      algorithmState: AlgorithmEnum.PHASE_0_1,
@@ -191,7 +202,8 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
          mapFilter: MapFilterEnum.DEFAULT
      },
      algorithmPhase: AlgorithmEnum.PHASE_0_1,
-     phaseOneService: null
+     phaseOneService: null,
+     logs: []
  }
  
  export const stateReducer = (state = initialState, action: any) => {
@@ -261,6 +273,11 @@ import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
                  ...state,
                  phaseOneService: action.phaseOneService
              }
+         case SET_LOGS:
+            return {
+                ...state,
+                logs: action.logs
+            }
          default:
              return state;
      }

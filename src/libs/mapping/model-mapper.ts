@@ -1,4 +1,4 @@
-import { IDemographics, IVoteData } from '../../models';
+import { IDemographics, IVoteData, PhaseOneArgs } from '../../models';
 
 export class ModelMapper {
 
@@ -20,6 +20,26 @@ export class ModelMapper {
             democraticVotes: votes.democratic || 0,
             republicanVotes: votes.republican || 0,
             otherVotes: votes.other || 0
+        }
+    }
+
+    public toPhaseTwoInputs(stateId: string, phaseOneArgs: PhaseOneArgs): any {
+        return {
+            stateId,
+            upperBound: (phaseOneArgs.maxPopulationPercent * 1.0) / 100,
+            lowerBound: (phaseOneArgs.minPopulationPercent * 1.0) / 100,
+            compactnessWeight: {
+                measure: phaseOneArgs.compactnessOption,
+                weight: phaseOneArgs.objectiveCompactness
+            },
+            demographcTypes: phaseOneArgs.selectedDemographics,
+            populationEquality: {
+                measure: phaseOneArgs.populationEqualityOption,
+                weight: phaseOneArgs.objectivePopulationEquality
+            },
+            depthHeuristic: phaseOneArgs.phaseTwoDepthHeuristic,
+            numRetries: phaseOneArgs.numRetries,
+            moveHeuristic: 'RANDOM'
         }
     }
 

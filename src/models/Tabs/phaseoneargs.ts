@@ -25,6 +25,10 @@ export interface PhaseOneArgs {
 
 export interface PhaseOneResult {
     deltas: PhaseOneMergeDelta[];
+    algPhaseType: string;
+    statusCode: string;
+    iteration: number;
+    logs: string[];
 }
 
 export interface PhaseOneMergeDelta {
