@@ -14,10 +14,13 @@ export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {
     render() {
         return (
             <div className='px-3'>
-                <h3>District Statistics</h3>
-                
+                <h4>District Statistics</h4>
+                <h6>Republican Districts: 5</h6>
+                <h6>Democratic Districts: 5</h6>
 
-                <h3>Debug Console</h3>
+                <br />
+
+                <h4>Debug Console</h4>
                 <textarea className='console' value={this.props.logs.join('\n')}></textarea>
             </div>
         )

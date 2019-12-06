@@ -49,7 +49,8 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                             )
                         }
                     >
-                        <Button>
+                        <Button 
+                        disabled={!this.props.phaseOneService}>
                             <FontAwesomeIcon icon={faPause} />
                         </Button>
                     </OverlayTrigger>

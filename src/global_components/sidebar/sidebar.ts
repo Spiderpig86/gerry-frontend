@@ -28,7 +28,7 @@ export const LeftSidebarStyles = {
         background: 'rgba(255, 255, 255, 0.9)',
         // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
-        maxWidth: '500px',
+        maxWidth: '550px',
     },
     bmMorphShape: {
         fill: '#373a47'
@@ -73,7 +73,7 @@ export const RightSidebarStyles = {
         // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
         width: '100%',
-        maxWidth: '500px',
+        maxWidth: '550px',
         boxShadow: '-4px 0px 6px 0px rgba(0,0,0,0.12)'
     },
     bmMorphShape: {

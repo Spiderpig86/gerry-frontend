@@ -51,7 +51,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 <h4>Phase 0</h4>
 
                 <h6>State Selection</h6>
-                <DropdownButton id="dropdown-basic-button" title={`Selected State: ${EnumNameMapper.getStateName(this.props.selectedState)}`}>
+                <DropdownButton id="dropdown-basic-button" className='pb-2' title={`Selected State: ${EnumNameMapper.getStateName(this.props.selectedState)}`}>
                     <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.CA)}>
                         California
                     </Dropdown.Item>
@@ -63,7 +63,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Dropdown.Item>
                 </DropdownButton>
 
-                <div className="py-2">
+                <div className="pt-2">
                     <h6>Demographic Population Threshold</h6>
                     <Form.Group className="form-group d-flex align-items-center pt-2">
                         <Form.Label className={'col-4'}>Majority Demographic:</Form.Label>
@@ -137,7 +137,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </p>
                     {
                         this.state.phaseZeroResults && (
-                            <p><b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}</p>
+                            <p className='my-0'><b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}</p>
                         )
                     }
                     {this.state.phaseZeroResults ?

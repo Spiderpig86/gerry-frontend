@@ -20,16 +20,16 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
             id: 'demographicType',
             accessor: (e: PrecinctBlocSummary) => EnumNameMapper.getDemographicName(e.demographicType)
         }, {
-            Header: 'Precinct Count',
-            accessor: 'votingBlocCount'
-        }, {
-            Header: 'Party Mean',
+            Header: 'Avg. Party',
             id: 'partyMean',
             accessor: (e: PrecinctBlocSummary) => `${e.meanPartyPercentage.toFixed(2)}%`
         }, {
-            Header: 'Demographic Mean',
+            Header: 'Avg. Demographic',
             id: 'demographicMean',
             accessor: (e: PrecinctBlocSummary) => `${e.meanDemographicPercentage.toFixed(2)}%`
+        }, {
+            Header: '# Precincts',
+            accessor: 'votingBlocCount'
         }];
 
         return (

@@ -23,8 +23,8 @@ class MapTooltipComponent extends React.PureComponent<IMapTooltipProps, {}> {
         const total = this.props.statistics ? this.props.statistics.reduce((total, obj) => (obj.needsPercent ? total + Number(obj.value) : total), 0) : 1;
         return (
             <div className="map-tooltip">
-                <h6>{ this.props.title || 'Statistics' }</h6>
-                <p><b>{ this.props.subtitle || 'Hover over a precinct to begin.' }</b></p>
+                <h6 className="my-0"><b>{ this.props.title || 'Statistics' }</b></h6>
+                <p className="mb-2">{ this.props.subtitle || 'Hover over a precinct to begin.' }</p>
                 {
                     this.props.statistics && this.props.statistics.map((stat: any, i: number) => {
                         return (
