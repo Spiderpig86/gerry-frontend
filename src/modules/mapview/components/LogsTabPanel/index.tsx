@@ -14,6 +14,10 @@ export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {
     render() {
         return (
             <div className='px-3'>
+                <h3>District Statistics</h3>
+                
+
+                <h3>Debug Console</h3>
                 <textarea className='console' value={this.props.logs.join('\n')}></textarea>
             </div>
         )

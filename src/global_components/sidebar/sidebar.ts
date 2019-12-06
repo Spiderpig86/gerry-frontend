@@ -26,7 +26,7 @@ export const LeftSidebarStyles = {
     },
     bmMenu: {
         background: 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'saturate(180%) blur(20px)',
+        // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
         maxWidth: '500px',
     },
@@ -70,7 +70,7 @@ export const RightSidebarStyles = {
     },
     bmMenu: {
         background: 'rgba(255, 255, 255, 0.9)',
-        backdropFilter: 'saturate(180%) blur(20px)',
+        // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
         width: '100%',
         maxWidth: '500px',

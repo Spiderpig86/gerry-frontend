@@ -65,11 +65,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
 
                 <div className="py-2">
                     <h6>Demographic Population Threshold</h6>
-                    <p className="alert alert-info">
-                        First, select the minimum percentage of a demographic must be populated in percinct to be
-                        considered.
-                    </p>
-                    <Form.Group className="form-group d-flex align-items-center pb-2">
+                    <Form.Group className="form-group d-flex align-items-center pt-2">
                         <Form.Label className={'col-4'}>Majority Demographic:</Form.Label>
                         <TooltipSlider
                             className={'col-8'}
@@ -81,12 +77,8 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Form.Group>
                 </div>
 
-                <div className="py-2">
+                <div className="pt-2">
                     <h6>Demographic Party Threshold</h6>
-                    <p className="alert alert-info">
-                        Then, select the threshold for the minimum winning party percentage for the selected election to
-                        see if the demographic voted en masse for the winning party.
-                    </p>
 
                     <DropdownButton
                         id="phase0Election"
@@ -141,7 +133,6 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 <div className="py-2">
                     <h6>Voting Bloc Precincts</h6>
                     <p className="alert alert-info">
-                        This will analyze all precincts within the state to find which ones have a demographic and political make up above the threshold set above.
                         It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 80%).
                     </p>
                     {

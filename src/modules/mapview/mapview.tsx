@@ -101,7 +101,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.properties.state));
+                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state));
             }
         });
     }
@@ -109,17 +109,20 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                // console.log(hashPrecinct(feature.properties));
-                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                // this.setState({
-                //     neighborPrecincts: neighbors.split(',')
-                // }, () => {
-                //     this.state.neighborPrecincts.forEach(element => {
-                //         // console.log(element);
-                //         console.log(this.props.precinctMap.get(element));
-                //         this.props.precinctMap.get(element).properties.v16_opres += 1000;
-                //     });
-                // });
+                console.log(hashPrecinct(feature.properties), this.props.precinctMap.get(hashPrecinct(feature.properties)));
+                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                this.setState({
+                    neighborPrecincts: neighbors.split(',')
+                }, () => {
+                    this.state.neighborPrecincts.forEach(element => {
+                        if (!element) {
+                            return;
+                        }
+                        // console.log(element);
+                        console.log(element, this.props.precinctMap.get(element));
+                        this.props.precinctMap.get(element).properties.v16_opres += 10000;
+                    });
+                });
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -249,7 +252,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                     <ReactLeaflet.GeoJSON
                                         key={data.state}
                                         data={data.data as GeoJsonObject}
-                                        style={this.getDistrictStyle.bind(this)}
+                                        style={this.coloring.colorDefault.bind(this)}
                                         onEachFeature={this.onEachFeatureState.bind(this)}
                                     />
                                 );

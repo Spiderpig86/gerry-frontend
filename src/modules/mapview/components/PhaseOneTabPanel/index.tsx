@@ -87,12 +87,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
                 <div className="mb-4">
                     <h6>Majority Minority District Threshold</h6>
-                    <p className="alert alert-info">
-                        The minimum is to prevent cracking (low thresholds will
-                        dilute voters). The maximum is to prevent packing.
-                        Select the demographics you want to consider
-                        collectively as minorities. It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 80%).
-                    </p>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Label
                             className={'col-6'}
@@ -192,9 +186,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
 
                 <h4>Compactness Options</h4>
-                <p className="alert alert-info">
-                    Specify algorithm for measuring compactness.
-                </p>
                 <div className="mb-4">
                     {
                         this.compactnessOptions.map(
@@ -222,9 +213,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 </div>
 
                 <h4>Political Fairness Options</h4>
-                <p className="alert alert-info">
-                    Specify factors for measuring political fairness.
-                </p>
                 <div className="mb-4">
                     {
                         this.politicalFairnessOptions.map(
@@ -252,9 +240,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 </div>
 
                 <h4>Population Equality Options</h4>
-                <p className="alert alert-info">
-                    Specify measurements for population equality.
-                </p>
                 <div className="mb-4">
                     {
                         this.populationEqualityOptions.map(
