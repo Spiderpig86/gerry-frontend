@@ -26,7 +26,7 @@ function mapStateToProps(state: any) {
     };
 }
 
-export const PhaseOneTabPanel = connect(
+export const LogsTabPanel = connect(
     (state: any) => {
         return mapStateToProps(state);
     },

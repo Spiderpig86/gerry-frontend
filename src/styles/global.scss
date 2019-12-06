@@ -1,3 +1,14 @@
 * {
     outline: 0;
 }
+
+.ReactTable .rt-thead .rt-resizable-header-content {
+    font-weight: bold;
+}
+
+.ReactTable .rt-th, .ReactTable .rt-td .rt-resizable-header-content {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    white-space: pre-wrap;
+}

@@ -109,17 +109,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                console.log(hashPrecinct(feature.properties));
-                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                this.setState({
-                    neighborPrecincts: neighbors.split(',')
-                }, () => {
-                    this.state.neighborPrecincts.forEach(element => {
-                        // console.log(element);
-                        console.log(this.props.precinctMap.get(element));
-                        this.props.precinctMap.get(element).properties.v16_opres += 1000;
-                    });
-                });
+                // console.log(hashPrecinct(feature.properties));
+                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                // this.setState({
+                //     neighborPrecincts: neighbors.split(',')
+                // }, () => {
+                //     this.state.neighborPrecincts.forEach(element => {
+                //         // console.log(element);
+                //         console.log(this.props.precinctMap.get(element));
+                //         this.props.precinctMap.get(element).properties.v16_opres += 1000;
+                //     });
+                // });
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]

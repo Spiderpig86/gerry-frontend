@@ -63,13 +63,13 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Dropdown.Item>
                 </DropdownButton>
 
-                <div className="py-3">
+                <div className="py-2">
                     <h6>Demographic Population Threshold</h6>
                     <p className="alert alert-info">
                         First, select the minimum percentage of a demographic must be populated in percinct to be
                         considered.
                     </p>
-                    <Form.Group className="form-group d-flex align-items-center py-2">
+                    <Form.Group className="form-group d-flex align-items-center pb-2">
                         <Form.Label className={'col-4'}>Majority Demographic:</Form.Label>
                         <TooltipSlider
                             className={'col-8'}
@@ -81,7 +81,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </Form.Group>
                 </div>
 
-                <div className="py-3">
+                <div className="py-2">
                     <h6>Demographic Party Threshold</h6>
                     <p className="alert alert-info">
                         Then, select the threshold for the minimum winning party percentage for the selected election to
@@ -125,7 +125,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                             tipFormatter={value => `${value}%`}
                         />
                     </Form.Group>
-                    <div className="d-flex py-3">
+                    <div className="d-flex py-2">
                         <Button
                             disabled={this.props.selectedState === StateEnum.NOT_SET}
                             className="w-100"
@@ -138,7 +138,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </div>
                 </div>
 
-                <div className="py-3">
+                <div className="py-2">
                     <h6>Voting Bloc Precincts</h6>
                     <p className="alert alert-info">
                         This will analyze all precincts within the state to find which ones have a demographic and political make up above the threshold set above.

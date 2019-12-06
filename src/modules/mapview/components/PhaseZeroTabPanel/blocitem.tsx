@@ -16,16 +16,16 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
     render() {
 
         const columns = [{
-            Header: 'Voting Bloc Count',
+            Header: 'Demographic',
+            id: 'demographicType',
+            accessor: (e: PrecinctBlocSummary) => EnumNameMapper.getDemographicName(e.demographicType)
+        }, {
+            Header: 'Precinct Count',
             accessor: 'votingBlocCount'
         }, {
             Header: 'Party Mean',
             id: 'partyMean',
             accessor: (e: PrecinctBlocSummary) => `${e.meanPartyPercentage.toFixed(2)}%`
-        }, {
-            Header: 'Demographic',
-            id: 'demographicType',
-            accessor: (e: PrecinctBlocSummary) => EnumNameMapper.getDemographicName(e.demographicType)
         }, {
             Header: 'Demographic Mean',
             id: 'demographicMean',
@@ -34,7 +34,7 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
 
         return (
             <div className='py-3'>
-                <h6>{this.props.party}</h6>
+                <h6 className='text-capitalize'>{this.props.party}</h6>
                 <ReactTable
                     columns={columns}
                     data={this.props.phaseZeroResults}
