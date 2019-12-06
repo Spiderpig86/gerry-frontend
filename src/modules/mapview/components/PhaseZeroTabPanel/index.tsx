@@ -51,16 +51,14 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 <h4>Phase 0</h4>
 
                 <h6>State Selection</h6>
-                <DropdownButton id="dropdown-basic-button" className='pb-2' title={`Selected State: ${EnumNameMapper.getStateName(this.props.selectedState)}`}>
-                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.CA)}>
-                        California
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.UT)}>
-                        Utah
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.VA)}>
-                        Virginia
-                    </Dropdown.Item>
+                <DropdownButton
+                    id="dropdown-basic-button"
+                    className="pb-2"
+                    title={`Selected State: ${EnumNameMapper.getStateName(this.props.selectedState)}`}
+                >
+                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.CA)}>California</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.UT)}>Utah</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setSelectedState(StateEnum.VA)}>Virginia</Dropdown.Item>
                 </DropdownButton>
 
                 <div className="pt-2">
@@ -133,22 +131,24 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                 <div className="py-2">
                     <h6>Voting Bloc Precincts</h6>
                     <p className="alert alert-info">
-                        It is best to set a higher threshold for results that better indicate the existence of a bloc (preferably above 80%).
+                        It is best to set a higher threshold for results that better indicate the existence of a bloc
+                        (preferably above 80%).
                     </p>
-                    {
-                        this.state.phaseZeroResults && (
-                            <p className='my-0'><b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}</p>
-                        )
-                    }
-                    {this.state.phaseZeroResults ?
-                        Object.keys(this.state.phaseZeroResults.precinctBlocs).map((key: any) => {
-                            return (
-                                <BlocItem key={key} party={key} phaseZeroResults={this.state.phaseZeroResults.precinctBlocs[key]} />
-                            );
-                        }) :
-                        <div className='mt-5'>
-                            <Placeholder title='No Data' subtitle='Please select a state and click "Analyze Precincts".'></Placeholder>
-                        </div>}
+                    {this.state.phaseZeroResults && (
+                        <p className="my-0">
+                            <b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}
+                        </p>
+                    )}
+                    {this.state.phaseZeroResults ? (
+                        <BlocItem phaseZeroResults={this.state.phaseZeroResults.precinctBlocs} />
+                    ) : (
+                        <div className="mt-5">
+                            <Placeholder
+                                title="No Data"
+                                subtitle='Please select a state and click "Analyze Precincts".'
+                            ></Placeholder>
+                        </div>
+                    )}
                 </div>
             </div>
         );

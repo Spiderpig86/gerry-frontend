@@ -39,6 +39,7 @@
     "react-bootstrap-slider": "^2.2.2",
     "react-burger-menu": "^2.6.11",
     "react-dom": "^16.9.0",
+    "react-joyride": "^2.1.1",
     "react-leaflet-choropleth": "^2.0.0",
     "react-leaflet-control": "^2.1.1",
     "react-progressbar": "^15.4.1",

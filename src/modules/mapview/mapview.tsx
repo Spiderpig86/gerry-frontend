@@ -4,11 +4,12 @@ import * as mapActionCreators from '../../redux/modules/state/state';
 import * as ReactLeaflet from 'react-leaflet';
 import * as Constants from '../../config/constants';
 
-import { PathOptions } from 'leaflet';
+import { PathOptions, map } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
+import Joyride from 'react-joyride';
 
 import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
 import { StateBorderService } from '../../libs/state-borders';
@@ -22,6 +23,7 @@ import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum,
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 
 import './mapview.scss';
+import { MapNavbar } from './components/MapNavbar';
 
 export interface IMapViewProps {
     selectedState: StateEnum;
@@ -36,6 +38,8 @@ export interface IMapViewProps {
 
 interface IMapViewState {
     stateBorders: any[];
+    selectedState: StateEnum;
+    districtBorders: Map<StateEnum, any>;
     map: ReactLeaflet.Map;
     isOpen: boolean;
     zoom: number;
@@ -53,6 +57,8 @@ interface IMapViewState {
 export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapViewState> {
     state: IMapViewState = {
         stateBorders: [],
+        selectedState: StateEnum.NOT_SET,
+        districtBorders: new Map(),
         isOpen: false,
         map: null,
         zoom: 5,
@@ -91,6 +97,19 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 stateBorders: data
             })
         });
+        await Promise.all([
+            statePopulator.fetchDistrictBorder(StateEnum.CA),
+            statePopulator.fetchDistrictBorder(StateEnum.UT),
+            statePopulator.fetchDistrictBorder(StateEnum.VA)
+        ]).then(data => {
+            const map = new Map();
+            for (const district of data) {
+                map.set(district.state, district.data);
+            }
+            this.setState({
+                districtBorders: map
+            });
+        });
     }
 
     /**
@@ -101,7 +120,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state));
+                this.setState({
+                    selectedState: feature.state
+                }, () => this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state)));
             }
         });
     }
@@ -173,6 +194,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     isOpen={this.state.isOpen}
                 />
 
+                <MapNavbar />
+
                 <ReactLeaflet.Map
                     className="row flex-fill"
                     ref={ref => {
@@ -235,18 +258,31 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         this.state.stateBorders.map((data: any, i: number) => {
                             if (
                                 data.state === this.props.selectedState &&
-                                this.props.precincts &&
+                                this.props.precinctMap &&
                                 this.state.zoom > 5
                             ) {
                                 return (
                                     <ReactLeaflet.GeoJSON
-                                        key={`precinct${this.props.precincts.features.length}`}
-                                        data={this.props.precincts as GeoJsonObject}
+                                        key={`precinct${this.props.precinctMap.size}`}
+                                        data={Array.from(this.props.precinctMap.values()) as any}
                                         style={this.getPrecinctStyle.bind(this)}
                                         onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                         onEachFeature={this.onEachFeaturePrecinct.bind(this)}
                                     />
                                 );
+                            } else if (data.state === this.state.selectedState && this.state.zoom > 5) {
+                                const district = this.state.districtBorders.get(data.state);
+                                return (
+                                    district &&
+                                    district.features.map((data: any, i: number) => {
+                                        return (
+                                            <ReactLeaflet.GeoJSON
+                                                key={data.properties.Code}
+                                                data={data as GeoJsonObject}
+                                                style={this.getDistrictStyle.bind(this)}
+                                            />
+                                        );
+                                }));
                             } else {
                                 return (
                                     <ReactLeaflet.GeoJSON

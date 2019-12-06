@@ -6,6 +6,7 @@
  import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
+import { StateBorderService } from '../../../libs/state-borders';
  
  const SET_STATE = 'SET_STATE';
  const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -22,11 +23,11 @@
  const SET_LOGS = 'SET_LOGS';
  
  export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
-     return (dispatch: any) => {
+     return async (dispatch: any) => {
          if (oldState === state) {
              return;
          }
-         dispatch(selectState(state));
+        //  dispatch(selectState(state));
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
          dispatch(() => new PrecinctService(state, dispatch));
      }

@@ -14,8 +14,7 @@ const server = http.createServer();
 server.listen(port);
 const wsServer = new socket({
     httpServer: server,
-    disableNagleAlgorithm: true,
-    assembleFragments: false
+    disableNagleAlgorithm: true
 });
 
 wsServer.on('request', req => {

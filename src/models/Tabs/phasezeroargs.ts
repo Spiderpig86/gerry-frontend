@@ -8,7 +8,7 @@ export interface PhaseZeroArgs {
 }
 
 export interface PhaseZeroResult {
-    precinctBlocs: Map<PartyEnum, PrecinctBlocSummary[]>;
+    precinctBlocs: PrecinctBlocSummary[];
     totalVoteBlocCount: number;
 }
 
