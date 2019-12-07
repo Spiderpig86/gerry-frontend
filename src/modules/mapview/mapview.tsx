@@ -145,7 +145,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     }
                 },
                 {
-                    target: '.bm-burger-button.burger-left',
+                    target: '.menu-left',
                     content: (
                         <div>
                             This button triggers the left sidebar, which is in charge of setting{' '}
@@ -154,6 +154,24 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         </div>
                     ),
                     title: '💎 Left Sidebar (Parameters/Logs)',
+                    placement: 'right',
+                    styles: {
+                        options: {
+                            zIndex: 10000
+                        }
+                    }
+                },
+                {
+                    target: '.menu-right',
+                    content: (
+                        <div>
+                            This button triggers the left sidebar, which is in charge of setting{' '}
+                            <b>algorithm parameters</b>, <b>view filters</b>, and{' '}
+                            <b>intermediate results during algorithm execution</b>.
+                        </div>
+                    ),
+                    title: '💎 Right Sidebar (Parameters/Logs)',
+                    placement: 'left',
                     styles: {
                         options: {
                             zIndex: 10000
@@ -261,7 +279,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     showSkipButton={true}
                     callback={this.handleJoyrideCallback}
                 />
-                <LeftSidebar handleStateChange={this.handleStateChange.bind(this)} />
+                <LeftSidebar leftOpen={this.state.sidebarOpen} handleStateChange={this.handleStateChange.bind(this)} />
                 <RightSidebar
                     {...this.state.mapProps}
                     mapView={this}
@@ -873,7 +891,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     private handleStateChange = ({ isOpen }) => {
-        if (!this.state.hasToured) {
+        console.log('OPEN', isOpen, this.state.hasToured)
+        if (!this.state.hasToured && isOpen) {
             this.setState({
                 sidebarOpen: isOpen,
                 run: this.state.stepIndex === 0 ? false : this.state.run,
@@ -885,53 +904,85 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     private handleJoyrideCallback = (data: CallBackProps) => {
         console.log(this.state.hasToured);
         if (this.state.hasToured) {
+            console.log('IGNORED')
             return;
         }
 
         const { action, index, type, status } = data;
-        console.log('joyride', type);
+        console.log('joyride', type, index);
 
         if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
             // Need to set our running state to false, so we can restart if we click start again.
             this.setState({ run: false, stepIndex: 0, hasToured: true });
         } else if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
             const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
-            console.log(index);
+            console.log(stepIndex, index, action, this.state.sidebarOpen);
             if (this.state.sidebarOpen && index === 0) {
                 setTimeout(() => {
-                    this.setState({ run: true });
-                }, 100);
+                    this.setState({ run: true, hasToured: false });
+                }, 600);
+            } else if (this.state.sidebarOpen && index === 1 && action === ACTIONS.PREV) {
+                this.setState(
+                    {
+                        run: false,
+                        stepIndex,
+                        sidebarOpen: false,
+                        isOpen: false,
+                        hasToured: false
+                    },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 600);
+                    }
+                );
+            } else if (this.state.sidebarOpen && index === 1 && action === ACTIONS.NEXT) {
+                    this.setState(
+                        {
+                            run: false,
+                            stepIndex,
+                            sidebarOpen: false,
+                            isOpen: true
+                        },
+                        () => {
+                            setTimeout(() => {
+                                this.setState({ run: true });
+                            }, 600);
+                        }
+                    );
             } else if (this.state.sidebarOpen && index === 1) {
                 this.setState(
                     {
                         run: false,
                         sidebarOpen: false,
-                        stepIndex
+                        stepIndex,
+                        hasToured: true
                     },
                     () => {
                         setTimeout(() => {
                             this.setState({ run: true });
-                        }, 100);
+                        }, 600);
                     }
                 );
             } else if (index === 2 && action === ACTIONS.PREV) {
                 this.setState(
                     {
                         run: false,
+                        stepIndex,
                         sidebarOpen: true,
-                        stepIndex
+                        isOpen: false
                     },
                     () => {
                         setTimeout(() => {
                             this.setState({ run: true });
-                        }, 100);
+                        }, 600);
                     }
                 );
             } else {
                 // Update state to advance the tour
                 this.setState({
                     sidebarOpen: false,
-                    stepIndex
+                    stepIndex,
                 });
             }
         }
