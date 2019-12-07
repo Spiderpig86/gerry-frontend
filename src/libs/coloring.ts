@@ -21,7 +21,8 @@ export class Coloring {
         this.colors = distinctColors({ count: Constants.COLOR_COUNT });
     }
 
-    public getPoliticalStyle(properties: PrecinctProperties, filter: string, majorityParty: { party: string; percent: number }) {
+    public getPoliticalStyle(properties: PrecinctProperties, filter: string, majorityParty: { party: string; percent: number }, zoom: number) {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         switch (majorityParty.party) {
             case 'D':
                     // 3383c0
@@ -31,7 +32,7 @@ export class Coloring {
                 return {
                     color: Color.default(Constants.COLOR_DEMOCRAT).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: Constants.COLOR_FILL_OPACITY,
+                    fillOpacity: opacity,
                     fillColor: partyColor.hex()
                 };
             case 'R':
@@ -41,7 +42,7 @@ export class Coloring {
                 return {
                     color: Color.default(Constants.COLOR_REPUBLICAN).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: Constants.COLOR_FILL_OPACITY,
+                    fillOpacity: opacity,
                     fillColor: partyColor.hex()
                 };
             case 'I':
@@ -51,7 +52,7 @@ export class Coloring {
                 return {
                     color: Color.default(Constants.COLOR_INDEPENDENT).darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: Constants.COLOR_FILL_OPACITY,
+                    fillOpacity: opacity,
                     fillColor: partyColor.hex()
                 };
             case 'O':
@@ -61,7 +62,7 @@ export class Coloring {
                 return {
                     color: Color.default('#6930be').darken(Constants.COLOR_DARKEN_FACTOR).hex(),
                     weight: 0.5,
-                    fillOpacity: Constants.COLOR_FILL_OPACITY,
+                    fillOpacity: opacity,
                     fillColor: partyColor.hex()
                 };
             default:
@@ -73,7 +74,8 @@ export class Coloring {
         }
     }
 
-    public getDemographicStyle(properties: any, filter: string) {
+    public getDemographicStyle(properties: any, filter: string, zoom: number) {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const demographicPercent = this.getPopulationPercentByDemographic(properties, filter);
         let color = Color.default(Constants.COLOR_DEMOGRAPHIC).saturate((demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR)
             .darken(demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD * 1.2)
@@ -93,12 +95,13 @@ export class Coloring {
                 .darken(0.5)
                 .hex(),
             weight: 0.5,
-            fillOpacity: Constants.COLOR_FILL_OPACITY,
+            fillOpacity: opacity,
             fillColor: color
         };
     }
 
-    public colorDefaultDistrict(properties: any): PathOptions {
+    public colorDefaultDistrict(properties: any, zoom: number): PathOptions {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const cdId = properties.cd;
         const fillColor = Color.rgb(this.colors[cdId]._rgb).hex();
         const color = Color.default(fillColor)
@@ -107,12 +110,13 @@ export class Coloring {
         return {
             color,
             weight: Constants.BORDER_WEIGHT_NORMAL,
-            fillOpacity: Constants.COLOR_FILL_OPACITY,
+            fillOpacity: opacity,
             fillColor: fillColor
         };
     }
 
-    public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>): PathOptions {
+    public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>, zoom: number): PathOptions {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const colorConfig = {
             color: Constants.COLOR_DEFAULT_RGB,
             weight: 1,
@@ -131,7 +135,7 @@ export class Coloring {
                                 .darken(Constants.COLOR_DARKEN_FACTOR)
                                 .hex();
             colorConfig.weight = Constants.BORDER_WEIGHT_NORMAL;
-            colorConfig.fillOpacity = Constants.COLOR_FILL_OPACITY;
+            colorConfig.fillOpacity = opacity;
             colorConfig.fillColor = color;
         }
         return colorConfig;

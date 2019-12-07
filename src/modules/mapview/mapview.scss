@@ -50,6 +50,7 @@ body {
 
 .bm-menu-wrap {
     max-width: 600px;
+    width: 50% !important;
 }
 
 .bm-cross {
@@ -68,6 +69,6 @@ body {
 
 @media screen and (max-width: 768px) {
     .bm-menu-wrap {
-        width: 100%;
+        width: 100% !important;
     }
 }

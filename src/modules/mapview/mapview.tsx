@@ -184,6 +184,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
+        console.log('test')
         return (
             <div className="container-fluid d-flex">
                 <LeftSidebar />
@@ -440,7 +441,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
     public getDistrictStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties;
-        return this.coloring.colorDefaultDistrict(properties);
+        return this.coloring.colorDefaultDistrict(properties, this.state.zoom);
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
@@ -450,11 +451,11 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             this.props.filter === MapFilterEnum.SENATE_2016 || this.props.filter === MapFilterEnum.HOUSE_2018 ||
             this.props.filter === MapFilterEnum.SENATE_2018) {
             style = this.coloring.getPoliticalStyle(properties, this.props.filter,
-                this.getMajorityPartyInPrecinct(properties));
+                this.getMajorityPartyInPrecinct(properties), this.state.zoom);
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
-            style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap);
+            style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap, this.state.zoom);
         } else {
-            style = this.coloring.getDemographicStyle(properties, this.props.filter);
+            style = this.coloring.getDemographicStyle(properties, this.props.filter, this.state.zoom);
         }
         return {
             ...style,

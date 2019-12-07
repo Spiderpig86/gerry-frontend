@@ -72,7 +72,6 @@ export const RightSidebarStyles = {
         background: 'rgba(255, 255, 255, 0.9)',
         // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
-        width: '100%',
         maxWidth: '600px',
         boxShadow: '-4px 0px 6px 0px rgba(0,0,0,0.12)'
     },
