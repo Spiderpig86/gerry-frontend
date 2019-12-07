@@ -10,11 +10,15 @@ import { LeftSidebarStyles } from '../../../../global_components';
 
 import '../../../../styles/cirrus/tabs.scss';
 
-export class LeftSidebar extends React.Component {
+interface LeftSidebarProps {
+    handleStateChange: (param) => void;
+}
+
+export class LeftSidebar extends React.Component<LeftSidebarProps, {}> {
 
     render() {
         return (
-            <Menu styles={LeftSidebarStyles} width={'100%'}>
+            <Menu styles={LeftSidebarStyles} width={'100%'} burgerButtonClassName={ "burger-left" } onStateChange={this.props.handleStateChange}>
                 <h1 className='px-3'><Link to='/' style={{ color: '#364b62' }}>Gerry</Link></h1>
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>

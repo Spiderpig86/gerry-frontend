@@ -4,12 +4,12 @@ import * as mapActionCreators from '../../redux/modules/state/state';
 import * as ReactLeaflet from 'react-leaflet';
 import * as Constants from '../../config/constants';
 
-import { PathOptions, map } from 'leaflet';
+import { PathOptions } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Control from 'react-leaflet-control';
-import Joyride from 'react-joyride';
+import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS, Step } from 'react-joyride';
 
 import { LeftSidebar, RightSidebar, MapTooltip, IMapTooltipProps } from './components';
 import { StateBorderService } from '../../libs/state-borders';
@@ -52,6 +52,12 @@ interface IMapViewState {
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
     neighborPrecincts: string[]; // TESTING
+
+    steps: Step[];
+    run: boolean;
+    stepIndex: number;
+    sidebarOpen: boolean;
+    hasToured: boolean;
 }
 
 export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapViewState> {
@@ -74,7 +80,12 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             statistics: null
         },
         selectedPrecinctId: null,
-        neighborPrecincts: []
+        neighborPrecincts: [],
+        steps: [],
+        run: false,
+        stepIndex: 0,
+        sidebarOpen: false,
+        hasToured: false
     };
     public coloring: Coloring;
 
@@ -95,7 +106,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         ]).then(data => {
             this.setState({
                 stateBorders: data
-            })
+            });
         });
         await Promise.all([
             statePopulator.fetchDistrictBorder(StateEnum.CA),
@@ -110,6 +121,47 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 districtBorders: map
             });
         });
+        this.setState({
+            run: true,
+            steps: [
+                {
+                    target: '.bm-burger-button.burger-left',
+                    content: (
+                        <div>
+                            Looks like this is your first time here. Let's learn a couple of basic features of Gerry.
+                        </div>
+                    ),
+                    title: '👋 Welcome to Gerry.',
+                    disableBeacon: true,
+                    disableOverlayClose: true,
+                    hideCloseButton: true,
+                    hideFooter: true,
+                    placement: 'bottom',
+                    spotlightClicks: true,
+                    styles: {
+                        options: {
+                            zIndex: 10000
+                        }
+                    }
+                },
+                {
+                    target: '.bm-burger-button.burger-left',
+                    content: (
+                        <div>
+                            This button triggers the left sidebar, which is in charge of setting{' '}
+                            <b>algorithm parameters</b>, <b>view filters</b>, and{' '}
+                            <b>intermediate results during algorithm execution</b>.
+                        </div>
+                    ),
+                    title: '💎 Left Sidebar (Parameters/Logs)',
+                    styles: {
+                        options: {
+                            zIndex: 10000
+                        }
+                    }
+                }
+            ]
+        });
     }
 
     /**
@@ -120,9 +172,15 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         layer.on({
             click: () => {
                 this.state.map.leafletElement.fitBounds(layer.getBounds());
-                this.setState({
-                    selectedState: feature.state
-                }, () => this.props.store.dispatch(mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state)));
+                this.setState(
+                    {
+                        selectedState: feature.state
+                    },
+                    () =>
+                        this.props.store.dispatch(
+                            mapActionCreators.setSelectedStateCreator(this.props.selectedState, feature.state)
+                        )
+                );
             }
         });
     }
@@ -130,20 +188,26 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                console.log(hashPrecinct(feature.properties), this.props.precinctMap.get(hashPrecinct(feature.properties)));
+                console.log(
+                    hashPrecinct(feature.properties),
+                    this.props.precinctMap.get(hashPrecinct(feature.properties))
+                );
                 const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                this.setState({
-                    neighborPrecincts: neighbors.split(',')
-                }, () => {
-                    this.state.neighborPrecincts.forEach(element => {
-                        if (!element) {
-                            return;
-                        }
-                        // console.log(element);
-                        console.log(element, this.props.precinctMap.get(element));
-                        this.props.precinctMap.get(element).properties.v16_opres += 10000;
-                    });
-                });
+                this.setState(
+                    {
+                        neighborPrecincts: neighbors.split(',')
+                    },
+                    () => {
+                        this.state.neighborPrecincts.forEach(element => {
+                            if (!element) {
+                                return;
+                            }
+                            // console.log(element);
+                            console.log(element, this.props.precinctMap.get(element));
+                            this.props.precinctMap.get(element).properties.v16_opres += 10000;
+                        });
+                    }
+                );
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -184,10 +248,20 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
-        console.log('test')
+        console.log('render')
         return (
             <div className="container-fluid d-flex">
-                <LeftSidebar />
+                <Joyride
+                    continuous={true}
+                    run={this.state.run}
+                    steps={this.state.steps}
+                    stepIndex={this.state.stepIndex}
+                    scrollToFirstStep={true}
+                    showProgress={true}
+                    showSkipButton={true}
+                    callback={this.handleJoyrideCallback}
+                />
+                <LeftSidebar handleStateChange={this.handleStateChange.bind(this)} />
                 <RightSidebar
                     {...this.state.mapProps}
                     mapView={this}
@@ -283,7 +357,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                                 style={this.getDistrictStyle.bind(this)}
                                             />
                                         );
-                                }));
+                                    })
+                                );
                             } else {
                                 return (
                                     <ReactLeaflet.GeoJSON
@@ -447,11 +522,19 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties;
         let style = {};
-        if (this.props.filter === MapFilterEnum.PRES_2016 || this.props.filter === MapFilterEnum.HOUSE_2016 ||
-            this.props.filter === MapFilterEnum.SENATE_2016 || this.props.filter === MapFilterEnum.HOUSE_2018 ||
-            this.props.filter === MapFilterEnum.SENATE_2018) {
-            style = this.coloring.getPoliticalStyle(properties, this.props.filter,
-                this.getMajorityPartyInPrecinct(properties), this.state.zoom);
+        if (
+            this.props.filter === MapFilterEnum.PRES_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2016 ||
+            this.props.filter === MapFilterEnum.SENATE_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2018 ||
+            this.props.filter === MapFilterEnum.SENATE_2018
+        ) {
+            style = this.coloring.getPoliticalStyle(
+                properties,
+                this.props.filter,
+                this.getMajorityPartyInPrecinct(properties),
+                this.state.zoom
+            );
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
             style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap, this.state.zoom);
         } else {
@@ -459,7 +542,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         }
         return {
             ...style,
-            weight: this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75
+            weight:
+                this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75
         };
     }
 
@@ -622,13 +706,16 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         }
                     ]
                 };
-        } 
+        }
     }
 
     private fetchDistrictProperties(filter: MapFilterEnum, level: ViewLevelEnum, properties: any): IMapTooltipProps {
         // Find the correct district statistics
         const precinct: IPrecinct = this.props.precinctMap.get(properties.precinct_id);
-        const cdData = (level === ViewLevelEnum.OLD_DISTRICTS) ? this.props.oldClusters.get(precinct.originalCdId) : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
+        const cdData =
+            level === ViewLevelEnum.OLD_DISTRICTS
+                ? this.props.oldClusters.get(precinct.originalCdId)
+                : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
 
         const response: IMapTooltipProps = {
             title: 'District Data',
@@ -657,14 +744,15 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Contiguity Score',
                         value: 0.6
-                    });
+                    }
+                );
                 break;
             case MapFilterEnum.PRES_2016:
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
                         value: cdData ? cdData.electionData.presidential16.democraticVotes : 120000,
-                        needsPercent: true,
+                        needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
@@ -679,7 +767,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Total District Population',
                         value: 240000
-                    },
+                    }
                 ]);
                 break;
             case MapFilterEnum.HOUSE_2016:
@@ -702,7 +790,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Total District Population',
                         value: 240000
-                    },
+                    }
                 ]);
                 break;
             case MapFilterEnum.HOUSE_2018:
@@ -710,7 +798,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Democratic Vote',
                         value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
-                        needsPercent: true,
+                        needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
@@ -725,7 +813,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Total District Population',
                         value: 240000
-                    },
+                    }
                 ]);
                 break;
             default:
@@ -733,7 +821,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'African American',
                         value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
-                        needsPercent: true,
+                        needsPercent: true
                     },
                     {
                         key: 'Asian',
@@ -773,16 +861,87 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         key: 'Total District Population',
                         value: 240000
-                    },
+                    }
                 ]);
         }
-        
+
         return response;
     }
 
     private resetSelectedPrecinct() {
         this.setState({ selectedPrecinctId: null });
     }
+
+    private handleStateChange = ({ isOpen }) => {
+        if (!this.state.hasToured) {
+            this.setState({
+                sidebarOpen: isOpen,
+                run: this.state.stepIndex === 0 ? false : this.state.run,
+                stepIndex: this.state.stepIndex === 0 ? 1 : this.state.stepIndex,
+            });
+        }
+    };
+
+    private handleJoyrideCallback = (data: CallBackProps) => {
+        console.log(this.state.hasToured);
+        if (this.state.hasToured) {
+            return;
+        }
+
+        const { action, index, type, status } = data;
+        console.log('joyride', type);
+
+        if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
+            // Need to set our running state to false, so we can restart if we click start again.
+            this.setState({ run: false, stepIndex: 0, hasToured: true });
+        } else if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
+            const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
+            console.log(index);
+            if (this.state.sidebarOpen && index === 0) {
+                setTimeout(() => {
+                    this.setState({ run: true });
+                }, 100);
+            } else if (this.state.sidebarOpen && index === 1) {
+                this.setState(
+                    {
+                        run: false,
+                        sidebarOpen: false,
+                        stepIndex
+                    },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 100);
+                    }
+                );
+            } else if (index === 2 && action === ACTIONS.PREV) {
+                this.setState(
+                    {
+                        run: false,
+                        sidebarOpen: true,
+                        stepIndex
+                    },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 100);
+                    }
+                );
+            } else {
+                // Update state to advance the tour
+                this.setState({
+                    sidebarOpen: false,
+                    stepIndex
+                });
+            }
+        }
+
+        // tslint:disable:no-console
+        console.groupCollapsed(type === EVENTS.TOUR_STATUS ? `${type}:${status}` : type);
+        console.log(data);
+        console.groupEnd();
+        // tslint:enable:no-console
+    };
 }
 
 function mapStatetoProps(state: any, ownProps: any) {
@@ -795,7 +954,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         level: state.stateReducer.filterArgs.viewLevel,
         oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
-        store: ownProps.store,
+        store: ownProps.store
     };
 }
 
