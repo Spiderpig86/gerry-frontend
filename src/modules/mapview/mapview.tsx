@@ -727,7 +727,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                             needsPercent: true
                         },
                         {
-                            key: 'Biracial Population',
+                            key: 'Multiracial Population',
                             value: Math.round(properties.pop_2more_nh || 0),
                             needsPercent: true
                         }
@@ -737,18 +737,24 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     private fetchDistrictProperties(filter: MapFilterEnum, level: ViewLevelEnum, properties: any): IMapTooltipProps {
-        // Find the correct district statistics
-        const precinct: IPrecinct = this.props.precinctMap.get(properties.precinct_id);
-        const cdData =
-            level === ViewLevelEnum.OLD_DISTRICTS
-                ? this.props.oldClusters.get(precinct.originalCdId)
-                : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
-
         const response: IMapTooltipProps = {
             title: 'District Data',
             subtitle: 'District information',
             statistics: []
         };
+
+        // Find the correct district statistics
+        const precinct: IPrecinct = this.props.precinctMap.get(properties.precinct_id);
+        if (!precinct) {
+            response.subtitle = 'Data not available for this precinct.'
+            return response;
+        }
+
+        const cdData =
+            level === ViewLevelEnum.OLD_DISTRICTS
+                ? this.props.oldClusters.get(precinct.originalCdId)
+                : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
+
         switch (filter) {
             case MapFilterEnum.DEFAULT:
                 response.statistics = response.statistics.concat(

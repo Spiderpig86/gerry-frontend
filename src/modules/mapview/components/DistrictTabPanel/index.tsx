@@ -3,12 +3,22 @@ import * as React from 'react';
 import { Dropdown, DropdownButton, Image} from 'react-bootstrap';
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
 import { Card } from 'react-bootstrap';
+import { StateEnum } from '../../../../models';
+import { Placeholder } from '../../../../global_components';
 
-export class DistrictTabPanel extends React.PureComponent<{}, {}> {
+interface DistrictTabPanelProps {
+    selectedState: StateEnum;
+}
+
+export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps, {}> {
     render() {
+        if (this.props.selectedState === StateEnum.NOT_SET) {
+            return <Placeholder title="No state selected." subtitle="Select a state to view data."></Placeholder>;
+        }
         return (
             <div style={{ padding: '0 1.5rem' }}>
-
+                <br />
+                <h4>District Statistics</h4>
                 <h6>Old District Statistics</h6>
 
                 <Card className='my-3'>

@@ -80,7 +80,7 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.OTHER_DENSITY} name='population' custom type={'radio'} id={`otherDensity`} label={`Other Density`} onClick={() => this.props.setMapFilterCreator(MapFilterEnum.OTHER_DENSITY)} />
                 </Form.Group>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
-                    <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.BIRACIAL_DENSITY} name='population' custom type={'radio'} id={`biracialDensity`} label={`Biracial Density`} onClick={() => this.props.setMapFilterCreator(MapFilterEnum.BIRACIAL_DENSITY)} />
+                    <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.BIRACIAL_DENSITY} name='population' custom type={'radio'} id={`biracialDensity`} label={`Multiracial Density`} onClick={() => this.props.setMapFilterCreator(MapFilterEnum.BIRACIAL_DENSITY)} />
                 </Form.Group>
             </div>
         )

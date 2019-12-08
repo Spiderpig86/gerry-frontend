@@ -166,7 +166,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             className={'col-12'}
                             type={'checkbox'}
                             id={'biracialGroupOther'}
-                            label={'Biracial'}
+                            label={'Multiracial'}
                             defaultChecked={this.containsDemographic(DemographicEnum.BIRACIAL)}
                             onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BIRACIAL, e.target.checked)}
                         />

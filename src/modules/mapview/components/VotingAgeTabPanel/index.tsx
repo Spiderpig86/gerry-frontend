@@ -10,7 +10,7 @@ export interface IVotingAgeTabProps {
 export class VotingAgeTabPanel extends React.PureComponent<IVotingAgeTabProps, {}> {
     render() {
         if (!this.props.votingAgeDemographics) {
-            return <Placeholder title='No jurisdiction selected.' subtitle='Select a precinct to view data.'></Placeholder>;
+            return <Placeholder title='No precinct selected.' subtitle='Select a precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>
@@ -24,7 +24,7 @@ export class VotingAgeTabPanel extends React.PureComponent<IVotingAgeTabProps, {
                 <p>Voting Age Asian: {Math.round(this.props.votingAgeDemographics.Asian)}</p>
                 <p>Voting Age Pacific Islander: {Math.round(this.props.votingAgeDemographics.PacificIslander)}</p>
                 <p>Voting Age Other: {Math.round(this.props.votingAgeDemographics.Other)}</p>
-                <p>Voting Age Biracial: {Math.round(this.props.votingAgeDemographics.Biracial)}</p>
+                <p>Voting Age Multiracial: {Math.round(this.props.votingAgeDemographics.Biracial)}</p>
             </div>
         )
     }

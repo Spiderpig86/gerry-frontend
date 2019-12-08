@@ -1,7 +1,10 @@
 import * as React from 'react';
+import * as mapActionCreators from '../../../../redux/modules/state/state';
 
 import { slide as Menu, } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { ElectionsTabPanel, StatisticsTabPanel, DistrictTabPanel } from '../';
 import { DemographicsTabPanel, IDemographicsTabProps } from '../DemographicsTabPanel';
@@ -9,10 +12,12 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
+import { StateEnum } from '../../../../models';
 
 import '../../../../styles/cirrus/tabs.scss';
 
 interface IRightSidebarProps {
+    selectedState: StateEnum;
     isOpen: boolean;
     mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
@@ -21,7 +26,7 @@ interface IRightSidebarProps {
     rightSidebarHandler: (param) => void;
 }
 
-export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
+export class RightSidebarComponent extends React.Component<IRightSidebarProps, {}> {
 
     render() {
         return (
@@ -37,10 +42,10 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
-                        <StatisticsTabPanel />
+                        <StatisticsTabPanel selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel />
+                        <DistrictTabPanel selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -56,3 +61,15 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
         );
     }
 }
+
+function mapStatetoProps(state: any, ownProps: any) {
+    return {
+        selectedState: state.stateReducer.selectedState,
+        ...ownProps
+    };
+}
+
+export const RightSidebar = connect(
+    (state: any, ownProps: any) => mapStatetoProps(state, ownProps),
+    dispatch => bindActionCreators(mapActionCreators, dispatch)
+)(RightSidebarComponent);

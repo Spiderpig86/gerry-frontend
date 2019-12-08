@@ -21,7 +21,7 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                             <p>Asian: {Math.round(Math.random() * 2000) + 100}</p>
                             <p>Pacific Islander: {Math.round(Math.random() * 2000) + 100}</p>
                             <p>Other: {Math.round(Math.random() * 2000) + 100}</p>
-                            <p>Biracial: {Math.round(Math.random() * 2000) + 100}</p>
+                            <p>Multiracial: {Math.round(Math.random() * 2000) + 100}</p>
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
@@ -37,7 +37,7 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                             <p>Voting Age Asian: {Math.round(Math.random() * 2000) + 100}</p>
                             <p>Voting Age Pacific Islander: {Math.round(Math.random() * 2000) + 100}</p>
                             <p>Voting Age Other: {Math.round(Math.random() * 2000) + 100}</p>
-                            <p>Voting Age Biracial: {Math.round(Math.random() * 2000) + 100}</p>
+                            <p>Voting Age Multiracial: {Math.round(Math.random() * 2000) + 100}</p>
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
