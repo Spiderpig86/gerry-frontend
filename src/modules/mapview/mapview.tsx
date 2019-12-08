@@ -41,7 +41,7 @@ interface IMapViewState {
     selectedState: StateEnum;
     districtBorders: Map<StateEnum, any>;
     map: ReactLeaflet.Map;
-    isOpen: boolean;
+    rightBarOpen: boolean;
     zoom: number;
     mapProps: {
         demographicsProps: IDemographicsTabProps;
@@ -56,7 +56,7 @@ interface IMapViewState {
     steps: Step[];
     run: boolean;
     stepIndex: number;
-    sidebarOpen: boolean;
+    leftBarOpen: boolean;
     hasToured: boolean;
 }
 
@@ -65,7 +65,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         stateBorders: [],
         selectedState: StateEnum.NOT_SET,
         districtBorders: new Map(),
-        isOpen: false,
+        rightBarOpen: false,
         map: null,
         zoom: 5,
         mapProps: {
@@ -84,7 +84,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         steps: [],
         run: false,
         stepIndex: 0,
-        sidebarOpen: false,
+        leftBarOpen: false,
         hasToured: false
     };
     public coloring: Coloring;
@@ -154,6 +154,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         </div>
                     ),
                     title: '💎 Left Sidebar (Parameters/Logs)',
+                    disableBeacon: true,
                     placement: 'right',
                     styles: {
                         options: {
@@ -165,13 +166,27 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     target: '.menu-right',
                     content: (
                         <div>
-                            This button triggers the left sidebar, which is in charge of setting{' '}
-                            <b>algorithm parameters</b>, <b>view filters</b>, and{' '}
-                            <b>intermediate results during algorithm execution</b>.
+                            The right sidebar is used to display detailed informaiton relating to the selected precinct.
                         </div>
                     ),
-                    title: '💎 Right Sidebar (Parameters/Logs)',
+                    title: '✨ Right Sidebar (Precinct Data)',
+                    disableBeacon: true,
                     placement: 'left',
+                    styles: {
+                        options: {
+                            zIndex: 10000
+                        }
+                    }
+                },
+                {
+                    content: (
+                        <div>
+                            <h3>🎁 Let's Get Started!</h3>
+                            <p>Now that you know the basics, let's get started on the app.</p>
+                        </div>
+                    ),
+                    placement: 'center',
+                    target: 'body',
                     styles: {
                         options: {
                             zIndex: 10000
@@ -266,7 +281,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
-        console.log('render')
         return (
             <div className="container-fluid d-flex">
                 <Joyride
@@ -279,12 +293,12 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     showSkipButton={true}
                     callback={this.handleJoyrideCallback}
                 />
-                <LeftSidebar leftOpen={this.state.sidebarOpen} handleStateChange={this.handleStateChange.bind(this)} />
+                <LeftSidebar leftOpen={this.state.leftBarOpen} handleStateChange={this.handleLeftSidebar.bind(this)} />
                 <RightSidebar
                     {...this.state.mapProps}
                     mapView={this}
-                    resetSelectedPrecinctHandler={this.resetSelectedPrecinct.bind(this)}
-                    isOpen={this.state.isOpen}
+                    rightSidebarHandler={this.handleRightSidebar.bind(this)}
+                    isOpen={this.state.rightBarOpen}
                 />
 
                 <MapNavbar />
@@ -470,7 +484,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             congressionalDistrictId: properties.cd
         };
         this.setState({
-            isOpen: true,
+            rightBarOpen: true,
             mapProps: {
                 electionsProps,
                 demographicsProps,
@@ -886,48 +900,49 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         return response;
     }
 
-    private resetSelectedPrecinct() {
-        this.setState({ selectedPrecinctId: null });
+    private handleRightSidebar({ isOpen }) {
+        if (!isOpen) {
+            // this.props.mapView.setState({ isOpen: false });
+            // this.props.rightSidebarHandler();
+            this.setState({ rightBarOpen: false });
+            this.setState({ selectedPrecinctId: null });
+        }
     }
 
-    private handleStateChange = ({ isOpen }) => {
-        console.log('OPEN', isOpen, this.state.hasToured)
+    private handleLeftSidebar = ({ isOpen }) => {
+        console.log('OPEN', isOpen, this.state.hasToured);
         if (!this.state.hasToured && isOpen) {
             this.setState({
-                sidebarOpen: isOpen,
+                leftBarOpen: isOpen,
                 run: this.state.stepIndex === 0 ? false : this.state.run,
-                stepIndex: this.state.stepIndex === 0 ? 1 : this.state.stepIndex,
+                stepIndex: this.state.stepIndex === 0 ? 1 : this.state.stepIndex
             });
         }
     };
 
     private handleJoyrideCallback = (data: CallBackProps) => {
-        console.log(this.state.hasToured);
         if (this.state.hasToured) {
-            console.log('IGNORED')
             return;
         }
 
         const { action, index, type, status } = data;
-        console.log('joyride', type, index);
 
         if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
             // Need to set our running state to false, so we can restart if we click start again.
             this.setState({ run: false, stepIndex: 0, hasToured: true });
         } else if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
             const stepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
-            console.log(stepIndex, index, action, this.state.sidebarOpen);
-            if (this.state.sidebarOpen && index === 0) {
+            if (this.state.leftBarOpen && index === 0) {
                 setTimeout(() => {
                     this.setState({ run: true, hasToured: false });
                 }, 600);
-            } else if (this.state.sidebarOpen && index === 1 && action === ACTIONS.PREV) {
+            } else if (this.state.leftBarOpen && index === 1 && action === ACTIONS.PREV) {
                 this.setState(
                     {
                         run: false,
                         stepIndex,
-                        sidebarOpen: false,
-                        isOpen: false,
+                        leftBarOpen: false,
+                        rightBarOpen: false,
                         hasToured: false
                     },
                     () => {
@@ -936,27 +951,26 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         }, 600);
                     }
                 );
-            } else if (this.state.sidebarOpen && index === 1 && action === ACTIONS.NEXT) {
-                    this.setState(
-                        {
-                            run: false,
-                            stepIndex,
-                            sidebarOpen: false,
-                            isOpen: true
-                        },
-                        () => {
-                            setTimeout(() => {
-                                this.setState({ run: true });
-                            }, 600);
-                        }
-                    );
-            } else if (this.state.sidebarOpen && index === 1) {
+            } else if (this.state.leftBarOpen && index === 1 && action === ACTIONS.NEXT) {
                 this.setState(
                     {
                         run: false,
-                        sidebarOpen: false,
                         stepIndex,
-                        hasToured: true
+                        leftBarOpen: false,
+                        rightBarOpen: true
+                    },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 600);
+                    }
+                );
+            } else if (this.state.leftBarOpen && index === 1) {
+                this.setState(
+                    {
+                        run: false,
+                        leftBarOpen: false,
+                        stepIndex,
                     },
                     () => {
                         setTimeout(() => {
@@ -969,8 +983,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     {
                         run: false,
                         stepIndex,
-                        sidebarOpen: true,
-                        isOpen: false
+                        leftBarOpen: true,
+                        rightBarOpen: false
                     },
                     () => {
                         setTimeout(() => {
@@ -978,20 +992,23 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         }, 600);
                     }
                 );
+            } else if (index === 3) {
+                this.setState(
+                    {
+                        run: false,
+                        stepIndex,
+                        leftBarOpen: false,
+                        rightBarOpen: false
+                    },
+                );
             } else {
                 // Update state to advance the tour
                 this.setState({
-                    sidebarOpen: false,
-                    stepIndex,
+                    leftBarOpen: false,
+                    stepIndex
                 });
             }
         }
-
-        // tslint:disable:no-console
-        console.groupCollapsed(type === EVENTS.TOUR_STATUS ? `${type}:${status}` : type);
-        console.log(data);
-        console.groupEnd();
-        // tslint:enable:no-console
     };
 }
 

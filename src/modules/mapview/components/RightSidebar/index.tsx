@@ -20,21 +20,14 @@ interface IRightSidebarProps {
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
     votingAgeProps: IVotingAgeTabProps;
-    resetSelectedPrecinctHandler: () => void;
+    rightSidebarHandler: (param) => void;
 }
 
 export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
 
-    menuHandler(state: any) {
-        if (!state.isOpen) {
-            this.props.mapView.setState({ isOpen: false });
-            this.props.resetSelectedPrecinctHandler();
-        }
-    }
-
     render() {
         return (
-            <Menu onStateChange={e => this.menuHandler.call(this, e) } isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'} burgerButtonClassName={ "burger-right" } menuClassName={ "menu-right" }>
+            <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'} burgerButtonClassName={ "burger-right" } menuClassName={ "menu-right" }>
                 <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
 
                 <Tabs className='tab-container'>
