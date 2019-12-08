@@ -15,8 +15,10 @@ export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {
         return (
             <div className='px-3'>
                 <h4>District Statistics</h4>
-                <h6>Republican Districts: 5</h6>
-                <h6>Democratic Districts: 5</h6>
+                <div className="mx-2">
+                    <h6>Republican Districts: 5</h6>
+                    <h6>Democratic Districts: 5</h6>
+                </div>
 
                 <br />
 

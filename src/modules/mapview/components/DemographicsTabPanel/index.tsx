@@ -2,40 +2,81 @@ import * as React from 'react';
 
 import { IDemographics } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
+import ReactTable from 'react-table';
 
 export interface IDemographicsTabProps {
     hispanicDemographics: IDemographics;
     nonHispanicDemographics: IDemographics;
     totalPopulation?: number;
+
+    votingAgeDemographics: IDemographics;
+    totalVotingPopulation?: number;
 }
 
 export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabProps, {}> {
+
+    private demographicColumns = null;
+
+    constructor() {
+        super();
+        this.demographicColumns = [{
+            Header: 'Demographic',
+            id: 'demographicType',
+            accessor: (e: any) => e[0]
+        }, {
+            Header: 'Population',
+            id: 'demographicPopulation',
+            accessor: (e: any) => Math.round(e[1])
+        }];
+    }
+    
     render() {
         if (!this.props.hispanicDemographics || !this.props.nonHispanicDemographics) {
-            return <Placeholder title='No jurisdiction selected.' subtitle='Select a congressional district or precinct to view data.'></Placeholder>;
+            return <Placeholder title='No precinct selected.' subtitle='Select a precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>
                 <br />
-                <h4>Demographics</h4>
-
+                <h4>Precinct Demographics</h4>
                 <p><b>Total Population: </b> {Math.round(this.props.totalPopulation) || 'N/A'}</p>
-                <p>Non-Hispanic White: {Math.round(this.props.nonHispanicDemographics.White)}</p>
-                <p>Non-Hispanic African Americans: {Math.round(this.props.nonHispanicDemographics.AfricanAmerican)}</p>
-                <p>Non-Hispanic Native Americans: {Math.round(this.props.nonHispanicDemographics.NativeAmerican)}</p>
-                <p>Non-Hispanic Asian: {Math.round(this.props.nonHispanicDemographics.Asian)}</p>
-                <p>Non-Hispanic Pacific Islander: {Math.round(this.props.nonHispanicDemographics.PacificIslander)}</p>
-                <p>Non-Hispanic Other: {Math.round(this.props.nonHispanicDemographics.Other)}</p>
-                <p>Non-Hispanic Biracial: {Math.round(this.props.nonHispanicDemographics.Biracial)}</p>
-                <br />
-                <p>Hispanic: {Math.round(this.props.hispanicDemographics.Hispanic)}</p>
-                <p>Hispanic White: {Math.round(this.props.hispanicDemographics.White)}</p>
-                <p>Hispanic African Americans: {Math.round(this.props.hispanicDemographics.AfricanAmerican)}</p>
-                <p>Hispanic Native Americans: {Math.round(this.props.hispanicDemographics.NativeAmerican)}</p>
-                <p>Hispanic Asian: {Math.round(this.props.hispanicDemographics.Asian)}</p>
-                <p>Hispanic Pacific Islander: {Math.round(this.props.hispanicDemographics.PacificIslander)}</p>
-                <p>Hispanic Other: {Math.round(this.props.hispanicDemographics.Other)}</p>
-                <p>Hispanic Biracial: {Math.round(this.props.hispanicDemographics.Biracial)}</p>
+
+                <div className='pt-3'>
+                    <b>Non-Hispanic Demographic</b>
+                    <ReactTable
+                        className={'my-3'}
+                        columns={this.demographicColumns}
+                        data={Object.entries(this.props.nonHispanicDemographics)}
+                        defaultPageSize={10}
+                        minRows={0}
+                        showPageSizeOptions={false}
+                        showPaginationBottom={false}
+                    />
+                </div>
+                <div className='pt-3'>
+                    <b>Hispanic Demographic</b>
+                    <ReactTable
+                        className={'my-3'}
+                        columns={this.demographicColumns}
+                        data={Object.entries(this.props.hispanicDemographics)}
+                        defaultPageSize={10}
+                        minRows={0}
+                        showPageSizeOptions={false}
+                        showPaginationBottom={false}
+                    />
+                </div>
+
+                <div className='pt-3'>
+                    <b>Voting Age Demographic</b>
+                    <ReactTable
+                        className={'my-3'}
+                        columns={this.demographicColumns}
+                        data={Object.entries(this.props.votingAgeDemographics)}
+                        defaultPageSize={10}
+                        minRows={0}
+                        showPageSizeOptions={false}
+                        showPaginationBottom={false}
+                    />
+                </div>
             </div>
         )
     }

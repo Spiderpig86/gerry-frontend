@@ -126,3 +126,7 @@
     border-color: transparent;
     box-shadow: none;
 }
+
+.react-tabs__tab:focus:after {
+    background: inherit;
+}

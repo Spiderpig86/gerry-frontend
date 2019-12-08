@@ -3,9 +3,8 @@ import * as React from 'react';
 import { slide as Menu, } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
-import { ElectionsTabPanel } from '../';
+import { ElectionsTabPanel, StatisticsTabPanel, DistrictTabPanel } from '../';
 import { DemographicsTabPanel, IDemographicsTabProps } from '../DemographicsTabPanel';
-import { VotingAgeTabPanel, IVotingAgeTabProps } from '../VotingAgeTabPanel';
 import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../PrecinctPropertiesTabPanel';
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
@@ -19,7 +18,6 @@ interface IRightSidebarProps {
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
-    votingAgeProps: IVotingAgeTabProps;
     rightSidebarHandler: (param) => void;
 }
 
@@ -32,19 +30,23 @@ export class RightSidebar extends React.Component<IRightSidebarProps, {}> {
 
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
+                        <Tab><h6>State Statistics</h6></Tab>
+                        <Tab><h6>District Statistics</h6></Tab>
                         <Tab><h6>Election</h6></Tab>
                         <Tab><h6>Demographics</h6></Tab>
-                        <Tab><h6>Voting Age</h6></Tab>
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
+                    <TabPanel>
+                        <StatisticsTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <DistrictTabPanel />
+                    </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
                     </TabPanel>
                     <TabPanel>
                         <DemographicsTabPanel {...this.props.demographicsProps} />
-                    </TabPanel>
-                    <TabPanel>
-                        <VotingAgeTabPanel {...this.props.votingAgeProps} />
                     </TabPanel>
                     <TabPanel>
                         <PrecinctPropertiesTabPanel {...this.props.precinctProps} />

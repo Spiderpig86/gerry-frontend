@@ -47,7 +47,6 @@ interface IMapViewState {
         demographicsProps: IDemographicsTabProps;
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
-        votingAgeProps: IVotingAgeTabProps;
     };
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
@@ -71,8 +70,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         mapProps: {
             demographicsProps: null,
             electionsProps: null,
-            precinctProps: null,
-            votingAgeProps: null
+            precinctProps: null
         },
         mapTooltip: {
             title: null,
@@ -182,7 +180,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     content: (
                         <div>
                             <h3>🎁 Let's Get Started!</h3>
-                            <p>Now that you know the basics, let's get started on the app.</p>
+                            <p>To get started, open the <b>left sidebar</b> and select a state in the <b>Phase 0</b> tab or by clicking any state on the map.</p>
                         </div>
                     ),
                     placement: 'center',
@@ -460,9 +458,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 PacificIslander: properties.pop_nhpi_h,
                 Other: properties.pop_other_h,
                 Biracial: properties.pop_2more_h
-            }
-        };
-        const votingAgeProps: IVotingAgeTabProps = {
+            },
             totalVotingPopulation: properties.pop_total_voting,
             votingAgeDemographics: {
                 White: properties.pop_white_voting,
@@ -488,7 +484,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             mapProps: {
                 electionsProps,
                 demographicsProps,
-                votingAgeProps,
                 precinctProps
             }
         });
@@ -910,7 +905,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     private handleLeftSidebar = ({ isOpen }) => {
-        console.log('OPEN', isOpen, this.state.hasToured);
         if (!this.state.hasToured && isOpen) {
             this.setState({
                 leftBarOpen: isOpen,
@@ -992,7 +986,21 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         }, 600);
                     }
                 );
-            } else if (index === 3) {
+            } else if (index === 3 && action === ACTIONS.PREV) {
+                this.setState(
+                    {
+                        run: false,
+                        stepIndex,
+                        leftBarOpen: false,
+                        rightBarOpen: true
+                    },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 600);
+                    }
+                );
+            } else if (index === 2) {
                 this.setState(
                     {
                         run: false,
@@ -1000,6 +1008,11 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         leftBarOpen: false,
                         rightBarOpen: false
                     },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({ run: true });
+                        }, 600);
+                    }
                 );
             } else {
                 // Update state to advance the tour

@@ -4,6 +4,7 @@ export { PhaseZeroTabPanel } from './PhaseZeroTabPanel';
 export { FilterTabPanel } from './FilterTabPanel';
 export { LogsTabPanel } from './LogsTabPanel';
 export { StatisticsTabPanel } from './StatisticsTabPanel';
+export { DistrictTabPanel } from './DistrictTabPanel';
 
 export { RightSidebar } from './RightSidebar';
 export { DemographicsTabPanel } from './DemographicsTabPanel';

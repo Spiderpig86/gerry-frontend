@@ -7,16 +7,17 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum } from '../../../../models';
+import { PhaseOneArgs, AlgorithmEnum, StateEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
     phaseOneArgs: PhaseOneArgs;
+    phaseOneService: PhaseOneService;
+    selectedState: StateEnum;
     setPhaseOneServiceCreator: () => void;
     setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
-    phaseOneService: PhaseOneService;
 }
 
 export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
@@ -34,7 +35,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                             )
                         }
                     >
-                        <Button id="btnPlay" onClick={this.startPhaseOne.bind(this)}>
+                        <Button id="btnPlay" disabled={this.props.selectedState === StateEnum.NOT_SET} onClick={this.startPhaseOne.bind(this)}>
                             <FontAwesomeIcon icon={faPlay} />
                         </Button>
                     </OverlayTrigger>
@@ -106,9 +107,10 @@ function mapStateToProps(state: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
+        phaseOneService: state.stateReducer.phaseOneService,
+        selectedState: state.stateReducer.selectedState,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
         setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
-        phaseOneService: state.stateReducer.phaseOneService
     };
 }
 

@@ -12,9 +12,11 @@ interface BlocItemProps {
 
 export class BlocItem extends React.Component<BlocItemProps, {}> {
 
-    render() {
+    private columns = null;
 
-        const columns = [{
+    constructor() {
+        super();
+        this.columns = [{
             Header: 'Race',
             id: 'demographicType',
             accessor: (e: PrecinctBlocSummary) => EnumNameMapper.getDemographicName(e.demographicType)
@@ -35,12 +37,14 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
             Header: '# Precincts',
             accessor: 'votingBlocCount'
         }];
+    }
+
+    render() {
 
         return (
             <div className='py-3'>
-                {/* <h6 className='text-capitalize'>{this.props.party}</h6> */}
                 <ReactTable
-                    columns={columns}
+                    columns={this.columns}
                     data={this.props.phaseZeroResults}
                     defaultPageSize={10}
                     minRows={0}
