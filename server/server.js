@@ -35,24 +35,7 @@ wsServer.on('request', req => {
             break;
         default:
     }
-
-    // for (
-    //     let i = 0;
-    //     i < state.features.length;
-    //     i += Math.min(CHUNK, state.features.length - i + 1)
-    // ) {
-    //     let payload = [];
-        
-    //     for (
-    //         let j = i;
-    //         j < Math.min(CHUNK, state.features.length - i) + i;
-    //         j++
-    //     ) {
-    //         payload.push(state.features[j]);
-    //     }
-    //     sendMessage(connection, JSON.stringify(payload));
-    // }
-
+    
     let features = state.features;
     let i = 0;
     while (features.length > 0) {
