@@ -22,6 +22,8 @@ module.exports = {
     devServer: {
         inline: true,
         contentBase: "public/",
+        host: '0.0.0.0',
+        disableHostCheck: false,
         port: 3001,
         proxy: [
             {

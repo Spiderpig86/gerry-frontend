@@ -4,7 +4,7 @@
   "description": "React Redux Application",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open --config configs/webpack.dev.js",
+    "start": "webpack-dev-server --host 0.0.0.0 --port 3001 --config configs/webpack.dev.js",
     "build:dev": "webpack --config configs/webpack.dev.js -d",
     "build:prod": "webpack --config configs/webpack.prod.js",
     "test": "jest",

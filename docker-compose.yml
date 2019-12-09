@@ -1,0 +1,7 @@
+version: '3'
+services:
+  gerry-client:
+    ports:
+      - "3001:3001"
+      command: npm start
+      build: ./gerry-client
