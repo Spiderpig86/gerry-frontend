@@ -31,6 +31,7 @@ export const COLOR_AMPLIFY_FACTOR = 3;
 export const COLOR_DARKEN_FACTOR = 0.25;
 export const COLOR_FILL_OPACITY = 0.75;
 export const COLOR_FILL_OPACITY_STATE = 0.25;
+export const COLOR_PZERO_HIGHLIGHT = '#fb861e';
 
 // Initial Redux State Values
 export const DEFAULT_THRESHOLD = 75;

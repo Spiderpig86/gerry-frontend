@@ -21,6 +21,7 @@ import { StateBorderService } from '../../../libs/state-borders';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
  const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
  const SET_LOGS = 'SET_LOGS';
+ const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
  
  export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
      return async (dispatch: any) => {
@@ -152,6 +153,13 @@ import { StateBorderService } from '../../../libs/state-borders';
         logs
      }
  }
+
+ export const setPZeroHighlightedPrecincts = (highlightedPrecincts: Set<String>) => {
+     return {
+         type: SET_PZERO_HIGHLIGHTED_PRECINCTS,
+         highlightedPrecincts
+     }
+ }
  
  export interface State {
      selectedState: StateEnum;
@@ -168,6 +176,7 @@ import { StateBorderService } from '../../../libs/state-borders';
      algorithmPhase: AlgorithmEnum;
      phaseOneService: PhaseOneService;
      logs: string[];
+     highlightedPrecincts: Set<String>;
  };
  
  const initialState: State = {
@@ -208,7 +217,8 @@ import { StateBorderService } from '../../../libs/state-borders';
      },
      algorithmPhase: AlgorithmEnum.PHASE_0_1,
      phaseOneService: null,
-     logs: []
+     logs: [],
+     highlightedPrecincts: new Set<String>()
  }
  
  export const stateReducer = (state = initialState, action: any) => {
@@ -278,6 +288,11 @@ import { StateBorderService } from '../../../libs/state-borders';
             return {
                 ...state,
                 logs: action.logs
+            }
+        case SET_PZERO_HIGHLIGHTED_PRECINCTS:
+            return {
+                ...state,
+                highlightedPrecincts: action.highlightedPrecincts
             }
          default:
              return state;

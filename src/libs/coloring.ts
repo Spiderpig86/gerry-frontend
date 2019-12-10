@@ -141,6 +141,16 @@ export class Coloring {
         return colorConfig;
     }
 
+    public colorPhaseZeroHighlight(zoom: number) {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
+        return {
+            color: Constants.COLOR_PZERO_HIGHLIGHT,
+            weight: 1,
+            fillOpacity: opacity,
+            fillColor: Constants.COLOR_PZERO_HIGHLIGHT
+        };
+    }
+
     public getPopulationPercentByDemographic(properties: any, filter: string): number {
         let demographicPopulation = 0;
         switch (filter) {

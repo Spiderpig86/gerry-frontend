@@ -53,7 +53,7 @@ export class StatisticsAccordionComponent extends React.PureComponent {
     render() {
         // Fake data
         const demographics = [];
-        for (const demographic of Object.keys(DemographicEnum)) {
+        for (const demographic of Object.values(DemographicEnum)) {
             demographics.push([demographic, Math.round(Math.random() * 2000) + 100]);
         }
 

@@ -29,6 +29,7 @@ export interface IMapViewProps {
     selectedState: StateEnum;
     precincts: any;
     precinctMap: Map<string, IPrecinct>;
+    highlightedPrecincts: Set<String>;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
     oldClusters: Map<string, ICluster>;
@@ -52,6 +53,7 @@ interface IMapViewState {
     selectedPrecinctId: string;
     neighborPrecincts: string[]; // TESTING
 
+    // React Joyride props
     steps: Step[];
     run: boolean;
     stepIndex: number;
@@ -219,26 +221,26 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                console.log(
-                    hashPrecinct(feature.properties),
-                    this.props.precinctMap.get(hashPrecinct(feature.properties))
-                );
-                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                this.setState(
-                    {
-                        neighborPrecincts: neighbors.split(',')
-                    },
-                    () => {
-                        this.state.neighborPrecincts.forEach(element => {
-                            if (!element) {
-                                return;
-                            }
-                            // console.log(element);
-                            console.log(element, this.props.precinctMap.get(element));
-                            this.props.precinctMap.get(element).properties.v16_opres += 10000;
-                        });
-                    }
-                );
+                // console.log(
+                //     hashPrecinct(feature.properties),
+                //     this.props.precinctMap.get(hashPrecinct(feature.properties))
+                // );
+                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                // this.setState(
+                //     {
+                //         neighborPrecincts: neighbors.split(',')
+                //     },
+                //     () => {
+                //         this.state.neighborPrecincts.forEach(element => {
+                //             if (!element) {
+                //                 return;
+                //             }
+                //             // console.log(element);
+                //             console.log(element, this.props.precinctMap.get(element));
+                //             this.props.precinctMap.get(element).properties.v16_opres += 10000;
+                //         });
+                //     }
+                // );
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -549,7 +551,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties;
         let style = {};
-        if (
+
+        if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
+            style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
+        } else if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
             this.props.filter === MapFilterEnum.HOUSE_2016 ||
             this.props.filter === MapFilterEnum.SENATE_2016 ||
@@ -1041,6 +1046,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         level: state.stateReducer.filterArgs.viewLevel,
         oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
+        highlightedPrecincts: state.stateReducer.highlightedPrecincts,
         store: ownProps.store
     };
 }

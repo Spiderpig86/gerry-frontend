@@ -20,9 +20,11 @@ interface IPhaseZeroTabPanelProps {
     selectedState: StateEnum;
     phaseZeroArgs: PhaseZeroArgs;
     phaseZeroResults: PhaseZeroResult;
+    highlightedPrecincts: Set<String>;
     setSelectedStateCreator: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
     setPhaseZeroResults: (phaseZeroResult: PhaseZeroResult) => void;
+    setPZeroHighlightedPrecincts: (highlightedPrecincts: Set<String>) => void;
 }
 
 interface IPhaseZeroTabPanelState {
@@ -140,15 +142,15 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         </p>
                     )}
                     {this.props.phaseZeroResults ? (
-                        <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} />
+                        <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} highlightedPrecincts={this.props.highlightedPrecincts} setPZeroHighlightedPrecincts={this.props.setPZeroHighlightedPrecincts} />
                     ) : (
-                        <div className="mt-5">
-                            <Placeholder
-                                title="No Data"
-                                subtitle='Please select a state and click "Analyze Precincts".'
-                            ></Placeholder>
-                        </div>
-                    )}
+                            <div className="mt-5">
+                                <Placeholder
+                                    title="No Data"
+                                    subtitle='Please select a state and click "Analyze Precincts".'
+                                ></Placeholder>
+                            </div>
+                        )}
                 </div>
             </div>
         );
@@ -223,9 +225,11 @@ function mapStateToProps(state: any) {
         selectedState: state.stateReducer.selectedState,
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
         phaseZeroResults: state.stateReducer.phaseZeroResults,
+        highlightedPrecincts: state.stateReducer.highlightedPrecincts,
         setSelectedStateCreator: state.stateReducer.setSelectedStateCreator,
         setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
-        setPhaseZeroResults: state.stateReducer.setPhaseZeroResults
+        setPhaseZeroResults: state.stateReducer.setPhaseZeroResults,
+        setPZeroHighlightedPrecincts: state.stateReducer.setPZeroHighlightedPrecincts,
     };
 }
 

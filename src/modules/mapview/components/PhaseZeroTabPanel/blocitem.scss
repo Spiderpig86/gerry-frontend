@@ -6,6 +6,14 @@
     background-color: rgba(0,0,0,.05);
 }
 
+.ReactTable .rt-tbody .rt-tr-group .rt-tr:hover {
+    cursor: pointer;
+}
+
+.ReactTable .rt-tbody .rt-tr-group .rt-tr:hover {
+    background-color: rgba(116, 162, 214, 0.35);
+}
+
 .ReactTable .rt-tbody .rt-td {
     padding: .5rem;
 }
