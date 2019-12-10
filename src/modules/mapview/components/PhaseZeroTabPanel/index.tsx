@@ -19,6 +19,7 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 interface IPhaseZeroTabPanelProps {
     selectedState: StateEnum;
     phaseZeroArgs: PhaseZeroArgs;
+    phaseZeroResults: PhaseZeroResult;
     setSelectedStateCreator: (oldState: string, state: string) => void;
     setPhaseZeroArgs: (phaseZeroArgs: PhaseZeroArgs) => void;
     setPhaseZeroResults: (phaseZeroResult: PhaseZeroResult) => void;
@@ -133,13 +134,13 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         It is best to set a higher threshold for results that better indicate the existence of a bloc
                         (preferably above 80%).
                     </p>
-                    {this.state.phaseZeroResults && (
+                    {this.props.phaseZeroResults && (
                         <p className="my-0">
-                            <b>Total Precinct Count:</b> {this.state.phaseZeroResults.totalVoteBlocCount}
+                            <b>Total Precinct Count:</b> {this.props.phaseZeroResults.totalVoteBlocCount}
                         </p>
                     )}
-                    {this.state.phaseZeroResults ? (
-                        <BlocItem phaseZeroResults={this.state.phaseZeroResults.precinctBlocs} />
+                    {this.props.phaseZeroResults ? (
+                        <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} />
                     ) : (
                         <div className="mt-5">
                             <Placeholder
@@ -221,6 +222,7 @@ function mapStateToProps(state: any) {
     return {
         selectedState: state.stateReducer.selectedState,
         phaseZeroArgs: state.stateReducer.phaseZeroArgs,
+        phaseZeroResults: state.stateReducer.phaseZeroResults,
         setSelectedStateCreator: state.stateReducer.setSelectedStateCreator,
         setPhaseZeroArgs: state.stateReducer.setPhaseZeroArgs,
         setPhaseZeroResults: state.stateReducer.setPhaseZeroResults
