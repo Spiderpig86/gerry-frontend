@@ -69,14 +69,14 @@ export enum PhaseTwoDepthEnum {
 }
 
 export enum DemographicEnum {
-    WHITE = 'WHITE',
-    BLACK = 'BLACK',
-    ASIAN = 'ASIAN',
-    HISPANIC = 'HISPANIC',
-    PACIFIC_ISLANDER = 'PACIFIC_ISLANDER',
-    NATIVE_AMERICAN = 'NATIVE_AMERICAN',
-    BIRACIAL = 'BIRACIAL',
-    OTHER = 'OTHER',
+    WHITE = 'pop_white_nh',
+    BLACK = 'pop_black_nh',
+    ASIAN = 'pop_asian_nh',
+    HISPANIC = 'pop_hispanic',
+    PACIFIC_ISLANDER = 'pop_nhpi_nh',
+    NATIVE_AMERICAN = 'pop_amin_nh',
+    BIRACIAL = 'pop_2more_nh',
+    OTHER = 'pop_other_nh',
 }
 
 export enum StateEnum {

@@ -205,7 +205,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     }
 
     private async fetchPrecinctBlocs(): Promise<void> {
-        const phaseZeroResult = await this.service.runPhaseZero(this.state.phaseZeroArgs);
+        const phaseZeroResult = await this.service.runPhaseZero(this.props.phaseZeroArgs);
         if (phaseZeroResult) {
             this.setState(
                 {

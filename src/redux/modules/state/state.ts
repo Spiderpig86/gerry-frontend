@@ -29,6 +29,10 @@ import { StateBorderService } from '../../../libs/state-borders';
          }
         //  dispatch(selectState(state));
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
+         dispatch(setPhaseZeroArgs({
+             ...initialState.phaseZeroArgs,
+             stateType: state
+         }));
          dispatch(() => new PrecinctService(state, dispatch));
      }
  }
@@ -212,10 +216,6 @@ import { StateBorderService } from '../../../libs/state-borders';
          case SET_STATE:
              return {
                  ...state,
-                 phaseZeroArgs: {
-                     ...state.phaseZeroArgs,
-                     stateType: action.selectedState
-                 },
                  selectedState: action.selectedState
              }
          case SET_PRECINCTS:

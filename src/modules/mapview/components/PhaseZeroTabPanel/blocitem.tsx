@@ -23,7 +23,7 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
         }, {
             Header: 'Avg. Race',
             id: 'demographicMean',
-            accessor: (e: PrecinctBlocSummary) => `${e.meanDemographicPercentage.toFixed(2)}%`
+            accessor: (e: PrecinctBlocSummary) => `${(e.meanDemographicPercentage * 100).toFixed(2)}%`
         },
         {
             Header: 'Party',
@@ -32,7 +32,7 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
         }, {
             Header: 'Avg. Party',
             id: 'partyMean',
-            accessor: (e: PrecinctBlocSummary) => `${e.meanPartyPercentage.toFixed(2)}%`
+            accessor: (e: PrecinctBlocSummary) => `${(e.meanPartyPercentage * 100).toFixed(2)}%`
         }, {
             Header: '# Precincts',
             id: 'numPrecincts',

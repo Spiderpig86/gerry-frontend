@@ -13,9 +13,10 @@ export interface PhaseZeroResult {
 }
 
 export interface PrecinctBlocSummary {
-    votingBlocCount: number,
-    partyType: PartyEnum,
-    demographicType: DemographicEnum,
-    meanDemographicPercentage: number,
-    meanPartyPercentage: number
+    votingBlocCount: number;
+    partyType: PartyEnum;
+    demographicType: DemographicEnum;
+    meanDemographicPercentage: number;
+    meanPartyPercentage: number;
+    precinctNames: string[];
 }
