@@ -5,6 +5,7 @@ import { slide as Menu, } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { ElectionsTabPanel, StatisticsTabPanel, DistrictTabPanel } from '../';
 import { DemographicsTabPanel, IDemographicsTabProps } from '../DemographicsTabPanel';
@@ -29,6 +30,7 @@ interface IRightSidebarProps {
 export class RightSidebarComponent extends React.Component<IRightSidebarProps, {}> {
 
     render() {
+
         return (
             <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'} burgerButtonClassName={ "burger-right" } menuClassName={ "menu-right" }>
                 <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
@@ -59,6 +61,14 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                 </Tabs>
             </Menu>
         );
+    }
+
+    private renderTooltip(props: any, text: string) {
+        props.style = {
+            ...props.style,
+            zIndex: 99999
+        };
+        return <Tooltip {...props} show={props.show.toString()}>{text}</Tooltip>;
     }
 }
 

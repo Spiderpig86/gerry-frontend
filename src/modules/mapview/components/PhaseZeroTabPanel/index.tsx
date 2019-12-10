@@ -13,7 +13,6 @@ import { BlocItem } from './blocitem';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
 import '../../../../styles/slider.scss';
-import '../../../../styles/tooltip.scss';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 

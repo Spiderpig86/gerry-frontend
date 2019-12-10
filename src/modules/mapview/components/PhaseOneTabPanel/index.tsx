@@ -9,7 +9,6 @@ import { bindActionCreators } from 'redux';
 import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../../models';
 
 import '../../../../styles/slider.scss';
-import '../../../../styles/tooltip.scss';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
 const TooltipRange = createSliderWithTooltip(Range);

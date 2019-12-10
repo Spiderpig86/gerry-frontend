@@ -36,15 +36,19 @@ module.exports = {
     devtool: "source-map",
     module: {
         rules: [
-            {  
-                test: /\.ts(x?)$/, 
+            {
+                test: /\.ts(x?)$/,
                 loader: "ts-loader",
                 exclude: /node_modules/
             },
-            { 
-                enforce: "pre", 
-                test: /\.js$/, 
-                loader: "source-map-loader" 
+            {
+                test: /\.svg$/,
+                loader: 'url-loader'
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
             },
             {
                 test: /\.css$/,
@@ -88,8 +92,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-          template: "src/index.html",
-          hash: true
+            template: "src/index.html",
+            hash: true
         }),
         new webpack.ProvidePlugin({
             $: 'jquery',

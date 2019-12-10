@@ -5,7 +5,7 @@ export class MapNavbar extends React.PureComponent {
     private navBarStyle: React.CSSProperties = {
         alignItems: 'center',
         backgroundColor: 'rgba(225, 225, 225, 0.75)',
-        backdropFilter: 'blur(20px) saturate(180%)',
+        // backdropFilter: 'blur(20px) saturate(180%)',
         display: 'flex',
         height: '3.75rem',
         justifyContent: 'center', 

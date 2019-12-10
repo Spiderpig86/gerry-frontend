@@ -1,4 +1,4 @@
-import { ElectionEnum, DemographicEnum, StateEnum, AlgorithmEnum } from '../models';
+import { ElectionEnum, DemographicEnum, StateEnum, AlgorithmEnum, PartyEnum } from '../models';
 
 export class EnumNameMapper {
     private static electionNames: Map<ElectionEnum, string> = new Map([
@@ -25,6 +25,11 @@ export class EnumNameMapper {
     private static algorithmNames: Map<AlgorithmEnum, string> = new Map([
         [AlgorithmEnum.PHASE_0_1, 'Phase 1'],
         [AlgorithmEnum.PHASE_2, 'Phase 2']
+    ]);
+    private static partyNames: Map<PartyEnum, string> = new Map([
+        [PartyEnum.DEMOCRATIC, 'Democratic'],
+        [PartyEnum.REPUBLICAN, 'Republican'],
+        [PartyEnum.OTHER, 'Other'],
     ])
 
     public static getElectionName(election: ElectionEnum): string {
@@ -41,5 +46,9 @@ export class EnumNameMapper {
 
     public static getAlgorithmName(phase: AlgorithmEnum): string {
         return this.algorithmNames.get(phase);
+    }
+
+    public static getPartyName(party: PartyEnum): string {
+        return this.partyNames.get(party);
     }
 }

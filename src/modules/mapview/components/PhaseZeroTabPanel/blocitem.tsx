@@ -35,7 +35,11 @@ export class BlocItem extends React.Component<BlocItemProps, {}> {
             accessor: (e: PrecinctBlocSummary) => `${e.meanPartyPercentage.toFixed(2)}%`
         }, {
             Header: '# Precincts',
-            accessor: 'votingBlocCount'
+            id: 'numPrecincts',
+            accessor: (e: PrecinctBlocSummary) => `${e.votingBlocCount.toLocaleString()}`,
+            sortMethod: (a, b) => {
+                return Number(a.replace(',', '')) - Number(b.replace(',', ''));
+            }
         }];
     }
 
