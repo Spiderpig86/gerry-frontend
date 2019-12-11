@@ -62,12 +62,6 @@ export enum PartyEnum {
     NOT_SET = 'not_set'
 }
 
-export enum PhaseTwoDepthEnum {
-    STANDARD = 'standard',
-    LEVEL = 'level',
-    TREE = 'tree'
-}
-
 export enum DemographicEnum {
     WHITE = 'pop_white_nh',
     BLACK = 'pop_black_nh',
@@ -94,4 +88,38 @@ export enum AlgorithmEnum {
 export enum ResponseEnum {
     OK = 'OK',
     ERROR = 'ERR'
+}
+
+export enum AlgorithmRunEnum {
+    TO_COMPLETION = 'to_completion',
+    BY_STEP = 'by_step'
+}
+
+export enum PhaseOneMajMinPairsEnum {
+    STANDARD = 'standard'
+}
+
+export enum PhaseOneOtherPairsEnum {
+    STANDARD = 'standard'
+}
+
+export enum PhaseOneStopEnum {
+    JOIN_SMALLEST = 'join_smallest'
+}
+
+export enum PhaseTwoMeasuresEnum {
+    POPULATION_EQUALITY = 'POPULATION_EQUALITY',
+    COMPACTNESS = 'COMPACTNESS',
+    PARTISAN_FAIRNESS = 'PARTISAN_FAIRNESS',
+    CONTIGUITY = 'CONTIGUITY'
+}
+
+export enum PhaseTwoDepthEnum {
+    STANDARD = 'standard',
+    LEVEL = 'level',
+    TREE = 'tree'
+}
+
+export enum PhaseTwoPrecinctMoveEnum {
+    RANDOM = 'random'
 }

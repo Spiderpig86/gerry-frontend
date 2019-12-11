@@ -1,4 +1,4 @@
-import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../enums';
+import { ElectionEnum, CompactnessEnum, PoliticalFairnessEnum, DemographicEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, StateEnum, AlgorithmRunEnum, PhaseOneMajMinPairsEnum, PhaseOneOtherPairsEnum, PhaseOneStopEnum } from '../enums';
 import { ICluster } from '../clusternode';
 
 /**
@@ -21,6 +21,20 @@ export interface PhaseOneArgs {
     objectivePartisanFairness: number;
     objectiveContiguity: number;
     intermediateResults: boolean;
+}
+
+export interface PhaseOneArgs2 {
+    stateType: StateEnum;
+    electionData: ElectionEnum;
+    
+    numDistricts: number;
+    demographicTypes: Set<DemographicEnum>;
+    upperBound: number;
+    lowerBound: number;
+    algRunType: AlgorithmRunEnum;
+    phaseOneMajMinPairHeuristic: PhaseOneMajMinPairsEnum;
+    phaseOneOtherPairsHeuristic: PhaseOneOtherPairsEnum;
+    stopHeurstic: PhaseOneStopEnum;
 }
 
 export interface PhaseOneResult {
