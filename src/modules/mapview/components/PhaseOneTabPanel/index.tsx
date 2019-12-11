@@ -20,13 +20,13 @@ interface IPhaseOneTabPanelProps {
     setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
 }
 
-interface IPhaseZeroTabPanelState {
+interface IPhaseOneTabPanelState {
     phaseOneArgs: PhaseOneArgs;
 }
 
 export class PhaseOneTabPanelComponent extends React.Component<
     IPhaseOneTabPanelProps,
-    IPhaseZeroTabPanelState
+    IPhaseOneTabPanelState
     > {
 
     state = {

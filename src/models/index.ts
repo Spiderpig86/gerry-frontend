@@ -8,7 +8,8 @@ export { IElection } from './election';
 
 export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phasezeroargs';
 export { PhaseOneArgs, PhaseOneMergeDelta, PhaseOneResult } from './Tabs/phaseoneargs';
+export { PhaseTwoArgs } from './Tabs/phasetwoargs';
 export { FilterArgs } from './Tabs/filterargs'
 
-export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from './enums';
+export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum, PopulationEqualityEnum, PhaseTwoDepthEnum. PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum } from './enums';
 export { WebSocketPing } from './websocket-ping';

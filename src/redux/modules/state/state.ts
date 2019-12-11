@@ -3,10 +3,11 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
 import { StateBorderService } from '../../../libs/state-borders';
+import { string } from 'prop-types';
  
  const SET_STATE = 'SET_STATE';
  const SET_PRECINCTS = 'SET_PRECINCTS';
@@ -18,6 +19,7 @@ import { StateBorderService } from '../../../libs/state-borders';
  const SET_PHASE_ZERO_ARGS = 'SET_PHASE_ZERO_ARGS';
  const SET_PHASE_ZERO_RESULTS = 'SET_PHASE_ZERO_RESULTS';
  const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
+ const SET_PHASE_TWO_ARGS = 'SET_PHASE_TWO_ARGS';
  const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
  const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
  const SET_LOGS = 'SET_LOGS';
@@ -120,7 +122,14 @@ import { StateBorderService } from '../../../libs/state-borders';
          phaseOneArgs
      }
  }
- 
+
+ export const setPhaseTwoArgs = (phaseTwoArgs: PhaseTwoArgs) => {
+     return {
+         type: SET_PHASE_TWO_ARGS,
+         phaseTwoArgs
+     }
+ }
+
  export const setAlgorithmPhase = (algorithmPhase: AlgorithmEnum) => {
      return {
          type: SET_ALGORITHM_PHASE,
@@ -174,6 +183,7 @@ import { StateBorderService } from '../../../libs/state-borders';
      phaseZeroArgs: PhaseZeroArgs;
      phaseZeroResults: PhaseZeroResult;
      phaseOneArgs: PhaseOneArgs;
+     phaseTwoArgs: PhaseTwoArgs;
      filterArgs: FilterArgs;
      algorithmPhase: AlgorithmEnum;
      phaseOneService: PhaseOneService;
@@ -212,6 +222,27 @@ import { StateBorderService } from '../../../libs/state-borders';
          objectivePartisanFairness: Constants.DEFAULT_OF_VALUE,
          objectiveContiguity: Constants.DEFAULT_OF_VALUE,
          intermediateResults: false
+     },
+     phaseTwoArgs: {
+         stateType: StateEnum.NOT_SET,
+         electionData: ElectionEnum.PRES_16,
+         stateId: '',
+         demographicTypes: new Set<DemographicEnum>(),
+         upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
+         lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
+         epsilon: 0.001,
+         weights: new Map([
+             [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 0],
+             [PhaseTwoMeasuresEnum.COMPACTNESS, 0],
+             [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 0],
+             [PhaseTwoMeasuresEnum.CONTIGUITY, 0]
+         ]),
+         phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
+         precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.RANDOM,
+         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
+         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
+         politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
+         populationEqualityOption: PopulationEqualityEnum.IDEAL,
      },
      filterArgs: {
          viewLevel: ViewLevelEnum.OLD_DISTRICTS,
@@ -270,6 +301,11 @@ import { StateBorderService } from '../../../libs/state-borders';
              return  {
                  ...state,
                  phaseOneArgs: action.phaseOneArgs
+             }
+         case SET_PHASE_TWO_ARGS:
+             return {
+                 ...state,
+                 phaseTwoArgs: action.phasetwoArgs
              }
          case SET_OLD_CLUSTERS:
              return {
