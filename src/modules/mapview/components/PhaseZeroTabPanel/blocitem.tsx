@@ -67,8 +67,6 @@ export class BlocItem extends React.Component<BlocItemProps, BlocItemState> {
                         return {
                             ...response,
                             onClick: (e, handleOriginal) => {
-                                console.log('A Td Element was clicked!')
-                                console.log(rowInfo, instance);
                                 if (this.props.highlightedPrecincts.size != rowInfo.original.precinctNames.length) {
                                     this.props.setPZeroHighlightedPrecincts(new Set<String>(rowInfo.original.precinctNames));
                                     this.setState({

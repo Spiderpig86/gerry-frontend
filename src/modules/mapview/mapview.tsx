@@ -21,9 +21,10 @@ import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
 import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
+import { MapNavbar } from './components/MapNavbar';
+import { APP_TOUR } from './tour';
 
 import './mapview.scss';
-import { MapNavbar } from './components/MapNavbar';
 
 export interface IMapViewProps {
     selectedState: StateEnum;
@@ -123,77 +124,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         });
         this.setState({
             run: true,
-            steps: [
-                {
-                    target: '.bm-burger-button.burger-left',
-                    content: (
-                        <div>
-                            Looks like this is your first time here. Let's learn a couple of basic features of Gerry.
-                        </div>
-                    ),
-                    title: '👋 Welcome to Gerry.',
-                    disableBeacon: true,
-                    disableOverlayClose: true,
-                    hideCloseButton: true,
-                    hideFooter: true,
-                    placement: 'bottom',
-                    spotlightClicks: true,
-                    styles: {
-                        options: {
-                            zIndex: 10000
-                        }
-                    }
-                },
-                {
-                    target: '.menu-left',
-                    content: (
-                        <div>
-                            This button triggers the left sidebar, which is in charge of setting{' '}
-                            <b>algorithm parameters</b>, <b>view filters</b>, and{' '}
-                            <b>intermediate results during algorithm execution</b>.
-                        </div>
-                    ),
-                    title: '💎 Left Sidebar (Parameters/Logs)',
-                    disableBeacon: true,
-                    placement: 'right',
-                    styles: {
-                        options: {
-                            zIndex: 10000
-                        }
-                    }
-                },
-                {
-                    target: '.menu-right',
-                    content: (
-                        <div>
-                            The right sidebar is used to display detailed informaiton relating to the selected precinct.
-                        </div>
-                    ),
-                    title: '✨ Right Sidebar (Precinct Data)',
-                    disableBeacon: true,
-                    placement: 'left',
-                    styles: {
-                        options: {
-                            zIndex: 10000
-                        }
-                    }
-                },
-                {
-                    content: (
-                        <div>
-                            <h3>🎁 Let's Get Started!</h3>
-                            <p>To get started, open the <b>left sidebar</b> and select a state in the <b>Phase 0</b> tab or by clicking any state on the map.</p>
-                        </div>
-                    ),
-                    placement: 'center',
-                    target: 'body',
-                    styles: {
-                        options: {
-                            zIndex: 10000
-                        }
-                    }
-                }
-            ]
+            steps: APP_TOUR
         });
     }
 
@@ -281,18 +212,24 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
+        console.log(localStorage.getItem('show-tour'))
         return (
             <div className="container-fluid d-flex">
-                <Joyride
-                    continuous={true}
-                    run={this.state.run}
-                    steps={this.state.steps}
-                    stepIndex={this.state.stepIndex}
-                    scrollToFirstStep={true}
-                    showProgress={true}
-                    showSkipButton={true}
-                    callback={this.handleJoyrideCallback}
-                />
+                {
+                    (localStorage.getItem('show-tour') === null || localStorage.getItem('show-tour') === 'true') &&
+                        (
+                            <Joyride
+                                continuous={true}
+                                run={this.state.run}
+                                steps={this.state.steps}
+                                stepIndex={this.state.stepIndex}
+                                scrollToFirstStep={true}
+                                showProgress={true}
+                                showSkipButton={true}
+                                callback={this.handleJoyrideCallback}
+                            />
+                        )
+                }
                 <LeftSidebar leftOpen={this.state.leftBarOpen} handleStateChange={this.handleLeftSidebar.bind(this)} />
                 <RightSidebar
                     {...this.state.mapProps}
@@ -908,8 +845,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
     private handleRightSidebar({ isOpen }) {
         if (!isOpen) {
-            // this.props.mapView.setState({ isOpen: false });
-            // this.props.rightSidebarHandler();
             this.setState({ rightBarOpen: false });
             this.setState({ selectedPrecinctId: null });
         }
