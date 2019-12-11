@@ -128,6 +128,14 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         });
     }
 
+    async componentWillReceiveProps(newProps) {
+        if (newProps.selectedState === this.state.selectedState) {
+            this.setState({
+                selectedState: StateEnum.NOT_SET
+            });
+        }
+    }
+
     /**
      * LEAFLET EVENTS
      */
@@ -212,7 +220,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
-        console.log(localStorage.getItem('show-tour'))
         return (
             <div className="container-fluid d-flex">
                 {

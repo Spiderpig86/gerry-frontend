@@ -53,7 +53,6 @@ export class BlocItem extends React.Component<BlocItemProps, BlocItemState> {
     }
 
     render() {
-
         return (
             <div className='py-3'>
                 <ReactTable

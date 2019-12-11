@@ -31,7 +31,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         overlay={props =>
                             this.renderTooltip(
                                 props,
-                                `Run ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)}`
+                                `Run ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)} (To Completion)`
                             )
                         }
                     >

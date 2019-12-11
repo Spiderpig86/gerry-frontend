@@ -34,6 +34,8 @@ import { StateBorderService } from '../../../libs/state-borders';
              ...initialState.phaseZeroArgs,
              stateType: state
          }));
+         dispatch(setPhaseZeroResults(null));
+         dispatch(setPZeroHighlightedPrecincts(new Set<String>()));
          dispatch(() => new PrecinctService(state, dispatch));
      }
  }
