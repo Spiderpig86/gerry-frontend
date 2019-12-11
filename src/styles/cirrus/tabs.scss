@@ -120,6 +120,8 @@
 .react-tabs__tab-panel--selected {
     height: 100%;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .react-tabs__tab:focus {

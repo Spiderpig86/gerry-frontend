@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
-import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service'
+import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
@@ -20,7 +20,7 @@ interface IAlgorithmPanelProps {
     setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
 }
 
-export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
+export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
     render() {
         return (
             <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
@@ -35,24 +35,13 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                             )
                         }
                     >
-                        <Button id="btnPlay" disabled={this.props.selectedState === StateEnum.NOT_SET} onClick={this.startPhaseOne.bind(this)}>
+                        <Button
+                            id="btnPlay"
+                            disabled={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET}
+                            onClick={this.startPhaseOne.bind(this)}
+                        >
                             <FontAwesomeIcon icon={faPlay} />
-                        </Button>
-                    </OverlayTrigger>
-
-                    <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={props =>
-                            this.renderTooltip(
-                                props,
-                                `Pause ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)}`
-                            )
-                        }
-                    >
-                        <Button 
-                        disabled={!this.props.phaseOneService}>
-                            <FontAwesomeIcon icon={faPause} />
+                            &nbsp; Run Phase 1
                         </Button>
                     </OverlayTrigger>
                     <OverlayTrigger
@@ -60,8 +49,15 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         delay={{ show: 250, hide: 400 }}
                         overlay={props => this.renderTooltip(props, `Step Forward`)}
                     >
-                        <Button disabled={!this.props.phaseOneService || !(this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP)} onClick={this.stepForward.bind(this)}>
+                        <Button
+                            disabled={
+                                !this.props.phaseOneService &&
+                                !(this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP) || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
+                            }
+                            onClick={this.stepForward.bind(this)}
+                        >
                             <FontAwesomeIcon icon={faStepForward} />
+                            &nbsp; Next
                         </Button>
                     </OverlayTrigger>
                 </ButtonGroup>
@@ -70,9 +66,9 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         custom
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
-                        label={'Display Intermediate Results (Phase 1)'}
+                        label={'Use Iterative Steps'}
                         defaultChecked={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP}
-                        onChange={(e) => this.toggleIntermediateUpdates(e.target.checked)}
+                        onChange={e => this.toggleIntermediateUpdates(e.target.checked)}
                     />
                 </Form.Group>
             </Row>
@@ -91,7 +87,11 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
             ...props.style,
             zIndex: 99999
         };
-        return <Tooltip {...props} show={props.show.toString()}>{text}</Tooltip>;
+        return (
+            <Tooltip {...props} show={props.show.toString()}>
+                {text}
+            </Tooltip>
+        );
     }
 
     private startPhaseOne(): void {
@@ -110,13 +110,13 @@ function mapStateToProps(state: any) {
         phaseOneService: state.stateReducer.phaseOneService,
         selectedState: state.stateReducer.selectedState,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
-        setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
+        setPhaseOneArgs: state.stateReducer.setPhaseOnArgs
     };
 }
 
-export const AlgorithmPanel = connect(
+export const PhaseOneAlgorithmPanel = connect(
     (state: any) => {
         return mapStateToProps(state);
     },
     dispatch => bindActionCreators(mapActionCreators, dispatch)
-)(AlgorithmPanelComponent);
+)(PhaseOneAlgorithmPanelComponent);

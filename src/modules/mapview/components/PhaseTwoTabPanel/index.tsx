@@ -6,10 +6,21 @@ import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum } from '../../../../models';
+import {
+    PhaseOneArgs,
+    ElectionEnum,
+    DemographicEnum,
+    CompactnessEnum,
+    PoliticalFairnessEnum,
+    PopulationEqualityEnum,
+    PhaseTwoDepthEnum,
+    PhaseTwoArgs,
+    PhaseTwoMeasuresEnum
+} from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
 import '../../../../styles/slider.scss';
+import { PhaseTwoAlgorithmPanel } from './algorithm';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 
@@ -24,11 +35,7 @@ interface IPhaseTwoTabPanelState {
     phaseTwoArgs: PhaseTwoArgs;
 }
 
-export class PhaseTwoTabPanelComponent extends React.Component<
-    IPhaseOneTabPanelProps,
-    IPhaseTwoTabPanelState
-    > {
-
+export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanelProps, IPhaseTwoTabPanelState> {
     state = {
         // phaseTwoArgs: {
         //     ...this.props.phaseTwoArgs,
@@ -41,22 +48,41 @@ export class PhaseTwoTabPanelComponent extends React.Component<
         phaseTwoArgs: this.props.phaseTwoArgs
     };
 
-    private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }, { name: 'Reock', key: CompactnessEnum.REOCK }, { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }];
-    private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT }, { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }];
-    private populationEqualityOptions = [{ name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST }, { name: 'Ideal', key: PopulationEqualityEnum.IDEAL }]
-    private depthOptions = [{ name: 'Standard', key: PhaseTwoDepthEnum.STANDARD }, { name: 'Level', key: PhaseTwoDepthEnum.LEVEL }, { name: 'Tree', key: PhaseTwoDepthEnum.TREE }]
+    private compactnessOptions = [
+        { name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL },
+        { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER },
+        { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG },
+        { name: 'Reock', key: CompactnessEnum.REOCK },
+        { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }
+    ];
+    private politicalFairnessOptions = [
+        { name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP },
+        { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT },
+        { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN },
+        { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS },
+        { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE },
+        { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT },
+        { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }
+    ];
+    private populationEqualityOptions = [
+        { name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST },
+        { name: 'Ideal', key: PopulationEqualityEnum.IDEAL }
+    ];
+    private depthOptions = [
+        { name: 'Standard', key: PhaseTwoDepthEnum.STANDARD },
+        { name: 'Level', key: PhaseTwoDepthEnum.LEVEL },
+        { name: 'Tree', key: PhaseTwoDepthEnum.TREE }
+    ];
 
     render() {
-        console.log(this.props.phaseTwoArgs, this.state.phaseTwoArgs)
         return (
-            <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
-                <h4>Phase 2</h4>
+            <>
+                <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
+                    <h4>Phase 2</h4>
 
-                <h4>Compactness Options</h4>
-                <div className="mb-4">
-                    {
-                        this.compactnessOptions.map(
-                        (e: any, i: number) => {
+                    <h4>Compactness Options</h4>
+                    <div className="mb-4">
+                        {this.compactnessOptions.map((e: any, i: number) => {
                             return (
                                 <Form.Group
                                     key={`compactGroup${i}`}
@@ -71,19 +97,16 @@ export class PhaseTwoTabPanelComponent extends React.Component<
                                         id={`compactGroup${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseTwoArgs.compactnessOption}
-                                        onChange={(e) => this.setCompactness(e.target.getAttribute('data-compactness'))}
+                                        onChange={e => this.setCompactness(e.target.getAttribute('data-compactness'))}
                                     />
                                 </Form.Group>
                             );
-                        }
-                    )}
-                </div>
+                        })}
+                    </div>
 
-                <h4>Political Fairness Options</h4>
-                <div className="mb-4">
-                    {
-                        this.politicalFairnessOptions.map(
-                        (e: any, i: number) => {
+                    <h4>Political Fairness Options</h4>
+                    <div className="mb-4">
+                        {this.politicalFairnessOptions.map((e: any, i: number) => {
                             return (
                                 <Form.Group
                                     key={`algoGroup${i}`}
@@ -98,19 +121,18 @@ export class PhaseTwoTabPanelComponent extends React.Component<
                                         id={`algoOption${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseTwoArgs.politicalFairnessOption}
-                                        onChange={(e) => this.setPoliticalFairness(e.target.getAttribute('data-political'))}
+                                        onChange={e =>
+                                            this.setPoliticalFairness(e.target.getAttribute('data-political'))
+                                        }
                                     />
                                 </Form.Group>
                             );
-                        }
-                    )}
-                </div>
+                        })}
+                    </div>
 
-                <h4>Population Equality Options</h4>
-                <div className="mb-4">
-                    {
-                        this.populationEqualityOptions.map(
-                        (e: any, i: number) => {
+                    <h4>Population Equality Options</h4>
+                    <div className="mb-4">
+                        {this.populationEqualityOptions.map((e: any, i: number) => {
                             return (
                                 <Form.Group
                                     key={`popGroup${i}`}
@@ -125,19 +147,18 @@ export class PhaseTwoTabPanelComponent extends React.Component<
                                         id={`popOption${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseTwoArgs.populationEqualityOption}
-                                        onChange={(e) => this.setPopulationEquality(e.target.getAttribute('data-population'))}
+                                        onChange={e =>
+                                            this.setPopulationEquality(e.target.getAttribute('data-population'))
+                                        }
                                     />
                                 </Form.Group>
                             );
-                        }
-                    )}
-                </div>
+                        })}
+                    </div>
 
-                <h4>Phase Two Depth Heuristics</h4>
-                <div className="mb-4">
-                    {
-                        this.depthOptions.map(
-                        (e: any, i: number) => {
+                    <h4>Phase Two Depth Heuristics</h4>
+                    <div className="mb-4">
+                        {this.depthOptions.map((e: any, i: number) => {
                             return (
                                 <Form.Group
                                     key={`depthGroup${i}`}
@@ -152,173 +173,203 @@ export class PhaseTwoTabPanelComponent extends React.Component<
                                         id={`dpethOption${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseTwoArgs.phaseTwoDepthHeuristic}
-                                        onChange={(e) => this.setPhaseTwoDepthHeuristic(e.target.getAttribute('data-depth'))}
+                                        onChange={e =>
+                                            this.setPhaseTwoDepthHeuristic(e.target.getAttribute('data-depth'))
+                                        }
                                     />
                                 </Form.Group>
                             );
-                        }
-                    )}
-                </div>
+                        })}
+                    </div>
 
-                <h4>Phase Two Simulated Annealing Retries</h4>
-                <div className="mb-4">
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Label
-                            className={'col-6'}
-                            id={'numRetries'}
-                        >Maximum Number of Retries</Form.Label>
-                        <Form.Control type={'number'}
-                            required
-                            className={'col-6'}
-                            min={1}
-                            defaultValue={this.state.phaseTwoArgs.numRetries.toString()}
-                            onChange={(e: any) => this.setNumberRetries(e.target.value)}
-                        />
-                    </Form.Group>
-                </div>
+                    <h4>Phase Two Simulated Annealing Retries</h4>
+                    <div className="mb-4">
+                        <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                            <Form.Label className={'col-6'} id={'numRetries'}>
+                                Maximum Number of Retries
+                            </Form.Label>
+                            <Form.Control
+                                type={'number'}
+                                required
+                                className={'col-6'}
+                                min={1}
+                                defaultValue={this.state.phaseTwoArgs.numRetries.toString()}
+                                onChange={(e: any) => this.setNumberRetries(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
 
-                <div className="mb-4">
-                    <h4>Objective Function Weights</h4>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">
-                            Population Equality
-                        </Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.POPULATION_EQUALITY)}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectivePopulationEquality.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">Compactness</Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.COMPACTNESS)}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectiveCompactness.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">
-                            Partisan Fairness
-                        </Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS)}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectivePartisanFairness.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.CONTIGUITY)}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectiveContiguity.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
+                    <div className="mb-4">
+                        <h4>Objective Function Weights</h4>
+                        <Form.Group className="row form-group d-flex align-items-center py-2">
+                            <Form.Label className="col-6 mb-0">Population Equality</Form.Label>
+                            <TooltipSlider
+                                className={'col-6'}
+                                min={0}
+                                max={100}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(
+                                    PhaseTwoMeasuresEnum.POPULATION_EQUALITY
+                                )}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setObjectivePopulationEquality.bind(this)}
+                            ></TooltipSlider>
+                        </Form.Group>
+                        <Form.Group className="row form-group d-flex align-items-center py-2">
+                            <Form.Label className="col-6 mb-0">Compactness</Form.Label>
+                            <TooltipSlider
+                                className={'col-6'}
+                                min={0}
+                                max={100}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.COMPACTNESS)}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setObjectiveCompactness.bind(this)}
+                            ></TooltipSlider>
+                        </Form.Group>
+                        <Form.Group className="row form-group d-flex align-items-center py-2">
+                            <Form.Label className="col-6 mb-0">Partisan Fairness</Form.Label>
+                            <TooltipSlider
+                                className={'col-6'}
+                                min={0}
+                                max={100}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(
+                                    PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS
+                                )}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setObjectivePartisanFairness.bind(this)}
+                            ></TooltipSlider>
+                        </Form.Group>
+                        <Form.Group className="row form-group d-flex align-items-center py-2">
+                            <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
+                            <TooltipSlider
+                                className={'col-6'}
+                                min={0}
+                                max={100}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.CONTIGUITY)}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setObjectiveContiguity.bind(this)}
+                            ></TooltipSlider>
+                        </Form.Group>
+                    </div>
                 </div>
-            </div>
+                <PhaseTwoAlgorithmPanel />
+            </>
         );
     }
 
     private setCompactness(compactnessOption: CompactnessEnum): void {
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                compactnessOption
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    compactnessOption
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setPoliticalFairness(politicalFairnessOption: PoliticalFairnessEnum): void {
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                politicalFairnessOption
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    politicalFairnessOption
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setPopulationEquality(populationEqualityOption: PopulationEqualityEnum): void {
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                populationEqualityOption
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    populationEqualityOption
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setPhaseTwoDepthHeuristic(phaseTwoDepthHeuristic: PhaseTwoDepthEnum): void {
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                phaseTwoDepthHeuristic
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    phaseTwoDepthHeuristic
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setNumberRetries(numRetries: number): void {
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                numRetries
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    numRetries
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setObjectivePopulationEquality(objectivePopulationEquality: number): void {
         const weights = this.state.phaseTwoArgs.weights;
         weights.set(PhaseTwoMeasuresEnum.POPULATION_EQUALITY, objectivePopulationEquality);
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                weights
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    weights
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setObjectiveCompactness(objectiveCompactness: number): void {
         const weights = this.state.phaseTwoArgs.weights;
         weights.set(PhaseTwoMeasuresEnum.COMPACTNESS, objectiveCompactness);
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                weights
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    weights
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setObjectivePartisanFairness(objectivePartisanFairness: number): void {
         const weights = this.state.phaseTwoArgs.weights;
         weights.set(PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, objectivePartisanFairness);
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                weights
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    weights
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 
     private setObjectiveContiguity(objectiveContiguity: number): void {
         const weights = this.state.phaseTwoArgs.weights;
         weights.set(PhaseTwoMeasuresEnum.CONTIGUITY, objectiveContiguity);
-        this.setState({
-            phaseTwoArgs: {
-                ...this.state.phaseTwoArgs,
-                weights
-            }
-        }, () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs));
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    weights
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
     }
 }
 

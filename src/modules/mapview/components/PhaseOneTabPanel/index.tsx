@@ -10,6 +10,7 @@ import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, Political
 
 import '../../../../styles/slider.scss';
 import { EnumNameMapper } from '../../../../libs/enum-name';
+import { PhaseOneAlgorithmPanel } from './algorithm';
 
 const TooltipRange = createSliderWithTooltip(Range);
 const TooltipSlider = createSliderWithTooltip(Slider);
@@ -35,149 +36,152 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
     render() {
         return (
-            <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
-                <h4>District Properties</h4>
-                <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                    <Form.Label
-                        className={'col-6'}
-                        id={'numDistricts'}
-                    >Number of Districts to Generate</Form.Label>
-                    <Form.Control type={'number'}
-                        required
-                        className={'col-6'}
-                        min={1}
-                        max={100}
-                        defaultValue={this.state.phaseOneArgs.numDistricts.toString()}
-                        onChange={(e: any) => this.setNumberDistricts(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
-                    <Form.Label
-                        className={'col-6'}
-                        id={'electionData'}
-                    >Election Data to Use</Form.Label>
-
-                    <DropdownButton
-                        id="dropdown-basic-button"
-                        title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
-                    >
-                        <Dropdown.Item
-                            onClick={() => this.setElectionData(ElectionEnum.PRES_16)}
-                        >
-                            Presidential 2016
-                            </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => this.setElectionData(ElectionEnum.HOUSE_16)}
-                        >
-                            Congressional 2016
-                            </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => this.setElectionData(ElectionEnum.HOUSE_18)}
-                        >
-                            Congressional 2018
-                            </Dropdown.Item>
-                    </DropdownButton>
-                </Form.Group>
-
-                <div className="mb-4">
-                    <h6>Majority Minority District Threshold</h6>
+            <>
+                <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
+                    <h4>District Properties</h4>
                     <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                         <Form.Label
                             className={'col-6'}
-                            title={'Min/Max Minority Percentage of Population'}
-                        >Min/Max Minority Percentage of Population</Form.Label>
-                        <TooltipRange
+                            id={'numDistricts'}
+                        >Number of Districts to Generate</Form.Label>
+                        <Form.Control type={'number'}
+                            required
                             className={'col-6'}
-                            count={1}
-                            allowCross={false}
-                            pushable={false}
-                            min={51}
+                            min={1}
                             max={100}
-                            defaultValue={[this.state.phaseOneArgs.lowerBound, this.state.phaseOneArgs.upperBound]}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setMajorityMinorityThreshold.bind(this)}
+                            defaultValue={this.state.phaseOneArgs.numDistricts.toString()}
+                            onChange={(e: any) => this.setNumberDistricts(e.target.value)}
                         />
+                    </Form.Group>
+                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2 mb-4">
+                        <Form.Label
+                            className={'col-6'}
+                            id={'electionData'}
+                        >Election Data to Use</Form.Label>
+
+                        <DropdownButton
+                            id="dropdown-basic-button"
+                            title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
+                        >
+                            <Dropdown.Item
+                                onClick={() => this.setElectionData(ElectionEnum.PRES_16)}
+                            >
+                                Presidential 2016
+                                </Dropdown.Item>
+                            <Dropdown.Item
+                                onClick={() => this.setElectionData(ElectionEnum.HOUSE_16)}
+                            >
+                                Congressional 2016
+                                </Dropdown.Item>
+                            <Dropdown.Item
+                                onClick={() => this.setElectionData(ElectionEnum.HOUSE_18)}
+                            >
+                                Congressional 2018
+                                </Dropdown.Item>
+                        </DropdownButton>
                     </Form.Group>
 
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupCheckAfrican'}
-                            label={'African Americans'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.BLACK)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BLACK, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupCheckAsian'}
-                            label={'Asians'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.ASIAN)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.ASIAN, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupCheckPacific'}
-                            label={'Pacific Islanders'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.PACIFIC_ISLANDER)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.PACIFIC_ISLANDER, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupCheckHispanic'}
-                            label={'Hispanics'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.HISPANIC)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.HISPANIC, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupCheckNHWhite'}
-                            label={'Non-Hispanic Whites'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.WHITE)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.WHITE, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'biracialGroupOther'}
-                            label={'Multiracial'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.BIRACIAL)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BIRACIAL, e.target.checked)}
-                        />
-                    </Form.Group>
-                    <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
-                        <Form.Check
-                            custom
-                            className={'col-12'}
-                            type={'checkbox'}
-                            id={'minorityGroupOther'}
-                            label={'Other'}
-                            defaultChecked={this.containsDemographic(DemographicEnum.OTHER)}
-                            onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.OTHER, e.target.checked)}
-                        />
-                    </Form.Group>
+                    <div className="mb-4">
+                        <h6>Majority Minority District Threshold</h6>
+                        <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
+                            <Form.Label
+                                className={'col-6'}
+                                title={'Min/Max Minority Percentage of Population'}
+                            >Min/Max Minority Percentage of Population</Form.Label>
+                            <TooltipRange
+                                className={'col-6'}
+                                count={1}
+                                allowCross={false}
+                                pushable={false}
+                                min={51}
+                                max={100}
+                                defaultValue={[this.state.phaseOneArgs.lowerBound, this.state.phaseOneArgs.upperBound]}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setMajorityMinorityThreshold.bind(this)}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckAfrican'}
+                                label={'African Americans'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.BLACK)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BLACK, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckAsian'}
+                                label={'Asians'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.ASIAN)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.ASIAN, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckPacific'}
+                                label={'Pacific Islanders'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.PACIFIC_ISLANDER)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.PACIFIC_ISLANDER, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckHispanic'}
+                                label={'Hispanics'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.HISPANIC)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.HISPANIC, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckNHWhite'}
+                                label={'Non-Hispanic Whites'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.WHITE)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.WHITE, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'biracialGroupOther'}
+                                label={'Multiracial'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.BIRACIAL)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.BIRACIAL, e.target.checked)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupOther'}
+                                label={'Other'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.OTHER)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.OTHER, e.target.checked)}
+                            />
+                        </Form.Group>
+                    </div>
                 </div>
-            </div>
+                <PhaseOneAlgorithmPanel />
+            </>
         );
     }
 

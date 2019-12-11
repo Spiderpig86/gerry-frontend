@@ -5,7 +5,6 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Link } from 'react-router-dom';
 
 import { PhaseOneTabPanel, FilterTabPanel, LogsTabPanel, PhaseZeroTabPanel, PhaseTwoTabPanel } from '../';
-import { AlgorithmPanel } from '../AlgorithmPanel';
 import { LeftSidebarStyles } from '../../../../global_components';
 
 import '../../../../styles/cirrus/tabs.scss';
@@ -46,7 +45,7 @@ export class LeftSidebar extends React.Component<LeftSidebarProps, {}> {
                         <LogsTabPanel />
                     </TabPanel>
                 </Tabs>
-                <AlgorithmPanel />
+                {/* <AlgorithmPanel /> */}
             </Menu>
         );
     }
