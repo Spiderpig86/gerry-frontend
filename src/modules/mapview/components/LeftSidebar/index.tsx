@@ -4,7 +4,7 @@ import { slide as Menu } from 'react-burger-menu';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Link } from 'react-router-dom';
 
-import { PhaseOneTabPanel, FilterTabPanel, LogsTabPanel, PhaseZeroTabPanel } from '../';
+import { PhaseOneTabPanel, FilterTabPanel, LogsTabPanel, PhaseZeroTabPanel, PhaseTwoTabPanel } from '../';
 import { AlgorithmPanel } from '../AlgorithmPanel';
 import { LeftSidebarStyles } from '../../../../global_components';
 
@@ -24,7 +24,8 @@ export class LeftSidebar extends React.Component<LeftSidebarProps, {}> {
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
                         <Tab><h6>Phase 0</h6></Tab>
-                        <Tab><h6>Phase 1/2</h6></Tab>
+                        <Tab><h6>Phase 1</h6></Tab>
+                        <Tab><h6>Phase 2</h6></Tab>
                         <Tab><h6>Filter</h6></Tab>
                         <Tab><h6>Logs</h6></Tab>
                     </TabList>
@@ -34,6 +35,9 @@ export class LeftSidebar extends React.Component<LeftSidebarProps, {}> {
                     </TabPanel>
                     <TabPanel>
                         <PhaseOneTabPanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <PhaseTwoTabPanel />
                     </TabPanel>
                     <TabPanel>
                         <FilterTabPanel />

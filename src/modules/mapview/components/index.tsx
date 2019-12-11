@@ -1,6 +1,7 @@
 export { LeftSidebar } from './LeftSidebar';
-export { PhaseOneTabPanel } from './PhaseOneTabPanel';
 export { PhaseZeroTabPanel } from './PhaseZeroTabPanel';
+export { PhaseOneTabPanel } from './PhaseOneTabPanel';
+export { PhaseTwoTabPanel } from './PhaseTwoTabPanel';
 export { FilterTabPanel } from './FilterTabPanel';
 export { LogsTabPanel } from './LogsTabPanel';
 export { StatisticsTabPanel } from './StatisticsTabPanel';

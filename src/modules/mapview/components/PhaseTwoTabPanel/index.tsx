@@ -30,14 +30,15 @@ export class PhaseTwoTabPanelComponent extends React.Component<
     > {
 
     state = {
-        phaseTwoArgs: {
-            ...this.props.phaseTwoArgs,
-            stateType: this.props.phaseOneArgs.stateType,
-            electionData: this.props.phaseOneArgs.electionData,
-            demographicTypes: this.props.phaseOneArgs.demographicTypes,
-            upperBound: this.props.phaseOneArgs.upperBound,
-            lowerBound: this.props.phaseOneArgs.lowerBound
-        }
+        // phaseTwoArgs: {
+        //     ...this.props.phaseTwoArgs,
+        //     stateType: this.props.phaseOneArgs.stateType,
+        //     electionData: this.props.phaseOneArgs.electionData,
+        //     demographicTypes: this.props.phaseOneArgs.demographicTypes,
+        //     upperBound: this.props.phaseOneArgs.upperBound,
+        //     lowerBound: this.props.phaseOneArgs.lowerBound
+        // }
+        phaseTwoArgs: this.props.phaseTwoArgs
     };
 
     private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }, { name: 'Reock', key: CompactnessEnum.REOCK }, { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }];
@@ -46,6 +47,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<
     private depthOptions = [{ name: 'Standard', key: PhaseTwoDepthEnum.STANDARD }, { name: 'Level', key: PhaseTwoDepthEnum.LEVEL }, { name: 'Tree', key: PhaseTwoDepthEnum.TREE }]
 
     render() {
+        console.log(this.props.phaseTwoArgs, this.state.phaseTwoArgs)
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                 <h4>Phase 2</h4>

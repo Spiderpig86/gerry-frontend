@@ -23,24 +23,24 @@ export class ModelMapper {
         }
     }
 
-    public toPhaseTwoInputs(stateId: string, phaseOneArgs: PhaseOneArgs): any {
-        return {
-            stateId,
-            upperBound: (phaseOneArgs.maxPopulationPercent * 1.0) / 100,
-            lowerBound: (phaseOneArgs.minPopulationPercent * 1.0) / 100,
-            compactnessWeight: {
-                measure: phaseOneArgs.compactnessOption,
-                weight: phaseOneArgs.objectiveCompactness
-            },
-            demographcTypes: phaseOneArgs.selectedDemographics,
-            populationEquality: {
-                measure: phaseOneArgs.populationEqualityOption,
-                weight: phaseOneArgs.objectivePopulationEquality
-            },
-            depthHeuristic: phaseOneArgs.phaseTwoDepthHeuristic,
-            numRetries: phaseOneArgs.numRetries,
-            moveHeuristic: 'RANDOM'
-        }
-    }
+    // public toPhaseTwoInputs(stateId: string, phaseOneArgs: PhaseOneArgs): any {
+    //     return {
+    //         stateId,
+    //         upperBound: (phaseOneArgs.maxPopulationPercent * 1.0) / 100,
+    //         lowerBound: (phaseOneArgs.minPopulationPercent * 1.0) / 100,
+    //         compactnessWeight: {
+    //             measure: phaseOneArgs.compactnessOption,
+    //             weight: phaseOneArgs.objectiveCompactness
+    //         },
+    //         demographcTypes: phaseOneArgs.selectedDemographics,
+    //         populationEquality: {
+    //             measure: phaseOneArgs.populationEqualityOption,
+    //             weight: phaseOneArgs.objectivePopulationEquality
+    //         },
+    //         depthHeuristic: phaseOneArgs.phaseTwoDepthHeuristic,
+    //         numRetries: phaseOneArgs.numRetries,
+    //         moveHeuristic: 'RANDOM'
+    //     }
+    // }
 
 }

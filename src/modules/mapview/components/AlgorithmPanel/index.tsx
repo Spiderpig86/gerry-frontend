@@ -7,9 +7,9 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum, StateEnum } from '../../../../models';
+import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
-import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
+import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service'
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
@@ -60,7 +60,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         delay={{ show: 250, hide: 400 }}
                         overlay={props => this.renderTooltip(props, `Step Forward`)}
                     >
-                        <Button disabled={!this.props.phaseOneService || !this.props.phaseOneArgs.intermediateResults} onClick={this.stepForward.bind(this)}>
+                        <Button disabled={!this.props.phaseOneService || !(this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP)} onClick={this.stepForward.bind(this)}>
                             <FontAwesomeIcon icon={faStepForward} />
                         </Button>
                     </OverlayTrigger>
@@ -71,7 +71,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
                         label={'Display Intermediate Results (Phase 1)'}
-                        defaultChecked={this.props.phaseOneArgs.intermediateResults}
+                        defaultChecked={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP}
                         onChange={(e) => this.toggleIntermediateUpdates(e.target.checked)}
                     />
                 </Form.Group>
@@ -82,7 +82,7 @@ export class AlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanel
     private toggleIntermediateUpdates(e: boolean) {
         this.props.setPhaseOneArgs({
             ...this.props.phaseOneArgs,
-            intermediateResults: e
+            algRunType: e ? AlgorithmRunEnum.BY_STEP : AlgorithmRunEnum.TO_COMPLETION
         });
     }
 

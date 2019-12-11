@@ -33,11 +33,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
         phaseOneArgs: this.props.phaseOneArgs
     };
 
-    private compactnessOptions = [{ name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL }, { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER }, { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG }, { name: 'Reock', key: CompactnessEnum.REOCK }, { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }];
-    private politicalFairnessOptions = [{ name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }, { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT }, { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN }, { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS }, { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE }, { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT }, { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }];
-    private populationEqualityOptions = [{ name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST }, { name: 'Ideal', key: PopulationEqualityEnum.IDEAL }]
-    private depthOptions = [{ name: 'Standard', key: PhaseTwoDepthEnum.STANDARD }, { name: 'Level', key: PhaseTwoDepthEnum.LEVEL }, { name: 'Tree', key: PhaseTwoDepthEnum.TREE }]
-
     render() {
         return (
             <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
@@ -98,7 +93,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             pushable={false}
                             min={51}
                             max={100}
-                            defaultValue={[this.state.phaseOneArgs.minPopulationPercent, this.state.phaseOneArgs.maxPopulationPercent]}
+                            defaultValue={[this.state.phaseOneArgs.lowerBound, this.state.phaseOneArgs.upperBound]}
                             tipFormatter={value => `${value}%`}
                             onAfterChange={this.setMajorityMinorityThreshold.bind(this)}
                         />
@@ -182,184 +177,6 @@ export class PhaseOneTabPanelComponent extends React.Component<
                         />
                     </Form.Group>
                 </div>
-
-
-                <h4>Compactness Options</h4>
-                <div className="mb-4">
-                    {
-                        this.compactnessOptions.map(
-                        (e: any, i: number) => {
-                            return (
-                                <Form.Group
-                                    key={`compactGroup${i}`}
-                                    className="w-100 py-2 row form-group d-flex align-items-center"
-                                >
-                                    <Form.Check
-                                        name={`compactnessAlgo`}
-                                        data-compactness={e.key}
-                                        key={e.key}
-                                        custom
-                                        type={'radio'}
-                                        id={`compactGroup${i}`}
-                                        label={`${e.name}`}
-                                        defaultChecked={e.key === this.state.phaseOneArgs.compactnessOption}
-                                        onChange={(e) => this.setCompactness(e.target.getAttribute('data-compactness'))}
-                                    />
-                                </Form.Group>
-                            );
-                        }
-                    )}
-                </div>
-
-                <h4>Political Fairness Options</h4>
-                <div className="mb-4">
-                    {
-                        this.politicalFairnessOptions.map(
-                        (e: any, i: number) => {
-                            return (
-                                <Form.Group
-                                    key={`algoGroup${i}`}
-                                    className="w-100 py-2 row form-group d-flex align-items-center"
-                                >
-                                    <Form.Check
-                                        name={`politicalAlgo`}
-                                        key={e.key}
-                                        data-political={e.key}
-                                        custom
-                                        type={'radio'}
-                                        id={`algoOption${i}`}
-                                        label={`${e.name}`}
-                                        defaultChecked={e.key === this.state.phaseOneArgs.politicalFairnessOption}
-                                        onChange={(e) => this.setPoliticalFairness(e.target.getAttribute('data-political'))}
-                                    />
-                                </Form.Group>
-                            );
-                        }
-                    )}
-                </div>
-
-                <h4>Population Equality Options</h4>
-                <div className="mb-4">
-                    {
-                        this.populationEqualityOptions.map(
-                        (e: any, i: number) => {
-                            return (
-                                <Form.Group
-                                    key={`popGroup${i}`}
-                                    className="w-100 py-2 row form-group d-flex align-items-center"
-                                >
-                                    <Form.Check
-                                        name={`populationAlgo`}
-                                        key={e.key}
-                                        data-population={e.key}
-                                        custom
-                                        type={'radio'}
-                                        id={`popOption${i}`}
-                                        label={`${e.name}`}
-                                        defaultChecked={e.key === this.state.phaseOneArgs.populationEqualityOption}
-                                        onChange={(e) => this.setPopulationEquality(e.target.getAttribute('data-population'))}
-                                    />
-                                </Form.Group>
-                            );
-                        }
-                    )}
-                </div>
-
-                <h4>Phase Two Depth Heuristics</h4>
-                <div className="mb-4">
-                    {
-                        this.depthOptions.map(
-                        (e: any, i: number) => {
-                            return (
-                                <Form.Group
-                                    key={`depthGroup${i}`}
-                                    className="w-100 py-2 row form-group d-flex align-items-center"
-                                >
-                                    <Form.Check
-                                        name={`depthAlgo`}
-                                        key={e.key}
-                                        data-depth={e.key}
-                                        custom
-                                        type={'radio'}
-                                        id={`dpethOption${i}`}
-                                        label={`${e.name}`}
-                                        defaultChecked={e.key === this.state.phaseOneArgs.phaseTwoDepthHeuristic}
-                                        onChange={(e) => this.setPhaseTwoDepthHeuristic(e.target.getAttribute('data-depth'))}
-                                    />
-                                </Form.Group>
-                            );
-                        }
-                    )}
-                </div>
-
-                <h4>Phase Two Simulated Annealing Retries</h4>
-                <div className="mb-4">
-                    <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
-                        <Form.Label
-                            className={'col-6'}
-                            id={'numRetries'}
-                        >Maximum Number of Retries</Form.Label>
-                        <Form.Control type={'number'}
-                            required
-                            className={'col-6'}
-                            min={1}
-                            defaultValue={this.state.phaseOneArgs.numRetries.toString()}
-                            onChange={(e: any) => this.setNumberRetries(e.target.value)}
-                        />
-                    </Form.Group>
-                </div>
-
-                <div className="mb-4">
-                    <h4>Objective Function Weights</h4>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">
-                            Population Equality
-                        </Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseOneArgs.objectivePopulationEquality}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectivePopulationEquality.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">Compactness</Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseOneArgs.objectiveCompactness}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectiveCompactness.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">
-                            Partisan Fairness
-                        </Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseOneArgs.objectivePartisanFairness}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectivePartisanFairness.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                    <Form.Group className="row form-group d-flex align-items-center py-2">
-                        <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
-                        <TooltipSlider
-                            className={'col-6'}
-                            min={0}
-                            max={100}
-                            defaultValue={this.state.phaseOneArgs.objectiveContiguity}
-                            tipFormatter={value => `${value}%`}
-                            onAfterChange={this.setObjectiveContiguity.bind(this)}
-                        ></TooltipSlider>
-                    </Form.Group>
-                </div>
             </div>
         );
     }
@@ -386,14 +203,14 @@ export class PhaseOneTabPanelComponent extends React.Component<
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
-                minPopulationPercent: values[0],
-                maxPopulationPercent: values[1]
+                lowerBound: values[0],
+                upperBound: values[1]
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
 
     private toggleSelectedDemographics(demographic: DemographicEnum, insert: boolean): void {
-        const demographics = this.state.phaseOneArgs.selectedDemographics;
+        const demographics = this.state.phaseOneArgs.demographicTypes;
         if (insert) {
             demographics.add(demographic);
         } else {
@@ -402,94 +219,13 @@ export class PhaseOneTabPanelComponent extends React.Component<
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
-                selectedDemographics: demographics
+                demographicTypes: demographics
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
 
     private containsDemographic(demographic: DemographicEnum): boolean {
-        return this.state.phaseOneArgs.selectedDemographics.has(demographic);
-    }
-
-    private setCompactness(compactnessOption: CompactnessEnum): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                compactnessOption
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setPoliticalFairness(politicalFairnessOption: PoliticalFairnessEnum): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                politicalFairnessOption
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setPopulationEquality(populationEqualityOption: PopulationEqualityEnum): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                populationEqualityOption
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setPhaseTwoDepthHeuristic(phaseTwoDepthHeuristic: PhaseTwoDepthEnum): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                phaseTwoDepthHeuristic
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setNumberRetries(numRetries: number): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                numRetries
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setObjectivePopulationEquality(objectivePopulationEquality: number): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                objectivePopulationEquality
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setObjectiveCompactness(objectiveCompactness: number): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                objectiveCompactness
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setObjectivePartisanFairness(objectivePartisanFairness: number): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                objectivePartisanFairness
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
-    }
-
-    private setObjectiveContiguity(objectiveContiguity: number): void {
-        this.setState({
-            phaseOneArgs: {
-                ...this.state.phaseOneArgs,
-                objectiveContiguity
-            }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+        return this.state.phaseOneArgs.demographicTypes.has(demographic);
     }
 }
 

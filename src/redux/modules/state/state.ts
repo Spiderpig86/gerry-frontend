@@ -3,7 +3,7 @@
  */
  import * as Constants from '../../../config/constants';
 
- import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum } from '../../../models';
+ import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseOneMajMinPairsEnum, PhaseTwoDepthEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum, AlgorithmRunEnum, PhaseOneOtherPairsEnum, PhaseOneStopEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
 import { StateBorderService } from '../../../libs/state-borders';
@@ -30,10 +30,13 @@ import { string } from 'prop-types';
          if (oldState === state) {
              return;
          }
-        //  dispatch(selectState(state));
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
          dispatch(setPhaseZeroArgs({
              ...initialState.phaseZeroArgs,
+             stateType: state
+         }));
+         dispatch(setPhaseOneArgs({
+             ...initialState.phaseOneArgs,
              stateType: state
          }));
          dispatch(setPhaseZeroResults(null));
@@ -41,6 +44,36 @@ import { string } from 'prop-types';
          dispatch(() => new PrecinctService(state, dispatch));
      }
  }
+
+ export const setPhaseZeroArgsCreator = (phaseZeroArgs: PhaseZeroArgs) => {
+    return async (dispatch: any) => {
+        dispatch(setPhaseZeroArgs(
+            phaseZeroArgs
+        ));
+        dispatch(setPhaseOneArgs({
+            ...initialState.phaseOneArgs,
+            electionData: phaseZeroArgs.electionType
+        }));
+        dispatch(setPhaseTwoArgs({
+            ...initialState.phaseTwoArgs,
+            electionData: phaseZeroArgs.electionType
+        }));
+    }
+}
+
+export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
+    return async (dispatch: any) => {
+        dispatch(setPhaseOneArgs(phaseOneArgs));
+        dispatch(setPhaseTwoArgs({
+                ...initialState.phaseTwoArgs,
+                stateType: phaseOneArgs.stateType,
+                electionData: phaseOneArgs.electionData,
+                demographicTypes: phaseOneArgs.demographicTypes,
+                upperBound: phaseOneArgs.upperBound,
+                lowerBound: phaseOneArgs.lowerBound
+        }));
+    }
+}
  
  export const setMapFilterCreator = (filter: string) => {
      return (dispatch: any) => {
@@ -207,21 +240,16 @@ import { string } from 'prop-types';
      },
      phaseZeroResults: null,
      phaseOneArgs: {
-         numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
+         stateType: StateEnum.NOT_SET,
          electionData: ElectionEnum.PRES_16,
-         minPopulationPercent: Constants.DEFAULT_POP_PRECENT_MIN,
-         maxPopulationPercent: Constants.DEFAULT_POP_PRECENT_MAX,
-         selectedDemographics: new Set<DemographicEnum>(),
-         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
-         politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
-         populationEqualityOption: PopulationEqualityEnum.IDEAL,
-         phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
-         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
-         objectivePopulationEquality: Constants.DEFAULT_OF_VALUE,
-         objectiveCompactness: Constants.DEFAULT_OF_VALUE,
-         objectivePartisanFairness: Constants.DEFAULT_OF_VALUE,
-         objectiveContiguity: Constants.DEFAULT_OF_VALUE,
-         intermediateResults: false
+         numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
+         demographicTypes: new Set<DemographicEnum>(),
+         upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
+         lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
+         algRunType: AlgorithmRunEnum.TO_COMPLETION,
+         phaseOneMajMinPairHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
+         phaseOneOtherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
+         stopHeurstic: PhaseOneStopEnum.JOIN_SMALLEST
      },
      phaseTwoArgs: {
          stateType: StateEnum.NOT_SET,
@@ -305,7 +333,7 @@ import { string } from 'prop-types';
          case SET_PHASE_TWO_ARGS:
              return {
                  ...state,
-                 phaseTwoArgs: action.phasetwoArgs
+                 phaseTwoArgs: action.phaseTwoArgs
              }
          case SET_OLD_CLUSTERS:
              return {
