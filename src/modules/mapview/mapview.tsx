@@ -223,6 +223,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     mapView={this}
                     rightSidebarHandler={this.handleRightSidebar.bind(this)}
                     isOpen={this.state.rightBarOpen}
+                    coloring={this.coloring}
                 />
 
                 <MapNavbar />

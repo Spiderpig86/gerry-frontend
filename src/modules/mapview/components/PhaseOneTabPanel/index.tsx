@@ -48,7 +48,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             required
                             className={'col-6'}
                             min={1}
-                            max={100}
+                            max={55}
                             defaultValue={this.state.phaseOneArgs.numDistricts.toString()}
                             onChange={(e: any) => this.setNumberDistricts(e.target.value)}
                         />

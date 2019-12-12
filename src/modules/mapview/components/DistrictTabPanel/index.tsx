@@ -5,10 +5,12 @@ import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
 import { Card } from 'react-bootstrap';
 import { StateEnum, ICluster } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
+import { Coloring } from '../../../../libs/coloring';
 
 interface DistrictTabPanelProps {
     selectedState: StateEnum;
     oldClusters: Map<string, ICluster>;
+    coloring: Coloring;
 }
 
 interface DistrictTabPanelState {
@@ -44,7 +46,7 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
     }
 
     render() {
-        
+
         if (this.props.selectedState === StateEnum.NOT_SET) {
             return <Placeholder loading={false} title="No state selected." subtitle="Select a state to view data."></Placeholder>;
         }
@@ -71,22 +73,36 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                 </Card>
 
                 <br />
-                <DropdownButton id="dropdown-basic-button" title={`Selected District: ${this.state.selectedOldDistrictId || 'N/A'}`}>
-                    {
-                        this.state.sortedKeys && this.state.sortedKeys.map(key => {
-                            return (
-                                <Dropdown.Item key={key} onClick={() => this.selectOldDistrictData(key)}>District {key}</Dropdown.Item>
-                            )
-                        })
-                    }
-                </DropdownButton>
+                <div className="d-flex align-items-center">
+                    <div className='mr-2' style={{
+                        width: '28px',
+                        height: '28px',
+                        backgroundColor: this.state.selectedOldDistrictId ? this.props.coloring.colors[parseInt(this.state.selectedOldDistrictId)] : '#ccc',
+                        display: 'block',
+                        borderRadius: '50%'
+                    }}></div>
+                    <DropdownButton id="dropdown-basic-button" title={`Selected District: ${this.state.selectedOldDistrictId || 'N/A'}`}>
+                        {
+                            this.state.sortedKeys && this.state.sortedKeys.map(key => {
+                                return (
+                                    <Dropdown.Item key={key} onClick={() => this.selectOldDistrictData(key)}>District {key}</Dropdown.Item>
+                                )
+                            })
+                        }
+                    </DropdownButton>
+                </div>
 
                 <br />
 
                 {
-                    this.state.oldDistrictData && (
+                    this.state.oldDistrictData ? (
                         <StatisticsAccordionComponent demographicData={this.state.oldDistrictData.demographicData} electionData={this.state.oldDistrictData.electionData} />
-                    )
+                    ) : (
+                            <div className='text-center'>
+                                <h4>No district selected.</h4>
+                                <h6>Select a district to view its data.</h6>
+                            </div>
+                        )
                 }
 
                 <br />
