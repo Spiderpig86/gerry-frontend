@@ -20,6 +20,7 @@ import '../../../../styles/cirrus/tabs.scss';
 interface IRightSidebarProps {
     selectedState: StateEnum;
     stateData: ICluster;
+    oldClusters: Map<string, ICluster>;
     isOpen: boolean;
     mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
@@ -48,7 +49,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel selectedState={this.props.selectedState} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -77,6 +78,7 @@ function mapStatetoProps(state: any, ownProps: any) {
     return {
         selectedState: state.stateReducer.selectedState,
         stateData: state.stateReducer.stateData,
+        oldClusters: state.stateReducer.oldClusters,
         ...ownProps
     };
 }
