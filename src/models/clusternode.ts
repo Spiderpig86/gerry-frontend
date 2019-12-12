@@ -1,5 +1,6 @@
 import { IDemographics } from './index';
 import { IElection } from './election';
+import { ClusterDemographics } from './demographics';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
@@ -10,14 +11,14 @@ import { IElection } from './election';
  */
 export interface ICluster {
 
-    type: string;
     id: string;
     name: string;
+    type: string;
     incumbent: string;
     precinctKeys: Set<string>;
-    counties: Set<string>;
+    // counties: Set<string>;
     // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
-    demographicData: IDemographics;
+    demographicData: ClusterDemographics;
     electionData: IElection;
     objectiveFunctionScores: IObjectiveFunctionScores;
 

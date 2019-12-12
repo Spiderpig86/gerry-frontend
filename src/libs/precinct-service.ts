@@ -1,9 +1,12 @@
 import * as stateReducer from '../redux/modules/state/state';
 import * as Constants from '../config/constants';
 
+import Axios from 'axios';
+
 import { WebSocketHandler } from './ws';
-import { StateEnum, IPrecinct } from '../models';
+import { StateEnum, IPrecinct, ElectionEnum, ICluster } from '../models';
 import { hashPrecinct } from './functions/hash';
+import { ModelMapper } from './mapping/model-mapper';
 
 export class PrecinctService {
     private state: StateEnum;
@@ -53,5 +56,63 @@ export class PrecinctService {
             const shape = message[i];
             this.precinctMap.set(hashPrecinct(shape.properties), {originalCdId: shape.properties.cd, ...shape});
         }
+    }
+
+    private URL_MAPPINGS = new Map<String, String>([
+        [StateEnum.CA, 'CALIFORNIA'],
+        [StateEnum.VA, 'VIRGINIA'],
+        [StateEnum.UT, 'UTAH'],
+        [ElectionEnum.PRES_16, 'PRESIDENTIAL_2016'],
+        [ElectionEnum.HOUSE_16, 'CONGRESSIONAL_2016'],
+        [ElectionEnum.HOUSE_18, 'CONGRESSIONAL_2018']
+    ]);
+    
+    public async getStateStatistics(state: StateEnum) {
+        let stateCluster: ICluster = null;
+        const districtClusters: Map<number, ICluster> = new Map<number, ICluster>();
+
+        await Promise.all([
+            this.getStatisticsByElection(state, ElectionEnum.PRES_16),
+            this.getStatisticsByElection(state, ElectionEnum.HOUSE_16),
+            this.getStatisticsByElection(state, ElectionEnum.HOUSE_18)
+        ]).then(data => {
+            console.log(data);
+            const pres16 = data[0].data;
+            const house16 = data[1].data;
+            const house18 = data[2].data;
+
+            // Create state cluster
+            stateCluster = {
+                ...pres16,
+                children: [],
+                demographicData: {
+                    ...pres16.demographicData,
+                    population: ModelMapper.toIDemographic(pres16.demographicData.population)
+                },
+                electionData: {
+                    presidential16: ModelMapper.toIVote(pres16.electionData.votes),
+                    house16: ModelMapper.toIVote(house16.electionData.votes),
+                    house18: ModelMapper.toIVote(house18.electionData.votes)
+                }
+            };
+            console.log(stateCluster);
+            this.dispatch(stateReducer.setStateData(stateCluster));
+
+            // // Create district clusters
+            // for (const district of pres16.children) {
+            //     // Get district number as key
+                // const key = district.name.substring(1);
+            //     const cluster = {...district, children: [], counties: []};
+
+
+
+            //     districtClusters.set(key, cluster);
+            // }
+
+        });
+    }
+
+    public async getStatisticsByElection(state: StateEnum, election: ElectionEnum): Promise<any> {
+        return await Axios.get(`${Constants.APP_API}/states/original/${this.URL_MAPPINGS.get(state)}/${this.URL_MAPPINGS.get(election)}`);
     }
 }

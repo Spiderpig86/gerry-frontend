@@ -13,12 +13,13 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
-import { StateEnum } from '../../../../models';
+import { StateEnum, ICluster } from '../../../../models';
 
 import '../../../../styles/cirrus/tabs.scss';
 
 interface IRightSidebarProps {
     selectedState: StateEnum;
+    stateData: ICluster;
     isOpen: boolean;
     mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
@@ -33,7 +34,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
 
         return (
             <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'} burgerButtonClassName={ "burger-right" } menuClassName={ "menu-right" }>
-                <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
+                <h3 className="px-3">{ this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
 
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
@@ -44,7 +45,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
-                        <StatisticsTabPanel selectedState={this.props.selectedState} />
+                        <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
                         <DistrictTabPanel selectedState={this.props.selectedState} />
@@ -75,6 +76,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
 function mapStatetoProps(state: any, ownProps: any) {
     return {
         selectedState: state.stateReducer.selectedState,
+        stateData: state.stateReducer.stateData,
         ...ownProps
     };
 }

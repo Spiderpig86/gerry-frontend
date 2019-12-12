@@ -41,7 +41,7 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
 
                 <br />
 
-                <StatisticsAccordionComponent />
+                {/* <StatisticsAccordionComponent /> */}
 
                 <br />
 
@@ -54,7 +54,7 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                 
                 <br />
 
-                <StatisticsAccordionComponent />
+                {/* <StatisticsAccordionComponent /> */}
             </div>
         );
     }

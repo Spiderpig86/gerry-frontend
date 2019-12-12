@@ -8,12 +8,3 @@ export interface IElection {
     house18: IVoteData;
 
 }
-
-export interface ClusterElection {
-
-    id: string;
-    electionType: ElectionEnum;
-    winner: PartyEnum;
-    votes: IVoteData
-
-}

@@ -2,7 +2,7 @@ import { IDemographics, IVoteData, PhaseOneArgs } from '../../models';
 
 export class ModelMapper {
 
-    public toIDemographic(demographic: any): IDemographics {
+    public static toIDemographic(demographic: any): IDemographics {
         return {
             White: demographic.pop_white_nh || 0,
             AfricanAmerican: demographic.pop_black_nh || 0,
@@ -15,7 +15,7 @@ export class ModelMapper {
         }
     }
 
-    public toIVote(votes: any): IVoteData {
+    public static toIVote(votes: any): IVoteData {
         return {
             democraticVotes: votes.democratic || 0,
             republicanVotes: votes.republican || 0,

@@ -802,42 +802,42 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'African American',
-                        value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.AfricanAmerican : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Asian',
-                        value: cdData ? cdData.demographicData.Asian : 120000,
+                        value: cdData ? cdData.demographicData.population.Asian : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Hispanic',
-                        value: cdData ? cdData.demographicData.Hispanic : 120000,
+                        value: cdData ? cdData.demographicData.population.Hispanic : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'White',
-                        value: cdData ? cdData.demographicData.White : 120000,
+                        value: cdData ? cdData.demographicData.population.White : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Pacific Islander',
-                        value: cdData ? cdData.demographicData.PacificIslander : 120000,
+                        value: cdData ? cdData.demographicData.population.PacificIslander : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Native American',
-                        value: cdData ? cdData.demographicData.NativeAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.NativeAmerican : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Biracial',
-                        value: cdData ? cdData.demographicData.Biracial : 120000,
+                        value: cdData ? cdData.demographicData.population.Biracial : 120000,
                         needsPercent: true
                     },
                     {
                         key: 'Other',
-                        value: cdData ? cdData.demographicData.Other : 120000,
+                        value: cdData ? cdData.demographicData.population.Other : 120000,
                         needsPercent: true
                     },
                     {

@@ -13,7 +13,7 @@ export class EnumNameMapper {
         [DemographicEnum.HISPANIC, 'Hispanic'],
         [DemographicEnum.PACIFIC_ISLANDER, 'Pacific Islander'],
         [DemographicEnum.NATIVE_AMERICAN, 'Native American'],
-        [DemographicEnum.BIRACIAL, 'Biracial'],
+        [DemographicEnum.BIRACIAL, 'Multiracial'],
         [DemographicEnum.OTHER, 'Other']
     ]);
     private static stateNames: Map<StateEnum, string> = new Map([
