@@ -10,7 +10,7 @@ export interface IVotingAgeTabProps {
 export class VotingAgeTabPanel extends React.PureComponent<IVotingAgeTabProps, {}> {
     render() {
         if (!this.props.votingAgeDemographics) {
-            return <Placeholder title='No precinct selected.' subtitle='Select a precinct to view data.'></Placeholder>;
+            return <Placeholder loading={false} title='No precinct selected.' subtitle='Select a precinct to view data.'></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>

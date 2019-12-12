@@ -15,11 +15,11 @@ export class StatisticsTabPanel extends React.PureComponent<StatisticsTabPanelPr
 
     render() {
         if (this.props.selectedState === StateEnum.NOT_SET) {
-            return <Placeholder title="No state selected." subtitle="Select a state to view all district data."></Placeholder>;
+            return <Placeholder loading={false} title="No state selected." subtitle="Select a state to view all district data."></Placeholder>;
         }
 
         if (!this.props.stateData) {
-            return <Placeholder title="Loading..." subtitle="Loading state data."></Placeholder>;
+            return <Placeholder loading={true} title="" subtitle=""></Placeholder>;
         }
 
         return (

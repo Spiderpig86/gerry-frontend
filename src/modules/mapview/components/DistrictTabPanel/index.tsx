@@ -46,11 +46,11 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
     render() {
         
         if (this.props.selectedState === StateEnum.NOT_SET) {
-            return <Placeholder title="No state selected." subtitle="Select a state to view data."></Placeholder>;
+            return <Placeholder loading={false} title="No state selected." subtitle="Select a state to view data."></Placeholder>;
         }
 
         if (!this.props.oldClusters || this.state.sortedKeys.length === 0) {
-            return <Placeholder title="Loading..." subtitle="Loading state data."></Placeholder>;
+            return <Placeholder loading={true} title="" subtitle=""></Placeholder>;
         }
 
         return (

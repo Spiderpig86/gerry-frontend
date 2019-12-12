@@ -46,7 +46,7 @@ export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {
 
     render() {
         if (!this.props.election2016 || !this.props.election2018) {
-            return <Placeholder title="No precinct selected." subtitle="Select a precinct to view data."></Placeholder>;
+            return <Placeholder loading={false} title="No precinct selected." subtitle="Select a precinct to view data."></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>
