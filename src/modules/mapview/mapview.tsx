@@ -764,17 +764,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.presidential16.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
@@ -787,17 +787,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house16.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house16.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house16.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
@@ -810,17 +810,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house18.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house18.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.otherVotes : 0,
                         needsPercent: true
                     },
                     {
@@ -833,42 +833,42 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'African American',
-                        value: cdData ? cdData.demographicData.population.AfricanAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.AfricanAmerican : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Asian',
-                        value: cdData ? cdData.demographicData.population.Asian : 120000,
+                        value: cdData ? cdData.demographicData.population.Asian : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Hispanic',
-                        value: cdData ? cdData.demographicData.population.Hispanic : 120000,
+                        value: cdData ? cdData.demographicData.population.Hispanic : 0,
                         needsPercent: true
                     },
                     {
                         key: 'White',
-                        value: cdData ? cdData.demographicData.population.White : 120000,
+                        value: cdData ? cdData.demographicData.population.White : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Pacific Islander',
-                        value: cdData ? cdData.demographicData.population.PacificIslander : 120000,
+                        value: cdData ? cdData.demographicData.population.PacificIslander : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Native American',
-                        value: cdData ? cdData.demographicData.population.NativeAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.NativeAmerican : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Biracial',
-                        value: cdData ? cdData.demographicData.population.Biracial : 120000,
+                        value: cdData ? cdData.demographicData.population.Biracial : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other',
-                        value: cdData ? cdData.demographicData.population.Other : 120000,
+                        value: cdData ? cdData.demographicData.population.Other : 0,
                         needsPercent: true
                     },
                     {
