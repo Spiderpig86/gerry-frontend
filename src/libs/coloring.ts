@@ -242,4 +242,15 @@ export class Coloring {
         }
         return demographicPopulation / district.demographicData.totalPopulation;
     }
+
+    public getBlankStyle() {
+        return {
+            color: Color.default(Constants.COLOR_DEMOGRAPHIC)
+                .alpha(0)
+                .hex(),
+            weight: 0.5,
+            fillOpacity: 0,
+            fillColor: Color.rgb([0, 0, 0]).alpha(0).hex()
+        };
+    }
 }

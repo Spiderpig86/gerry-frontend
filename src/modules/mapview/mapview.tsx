@@ -487,10 +487,13 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
         // TODO: Test
         if (!properties.cd) {
-            return null;
+            return this.coloring.getBlankStyle();
         }
 
         const district = this.props.oldClusters.get(properties.cd.toString());
+        if (!district) {
+            return this.coloring.getBlankStyle();
+        }
         
         if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
             style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
@@ -730,12 +733,14 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 ? this.props.oldClusters.get(precinct.originalCdId.toString())
                 : this.props.newClusters.get(precinct.newCdId.toString()); // Get correct cd data based on filter
 
+        response.subtitle = `District: ${cdData.name.substring(1)}`
+
         switch (filter) {
             case MapFilterEnum.DEFAULT:
                 response.statistics = response.statistics.concat(
                     {
                         key: 'Total District Population',
-                        value: cdData.demographicData.totalPopulation
+                        value: cdData ? cdData.demographicData.totalPopulation : 0
                     },
                     {
                         key: 'Political Fairness Score',
@@ -774,7 +779,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     },
                     {
                         key: 'Total District Votes',
-                        value: cdData.electionData.presidential16.totalVotes
+                        value: cdData ? cdData.electionData.presidential16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -797,7 +802,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     },
                     {
                         key: 'Total District Votes',
-                        value: cdData.electionData.house16.totalVotes
+                        value: cdData ? cdData.electionData.house16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -868,7 +873,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     },
                     {
                         key: 'Total District Population',
-                        value: 240000
+                        value: cdData ? cdData.demographicData.totalPopulation : 0
                     }
                 ]);
         }

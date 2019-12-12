@@ -130,8 +130,6 @@ export class PrecinctService {
                 const districtData = districtClusters.get(key);
                 districtData.electionData.house18 = ModelMapper.toIVote(district.electionData);
             }
-
-            console.log(districtClusters);
             this.dispatch(stateReducer.setOldClusters(districtClusters));
         });
     }

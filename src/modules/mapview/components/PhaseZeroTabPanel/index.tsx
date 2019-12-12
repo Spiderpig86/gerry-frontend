@@ -163,7 +163,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     stateType: state
                 }
             },
@@ -178,7 +178,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     populationThreshold: value
                 }
             },
@@ -190,7 +190,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     electionType: value
                 }
             },
@@ -202,7 +202,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     voteThreshold: value
                 }
             },
