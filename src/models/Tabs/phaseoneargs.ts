@@ -7,15 +7,15 @@ import { ICluster } from '../clusternode';
 
 export interface PhaseOneArgs {
     stateType: StateEnum;
-    electionData: ElectionEnum;
+    electionType: ElectionEnum;
     
     numDistricts: number;
     demographicTypes: Set<DemographicEnum>;
-    upperBound: number;
+    upperBound: number; 
     lowerBound: number;
     algRunType: AlgorithmRunEnum;
-    phaseOneMajMinPairHeuristic: PhaseOneMajMinPairsEnum;
-    phaseOneOtherPairsHeuristic: PhaseOneOtherPairsEnum;
+    majMinPairsHeuristic: PhaseOneMajMinPairsEnum;
+    otherPairsHeuristic: PhaseOneOtherPairsEnum;
     stopHeurstic: PhaseOneStopEnum;
 }
 

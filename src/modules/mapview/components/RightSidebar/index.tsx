@@ -27,6 +27,7 @@ interface IRightSidebarProps {
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
+    selectedDistrictId: string;
     rightSidebarHandler: (param) => void;
 
     coloring: Coloring;
@@ -52,7 +53,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel oldClusters={this.props.oldClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedDistrictId={this.props.selectedDistrictId} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />

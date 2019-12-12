@@ -55,7 +55,7 @@
         ));
         dispatch(setPhaseOneArgs({
             ...initialState.phaseOneArgs,
-            electionData: phaseZeroArgs.electionType
+            electionType: phaseZeroArgs.electionType
         }));
         dispatch(setPhaseTwoArgs({
             ...initialState.phaseTwoArgs,
@@ -70,7 +70,7 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
         dispatch(setPhaseTwoArgs({
                 ...initialState.phaseTwoArgs,
                 stateType: phaseOneArgs.stateType,
-                electionData: phaseOneArgs.electionData,
+                electionData: phaseOneArgs.electionType,
                 demographicTypes: phaseOneArgs.demographicTypes,
                 upperBound: phaseOneArgs.upperBound,
                 lowerBound: phaseOneArgs.lowerBound
@@ -253,14 +253,14 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
      phaseZeroResults: null,
      phaseOneArgs: {
          stateType: StateEnum.NOT_SET,
-         electionData: ElectionEnum.PRES_16,
+         electionType: ElectionEnum.PRES_16,
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
          demographicTypes: new Set<DemographicEnum>(),
          upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
          lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
          algRunType: AlgorithmRunEnum.TO_COMPLETION,
-         phaseOneMajMinPairHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
-         phaseOneOtherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
+         majMinPairsHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
+         otherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
          stopHeurstic: PhaseOneStopEnum.JOIN_SMALLEST
      },
      phaseTwoArgs: {

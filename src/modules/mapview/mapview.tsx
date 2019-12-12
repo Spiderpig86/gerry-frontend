@@ -49,6 +49,7 @@ interface IMapViewState {
         demographicsProps: IDemographicsTabProps;
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
+        selectedDistrictId: string;
     };
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
@@ -73,7 +74,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         mapProps: {
             demographicsProps: null,
             electionsProps: null,
-            precinctProps: null
+            precinctProps: null,
+            selectedDistrictId: '0',
         },
         mapTooltip: {
             title: null,
@@ -224,6 +226,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     rightSidebarHandler={this.handleRightSidebar.bind(this)}
                     isOpen={this.state.rightBarOpen}
                     coloring={this.coloring}
+                    selectedPrecinct={this.state.selectedPrecinctId}
                 />
 
                 <MapNavbar />
@@ -411,7 +414,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             mapProps: {
                 electionsProps,
                 demographicsProps,
-                precinctProps
+                precinctProps,
+                selectedDistrictId: precinctProps.congressionalDistrictId || '0'
             }
         });
     }
@@ -523,7 +527,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } else {
             style = this.coloring.getDemographicStyleDistrict(district, this.props.filter, this.state.zoom);
         }
-        return style;
+        return {
+            ...style,
+            weight: this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75
+        };
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {

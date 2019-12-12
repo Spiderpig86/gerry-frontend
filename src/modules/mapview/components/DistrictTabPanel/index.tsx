@@ -9,6 +9,7 @@ import { Coloring } from '../../../../libs/coloring';
 
 interface DistrictTabPanelProps {
     selectedState: StateEnum;
+    selectedDistrictId: string;
     oldClusters: Map<string, ICluster>;
     coloring: Coloring;
 }
@@ -29,24 +30,30 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
 
     componentWillMount() {
         if (this.props.oldClusters) {
-            console.log("yese");
-
             this.setState({
                 sortedKeys: Array.from(this.props.oldClusters.keys()).sort((a, b) => Number(a) - Number(b))
             });
         }
+
+        if (this.props.selectedDistrictId !== '0') {
+            this.selectOldDistrictData(this.props.selectedDistrictId.toString());
+        }
     }
 
     async componentWillReceiveProps(newProps: DistrictTabPanelProps) {
-        if (this.state.sortedKeys) {
+        if (!this.state.sortedKeys) {
             this.setState({
                 sortedKeys: Array.from(newProps.oldClusters.keys()).sort((a, b) => Number(a) - Number(b))
             });
         }
+
+        if (this.props.selectedDistrictId !== '0') {
+            this.selectOldDistrictData(this.props.selectedDistrictId.toString());
+        }
     }
 
     render() {
-
+        
         if (this.props.selectedState === StateEnum.NOT_SET) {
             return <Placeholder loading={false} title="No state selected." subtitle="Select a state to view data."></Placeholder>;
         }

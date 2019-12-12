@@ -61,7 +61,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
                         <DropdownButton
                             id="dropdown-basic-button"
-                            title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
+                            title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionType)}
                         >
                             <Dropdown.Item
                                 onClick={() => this.setElectionData(ElectionEnum.PRES_16)}
@@ -194,11 +194,11 @@ export class PhaseOneTabPanelComponent extends React.Component<
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
 
-    private setElectionData(electionData: ElectionEnum): void {
+    private setElectionData(electionType: ElectionEnum): void {
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
-                electionData
+                electionType
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
