@@ -160,26 +160,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                // console.log(
-                //     hashPrecinct(feature.properties),
-                //     this.props.precinctMap.get(hashPrecinct(feature.properties))
-                // );
-                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                // this.setState(
-                //     {
-                //         neighborPrecincts: neighbors.split(',')
-                //     },
-                //     () => {
-                //         this.state.neighborPrecincts.forEach(element => {
-                //             if (!element) {
-                //                 return;
-                //             }
-                //             // console.log(element);
-                //             console.log(element, this.props.precinctMap.get(element));
-                //             this.props.precinctMap.get(element).properties.v16_opres += 10000;
-                //         });
-                //     }
-                // );
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -701,15 +681,15 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
         const cdData =
             level === ViewLevelEnum.OLD_DISTRICTS
-                ? this.props.oldClusters.get(precinct.originalCdId)
-                : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
+                ? this.props.oldClusters.get(precinct.originalCdId.toString())
+                : this.props.newClusters.get(precinct.newCdId.toString()); // Get correct cd data based on filter
 
         switch (filter) {
             case MapFilterEnum.DEFAULT:
                 response.statistics = response.statistics.concat(
                     {
                         key: 'Total District Population',
-                        value: 240000
+                        value: cdData.demographicData.totalPopulation
                     },
                     {
                         key: 'Political Fairness Score',

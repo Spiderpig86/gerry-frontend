@@ -116,6 +116,7 @@ export class PrecinctService {
                         presidential16: ModelMapper.toIVote(district.electionData.votes),
                     } as any
                 };
+                cluster.electionData.presidential16.totalVotes = district.electionData.totalVotes;
                 districtClusters.set(key, cluster);
             }
 
@@ -123,12 +124,14 @@ export class PrecinctService {
                 const key = district.name.substring(1);
                 const districtData = districtClusters.get(key);
                 districtData.electionData.house16 = ModelMapper.toIVote(district.electionData.votes);
+                districtData.electionData.house16.totalVotes = district.electionData.totalVotes;
             }
 
             for (const district of house18.children) {
                 const key = district.name.substring(1);
                 const districtData = districtClusters.get(key);
                 districtData.electionData.house18 = ModelMapper.toIVote(district.electionData.votes);
+                districtData.electionData.house18.totalVotes = district.electionData.totalVotes;
             }
 
             console.log(districtClusters);
