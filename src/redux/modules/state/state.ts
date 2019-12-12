@@ -30,6 +30,8 @@
              return;
          }
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
+         dispatch(setStateData(null));
+         dispatch(setOldClusters(new Map<string, ICluster>()));
          dispatch(setPhaseZeroArgs({
              ...initialState.phaseZeroArgs,
              stateType: state

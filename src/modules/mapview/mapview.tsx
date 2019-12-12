@@ -19,7 +19,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
-import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster } from '../../models';
+import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster, IVoteData } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 import { MapNavbar } from './components/MapNavbar';
 import { APP_TOUR } from './tour';
@@ -178,7 +178,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 layer.setStyle({
                     weight:
                         this.state.selectedPrecinctId &&
-                        this.state.selectedPrecinctId === hashPrecinct(feature.properties)
+                            this.state.selectedPrecinctId === hashPrecinct(feature.properties)
                             ? 5
                             : 0.75,
                     color: layer.options.color
@@ -204,18 +204,18 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             <div className="container-fluid d-flex">
                 {
                     (localStorage.getItem('show-tour') === null || localStorage.getItem('show-tour') === 'true') &&
-                        (
-                            <Joyride
-                                continuous={true}
-                                run={this.state.run}
-                                steps={this.state.steps}
-                                stepIndex={this.state.stepIndex}
-                                scrollToFirstStep={true}
-                                showProgress={true}
-                                showSkipButton={true}
-                                callback={this.handleJoyrideCallback}
-                            />
-                        )
+                    (
+                        <Joyride
+                            continuous={true}
+                            run={this.state.run}
+                            steps={this.state.steps}
+                            stepIndex={this.state.stepIndex}
+                            scrollToFirstStep={true}
+                            showProgress={true}
+                            showSkipButton={true}
+                            callback={this.handleJoyrideCallback}
+                        />
+                    )
                 }
                 <LeftSidebar leftOpen={this.state.leftBarOpen} handleStateChange={this.handleLeftSidebar.bind(this)} />
                 <RightSidebar
@@ -297,7 +297,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                     <ReactLeaflet.GeoJSON
                                         key={`precinct${this.props.precinctMap.size}`}
                                         data={Array.from(this.props.precinctMap.values()) as any}
-                                        style={this.getPrecinctStyle.bind(this)}
+                                        style={this.getShapeStyle.bind(this)}
                                         onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                         onEachFeature={this.onEachFeaturePrecinct.bind(this)}
                                     />
@@ -311,7 +311,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                             <ReactLeaflet.GeoJSON
                                                 key={data.properties.Code}
                                                 data={data as GeoJsonObject}
-                                                style={this.getDistrictStyle.bind(this)}
+                                                style={(feature) => this.coloring.colorDistrictLoading(feature, this.state.zoom)}
                                             />
                                         );
                                     })
@@ -447,7 +447,12 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 otherVotes = properties.v18_osenate || 0;
                 break;
         }
-        const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(otherVotes);
+
+        return this.findMajority(Number(democratVotes), Number(republicanVotes), Number(otherVotes));
+    }
+
+    public findMajority(democratVotes: number, republicanVotes: number, otherVotes: number): { party: string; percent: number } {
+        const totalVotes = democratVotes + republicanVotes + otherVotes;
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
         }
@@ -468,9 +473,54 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         );
     }
 
+    public getShapeStyle(feature: any, layer: any): PathOptions {
+        if (this.props.level === ViewLevelEnum.PRECINCTS) {
+            return this.getPrecinctStyle(feature, layer);
+        } else {
+            return this.getDistrictStyle(feature, layer);
+        }
+    }
+
     public getDistrictStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties;
-        return this.coloring.colorDefaultDistrict(properties, this.state.zoom);
+        let style = {};
+
+        // TODO: Test
+        if (!properties.cd) {
+            return null;
+        }
+
+        const district = this.props.oldClusters.get(properties.cd.toString());
+        
+        if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
+            style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
+        } else if (
+            this.props.filter === MapFilterEnum.PRES_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2018
+        ) {
+            let electionData: IVoteData = null;
+            switch (this.props.filter) {
+                case MapFilterEnum.HOUSE_2016:
+                    electionData = district.electionData.house16
+                    break;
+                case MapFilterEnum.HOUSE_2018:
+                    electionData = district.electionData.house18
+                    break;
+                default:
+                    electionData = district.electionData.presidential16
+            }
+
+            style = this.coloring.getPoliticalStyle(
+                this.findMajority(electionData.democraticVotes, electionData.republicanVotes, electionData.otherVotes || 0),
+                this.state.zoom
+            );
+        } else if (this.props.filter === MapFilterEnum.DEFAULT) {
+            style = this.coloring.colorDefaultDistrict(properties, this.props.level, this.props.precinctMap, this.state.zoom);
+        } else {
+            style = this.coloring.getDemographicStyleDistrict(district, this.props.filter, this.state.zoom);
+        }
+        return style;
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
@@ -482,18 +532,14 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } else if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
             this.props.filter === MapFilterEnum.HOUSE_2016 ||
-            this.props.filter === MapFilterEnum.SENATE_2016 ||
-            this.props.filter === MapFilterEnum.HOUSE_2018 ||
-            this.props.filter === MapFilterEnum.SENATE_2018
+            this.props.filter === MapFilterEnum.HOUSE_2018
         ) {
             style = this.coloring.getPoliticalStyle(
-                properties,
-                this.props.filter,
                 this.getMajorityPartyInPrecinct(properties),
                 this.state.zoom
             );
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
-            style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap, this.state.zoom);
+            style = this.coloring.colorDefault();
         } else {
             style = this.coloring.getDemographicStyle(properties, this.props.filter, this.state.zoom);
         }
@@ -540,7 +586,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     ]
                 };
             case MapFilterEnum.HOUSE_2016:
-                const total = properties.v16_house + properties.v16_rhouse;
                 return {
                     title: '2016 House Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
@@ -728,8 +773,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData.electionData.presidential16.totalVotes
                     }
                 ]);
                 break;
@@ -751,8 +796,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData.electionData.house16.totalVotes
                     }
                 ]);
                 break;
@@ -774,8 +819,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData.electionData.house18.totalVotes
                     }
                 ]);
                 break;

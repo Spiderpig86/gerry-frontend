@@ -51,7 +51,7 @@ export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabPr
                 <br />
                 <h4>Precinct Demographics</h4>
                 <p>
-                    <b>Total Population: </b> {Math.round(this.props.totalPopulation).toLocaleString() || 'N/A'}
+                    <span>Total Population: </span> {Math.round(this.props.totalPopulation).toLocaleString() || 'N/A'}
                 </p>
 
                 <div className="pt-3">

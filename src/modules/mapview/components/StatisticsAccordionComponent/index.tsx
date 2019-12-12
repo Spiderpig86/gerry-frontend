@@ -84,15 +84,15 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
         ];
 
         const house16 = [
-            [PartyEnum.DEMOCRATIC, this.props.electionData.house16.democraticVotes, this.props.electionData.house16.democraticVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.REPUBLICAN, this.props.electionData.house16.republicanVotes, this.props.electionData.house16.republicanVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.OTHER, this.props.electionData.house16.otherVotes || 0, (this.props.electionData.house16.otherVotes || 0) / this.props.electionData.presidential16.totalVotes],
+            [PartyEnum.DEMOCRATIC, this.props.electionData.house16.democraticVotes, this.props.electionData.house16.democraticVotes / this.props.electionData.house16.totalVotes],
+            [PartyEnum.REPUBLICAN, this.props.electionData.house16.republicanVotes, this.props.electionData.house16.republicanVotes / this.props.electionData.house16.totalVotes],
+            [PartyEnum.OTHER, this.props.electionData.house16.otherVotes || 0, (this.props.electionData.house16.otherVotes || 0) / this.props.electionData.house16.totalVotes],
         ];
 
         const house18 = [
-            [PartyEnum.DEMOCRATIC, this.props.electionData.house18.democraticVotes, this.props.electionData.house18.democraticVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.REPUBLICAN, this.props.electionData.house18.republicanVotes, this.props.electionData.house18.republicanVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.OTHER, this.props.electionData.house18.otherVotes || 0, (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.presidential16.totalVotes],
+            [PartyEnum.DEMOCRATIC, this.props.electionData.house18.democraticVotes, this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes],
+            [PartyEnum.REPUBLICAN, this.props.electionData.house18.republicanVotes, this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes],
+            [PartyEnum.OTHER, this.props.electionData.house18.otherVotes || 0, (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes],
         ];
 
         return (

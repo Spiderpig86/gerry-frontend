@@ -15,11 +15,13 @@ export class ModelMapper {
         }
     }
 
-    public static toIVote(votes: any): IVoteData {
+    public static toIVote(electionData: any): IVoteData {
         return {
-            democraticVotes: votes.democratic || 0,
-            republicanVotes: votes.republican || 0,
-            otherVotes: votes.other || 0
+            democraticVotes: electionData.votes.democratic || 0,
+            republicanVotes: electionData.votes.republican || 0,
+            otherVotes: electionData.votes.other || 0,
+            winners: electionData.winners,
+            totalVotes: electionData.totalVotes
         }
     }
 

@@ -90,9 +90,9 @@ export class PrecinctService {
                     population: ModelMapper.toIDemographic(pres16.demographicData.population)
                 },
                 electionData: {
-                    presidential16: this.buildElectionData(pres16.electionData),
-                    house16: this.buildElectionData(house16.electionData),
-                    house18: this.buildElectionData(house18.electionData),
+                    presidential16: ModelMapper.toIVote(pres16.electionData),
+                    house16: ModelMapper.toIVote(house16.electionData),
+                    house18: ModelMapper.toIVote(house18.electionData),
                 }
             };
             this.dispatch(stateReducer.setStateData(stateCluster));
@@ -113,25 +113,22 @@ export class PrecinctService {
                         population: ModelMapper.toIDemographic(district.demographicData.population)
                     },
                     electionData: {
-                        presidential16: ModelMapper.toIVote(district.electionData.votes),
+                        presidential16: ModelMapper.toIVote(district.electionData),
                     } as any
                 };
-                cluster.electionData.presidential16.totalVotes = district.electionData.totalVotes;
                 districtClusters.set(key, cluster);
             }
 
             for (const district of house16.children) {
                 const key = district.name.substring(1);
                 const districtData = districtClusters.get(key);
-                districtData.electionData.house16 = ModelMapper.toIVote(district.electionData.votes);
-                districtData.electionData.house16.totalVotes = district.electionData.totalVotes;
+                districtData.electionData.house16 = ModelMapper.toIVote(district.electionData);
             }
 
             for (const district of house18.children) {
                 const key = district.name.substring(1);
                 const districtData = districtClusters.get(key);
-                districtData.electionData.house18 = ModelMapper.toIVote(district.electionData.votes);
-                districtData.electionData.house18.totalVotes = district.electionData.totalVotes;
+                districtData.electionData.house18 = ModelMapper.toIVote(district.electionData);
             }
 
             console.log(districtClusters);
@@ -141,12 +138,5 @@ export class PrecinctService {
 
     public async getStatisticsByElection(state: StateEnum, election: ElectionEnum): Promise<any> {
         return await Axios.get(`${Constants.APP_API}/states/original/${this.URL_MAPPINGS.get(state)}/${this.URL_MAPPINGS.get(election)}`);
-    }
-
-    private buildElectionData(oldElectionData: any) {
-        return {
-            ...oldElectionData,
-            ...ModelMapper.toIVote(oldElectionData.votes)
-        };
     }
 }

@@ -10,7 +10,7 @@ import * as Constants from '../config/constants';
 import distinctColors from 'distinct-colors';
 
 import { PathOptions } from 'leaflet';
-import { PrecinctProperties, IPrecinct, MapFilterEnum, ViewLevelEnum } from '../models';
+import { PrecinctProperties, IPrecinct, MapFilterEnum, ViewLevelEnum, ICluster } from '../models';
 import { hashPrecinct } from './functions/hash';
 
 export class Coloring {
@@ -21,11 +21,11 @@ export class Coloring {
         this.colors = distinctColors({ count: Constants.COLOR_COUNT });
     }
 
-    public getPoliticalStyle(properties: PrecinctProperties, filter: string, majorityParty: { party: string; percent: number }, zoom: number) {
+    public getPoliticalStyle(majorityParty: { party: string; percent: number }, zoom: number) {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         switch (majorityParty.party) {
             case 'D':
-                    // 3383c0
+                // 3383c0
                 let partyColor: Color = majorityParty.percent >= Constants.COLOR_UPPER_THRESHOLD
                     ? Color.default(Constants.COLOR_DEMOCRAT).saturate((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR).darken((majorityParty.percent - Constants.COLOR_UPPER_THRESHOLD))
                     : Color.default(Constants.COLOR_DEMOCRAT).lighten((Constants.COLOR_UPPER_THRESHOLD - majorityParty.percent) * Constants.COLOR_AMPLIFY_FACTOR);
@@ -100,13 +100,36 @@ export class Coloring {
         };
     }
 
-    public colorDefaultDistrict(properties: any, zoom: number): PathOptions {
+    
+    public getDemographicStyleDistrict(district: ICluster, filter: string, zoom: number) {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
-        const cdId = properties.cd;
+        const demographicPercent = this.getPopulationPercentByDemographicDistrict(district, filter);
+        let color = Color.default(Constants.COLOR_DEMOGRAPHIC).saturate((demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR)
+            .darken(demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD * 1.2)
+            .hex();
+        if (demographicPercent < Constants.COLOR_MIDDLE_THRESHOLD) {
+            color = Color.default(Constants.COLOR_DEMOGRAPHIC)
+                .lighten(Constants.COLOR_MIDDLE_THRESHOLD - demographicPercent)
+                .hex();
+        }
+
+        return {
+            color: Color.default(Constants.COLOR_DEMOGRAPHIC)
+                .darken(0.5)
+                .hex(),
+            weight: 0.5,
+            fillOpacity: opacity,
+            fillColor: color
+        };
+    }
+
+    public colorDistrictLoading(feature: any, zoom: number): PathOptions {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
+        const cdId = feature.properties.cd;
         const fillColor = Color.rgb(this.colors[cdId]._rgb).hex();
         const color = Color.default(fillColor)
-                .darken(Constants.COLOR_DARKEN_FACTOR)
-                .hex();
+            .darken(Constants.COLOR_DARKEN_FACTOR)
+            .hex();
         return {
             color,
             weight: Constants.BORDER_WEIGHT_NORMAL,
@@ -115,7 +138,7 @@ export class Coloring {
         };
     }
 
-    public colorDefault(properties: any, level: string, precinctMap: Map<string, IPrecinct>, zoom: number): PathOptions {
+    public colorDefaultDistrict(properties: any, level: string, precinctMap: Map<string, IPrecinct>, zoom: number): PathOptions {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const colorConfig = {
             color: Constants.COLOR_DEFAULT_RGB,
@@ -123,21 +146,28 @@ export class Coloring {
             fillOpacity: Constants.COLOR_FILL_OPACITY_STATE,
             fillColor: Constants.COLOR_DEFAULT_RGB
         };
-        
-        if (level === ViewLevelEnum.OLD_DISTRICTS) {
-            const precinct = precinctMap.get(hashPrecinct(properties));
-            if (!precinct) {
-                return colorConfig;
-            }
-            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId);
-            const color = Color.rgb(this.colors[cdId]._rgb).hex();
-            colorConfig.color = Color.default(color)
-                                .darken(Constants.COLOR_DARKEN_FACTOR)
-                                .hex();
-            colorConfig.weight = Constants.BORDER_WEIGHT_NORMAL;
-            colorConfig.fillOpacity = opacity;
-            colorConfig.fillColor = color;
+        const precinct = precinctMap.get(hashPrecinct(properties));
+        if (!precinct) {
+            return colorConfig;
         }
+        const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId);
+        const color = Color.rgb(this.colors[cdId]._rgb).hex();
+        colorConfig.color = Color.default(color)
+            .darken(Constants.COLOR_DARKEN_FACTOR)
+            .hex();
+        colorConfig.weight = Constants.BORDER_WEIGHT_NORMAL;
+        colorConfig.fillOpacity = opacity;
+        colorConfig.fillColor = color;
+        return colorConfig;
+    }
+
+    public colorDefault(): PathOptions {
+        const colorConfig = {
+            color: Constants.COLOR_DEFAULT_RGB,
+            weight: 1,
+            fillOpacity: Constants.COLOR_FILL_OPACITY_STATE,
+            fillColor: Constants.COLOR_DEFAULT_RGB
+        };
         return colorConfig;
     }
 
@@ -180,5 +210,36 @@ export class Coloring {
                 break;
         }
         return demographicPopulation / properties.pop_total;
+    }
+
+    public getPopulationPercentByDemographicDistrict(district: ICluster, filter: string): number {
+        let demographicPopulation = 0;
+        switch (filter) {
+            case MapFilterEnum.WHITE_DENSITY:
+                demographicPopulation = district.demographicData.population.White;
+                break;
+            case MapFilterEnum.BLACK_DENSITY:
+                demographicPopulation = district.demographicData.population.AfricanAmerican;
+                break;
+            case MapFilterEnum.ASIAN_DENSITY:
+                demographicPopulation = district.demographicData.population.Asian;
+                break;
+            case MapFilterEnum.HISPANIC_DENSITY:
+                demographicPopulation = district.demographicData.population.Hispanic;
+                break;
+            case MapFilterEnum.NATIVE_AMERICAN_DENSITY:
+                demographicPopulation = district.demographicData.population.NativeAmerican;
+                break;
+            case MapFilterEnum.PACIFIC_ISLANDER_DENSITY:
+                demographicPopulation = district.demographicData.population.PacificIslander;
+                break;
+            case MapFilterEnum.OTHER_DENSITY:
+                demographicPopulation = district.demographicData.population.Other;
+                break;
+            case MapFilterEnum.BIRACIAL_DENSITY:
+                demographicPopulation = district.demographicData.population.Biracial;
+                break;
+        }
+        return demographicPopulation / district.demographicData.totalPopulation;
     }
 }
