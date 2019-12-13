@@ -17,10 +17,9 @@ export interface IDemographics {
     Biracial: number;
 }
 
-export interface ClusterDemographic {
-    id: string;
+export interface ClusterDemographics {
+    population: IDemographics;
     totalPopulation: number;
     totalVotingAgePopulaton: number;
-    population: IDemographics;
     votingAgePopulation: IDemographics;
 }

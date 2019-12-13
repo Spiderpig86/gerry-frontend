@@ -13,18 +13,24 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
-import { StateEnum } from '../../../../models';
+import { StateEnum, ICluster } from '../../../../models';
+import { Coloring } from '../../../../libs/coloring';
 
 import '../../../../styles/cirrus/tabs.scss';
 
 interface IRightSidebarProps {
     selectedState: StateEnum;
+    stateData: ICluster;
+    oldClusters: Map<string, ICluster>;
     isOpen: boolean;
     mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
+    selectedDistrictId: string;
     rightSidebarHandler: (param) => void;
+
+    coloring: Coloring;
 }
 
 export class RightSidebarComponent extends React.Component<IRightSidebarProps, {}> {
@@ -32,8 +38,8 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
     render() {
 
         return (
-            <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={ RightSidebarStyles } width={'100%'} burgerButtonClassName={ "burger-right" } menuClassName={ "menu-right" }>
-                <h3 className="px-3">Precinct { this.props.precinctProps && this.props.precinctProps.precinctName } Data</h3>
+            <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={RightSidebarStyles} width={'100%'} burgerButtonClassName={"burger-right"} menuClassName={"menu-right"}>
+                <h3 className="px-3">{this.props.precinctProps && this.props.precinctProps.precinctName} Data</h3>
 
                 <Tabs className='tab-container'>
                     <TabList className='px-3'>
@@ -44,10 +50,10 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
-                        <StatisticsTabPanel selectedState={this.props.selectedState} />
+                        <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel selectedState={this.props.selectedState} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedDistrictId={this.props.selectedDistrictId} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -75,6 +81,8 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
 function mapStatetoProps(state: any, ownProps: any) {
     return {
         selectedState: state.stateReducer.selectedState,
+        stateData: state.stateReducer.stateData,
+        oldClusters: state.stateReducer.oldClusters,
         ...ownProps
     };
 }

@@ -30,6 +30,7 @@ interface IPhaseZeroTabPanelProps {
 interface IPhaseZeroTabPanelState {
     phaseZeroArgs: PhaseZeroArgs;
     phaseZeroResults: PhaseZeroResult;
+    beginPhaseZero: boolean;
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPanelProps, IPhaseZeroTabPanelState> {
@@ -43,7 +44,8 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     componentWillMount() {
         this.setState({
             phaseZeroArgs: this.props.phaseZeroArgs,
-            phaseZeroResults: null
+            phaseZeroResults: null,
+            beginPhaseZero: false
         });
     }
 
@@ -146,6 +148,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     ) : (
                             <div className="mt-5">
                                 <Placeholder
+                                    loading={this.state.beginPhaseZero}
                                     title="No Data"
                                     subtitle='Please select a state and click "Analyze Precincts".'
                                 ></Placeholder>
@@ -160,7 +163,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     stateType: state
                 }
             },
@@ -175,7 +178,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     populationThreshold: value
                 }
             },
@@ -187,7 +190,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     electionType: value
                 }
             },
@@ -199,7 +202,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState(
             {
                 phaseZeroArgs: {
-                    ...this.state.phaseZeroArgs,
+                    ...this.props.phaseZeroArgs,
                     voteThreshold: value
                 }
             },
@@ -208,11 +211,15 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
     }
 
     private async fetchPrecinctBlocs(): Promise<void> {
+        this.setState({
+            beginPhaseZero: true
+        });
         const phaseZeroResult = await this.service.runPhaseZero(this.props.phaseZeroArgs);
         if (phaseZeroResult) {
             this.setState(
                 {
-                    phaseZeroResults: phaseZeroResult.data
+                    phaseZeroResults: phaseZeroResult.data,
+                    beginPhaseZero: false
                 },
                 () => this.props.setPhaseZeroResults(this.state.phaseZeroResults)
             );

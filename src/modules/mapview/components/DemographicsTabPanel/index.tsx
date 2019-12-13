@@ -44,14 +44,14 @@ export class DemographicsTabPanel extends React.PureComponent<IDemographicsTabPr
 
     render() {
         if (!this.props.hispanicDemographics || !this.props.nonHispanicDemographics) {
-            return <Placeholder title="No precinct selected." subtitle="Select a precinct to view data."></Placeholder>;
+            return <Placeholder loading={false} title="No precinct selected." subtitle="Select a precinct to view data."></Placeholder>;
         }
         return (
             <div style={{ padding: '0 1.5rem' }}>
                 <br />
                 <h4>Precinct Demographics</h4>
                 <p>
-                    <b>Total Population: </b> {Math.round(this.props.totalPopulation) || 'N/A'}
+                    <span>Total Population: </span> {Math.round(this.props.totalPopulation).toLocaleString() || 'N/A'}
                 </p>
 
                 <div className="pt-3">

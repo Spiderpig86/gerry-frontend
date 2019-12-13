@@ -1,4 +1,4 @@
-export { IDemographics } from './demographics';
+export { IDemographics, ClusterDemographics } from './demographics';
 export { User } from './user';
 export { IPrecinct } from './precinct';
 export { ICluster } from './clusternode';

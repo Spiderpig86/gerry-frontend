@@ -19,7 +19,7 @@ import { IElectionsTabProps } from './components/ElectionsTabPanel';
 import { IPrecinctPropertiesTabProps } from './components/PrecinctPropertiesTabPanel';
 import { IVotingAgeTabProps } from './components/VotingAgeTabPanel';
 import { Coloring } from '../../libs/coloring';
-import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster } from '../../models';
+import { IPrecinct, PrecinctProperties, MapFilterEnum, ViewLevelEnum, StateEnum, ICluster, IVoteData } from '../../models';
 import { setTooltipData } from '../../redux/modules/maptooltip/maptooltip';
 import { MapNavbar } from './components/MapNavbar';
 import { APP_TOUR } from './tour';
@@ -49,6 +49,7 @@ interface IMapViewState {
         demographicsProps: IDemographicsTabProps;
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
+        selectedDistrictId: string;
     };
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
@@ -73,7 +74,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         mapProps: {
             demographicsProps: null,
             electionsProps: null,
-            precinctProps: null
+            precinctProps: null,
+            selectedDistrictId: '0',
         },
         mapTooltip: {
             title: null,
@@ -160,26 +162,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                // console.log(
-                //     hashPrecinct(feature.properties),
-                //     this.props.precinctMap.get(hashPrecinct(feature.properties))
-                // );
-                // const neighbors = feature.properties.neighbors.replace(/, /g, ',');
-                // this.setState(
-                //     {
-                //         neighborPrecincts: neighbors.split(',')
-                //     },
-                //     () => {
-                //         this.state.neighborPrecincts.forEach(element => {
-                //             if (!element) {
-                //                 return;
-                //             }
-                //             // console.log(element);
-                //             console.log(element, this.props.precinctMap.get(element));
-                //             this.props.precinctMap.get(element).properties.v16_opres += 10000;
-                //         });
-                //     }
-                // );
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -198,7 +180,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 layer.setStyle({
                     weight:
                         this.state.selectedPrecinctId &&
-                        this.state.selectedPrecinctId === hashPrecinct(feature.properties)
+                            this.state.selectedPrecinctId === hashPrecinct(feature.properties)
                             ? 5
                             : 0.75,
                     color: layer.options.color
@@ -224,18 +206,18 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             <div className="container-fluid d-flex">
                 {
                     (localStorage.getItem('show-tour') === null || localStorage.getItem('show-tour') === 'true') &&
-                        (
-                            <Joyride
-                                continuous={true}
-                                run={this.state.run}
-                                steps={this.state.steps}
-                                stepIndex={this.state.stepIndex}
-                                scrollToFirstStep={true}
-                                showProgress={true}
-                                showSkipButton={true}
-                                callback={this.handleJoyrideCallback}
-                            />
-                        )
+                    (
+                        <Joyride
+                            continuous={true}
+                            run={this.state.run}
+                            steps={this.state.steps}
+                            stepIndex={this.state.stepIndex}
+                            scrollToFirstStep={true}
+                            showProgress={true}
+                            showSkipButton={true}
+                            callback={this.handleJoyrideCallback}
+                        />
+                    )
                 }
                 <LeftSidebar leftOpen={this.state.leftBarOpen} handleStateChange={this.handleLeftSidebar.bind(this)} />
                 <RightSidebar
@@ -243,6 +225,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     mapView={this}
                     rightSidebarHandler={this.handleRightSidebar.bind(this)}
                     isOpen={this.state.rightBarOpen}
+                    coloring={this.coloring}
+                    selectedPrecinct={this.state.selectedPrecinctId}
                 />
 
                 <MapNavbar />
@@ -316,7 +300,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                     <ReactLeaflet.GeoJSON
                                         key={`precinct${this.props.precinctMap.size}`}
                                         data={Array.from(this.props.precinctMap.values()) as any}
-                                        style={this.getPrecinctStyle.bind(this)}
+                                        style={this.getShapeStyle.bind(this)}
                                         onMouseOver={this.onMouseHoverPrecinct.bind(this)}
                                         onEachFeature={this.onEachFeaturePrecinct.bind(this)}
                                     />
@@ -330,7 +314,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                                             <ReactLeaflet.GeoJSON
                                                 key={data.properties.Code}
                                                 data={data as GeoJsonObject}
-                                                style={this.getDistrictStyle.bind(this)}
+                                                style={(feature) => this.coloring.colorDistrictLoading(feature, this.state.zoom)}
                                             />
                                         );
                                     })
@@ -430,7 +414,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             mapProps: {
                 electionsProps,
                 demographicsProps,
-                precinctProps
+                precinctProps,
+                selectedDistrictId: precinctProps.congressionalDistrictId || '0'
             }
         });
     }
@@ -466,7 +451,12 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 otherVotes = properties.v18_osenate || 0;
                 break;
         }
-        const totalVotes = Number(democratVotes) + Number(republicanVotes) + Number(otherVotes);
+
+        return this.findMajority(Number(democratVotes), Number(republicanVotes), Number(otherVotes));
+    }
+
+    public findMajority(democratVotes: number, republicanVotes: number, otherVotes: number): { party: string; percent: number } {
+        const totalVotes = democratVotes + republicanVotes + otherVotes;
         if (totalVotes === 0) {
             return { percent: 0, party: '-' };
         }
@@ -487,9 +477,60 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         );
     }
 
+    public getShapeStyle(feature: any, layer: any): PathOptions {
+        if (this.props.level === ViewLevelEnum.PRECINCTS) {
+            return this.getPrecinctStyle(feature, layer);
+        } else {
+            return this.getDistrictStyle(feature, layer);
+        }
+    }
+
     public getDistrictStyle(feature: any, layer: any): PathOptions {
         const properties = feature.properties;
-        return this.coloring.colorDefaultDistrict(properties, this.state.zoom);
+        let style = {};
+
+        // TODO: Test
+        if (!properties.cd) {
+            return this.coloring.getBlankStyle();
+        }
+
+        const district = this.props.oldClusters.get(properties.cd.toString());
+        if (!district) {
+            return this.coloring.getBlankStyle();
+        }
+        
+        if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
+            style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
+        } else if (
+            this.props.filter === MapFilterEnum.PRES_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2016 ||
+            this.props.filter === MapFilterEnum.HOUSE_2018
+        ) {
+            let electionData: IVoteData = null;
+            switch (this.props.filter) {
+                case MapFilterEnum.HOUSE_2016:
+                    electionData = district.electionData.house16
+                    break;
+                case MapFilterEnum.HOUSE_2018:
+                    electionData = district.electionData.house18
+                    break;
+                default:
+                    electionData = district.electionData.presidential16
+            }
+
+            style = this.coloring.getPoliticalStyle(
+                this.findMajority(electionData.democraticVotes, electionData.republicanVotes, electionData.otherVotes || 0),
+                this.state.zoom
+            );
+        } else if (this.props.filter === MapFilterEnum.DEFAULT) {
+            style = this.coloring.colorDefaultDistrict(properties, this.props.level, this.props.precinctMap, this.state.zoom);
+        } else {
+            style = this.coloring.getDemographicStyleDistrict(district, this.props.filter, this.state.zoom);
+        }
+        return {
+            ...style,
+            weight: this.state.selectedPrecinctId && this.state.selectedPrecinctId === hashPrecinct(properties) ? 5 : 0.75
+        };
     }
 
     public getPrecinctStyle(feature: any, layer: any): PathOptions {
@@ -501,18 +542,14 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } else if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
             this.props.filter === MapFilterEnum.HOUSE_2016 ||
-            this.props.filter === MapFilterEnum.SENATE_2016 ||
-            this.props.filter === MapFilterEnum.HOUSE_2018 ||
-            this.props.filter === MapFilterEnum.SENATE_2018
+            this.props.filter === MapFilterEnum.HOUSE_2018
         ) {
             style = this.coloring.getPoliticalStyle(
-                properties,
-                this.props.filter,
                 this.getMajorityPartyInPrecinct(properties),
                 this.state.zoom
             );
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
-            style = this.coloring.colorDefault(properties, this.props.level, this.props.precinctMap, this.state.zoom);
+            style = this.coloring.colorDefault();
         } else {
             style = this.coloring.getDemographicStyle(properties, this.props.filter, this.state.zoom);
         }
@@ -559,7 +596,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     ]
                 };
             case MapFilterEnum.HOUSE_2016:
-                const total = properties.v16_house + properties.v16_rhouse;
                 return {
                     title: '2016 House Election',
                     subtitle: `Precinct: ${properties.precinct_name}`,
@@ -701,15 +737,17 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
 
         const cdData =
             level === ViewLevelEnum.OLD_DISTRICTS
-                ? this.props.oldClusters.get(precinct.originalCdId)
-                : this.props.newClusters.get(precinct.newCdId); // Get correct cd data based on filter
+                ? this.props.oldClusters.get(precinct.originalCdId.toString())
+                : this.props.newClusters.get(precinct.newCdId.toString()); // Get correct cd data based on filter
+
+        response.subtitle = `District: ${cdData.name.substring(1)}`
 
         switch (filter) {
             case MapFilterEnum.DEFAULT:
                 response.statistics = response.statistics.concat(
                     {
                         key: 'Total District Population',
-                        value: 240000
+                        value: cdData ? cdData.demographicData.totalPopulation : 0
                     },
                     {
                         key: 'Political Fairness Score',
@@ -733,22 +771,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.presidential16.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.presidential16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData ? cdData.electionData.presidential16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -756,22 +794,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house16.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house16.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house16.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.house16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData ? cdData.electionData.house16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -779,22 +817,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house18.democraticVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house18.republicanVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house18.otherVotes : 120000,
+                        value: cdData ? cdData.electionData.house18.otherVotes : 0,
                         needsPercent: true
                     },
                     {
-                        key: 'Total District Population',
-                        value: 240000
+                        key: 'Total District Votes',
+                        value: cdData.electionData.house18.totalVotes
                     }
                 ]);
                 break;
@@ -802,47 +840,47 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'African American',
-                        value: cdData ? cdData.demographicData.AfricanAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.AfricanAmerican : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Asian',
-                        value: cdData ? cdData.demographicData.Asian : 120000,
+                        value: cdData ? cdData.demographicData.population.Asian : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Hispanic',
-                        value: cdData ? cdData.demographicData.Hispanic : 120000,
+                        value: cdData ? cdData.demographicData.population.Hispanic : 0,
                         needsPercent: true
                     },
                     {
                         key: 'White',
-                        value: cdData ? cdData.demographicData.White : 120000,
+                        value: cdData ? cdData.demographicData.population.White : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Pacific Islander',
-                        value: cdData ? cdData.demographicData.PacificIslander : 120000,
+                        value: cdData ? cdData.demographicData.population.PacificIslander : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Native American',
-                        value: cdData ? cdData.demographicData.NativeAmerican : 120000,
+                        value: cdData ? cdData.demographicData.population.NativeAmerican : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Biracial',
-                        value: cdData ? cdData.demographicData.Biracial : 120000,
+                        value: cdData ? cdData.demographicData.population.Biracial : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other',
-                        value: cdData ? cdData.demographicData.Other : 120000,
+                        value: cdData ? cdData.demographicData.population.Other : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Total District Population',
-                        value: 240000
+                        value: cdData ? cdData.demographicData.totalPopulation : 0
                     }
                 ]);
         }

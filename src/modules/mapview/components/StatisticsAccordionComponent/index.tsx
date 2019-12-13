@@ -3,13 +3,18 @@ import * as React from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
-import { DemographicEnum, PartyEnum } from '../../../../models';
+import { DemographicEnum, PartyEnum, ClusterDemographics, IElection, ElectionEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { round } from '../../../../libs/functions/round';
 
 import './styles.scss';
 
-export class StatisticsAccordionComponent extends React.PureComponent {
+interface StatisticsAccordionProps {
+    demographicData: ClusterDemographics;
+    electionData: IElection;
+}
+
+export class StatisticsAccordionComponent extends React.PureComponent<StatisticsAccordionProps, {}> {
     private demographicColumns = null;
     private electionColumns = null;
 
@@ -30,6 +35,11 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                 sortMethod: (a, b) => {
                     return Number(a.replace(',', '')) - Number(b.replace(',', ''));
                 }
+            },
+            {
+                Header: '% of Total',
+                id: 'percentage',
+                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`,
             }
         ];
 
@@ -46,31 +56,44 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                 sortMethod: (a, b) => {
                     return Number(a.replace(',', '')) - Number(b.replace(',', ''));
                 }
+            },
+            {
+                Header: '% of Total',
+                id: 'percentage',
+                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`,
             }
         ];
     }
 
     render() {
-        // Fake data
-        const demographics = [];
-        for (const demographic of Object.values(DemographicEnum)) {
-            demographics.push([demographic, Math.round(Math.random() * 2000) + 100]);
-        }
+        const demographics = [
+            [DemographicEnum.WHITE, this.props.demographicData.population.White, this.props.demographicData.population.White / this.props.demographicData.totalPopulation],
+            [DemographicEnum.BLACK, this.props.demographicData.population.AfricanAmerican, this.props.demographicData.population.AfricanAmerican / this.props.demographicData.totalPopulation],
+            [DemographicEnum.ASIAN, this.props.demographicData.population.Asian, this.props.demographicData.population.Asian / this.props.demographicData.totalPopulation],
+            [DemographicEnum.HISPANIC, this.props.demographicData.population.Hispanic, this.props.demographicData.population.Hispanic / this.props.demographicData.totalPopulation],
+            [DemographicEnum.PACIFIC_ISLANDER, this.props.demographicData.population.PacificIslander, this.props.demographicData.population.PacificIslander / this.props.demographicData.totalPopulation],
+            [DemographicEnum.NATIVE_AMERICAN, this.props.demographicData.population.NativeAmerican, this.props.demographicData.population.NativeAmerican / this.props.demographicData.totalPopulation],
+            [DemographicEnum.BIRACIAL, this.props.demographicData.population.Biracial, this.props.demographicData.population.Biracial / this.props.demographicData.totalPopulation],
+            [DemographicEnum.OTHER, this.props.demographicData.population.Other, this.props.demographicData.population.Other / this.props.demographicData.totalPopulation],
+        ];
 
-        const pres16 = [];
-        for (const party of [PartyEnum.DEMOCRATIC, PartyEnum.REPUBLICAN, PartyEnum.OTHER]) {
-            pres16.push([party, Math.round(Math.random() * 2000) + 100]);
-        }
+        const pres16 = [
+            [PartyEnum.DEMOCRATIC, this.props.electionData.presidential16.democraticVotes, this.props.electionData.presidential16.democraticVotes / this.props.electionData.presidential16.totalVotes],
+            [PartyEnum.REPUBLICAN, this.props.electionData.presidential16.republicanVotes, this.props.electionData.presidential16.republicanVotes / this.props.electionData.presidential16.totalVotes],
+            [PartyEnum.OTHER, this.props.electionData.presidential16.otherVotes || 0, (this.props.electionData.presidential16.otherVotes || 0) / this.props.electionData.presidential16.totalVotes],
+        ];
 
-        const house16 = [];
-        for (const party of [PartyEnum.DEMOCRATIC, PartyEnum.REPUBLICAN, PartyEnum.OTHER]) {
-            house16.push([party, Math.round(Math.random() * 2000) + 100]);
-        }
+        const house16 = [
+            [PartyEnum.DEMOCRATIC, this.props.electionData.house16.democraticVotes, this.props.electionData.house16.democraticVotes / this.props.electionData.house16.totalVotes],
+            [PartyEnum.REPUBLICAN, this.props.electionData.house16.republicanVotes, this.props.electionData.house16.republicanVotes / this.props.electionData.house16.totalVotes],
+            [PartyEnum.OTHER, this.props.electionData.house16.otherVotes || 0, (this.props.electionData.house16.otherVotes || 0) / this.props.electionData.house16.totalVotes],
+        ];
 
-        const house18 = [];
-        for (const party of [PartyEnum.DEMOCRATIC, PartyEnum.REPUBLICAN, PartyEnum.OTHER]) {
-            house18.push([party, Math.round(Math.random() * 2000) + 100]);
-        }
+        const house18 = [
+            [PartyEnum.DEMOCRATIC, this.props.electionData.house18.democraticVotes, this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes],
+            [PartyEnum.REPUBLICAN, this.props.electionData.house18.republicanVotes, this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes],
+            [PartyEnum.OTHER, this.props.electionData.house18.otherVotes || 0, (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes],
+        ];
 
         return (
             <Accordion className='statistics-accordion'>
@@ -79,9 +102,9 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                         Demographics
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
-                        <Card.Body>
+                        <Card.Body className={'px-0 py-0'}>
                             <ReactTable
-                                className={'my-3'}
+                                className={'mx-0 my-0'}
                                 columns={this.demographicColumns}
                                 data={demographics}
                                 defaultPageSize={10}
@@ -97,9 +120,9 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                         2016 Presidential Election
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="2">
-                        <Card.Body>
+                        <Card.Body className={'px-0 py-0'}>
                             <ReactTable
-                                className={'my-3'}
+                                className={'mx-0 my-0'}
                                 columns={this.electionColumns}
                                 data={pres16}
                                 defaultPageSize={10}
@@ -115,9 +138,9 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                         2016 Congressional Election
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="3">
-                        <Card.Body>
+                        <Card.Body className={'px-0 py-0'}>
                             <ReactTable
-                                className={'my-3'}
+                                className={'mx-0 my-0'}
                                 columns={this.electionColumns}
                                 data={house16}
                                 defaultPageSize={10}
@@ -133,9 +156,9 @@ export class StatisticsAccordionComponent extends React.PureComponent {
                         2018 Congressional Election
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="4">
-                        <Card.Body>
+                        <Card.Body className={'px-0 py-0'}>
                             <ReactTable
-                                className={'my-3'}
+                                className={'mx-0 my-0'}
                                 columns={this.electionColumns}
                                 data={house18}
                                 defaultPageSize={10}

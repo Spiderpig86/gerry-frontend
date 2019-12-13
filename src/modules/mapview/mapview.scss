@@ -67,6 +67,11 @@ body {
 .rc-tooltip { z-index: 1500; }
 .rc-slider-tooltip { z-index: 1500; }
 
+.dropdown-menu.show {
+    overflow: auto;
+    max-height: 300px;
+}
+
 @media screen and (max-width: 768px) {
     .bm-menu-wrap {
         width: 100% !important;

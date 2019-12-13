@@ -6,10 +6,9 @@
  import { PhaseZeroArgs, IPrecinct, MapFilterEnum, ViewLevelEnum, ElectionEnum, ICluster, PhaseOneArgs, CompactnessEnum, DemographicEnum, StateEnum, FilterArgs, AlgorithmEnum, PhaseZeroResult, PartyEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseOneMajMinPairsEnum, PhaseTwoDepthEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum, AlgorithmRunEnum, PhaseOneOtherPairsEnum, PhaseOneStopEnum } from '../../../models';
  import { PrecinctService } from '../../../libs/precinct-service';
  import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
-import { StateBorderService } from '../../../libs/state-borders';
-import { string } from 'prop-types';
  
  const SET_STATE = 'SET_STATE';
+ const SET_STATE_DATA = 'SET_STATE_DATA';
  const SET_PRECINCTS = 'SET_PRECINCTS';
  const SET_PRECINCT_MAP = 'SET_PRECINCT_MAP';
  const SET_OLD_CLUSTERS = 'SET_OLD_CLUSTERS';
@@ -31,6 +30,8 @@ import { string } from 'prop-types';
              return;
          }
          dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
+         dispatch(setStateData(null));
+         dispatch(setOldClusters(new Map<string, ICluster>()));
          dispatch(setPhaseZeroArgs({
              ...initialState.phaseZeroArgs,
              stateType: state
@@ -41,7 +42,9 @@ import { string } from 'prop-types';
          }));
          dispatch(setPhaseZeroResults(null));
          dispatch(setPZeroHighlightedPrecincts(new Set<String>()));
-         dispatch(() => new PrecinctService(state, dispatch));
+
+         const service = new PrecinctService(state, dispatch);
+         await service.getStateStatistics(state);
      }
  }
 
@@ -52,7 +55,7 @@ import { string } from 'prop-types';
         ));
         dispatch(setPhaseOneArgs({
             ...initialState.phaseOneArgs,
-            electionData: phaseZeroArgs.electionType
+            electionType: phaseZeroArgs.electionType
         }));
         dispatch(setPhaseTwoArgs({
             ...initialState.phaseTwoArgs,
@@ -67,7 +70,7 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
         dispatch(setPhaseTwoArgs({
                 ...initialState.phaseTwoArgs,
                 stateType: phaseOneArgs.stateType,
-                electionData: phaseOneArgs.electionData,
+                electionData: phaseOneArgs.electionType,
                 demographicTypes: phaseOneArgs.demographicTypes,
                 upperBound: phaseOneArgs.upperBound,
                 lowerBound: phaseOneArgs.lowerBound
@@ -104,6 +107,13 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
      return {
          type: SET_STATE,
          selectedState
+     }
+ }
+
+ export const setStateData = (stateData: ICluster) => {
+     return {
+         type: SET_STATE_DATA,
+         stateData
      }
  }
  
@@ -207,6 +217,7 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
  
  export interface State {
      selectedState: StateEnum;
+     stateData: ICluster;
      stateId: string;
      precincts: any;
      precinctMap: Map<string, IPrecinct>;
@@ -226,6 +237,7 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
  
  const initialState: State = {
      selectedState: StateEnum.NOT_SET,
+     stateData: null,
      stateId: null,
      precincts: Constants.EMPTY_PRECINCTS,
      precinctMap: new Map<string, IPrecinct>(),
@@ -241,14 +253,14 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
      phaseZeroResults: null,
      phaseOneArgs: {
          stateType: StateEnum.NOT_SET,
-         electionData: ElectionEnum.PRES_16,
+         electionType: ElectionEnum.PRES_16,
          numDistricts: Constants.DEFAULT_NUM_DISTRICTS,
          demographicTypes: new Set<DemographicEnum>(),
          upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
          lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
          algRunType: AlgorithmRunEnum.TO_COMPLETION,
-         phaseOneMajMinPairHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
-         phaseOneOtherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
+         majMinPairsHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
+         otherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
          stopHeurstic: PhaseOneStopEnum.JOIN_SMALLEST
      },
      phaseTwoArgs: {
@@ -288,6 +300,11 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
              return {
                  ...state,
                  selectedState: action.selectedState
+             }
+         case SET_STATE_DATA:
+             return {
+                 ...state,
+                 stateData: action.stateData
              }
          case SET_PRECINCTS:
              return {

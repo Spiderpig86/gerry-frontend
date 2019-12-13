@@ -1,15 +1,12 @@
 import Axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 
 import * as Constants from '../../config/constants';
 
 import { PhaseZeroArgs, ResponseEnum, PartyEnum, PhaseZeroResult, DemographicEnum, PrecinctBlocSummary } from '../../models';
 import { formatResponse } from '../functions/response';
 
-const mock = Axios.create();
-const MockAxios = new MockAdapter(mock);
-
 export class PhaseZeroService {
+
     public async runPhaseZero(phaseZeroArgs: PhaseZeroArgs): Promise<any> {
         try {
             const response = await Axios.post(`${Constants.APP_API}/algorithm/phase0`, {

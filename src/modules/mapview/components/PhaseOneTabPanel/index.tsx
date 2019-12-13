@@ -48,7 +48,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                             required
                             className={'col-6'}
                             min={1}
-                            max={100}
+                            max={60}
                             defaultValue={this.state.phaseOneArgs.numDistricts.toString()}
                             onChange={(e: any) => this.setNumberDistricts(e.target.value)}
                         />
@@ -61,7 +61,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
 
                         <DropdownButton
                             id="dropdown-basic-button"
-                            title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionData)}
+                            title={EnumNameMapper.getElectionName(this.state.phaseOneArgs.electionType)}
                         >
                             <Dropdown.Item
                                 onClick={() => this.setElectionData(ElectionEnum.PRES_16)}
@@ -194,11 +194,11 @@ export class PhaseOneTabPanelComponent extends React.Component<
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
 
-    private setElectionData(electionData: ElectionEnum): void {
+    private setElectionData(electionType: ElectionEnum): void {
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,
-                electionData
+                electionType
             }
         }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
     }
