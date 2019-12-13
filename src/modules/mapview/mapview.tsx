@@ -724,7 +724,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     private fetchDistrictProperties(filter: MapFilterEnum, level: ViewLevelEnum, properties: any): IMapTooltipProps {
         const response: IMapTooltipProps = {
             title: 'District Data',
-            subtitle: 'District information',
+            subtitle: 'District information is not available.',
             statistics: []
         };
 
@@ -739,6 +739,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             level === ViewLevelEnum.OLD_DISTRICTS
                 ? this.props.oldClusters.get(precinct.originalCdId.toString())
                 : this.props.newClusters.get(precinct.newCdId.toString()); // Get correct cd data based on filter
+
+        if (!cdData) {
+            return response;
+        }
 
         response.subtitle = `District: ${cdData.name.substring(1)}`
 

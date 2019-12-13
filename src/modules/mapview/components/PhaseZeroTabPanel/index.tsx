@@ -124,6 +124,8 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                             disabled={this.props.selectedState === StateEnum.NOT_SET}
                             className="w-100"
                             onClick={async () => {
+                                this.props.setPhaseZeroResults(null);
+                                this.props.setPZeroHighlightedPrecincts(new Set<String>());
                                 await this.fetchPrecinctBlocs();
                             }}
                         >

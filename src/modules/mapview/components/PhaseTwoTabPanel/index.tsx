@@ -80,7 +80,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                 <div className="px-4 py-2" style={{ overflow: 'auto', height: '100%' }}>
                     <h4>Phase 2</h4>
 
-                    <h4>Compactness Options</h4>
+                    <h6>Compactness Options</h6>
                     <div className="mb-4">
                         {this.compactnessOptions.map((e: any, i: number) => {
                             return (
@@ -104,7 +104,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                         })}
                     </div>
 
-                    <h4>Political Fairness Options</h4>
+                    <h6>Political Fairness Options</h6>
                     <div className="mb-4">
                         {this.politicalFairnessOptions.map((e: any, i: number) => {
                             return (
@@ -130,7 +130,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                         })}
                     </div>
 
-                    <h4>Population Equality Options</h4>
+                    <h6>Population Equality Options</h6>
                     <div className="mb-4">
                         {this.populationEqualityOptions.map((e: any, i: number) => {
                             return (
@@ -156,7 +156,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                         })}
                     </div>
 
-                    <h4>Phase Two Depth Heuristics</h4>
+                    <h6>Phase Two Depth Heuristics</h6>
                     <div className="mb-4">
                         {this.depthOptions.map((e: any, i: number) => {
                             return (
@@ -182,7 +182,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                         })}
                     </div>
 
-                    <h4>Phase Two Simulated Annealing Retries</h4>
+                    <h6>Phase Two Simulated Annealing Retries</h6>
                     <div className="mb-4">
                         <Form.Group className="w-100 row form-group d-flex align-items-center py-2">
                             <Form.Label className={'col-6'} id={'numRetries'}>
@@ -200,7 +200,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                     </div>
 
                     <div className="mb-4">
-                        <h4>Objective Function Weights</h4>
+                        <h6>Objective Function Weights</h6>
                         <Form.Group className="row form-group d-flex align-items-center py-2">
                             <Form.Label className="col-6 mb-0">Population Equality</Form.Label>
                             <TooltipSlider
@@ -239,14 +239,25 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                             ></TooltipSlider>
                         </Form.Group>
                         <Form.Group className="row form-group d-flex align-items-center py-2">
-                            <Form.Label className="col-6 mb-0">Contiguity</Form.Label>
+                            <Form.Label className="col-6 mb-0">Political Competiveness</Form.Label>
                             <TooltipSlider
                                 className={'col-6'}
                                 min={0}
                                 max={100}
-                                defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.CONTIGUITY)}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS)}
                                 tipFormatter={value => `${value}%`}
-                                onAfterChange={this.setObjectiveContiguity.bind(this)}
+                                onAfterChange={this.setObjectivePoliticalCompetitiveness.bind(this)}
+                            ></TooltipSlider>
+                        </Form.Group>
+                        <Form.Group className="row form-group d-flex align-items-center py-2">
+                            <Form.Label className="col-6 mb-0">Political Homogeneity</Form.Label>
+                            <TooltipSlider
+                                className={'col-6'}
+                                min={0}
+                                max={100}
+                                defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY)}
+                                tipFormatter={value => `${value}%`}
+                                onAfterChange={this.setObjectivePoliticalHomogeneity.bind(this)}
                             ></TooltipSlider>
                         </Form.Group>
                     </div>
@@ -358,9 +369,23 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
         );
     }
 
-    private setObjectiveContiguity(objectiveContiguity: number): void {
+    private setObjectivePoliticalCompetitiveness(objectivePoliticalCompetitiveness: number): void {
         const weights = this.state.phaseTwoArgs.weights;
-        weights.set(PhaseTwoMeasuresEnum.CONTIGUITY, objectiveContiguity);
+        weights.set(PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, objectivePoliticalCompetitiveness);
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    weights
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
+    }
+
+    private setObjectivePoliticalHomogeneity(objectivePoliticalHomogenity: number): void {
+        const weights = this.state.phaseTwoArgs.weights;
+        weights.set(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, objectivePoliticalHomogenity);
         this.setState(
             {
                 phaseTwoArgs: {

@@ -251,7 +251,7 @@ export class Coloring {
 
     public getBlankStyle() {
         return {
-            color: Color.default(Constants.COLOR_DEMOGRAPHIC)
+            color: Color.default([255, 255, 255])
                 .alpha(0)
                 .hex(),
             weight: 0.5,

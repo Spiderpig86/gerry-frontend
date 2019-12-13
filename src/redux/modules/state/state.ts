@@ -275,7 +275,8 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
              [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 0],
              [PhaseTwoMeasuresEnum.COMPACTNESS, 0],
              [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 0],
-             [PhaseTwoMeasuresEnum.CONTIGUITY, 0]
+             [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 0],
+             [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 0],
          ]),
          phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
          precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.RANDOM,

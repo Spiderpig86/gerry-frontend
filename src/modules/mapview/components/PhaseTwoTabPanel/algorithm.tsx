@@ -27,11 +27,11 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         overlay={props =>
                             this.renderTooltip(
                                 props,
-                                `Run ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)} (To Completion)`
+                                `Run Phase 2`
                             )
                         }
                     >
-                        <Button id="btnPlay" disabled={this.props.selectedState === StateEnum.NOT_SET} onClick={this.startPhaseTwo.bind(this)}>
+                        <Button id="btnPlay" disabled={this.props.selectedState === StateEnum.NOT_SET || this.props.algorithmState !== AlgorithmEnum.PHASE_2} onClick={this.startPhaseTwo.bind(this)}>
                             <FontAwesomeIcon icon={faPlay} />
                             &nbsp; Run Phase 2
                         </Button>
