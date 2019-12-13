@@ -7,6 +7,8 @@
 import * as Color from 'color';
 import * as Constants from '../config/constants';
 
+import * as ColorArr from './colors.json';
+
 import distinctColors from 'distinct-colors';
 
 import { PathOptions } from 'leaflet';
@@ -16,9 +18,11 @@ import { hashPrecinct } from './functions/hash';
 export class Coloring {
 
     public colors: any[];
+    public districtColors: string[];
 
     constructor() {
-        this.colors = distinctColors({ count: Constants.COLOR_COUNT });
+        // this.colors = distinctColors({ count: Constants.COLOR_COUNT });
+        this.colors = ColorArr;
     }
 
     public getPoliticalStyle(properties: PrecinctProperties, filter: string, majorityParty: { party: string; percent: number }, zoom: number) {
@@ -103,7 +107,8 @@ export class Coloring {
     public colorDefaultDistrict(properties: any, zoom: number): PathOptions {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const cdId = properties.cd;
-        const fillColor = Color.rgb(this.colors[cdId]._rgb).hex();
+        // const fillColor = Color.rgb(this.colors[cdId]._rgb).hex();
+        const fillColor = Color.rgb(this.colors[cdId]).hex();
         const color = Color.default(fillColor)
                 .darken(Constants.COLOR_DARKEN_FACTOR)
                 .hex();
@@ -124,13 +129,14 @@ export class Coloring {
             fillColor: Constants.COLOR_DEFAULT_RGB
         };
         
-        if (level === ViewLevelEnum.OLD_DISTRICTS) {
+        if (level === ViewLevelEnum.OLD_DISTRICTS || level === ViewLevelEnum.NEW_DISTRICTS) {
             const precinct = precinctMap.get(hashPrecinct(properties));
             if (!precinct) {
                 return colorConfig;
             }
-            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId);
-            const color = Color.rgb(this.colors[cdId]._rgb).hex();
+            const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : Math.round(Math.random() * 20000));
+            // const color = Color.rgb(this.colors[cdId]._rgb).hex();
+            const color = Color.rgb(this.colors[cdId]).hex();
             colorConfig.color = Color.default(color)
                                 .darken(Constants.COLOR_DARKEN_FACTOR)
                                 .hex();
