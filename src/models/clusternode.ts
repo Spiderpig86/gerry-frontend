@@ -15,7 +15,7 @@ export interface ICluster {
     name: string;
     type: string;
     incumbent: string;
-    // precinctKeys: Set<string>;
+    precinctKeys: Set<string>;
     // counties: Set<string>;
     // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
     demographicData: ClusterDemographics;

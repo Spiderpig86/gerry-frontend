@@ -142,7 +142,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                     </p>
                     {this.props.phaseZeroResults && (
                         <p className="my-0">
-                            <b>Total Precinct Count:</b> {this.props.phaseZeroResults.totalVoteBlocCount}
+                            <b>Total Precinct Count:</b> {this.props.phaseZeroResults.totalVoteBlocCount.toLocaleString()}
                         </p>
                     )}
                     {this.props.phaseZeroResults ? (

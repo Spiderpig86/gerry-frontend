@@ -108,6 +108,7 @@ export class PrecinctService {
                     type: district.type,
                     incumbent: '',
                     objectiveFunctionScores: null,
+                    precinctKeys: new Set<string>(),
                     demographicData: {
                         ...district.demographicData,
                         population: ModelMapper.toIDemographic(district.demographicData.population)

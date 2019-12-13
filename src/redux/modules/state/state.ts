@@ -261,7 +261,8 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
          algRunType: AlgorithmRunEnum.TO_COMPLETION,
          majMinPairsHeuristic: PhaseOneMajMinPairsEnum.STANDARD,
          otherPairsHeuristic: PhaseOneOtherPairsEnum.STANDARD,
-         stopHeurstic: PhaseOneStopEnum.JOIN_SMALLEST
+         stopHeurstic: PhaseOneStopEnum.JOIN_SMALLEST,
+         jobId: null
      },
      phaseTwoArgs: {
          stateType: StateEnum.NOT_SET,

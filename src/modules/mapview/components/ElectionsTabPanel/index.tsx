@@ -78,19 +78,6 @@ export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {
                     showPaginationBottom={false}
                 />
                 <br />
-                <p>
-                    <b>Senate</b>
-                </p>
-                <ReactTable
-                    className={'my-3'}
-                    columns={this.columns}
-                    data={Object.entries(this.props.election2016.senatorialResults)}
-                    defaultPageSize={10}
-                    minRows={0}
-                    showPageSizeOptions={false}
-                    showPaginationBottom={false}
-                />
-                <br />
                 <h4>Precinct 2018 Election</h4>
                 <p>
                     <b>House</b>
@@ -99,19 +86,6 @@ export class ElectionsTabPanel extends React.PureComponent<IElectionsTabProps, {
                     className={'my-3'}
                     columns={this.columns}
                     data={Object.entries(this.props.election2018.houseResults)}
-                    defaultPageSize={10}
-                    minRows={0}
-                    showPageSizeOptions={false}
-                    showPaginationBottom={false}
-                />
-                <br />
-                <p>
-                    <b>Senate</b>
-                </p>
-                <ReactTable
-                    className={'my-3'}
-                    columns={this.columns}
-                    data={Object.entries(this.props.election2018.senatorialResults)}
                     defaultPageSize={10}
                     minRows={0}
                     showPageSizeOptions={false}

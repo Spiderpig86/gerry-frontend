@@ -17,6 +17,7 @@ export interface PhaseOneArgs {
     majMinPairsHeuristic: PhaseOneMajMinPairsEnum;
     otherPairsHeuristic: PhaseOneOtherPairsEnum;
     stopHeurstic: PhaseOneStopEnum;
+    jobId: string;
 }
 
 export interface PhaseOneResult {

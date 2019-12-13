@@ -14,10 +14,8 @@ export class PhaseZeroService {
                 voteThreshold: (phaseZeroArgs.voteThreshold * 1.0) / 100,
                 populationThreshold: (phaseZeroArgs.populationThreshold * 1.0) / 100,
             });
-            console.log(response);
             return formatResponse(ResponseEnum.OK, this.toPhaseZeroResult(response.data.precinctBlocs));
         } catch (e) {
-            console.log(e);
             return formatResponse(ResponseEnum.ERROR, null);
         }
     }
