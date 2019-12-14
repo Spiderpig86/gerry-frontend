@@ -18,9 +18,23 @@ interface IAlgorithmPanelProps {
     selectedState: StateEnum;
     setPhaseOneServiceCreator: () => void;
     setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
+    setAlgorithmPhase: (algorithmPhase: AlgorithmEnum) => void;
 }
 
 export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
+
+    async componentDidMount() {
+        if (!this.props.phaseOneService && this.props.selectedState) {
+            this.props.setPhaseOneServiceCreator();
+        }
+    }
+
+    async componentWillReceiveProps(newProps) {
+        if (!this.props.phaseOneService && this.props.selectedState) {
+            this.props.setPhaseOneServiceCreator();
+        }
+    }
+
     render() {
         return (
             <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
@@ -31,7 +45,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         overlay={props =>
                             this.renderTooltip(
                                 props,
-                                `Run ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)} (To Completion)`
+                                `Run Phase 1 (To Completion)`
                             )
                         }
                     >
@@ -51,7 +65,6 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                     >
                         <Button
                             disabled={
-                                !this.props.phaseOneService &&
                                 !(this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP) || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
                             }
                             onClick={this.stepForward.bind(this)}
@@ -67,6 +80,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
                         label={'Use Iterative Steps'}
+                        disabled={this.props.phaseOneArgs.jobId !== null && this.props.algorithmState === AlgorithmEnum.PHASE_0_1}
                         defaultChecked={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP}
                         onChange={e => this.toggleIntermediateUpdates(e.target.checked)}
                     />
@@ -95,11 +109,23 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
     }
 
     private startPhaseOne(): void {
-        this.props.setPhaseOneServiceCreator();
+        this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
+        this.props.setPhaseOneArgs({
+            ...this.props.phaseOneArgs,
+            jobId: 'test'
+        }); // Test
+        this.props.phaseOneService.runPhaseOne(this.props.phaseOneArgs);
+        console.log(this.props.phaseOneService);
     }
 
     private stepForward(): void {
-        this.props.phaseOneService.fetchNextStep();
+        this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
+        this.props.phaseOneService.fetchNextStep(); // TODO: Move when working
+        this.props.setPhaseOneArgs({
+            ...this.props.phaseOneArgs,
+            jobId: 'test'
+        }); // Test
+        console.log(this.props.phaseOneService);
     }
 }
 
@@ -110,7 +136,8 @@ function mapStateToProps(state: any) {
         phaseOneService: state.stateReducer.phaseOneService,
         selectedState: state.stateReducer.selectedState,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
-        setPhaseOneArgs: state.stateReducer.setPhaseOnArgs
+        setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
+        setAlgorithmPhase: state.stateReducer.setAlgorithmPhase
     };
 }
 

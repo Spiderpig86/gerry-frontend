@@ -173,10 +173,10 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
      }
  }
 
- export const setAlgorithmPhase = (algorithmPhase: AlgorithmEnum) => {
+ export const setAlgorithmPhase = (algorithmState: AlgorithmEnum) => {
      return {
          type: SET_ALGORITHM_PHASE,
-         algorithmPhase
+         algorithmState
      }
  }
 
@@ -333,6 +333,11 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
                      ...state.filterArgs,
                      viewLevel: action.level
                  }
+             }
+         case SET_ALGORITHM_PHASE:
+             return {
+                 ...state,
+                 algorithmState: action.algorithmState
              }
          case SET_PHASE_ZERO_ARGS:
              return {

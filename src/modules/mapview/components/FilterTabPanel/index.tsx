@@ -33,6 +33,7 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                     </Form.Group>
                 </Form>
                 
+                <h5>Display Filters</h5>
                 <h6>Display Misc.</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.DEFAULT} name='population' custom type={'radio'} id={`displayDefault`} label={`Default Filter`} onClick={() => this.props.setMapFilterCreator(MapFilterEnum.DEFAULT)} />

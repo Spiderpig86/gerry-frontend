@@ -43,7 +43,7 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         overlay={props =>
                             this.renderTooltip(
                                 props,
-                                `Pause ${EnumNameMapper.getAlgorithmName(this.props.algorithmState)}`
+                                `Pause Phase 2`
                             )
                         }
                     >
