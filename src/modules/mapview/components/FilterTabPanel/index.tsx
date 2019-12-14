@@ -19,8 +19,7 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
     render() {
         return (
             <div className='px-4 py-3'>
-                <h4>Map Filter</h4>
-                <h5>Display Level</h5>
+                <h4>Display Level</h4>
                 <Form className='mb-3'>
                     <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                         <Form.Check defaultChecked={this.props.filterArgs.viewLevel === ViewLevelEnum.PRECINCTS} name='displayLevel' custom type={'radio'} id={`displayLevelPrecinct`} label={`Precincts`} onClick={() => this.props.setMapLevelCreator(ViewLevelEnum.PRECINCTS)} />
@@ -33,7 +32,7 @@ class FilterTabPanelComponent extends React.Component<IFilterProps, {}> {
                     </Form.Group>
                 </Form>
                 
-                <h5>Display Filters</h5>
+                <h4>Display Filters</h4>
                 <h6>Display Misc.</h6>
                 <Form.Group className="w-100 py-2 row form-group d-flex align-items-center">
                     <Form.Check defaultChecked={this.props.filterArgs.mapFilter === MapFilterEnum.DEFAULT} name='population' custom type={'radio'} id={`displayDefault`} label={`Default Filter`} onClick={() => this.props.setMapFilterCreator(MapFilterEnum.DEFAULT)} />

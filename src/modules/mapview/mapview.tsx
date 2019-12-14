@@ -31,6 +31,7 @@ export interface IMapViewProps {
     precincts: any;
     precinctMap: Map<string, IPrecinct>;
     highlightedPrecincts: Set<String>;
+    setPZeroHighlightedPrecincts: (highlightedPrecincts: Set<String>) => void;
     filter: MapFilterEnum;
     level: ViewLevelEnum;
     oldClusters: Map<string, ICluster>;
@@ -162,6 +163,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
+                this.props.setPZeroHighlightedPrecincts(new Set<string>());
+                console.log(hashPrecinct(feature.properties), this.props.precinctMap.get(hashPrecinct(feature.properties)));
+                const neighbors = feature.properties.neighbors.replace(/, /g, ',');
+                this.setState({
+                    neighborPrecincts: neighbors.split(',')
+                }, () => {
+                    this.state.neighborPrecincts.forEach(element => {
+                        if (!element) {
+                            return;
+                        }
+                        // console.log(element);
+                        console.log(element, this.props.precinctMap.get(element));
+                        // this.props.precinctMap.get(element).properties.v16_opres += 10000;
+                        this.props.highlightedPrecincts.add(element);
+                    });
+                });
                 this.fetchPrecinctData(feature, layer);
                 this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                     paddingBottomRight: [500, 0]
@@ -1031,6 +1048,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
         highlightedPrecincts: state.stateReducer.highlightedPrecincts,
+        setPZeroHighlightedPrecincts: state.stateReducer.setPZeroHighlightedPrecincts,
         store: ownProps.store
     };
 }

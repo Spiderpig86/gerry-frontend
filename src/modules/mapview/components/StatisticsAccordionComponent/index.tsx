@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
-import { DemographicEnum, PartyEnum, ClusterDemographics, IElection, ElectionEnum } from '../../../../models';
+import { DemographicEnum, PartyEnum, ClusterDemographics, IElection, ElectionEnum, PhaseTwoMeasuresEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { round } from '../../../../libs/functions/round';
 
@@ -17,6 +17,7 @@ interface StatisticsAccordionProps {
 export class StatisticsAccordionComponent extends React.PureComponent<StatisticsAccordionProps, {}> {
     private demographicColumns = null;
     private electionColumns = null;
+    private scoreColumns = null;
 
     constructor() {
         super();
@@ -63,6 +64,21 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
                 accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`,
             }
         ];
+
+        this.scoreColumns = [
+            {
+                Header: 'Measure',
+                id: 'scoreCat',
+                accessor: (e: any) => {
+                    return EnumNameMapper.getMeasuresName(e[0]);
+                }
+            },
+            {
+                Header: 'Score (out of 1)',
+                id: 'score',
+                accessor: (e: any) => `${e[1].toFixed(2)}`,
+            }
+        ];
     }
 
     render() {
@@ -93,6 +109,15 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
             [PartyEnum.DEMOCRATIC, this.props.electionData.house18.democraticVotes, this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes],
             [PartyEnum.REPUBLICAN, this.props.electionData.house18.republicanVotes, this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes],
             [PartyEnum.OTHER, this.props.electionData.house18.otherVotes || 0, (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes],
+        ];
+
+        
+        const scores = [
+            [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, Math.random()],
+            [PhaseTwoMeasuresEnum.COMPACTNESS, Math.random()],
+            [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, Math.random()],
+            [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, Math.random()],
+            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, Math.random()],
         ];
 
         return (
@@ -161,6 +186,24 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
                                 className={'mx-0 my-0'}
                                 columns={this.electionColumns}
                                 data={house18}
+                                defaultPageSize={10}
+                                minRows={0}
+                                showPageSizeOptions={false}
+                                showPaginationBottom={false}
+                            />
+                        </Card.Body>
+                    </Accordion.Collapse>
+                </Card>
+                <Card>
+                    <Accordion.Toggle as={Card.Header} eventKey="5">
+                        Objective Function Scores
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey="5">
+                        <Card.Body className={'px-0 py-0'}>
+                            <ReactTable
+                                className={'mx-0 my-0'}
+                                columns={this.scoreColumns}
+                                data={scores}
                                 defaultPageSize={10}
                                 minRows={0}
                                 showPageSizeOptions={false}

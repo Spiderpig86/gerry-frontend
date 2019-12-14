@@ -26,17 +26,9 @@ export class StompClient {
 
         this.stompClient.connect({}, (frame: any) => {
             console.log('CONNECTED')
-            this.stompClient.subscribe('/user/queue/reports/phase0', function (greeting) {
-                console.log(JSON.stringify(greeting.body));
+            this.stompClient.subscribe(this.subscribePath, (data) => {
+                this.executeCallback(() => onMessage(data), () => this.defaultOnMessage(data));
             });
-            
-            
-            // this.stompClient.send(this.sendPath, {}, JSON.stringify({
-            //     "stateType": "VA",
-            //     "electionType": "house_16",
-            //     "populationThreshold": 0.8,
-            //     "voteThreshold": 0.8
-            // }));
             this.executeCallback(onOpen, this.defaultOnOpen);
         });
     }
@@ -54,13 +46,11 @@ export class StompClient {
     }
 
     public publish(body: string): void {
-        console.log('sending');
         this.stompClient.send(this.sendPath, {}, body);
     }
 
     public closeConnection() {
         this.stompClient.disconnect(() => {
-            console.log('CLOSING');
             this.executeCallback(this.onClose, this.defaultOnClose);
         });
     }
