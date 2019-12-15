@@ -11,16 +11,16 @@ import { ClusterDemographics } from './demographics';
  */
 export interface ICluster {
 
-    id: string;
-    name: string;
-    type: string;
-    incumbent: string;
-    precinctKeys: Set<string>;
+    numericalId: string;
+    type?: string;
+    incumbent?: string;
+    precinctNames: Set<string>;
     // counties: Set<string>;
     // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
     demographicData: ClusterDemographics;
     electionData: IElection;
     objectiveFunctionScores: IObjectiveFunctionScores;
+    isMajorityMinority: boolean;
 
     [x: string]: any;
 

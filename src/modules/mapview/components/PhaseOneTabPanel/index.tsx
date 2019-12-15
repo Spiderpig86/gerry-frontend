@@ -204,6 +204,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
     }
 
     private setMajorityMinorityThreshold(values: number[]): void {
+        console.log(values);
         this.setState({
             phaseOneArgs: {
                 ...this.state.phaseOneArgs,

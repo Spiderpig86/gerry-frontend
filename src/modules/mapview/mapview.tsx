@@ -755,7 +755,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         const cdData =
             level === ViewLevelEnum.OLD_DISTRICTS
                 ? this.props.oldClusters.get(precinct.originalCdId.toString())
-                : this.props.newClusters.get(precinct.newCdId.toString()); // Get correct cd data based on filter
+                : this.props.newClusters.get(precinct.newCdId.toString() || '0'); // Get correct cd data based on filter
 
         if (!cdData) {
             return response;

@@ -15,7 +15,7 @@ import { mapTooltipReducer } from './redux/modules/maptooltip/maptooltip';
 import './styles/global.scss';
 
 const rootReducer = combineReducers({users, stateReducer, mapTooltipReducer});
-const store = createStore(rootReducer, applyMiddleware(thunk));
+export const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>

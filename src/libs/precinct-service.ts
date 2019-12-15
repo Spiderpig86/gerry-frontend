@@ -54,7 +54,7 @@ export class PrecinctService {
     private updateStateReducerPrecincts(message: any[]): void {
         for (let i = 0; i < message.length; i++) {
             const shape = message[i];
-            this.precinctMap.set(hashPrecinct(shape.properties), { originalCdId: shape.properties.cd, ...shape });
+            this.precinctMap.set(hashPrecinct(shape.properties), { originalCdId: shape.properties.cd, newCdId: 0, ...shape });
         }
     }
 
@@ -102,20 +102,21 @@ export class PrecinctService {
                 // Get district number as key
                 const key = district.name.substring(1);
                 const cluster: ICluster = {
-                    id: district.id,
+                    numericalId: district.id,
                     name: district.name,
                     nodeType: district.nodeType,
                     type: district.type,
                     incumbent: '',
                     objectiveFunctionScores: null,
-                    precinctKeys: new Set<string>(),
+                    precinctNames: new Set<string>(),
                     demographicData: {
                         ...district.demographicData,
                         population: ModelMapper.toIDemographic(district.demographicData.population)
                     },
                     electionData: {
                         presidential16: ModelMapper.toIVote(district.electionData),
-                    } as any
+                    } as any,
+                    isMajorityMinority: false
                 };
                 districtClusters.set(key, cluster);
             }
@@ -136,6 +137,6 @@ export class PrecinctService {
     }
 
     public async getStatisticsByElection(state: StateEnum, election: ElectionEnum): Promise<any> {
-        return await Axios.get(`${Constants.APP_API}/states/original/${this.URL_MAPPINGS.get(state)}/${this.URL_MAPPINGS.get(election)}`);
+        return await Axios.get(`${Constants.APP_API}/states/original/stats/${this.URL_MAPPINGS.get(state)}/${this.URL_MAPPINGS.get(election)}`);
     }
 }

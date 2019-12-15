@@ -16,7 +16,7 @@ export interface PhaseOneArgs {
     algRunType: AlgorithmRunEnum;
     majMinPairsHeuristic: PhaseOneMajMinPairsEnum;
     otherPairsHeuristic: PhaseOneOtherPairsEnum;
-    stopHeurstic: PhaseOneStopEnum;
+    stopHeuristic: PhaseOneStopEnum;
     jobId: string;
 }
 

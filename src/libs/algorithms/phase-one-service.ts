@@ -2,9 +2,10 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import Axios from 'axios';
 
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing, ResponseEnum } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing, ResponseEnum, ElectionEnum } from '../../models';
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
+import { ModelMapper } from '../mapping/model-mapper';
 
 export class PhaseOneService {
     private dispatch: any;
@@ -19,7 +20,7 @@ export class PhaseOneService {
         this.handler = new StompClient(
             this.generateUrl(),
             this.getPath(),
-            `/algorithm/phase0`,
+            `/algorithm/phase1`,
             this.onOpen.bind(this),
             this.onMessage.bind(this),
             this.onClose.bind(this)
@@ -33,37 +34,57 @@ export class PhaseOneService {
     }
 
     private getPath() {
-        return `/user/queue/reports/phase0`;
+        return `/user/queue/reports/phase1`;
     }
 
     private onOpen(): void {
         console.info('Phase 1 stomp connected!');
     }
 
-    private onMessage(res: any): void {
-        console.log(res);
+    private onMessage(response: any): void {
+        const data = JSON.parse(response.body);
 
-        // TODO: if the iteration is done in statuscode for report, close the socket
+        if (data.statusCode === 'success') {
+            this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
+            return;
+        }
 
-        // Assign the new district ID to each precinct (this is the final one)
-        // const data = JSON.parse(frame.body);
-        // const changedNodes: Map<string, string> = new Map(Object.entries(data.changedNodes));
-        // const newDistricts: Map<string, ICluster> = new Map(Object.entries(data.newDistricts)); // Note: any could be converted to ICluster
-        // // changedNodes.forEach((districtId: string, precinctId: string) => {
-        // //     if (this.precincts.has(districtId)) {
-        // //         this.precincts.get(precinctId).newCdId = districtId;
-        // //     }
-        // // });
+        const jobId = data.jobId;
+        const info = data.deltas[0];
+        const iteration = info.iteration;
+        const newDistricts: any[] = Object.values(info.newDistricts);
 
-        // // Update the final map with the new district IDs in newDistricts
-        // newDistricts.forEach((districtObject: ICluster, districtId: string) => {
-        //     districtObject.precinctKeys.forEach(precinctId => {
-        //         this.precincts.get(precinctId).newCdId = Number(districtId);
-        //     });
-        //     this.districts.set(districtId, districtObject);
-        // });
-        // this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
-        // this.dispatch(mapActionCreators.setNewClusters(this.districts));
+        // Transform and populate map
+        for (const district of newDistricts) {
+            const key = district.numericalId;
+            const cluster: ICluster = {
+                numericalId: district.id,
+                objectiveFunctionScores: null,
+                precinctNames: new Set<string>(district.precinctNames),
+                demographicData: {
+                    ...district.demographicData,
+                    population: ModelMapper.toIDemographic(district.demographicData.population)
+                },
+                electionData: this.getElection(district.electionData),
+                isMajorityMinority: district.majMin
+            };
+
+            this.districts.set(key, cluster);
+        }
+
+
+        // Update the final map with the new district IDs in newDistricts
+        this.districts.forEach((districtObject: ICluster, districtId: string) => {
+            districtObject.precinctNames.forEach(precinctId => {
+                this.precincts.get(precinctId).newCdId = Number(districtId);
+            });
+        });
+        this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
+        this.dispatch(mapActionCreators.setNewClusters(this.districts));
+        console.log(jobId);
+        if (jobId) {
+            this.dispatch(mapActionCreators.setPhaseOneJobId(jobId));
+        }
     }
 
     private onClose(): void {
@@ -74,21 +95,15 @@ export class PhaseOneService {
     /**
      * Triggered by hitting the next step button for phase 1
      */
-    public fetchNextStep() {
-        // this.handler.ws.send(
-        //     JSON.stringify({
-        //         action: 'REQUEST_NEXT_STEP',
-        //         value: null
-        //     } as WebSocketPing)
-        // );
-        // 
+    public fetchNextStep(phaseOneArgs: PhaseOneArgs) {
+        const args = {
+            ...phaseOneArgs,
+            lowerBound: phaseOneArgs.lowerBound / 100,
+            upperBound: phaseOneArgs.upperBound / 100,
+            demographicTypes: Array.from(phaseOneArgs.demographicTypes)
+        };
         this.handler.publish(JSON.stringify(
-            {
-                "stateType": "VA",
-                "electionType": "house_16",
-                "populationThreshold": 0.8,
-                "voteThreshold": 0.8
-            }
+                args
         ));
     }
 
@@ -107,5 +122,26 @@ export class PhaseOneService {
             console.log(e);
             return formatResponse(ResponseEnum.ERROR, null);
         }
+    }
+
+    private getElection(electionData: any) {
+        switch (electionData.electionType) {
+            case ElectionEnum.PRES_16:
+                return {
+                    presidential16: ModelMapper.toIVote(electionData)
+                }
+            case ElectionEnum.HOUSE_16:
+                return {
+                    house16: ModelMapper.toIVote(electionData)
+                }
+            default:
+                return {
+                    house18: ModelMapper.toIVote(electionData)
+                }
+        }
+    }
+
+    public setDispatch(dispatch: any) {
+        this.dispatch = dispatch;
     }
 }

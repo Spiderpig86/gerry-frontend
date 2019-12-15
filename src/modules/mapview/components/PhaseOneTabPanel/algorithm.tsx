@@ -7,32 +7,39 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum } from '../../../../models';
+import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum, ICluster, IPrecinct } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
+    newClusters: Map<string, ICluster>;
     phaseOneArgs: PhaseOneArgs;
     phaseOneService: PhaseOneService;
+    precinctMap: Map<string, IPrecinct>;
     selectedState: StateEnum;
-    setPhaseOneServiceCreator: () => void;
-    setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
-    setAlgorithmPhase: (algorithmPhase: AlgorithmEnum) => void;
+    setPhaseOneServiceCreator: (phaseOneService: PhaseOneService) => void;
+    setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => any;
+    setAlgorithmPhase: (algorithmPhase: AlgorithmEnum) => any;
+    setNewClusters: (oldClusters: Map<string, ICluster>) => any;
 }
 
 export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
 
     async componentDidMount() {
-        if (!this.props.phaseOneService && this.props.selectedState) {
-            this.props.setPhaseOneServiceCreator();
+        if (!this.props.phaseOneService && this.props.selectedState && this.props.precinctMap.size > 0) {
+            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, this.props.newClusters);
+            this.props.setPhaseOneServiceCreator(phaseOneService);
         }
     }
 
     async componentWillReceiveProps(newProps) {
-        if (!this.props.phaseOneService && this.props.selectedState) {
-            this.props.setPhaseOneServiceCreator();
+        if (!this.props.phaseOneService && this.props.selectedState && this.props.precinctMap.size > 0) {
+            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, this.props.newClusters);
+            this.props.setPhaseOneServiceCreator(phaseOneService);
         }
+        console.log('state', newProps, this.props.phaseOneArgs.stateType, this.props.phaseOneArgs.algRunType);
+        
     }
 
     render() {
@@ -65,7 +72,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                     >
                         <Button
                             disabled={
-                                !(this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP) || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
+                                this.props.phaseOneArgs.algRunType !== AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
                             }
                             onClick={this.stepForward.bind(this)}
                         >
@@ -110,6 +117,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
 
     private startPhaseOne(): void {
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
+        this.props.setNewClusters(new Map<string, ICluster>());
         this.props.setPhaseOneArgs({
             ...this.props.phaseOneArgs,
             jobId: 'test'
@@ -120,11 +128,8 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
 
     private stepForward(): void {
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
-        this.props.phaseOneService.fetchNextStep(); // TODO: Move when working
-        this.props.setPhaseOneArgs({
-            ...this.props.phaseOneArgs,
-            jobId: 'test'
-        }); // Test
+        this.props.setNewClusters(new Map<string, ICluster>());
+        this.props.phaseOneService.fetchNextStep(this.props.phaseOneArgs); // TODO: Move when working
         console.log(this.props.phaseOneService);
     }
 }
@@ -132,12 +137,15 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
 function mapStateToProps(state: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
+        newClusters: state.stateReducer.newClusters,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         phaseOneService: state.stateReducer.phaseOneService,
+        precinctMap: state.stateReducer.precinctMap,
         selectedState: state.stateReducer.selectedState,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
         setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
-        setAlgorithmPhase: state.stateReducer.setAlgorithmPhase
+        setAlgorithmPhase: state.stateReducer.setAlgorithmPhase,
+        setNewClusters: state.stateReducer.setNewClusters
     };
 }
 

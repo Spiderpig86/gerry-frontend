@@ -155,7 +155,7 @@ export class Coloring {
         if (!precinct) {
             return colorConfig;
         }
-        const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : Math.round(Math.random() * 20000));
+        const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId || 0);
         // const color = Color.rgb(this.colors[cdId]._rgb).hex();
         const color = Color.rgb(this.colors[cdId]).hex();
         colorConfig.color = Color.default(color)
