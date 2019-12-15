@@ -7,7 +7,15 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum, ICluster, IPrecinct, ViewLevelEnum } from '../../../../models';
+import {
+    PhaseOneArgs,
+    AlgorithmEnum,
+    StateEnum,
+    AlgorithmRunEnum,
+    ICluster,
+    IPrecinct,
+    ViewLevelEnum
+} from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
@@ -26,7 +34,6 @@ interface IAlgorithmPanelProps {
 }
 
 export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
-
     async componentDidMount() {
         if (!this.props.phaseOneService && this.props.selectedState && this.props.precinctMap.size > 0) {
             const phaseOneService = new PhaseOneService(this.props.precinctMap, null, new Map<string, ICluster>());
@@ -40,7 +47,6 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
             this.props.setPhaseOneServiceCreator(phaseOneService);
         }
         console.log('state', newProps, this.props.phaseOneArgs.stateType, this.props.phaseOneArgs.algRunType);
-        
     }
 
     render() {
@@ -49,37 +55,56 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                 <ButtonGroup>
                     <OverlayTrigger
                         placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={props =>
-                            this.renderTooltip(
-                                props,
-                                `Run Phase 1 (To Completion)`
-                            )
-                        }
+                        rootClose
+                        delay={{ show: 10, hide: 10 }}
+                        overlay={props => this.renderTooltip(props, `Run Phase 1 (To Completion)`)}
                     >
-                        <Button
-                            id="btnPlay"
-                            disabled={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET}
-                            onClick={this.startPhaseOne.bind(this)}
-                        >
-                            <FontAwesomeIcon icon={faPlay} />
-                            &nbsp; Run Phase 1
-                        </Button>
+                        <div>
+                            <Button
+                                className='mr-1'
+                                id="btnPlay"
+                                disabled={
+                                    this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP ||
+                                    this.props.phaseOneArgs.stateType === StateEnum.NOT_SET ||
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
+                                }
+                                onClick={this.startPhaseOne.bind(this)}
+                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                            >
+                                <FontAwesomeIcon icon={faPlay} />
+                                &nbsp; Run Phase 1
+                            </Button>
+                        </div>
                     </OverlayTrigger>
                     <OverlayTrigger
                         placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={props => this.renderTooltip(props, `Step Forward`)}
+                        rootClose
+                        delay={{ show: 10, hide: 10 }}
+                        overlay={props =>
+                            this.renderTooltip(
+                                props,
+                                this.props.algorithmState === AlgorithmEnum.PHASE_0_1
+                                    ? `Step Forward`
+                                    : `Phase 1 Completed`
+                            )
+                        }
                     >
-                        <Button
-                            disabled={
-                                !this.props.phaseOneService || this.props.phaseOneArgs.algRunType !== AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
-                            }
-                            onClick={this.stepForward.bind(this)}
-                        >
-                            <FontAwesomeIcon icon={faStepForward} />
-                            &nbsp; Next
-                        </Button>
+                        <div>
+                            <Button
+                                className='mr-1'
+                                disabled={
+                                    !this.props.phaseOneService ||
+                                    this.props.phaseOneArgs.algRunType !== AlgorithmRunEnum.BY_STEP ||
+                                    this.props.phaseOneArgs.stateType === StateEnum.NOT_SET ||
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
+                                }
+                                onClick={this.stepForward.bind(this)}
+                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                            >
+                                <FontAwesomeIcon icon={faStepForward} />
+                                &nbsp; Next
+                            </Button>
+                        </div>
                     </OverlayTrigger>
                 </ButtonGroup>
                 <Form.Group className="row form-group d-flex align-items-center justify-content-flex-end">
@@ -88,7 +113,11 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
                         label={'Use Iterative Steps'}
-                        disabled={!this.props.phaseOneService || this.props.phaseOneArgs.jobId !== null && this.props.algorithmState === AlgorithmEnum.PHASE_0_1}
+                        disabled={
+                            !this.props.phaseOneService ||
+                            (this.props.phaseOneArgs.jobId !== null &&
+                                this.props.algorithmState === AlgorithmEnum.PHASE_0_1)
+                        }
                         defaultChecked={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP}
                         onChange={e => this.toggleIntermediateUpdates(e.target.checked)}
                     />
@@ -117,24 +146,27 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
     }
 
     private startPhaseOne(): void {
-        this.resetPhaseOneResults();
-        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
-        console.log(this.props.phaseOneService);
-    }
-
-    private stepForward(): void {
-        this.resetPhaseOneResults();
-        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
-        console.log(this.props.phaseOneService);
-    }
-
-    private resetPhaseOneResults(): void {
         const args = {
             ...this.props.phaseOneArgs,
             jobId: null
         };
-        this.props.phaseOneService.fetchNextStep(this.props.algorithmState === AlgorithmEnum.PHASE_2 ? args : this.props.phaseOneArgs); // TODO: Move when working
-        this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
+        this.props.phaseOneService.fetchNextStep(args);
+        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
+    }
+
+    private stepForward(): void {
+        const args = {
+            ...this.props.phaseOneArgs,
+            jobId: null
+        };
+        this.props.phaseOneService.fetchNextStep(
+            this.props.algorithmState === AlgorithmEnum.PHASE_2 ? args : this.props.phaseOneArgs
+        );
+        this.resetPhaseOneResults();
+        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
+    }
+
+    private resetPhaseOneResults(): void {
         this.props.setNewClusters(new Map<string, ICluster>());
     }
 }
