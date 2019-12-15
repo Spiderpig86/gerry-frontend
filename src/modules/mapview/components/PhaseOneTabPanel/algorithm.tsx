@@ -72,7 +72,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                     >
                         <Button
                             disabled={
-                                this.props.phaseOneArgs.algRunType !== AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
+                                !this.props.phaseOneService || this.props.phaseOneArgs.algRunType !== AlgorithmRunEnum.BY_STEP || this.props.phaseOneArgs.stateType === StateEnum.NOT_SET
                             }
                             onClick={this.stepForward.bind(this)}
                         >
@@ -87,7 +87,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         type={'checkbox'}
                         id={'intermediateResultsCheckbox'}
                         label={'Use Iterative Steps'}
-                        disabled={this.props.phaseOneArgs.jobId !== null && this.props.algorithmState === AlgorithmEnum.PHASE_0_1}
+                        disabled={!this.props.phaseOneService || this.props.phaseOneArgs.jobId !== null && this.props.algorithmState === AlgorithmEnum.PHASE_0_1}
                         defaultChecked={this.props.phaseOneArgs.algRunType === AlgorithmRunEnum.BY_STEP}
                         onChange={e => this.toggleIntermediateUpdates(e.target.checked)}
                     />
