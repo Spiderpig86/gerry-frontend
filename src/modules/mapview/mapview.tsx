@@ -180,9 +180,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     });
                 });
                 this.fetchPrecinctData(feature, layer);
-                this.state.map.leafletElement.fitBounds(layer.getBounds(), {
-                    paddingBottomRight: [500, 0]
-                });
+               // this.state.map.leafletElement.fitBounds(layer.getBounds(), {
+               //     paddingBottomRight: [500, 0]
+               // });
                 this.setState({
                     selectedPrecinctId: hashPrecinct(feature.properties)
                 });
