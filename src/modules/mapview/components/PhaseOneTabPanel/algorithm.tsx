@@ -122,7 +122,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
             ...this.props.phaseOneArgs,
             jobId: 'test'
         }); // Test
-        this.props.phaseOneService.runPhaseOne(this.props.phaseOneArgs);
+        this.props.phaseOneService.fetchNextStep(this.props.phaseOneArgs);
         console.log(this.props.phaseOneService);
     }
 

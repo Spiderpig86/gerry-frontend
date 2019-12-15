@@ -44,11 +44,6 @@ export class PhaseOneService {
     private onMessage(response: any): void {
         const data = JSON.parse(response.body);
 
-        if (data.statusCode === 'success') {
-            this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
-            return;
-        }
-
         const jobId = data.jobId;
         const info = data.deltas[0];
         const iteration = info.iteration;
@@ -70,6 +65,12 @@ export class PhaseOneService {
             };
 
             this.districts.set(key, cluster);
+
+            
+
+            if (data.statusCode === 'success') {
+                this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
+            }
         }
 
 
