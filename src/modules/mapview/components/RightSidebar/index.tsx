@@ -22,6 +22,7 @@ interface IRightSidebarProps {
     selectedState: StateEnum;
     stateData: ICluster;
     oldClusters: Map<string, ICluster>;
+    newClusters: Map<string, ICluster>;
     isOpen: boolean;
     mapView: MapViewComponent;
     demographicsProps: IDemographicsTabProps;
@@ -53,7 +54,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel oldClusters={this.props.oldClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedDistrictId={this.props.selectedDistrictId} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedDistrictId={this.props.selectedDistrictId} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -83,6 +84,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         selectedState: state.stateReducer.selectedState,
         stateData: state.stateReducer.stateData,
         oldClusters: state.stateReducer.oldClusters,
+        newClusters: state.stateReducer.newClusters,
         ...ownProps
     };
 }

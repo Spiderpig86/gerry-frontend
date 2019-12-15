@@ -3,7 +3,14 @@ import * as React from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 import ReactTable from 'react-table';
 
-import { DemographicEnum, PartyEnum, ClusterDemographics, IElection, ElectionEnum, PhaseTwoMeasuresEnum } from '../../../../models';
+import {
+    DemographicEnum,
+    PartyEnum,
+    ClusterDemographics,
+    IElection,
+    ElectionEnum,
+    PhaseTwoMeasuresEnum
+} from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { round } from '../../../../libs/functions/round';
 
@@ -40,7 +47,7 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
             {
                 Header: '% of Total',
                 id: 'percentage',
-                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`,
+                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`
             }
         ];
 
@@ -61,7 +68,7 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
             {
                 Header: '% of Total',
                 id: 'percentage',
-                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`,
+                accessor: (e: any) => `${(e[2] * 100).toFixed(2)}%`
             }
         ];
 
@@ -76,52 +83,69 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
             {
                 Header: 'Score (out of 1)',
                 id: 'score',
-                accessor: (e: any) => `${e[1].toFixed(2)}`,
+                accessor: (e: any) => `${e[1].toFixed(2)}`
             }
         ];
     }
 
     render() {
         const demographics = [
-            [DemographicEnum.WHITE, this.props.demographicData.population.White, this.props.demographicData.population.White / this.props.demographicData.totalPopulation],
-            [DemographicEnum.BLACK, this.props.demographicData.population.AfricanAmerican, this.props.demographicData.population.AfricanAmerican / this.props.demographicData.totalPopulation],
-            [DemographicEnum.ASIAN, this.props.demographicData.population.Asian, this.props.demographicData.population.Asian / this.props.demographicData.totalPopulation],
-            [DemographicEnum.HISPANIC, this.props.demographicData.population.Hispanic, this.props.demographicData.population.Hispanic / this.props.demographicData.totalPopulation],
-            [DemographicEnum.PACIFIC_ISLANDER, this.props.demographicData.population.PacificIslander, this.props.demographicData.population.PacificIslander / this.props.demographicData.totalPopulation],
-            [DemographicEnum.NATIVE_AMERICAN, this.props.demographicData.population.NativeAmerican, this.props.demographicData.population.NativeAmerican / this.props.demographicData.totalPopulation],
-            [DemographicEnum.BIRACIAL, this.props.demographicData.population.Biracial, this.props.demographicData.population.Biracial / this.props.demographicData.totalPopulation],
-            [DemographicEnum.OTHER, this.props.demographicData.population.Other, this.props.demographicData.population.Other / this.props.demographicData.totalPopulation],
+            [
+                DemographicEnum.WHITE,
+                this.props.demographicData.population.White,
+                this.props.demographicData.population.White / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.BLACK,
+                this.props.demographicData.population.AfricanAmerican,
+                this.props.demographicData.population.AfricanAmerican / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.ASIAN,
+                this.props.demographicData.population.Asian,
+                this.props.demographicData.population.Asian / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.HISPANIC,
+                this.props.demographicData.population.Hispanic,
+                this.props.demographicData.population.Hispanic / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.PACIFIC_ISLANDER,
+                this.props.demographicData.population.PacificIslander,
+                this.props.demographicData.population.PacificIslander / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.NATIVE_AMERICAN,
+                this.props.demographicData.population.NativeAmerican,
+                this.props.demographicData.population.NativeAmerican / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.BIRACIAL,
+                this.props.demographicData.population.Biracial,
+                this.props.demographicData.population.Biracial / this.props.demographicData.totalPopulation
+            ],
+            [
+                DemographicEnum.OTHER,
+                this.props.demographicData.population.Other,
+                this.props.demographicData.population.Other / this.props.demographicData.totalPopulation
+            ]
         ];
 
-        const pres16 = [
-            [PartyEnum.DEMOCRATIC, this.props.electionData.presidential16.democraticVotes, this.props.electionData.presidential16.democraticVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.REPUBLICAN, this.props.electionData.presidential16.republicanVotes, this.props.electionData.presidential16.republicanVotes / this.props.electionData.presidential16.totalVotes],
-            [PartyEnum.OTHER, this.props.electionData.presidential16.otherVotes || 0, (this.props.electionData.presidential16.otherVotes || 0) / this.props.electionData.presidential16.totalVotes],
-        ];
+        const pres16 = this.fillPresidential16(this.props.electionData);
+        const house16 = this.fillHouse16(this.props.electionData);
+        const house18 = this.fillHouse18(this.props.electionData);
 
-        const house16 = [
-            [PartyEnum.DEMOCRATIC, this.props.electionData.house16.democraticVotes, this.props.electionData.house16.democraticVotes / this.props.electionData.house16.totalVotes],
-            [PartyEnum.REPUBLICAN, this.props.electionData.house16.republicanVotes, this.props.electionData.house16.republicanVotes / this.props.electionData.house16.totalVotes],
-            [PartyEnum.OTHER, this.props.electionData.house16.otherVotes || 0, (this.props.electionData.house16.otherVotes || 0) / this.props.electionData.house16.totalVotes],
-        ];
-
-        const house18 = [
-            [PartyEnum.DEMOCRATIC, this.props.electionData.house18.democraticVotes, this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes],
-            [PartyEnum.REPUBLICAN, this.props.electionData.house18.republicanVotes, this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes],
-            [PartyEnum.OTHER, this.props.electionData.house18.otherVotes || 0, (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes],
-        ];
-
-        
         const scores = [
             [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, Math.random()],
             [PhaseTwoMeasuresEnum.COMPACTNESS, Math.random()],
             [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, Math.random()],
             [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, Math.random()],
-            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, Math.random()],
+            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, Math.random()]
         ];
 
         return (
-            <Accordion className='statistics-accordion'>
+            <Accordion className="statistics-accordion">
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
                         Demographics
@@ -140,60 +164,68 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
-                <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="2">
-                        2016 Presidential Election
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="2">
-                        <Card.Body className={'px-0 py-0'}>
-                            <ReactTable
-                                className={'mx-0 my-0'}
-                                columns={this.electionColumns}
-                                data={pres16}
-                                defaultPageSize={10}
-                                minRows={0}
-                                showPageSizeOptions={false}
-                                showPaginationBottom={false}
-                            />
-                        </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="3">
-                        2016 Congressional Election
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="3">
-                        <Card.Body className={'px-0 py-0'}>
-                            <ReactTable
-                                className={'mx-0 my-0'}
-                                columns={this.electionColumns}
-                                data={house16}
-                                defaultPageSize={10}
-                                minRows={0}
-                                showPageSizeOptions={false}
-                                showPaginationBottom={false}
-                            />
-                        </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="4">
-                        2018 Congressional Election
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="4">
-                        <Card.Body className={'px-0 py-0'}>
-                            <ReactTable
-                                className={'mx-0 my-0'}
-                                columns={this.electionColumns}
-                                data={house18}
-                                defaultPageSize={10}
-                                minRows={0}
-                                showPageSizeOptions={false}
-                                showPaginationBottom={false}
-                            />
-                        </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
+                {pres16.length > 0 && (
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="2">
+                            2016 Presidential Election
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="2">
+                            <Card.Body className={'px-0 py-0'}>
+                                <ReactTable
+                                    className={'mx-0 my-0'}
+                                    columns={this.electionColumns}
+                                    data={pres16}
+                                    defaultPageSize={10}
+                                    minRows={0}
+                                    showPageSizeOptions={false}
+                                    showPaginationBottom={false}
+                                />
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                )}
+
+                {house16.length > 0 && (
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="3">
+                            2016 Congressional Election
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="3">
+                            <Card.Body className={'px-0 py-0'}>
+                                <ReactTable
+                                    className={'mx-0 my-0'}
+                                    columns={this.electionColumns}
+                                    data={house16}
+                                    defaultPageSize={10}
+                                    minRows={0}
+                                    showPageSizeOptions={false}
+                                    showPaginationBottom={false}
+                                />
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                )}
+
+                {house18.length > 0 && (
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="4">
+                            2018 Congressional Election
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="4">
+                            <Card.Body className={'px-0 py-0'}>
+                                <ReactTable
+                                    className={'mx-0 my-0'}
+                                    columns={this.electionColumns}
+                                    data={house18}
+                                    defaultPageSize={10}
+                                    minRows={0}
+                                    showPageSizeOptions={false}
+                                    showPaginationBottom={false}
+                                />
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                )}
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="5">
                         Objective Function Scores
@@ -214,5 +246,77 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
                 </Card>
             </Accordion>
         );
+    }
+
+    private fillPresidential16(electionData: any): any[] {
+        if (electionData.presidential16) {
+            return [
+                [
+                    PartyEnum.DEMOCRATIC,
+                    this.props.electionData.presidential16.democraticVotes,
+                    this.props.electionData.presidential16.democraticVotes /
+                        this.props.electionData.presidential16.totalVotes
+                ],
+                [
+                    PartyEnum.REPUBLICAN,
+                    this.props.electionData.presidential16.republicanVotes,
+                    this.props.electionData.presidential16.republicanVotes /
+                        this.props.electionData.presidential16.totalVotes
+                ],
+                [
+                    PartyEnum.OTHER,
+                    this.props.electionData.presidential16.otherVotes || 0,
+                    (this.props.electionData.presidential16.otherVotes || 0) /
+                        this.props.electionData.presidential16.totalVotes
+                ]
+            ];
+        }
+        return [];
+    }
+
+    private fillHouse16(electionData: any): any[] {
+        if (electionData.house16) {
+            return [
+                [
+                    PartyEnum.DEMOCRATIC,
+                    this.props.electionData.house16.democraticVotes,
+                    this.props.electionData.house16.democraticVotes / this.props.electionData.house16.totalVotes
+                ],
+                [
+                    PartyEnum.REPUBLICAN,
+                    this.props.electionData.house16.republicanVotes,
+                    this.props.electionData.house16.republicanVotes / this.props.electionData.house16.totalVotes
+                ],
+                [
+                    PartyEnum.OTHER,
+                    this.props.electionData.house16.otherVotes || 0,
+                    (this.props.electionData.house16.otherVotes || 0) / this.props.electionData.house16.totalVotes
+                ]
+            ];
+        }
+        return [];
+    }
+
+    private fillHouse18(electionData: any): any[] {
+        if (electionData.house18) {
+            return [
+                [
+                    PartyEnum.DEMOCRATIC,
+                    this.props.electionData.house18.democraticVotes,
+                    this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes
+                ],
+                [
+                    PartyEnum.REPUBLICAN,
+                    this.props.electionData.house18.republicanVotes,
+                    this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes
+                ],
+                [
+                    PartyEnum.OTHER,
+                    this.props.electionData.house18.otherVotes || 0,
+                    (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes
+                ]
+            ];
+        }
+        return [];
     }
 }

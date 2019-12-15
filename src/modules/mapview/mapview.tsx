@@ -507,14 +507,19 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         let style = {};
 
         // TODO: Test
+        const precinct = this.props.precinctMap.get(hashPrecinct(properties));
         if (!properties.cd) {
             return this.coloring.getBlankStyle();
         }
 
-        const district = this.props.oldClusters.get(properties.cd.toString());
-        if (!district) {
-            return this.coloring.getBlankStyle();
-        }
+        // const district = this.props.oldClusters.get(properties.cd.toString());
+        const district =
+            this.props.level === ViewLevelEnum.OLD_DISTRICTS
+                ? this.props.oldClusters.get(properties.cd.toString())
+                : this.props.newClusters.get(precinct.newCdId.toString() || '0');
+        // if (!district) {
+        //     return this.coloring.getBlankStyle();
+        // }
         
         if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
             style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
@@ -533,6 +538,10 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                     break;
                 default:
                     electionData = district.electionData.presidential16
+            }
+
+            if (!electionData) {
+                return this.coloring.getBlankStyle();
             }
 
             style = this.coloring.getPoliticalStyle(
@@ -758,9 +767,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 : this.props.newClusters.get(precinct.newCdId.toString() || '0'); // Get correct cd data based on filter
 
         if (!cdData) {
-            return response;
+            console.log(precinct);
         }
-
+        
         response.subtitle = `District: ${cdData.name.substring(1)}`
 
         switch (filter) {
@@ -792,22 +801,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.presidential16.democraticVotes : 0,
+                        value: cdData && cdData.electionData.presidential16 ? cdData.electionData.presidential16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.presidential16.republicanVotes : 0,
+                        value: cdData && cdData.electionData.presidential16 ? cdData.electionData.presidential16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.presidential16.otherVotes : 0,
+                        value: cdData && cdData.electionData.presidential16 ? cdData.electionData.presidential16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Total District Votes',
-                        value: cdData ? cdData.electionData.presidential16.totalVotes : 0
+                        value: cdData && cdData.electionData.presidential16 ? cdData.electionData.presidential16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -815,22 +824,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house16.democraticVotes : 0,
+                        value: cdData && cdData.electionData.house16 ? cdData.electionData.house16.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house16.republicanVotes : 0,
+                        value: cdData && cdData.electionData.house16 ? cdData.electionData.house16.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house16.otherVotes : 0,
+                        value: cdData && cdData.electionData.house16 ? cdData.electionData.house16.otherVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Total District Votes',
-                        value: cdData ? cdData.electionData.house16.totalVotes : 0
+                        value: cdData && cdData.electionData.house16 ? cdData.electionData.house16.totalVotes : 0
                     }
                 ]);
                 break;
@@ -838,22 +847,22 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 response.statistics = response.statistics.concat([
                     {
                         key: 'Democratic Vote',
-                        value: cdData ? cdData.electionData.house18.democraticVotes : 0,
+                        value: cdData && cdData.electionData.house18 ? cdData.electionData.house18.democraticVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Republican Vote',
-                        value: cdData ? cdData.electionData.house18.republicanVotes : 0,
+                        value: cdData && cdData.electionData.house18 ? cdData.electionData.house18.republicanVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Other Vote',
-                        value: cdData ? cdData.electionData.house18.otherVotes : 0,
+                        value: cdData && cdData.electionData.house18 ? cdData.electionData.house18.otherVotes : 0,
                         needsPercent: true
                     },
                     {
                         key: 'Total District Votes',
-                        value: cdData.electionData.house18.totalVotes
+                        value: cdData && cdData.electionData.house18 ? cdData.electionData.house18.totalVotes : 0
                     }
                 ]);
                 break;

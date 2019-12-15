@@ -7,7 +7,7 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum, ICluster, IPrecinct } from '../../../../models';
+import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum, ICluster, IPrecinct, ViewLevelEnum } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
@@ -22,20 +22,21 @@ interface IAlgorithmPanelProps {
     setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => any;
     setAlgorithmPhase: (algorithmPhase: AlgorithmEnum) => any;
     setNewClusters: (oldClusters: Map<string, ICluster>) => any;
+    setMapLevelCreator: (level: string) => any;
 }
 
 export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
 
     async componentDidMount() {
         if (!this.props.phaseOneService && this.props.selectedState && this.props.precinctMap.size > 0) {
-            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, this.props.newClusters);
+            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, new Map<string, ICluster>());
             this.props.setPhaseOneServiceCreator(phaseOneService);
         }
     }
 
     async componentWillReceiveProps(newProps) {
         if (!this.props.phaseOneService && this.props.selectedState && this.props.precinctMap.size > 0) {
-            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, this.props.newClusters);
+            const phaseOneService = new PhaseOneService(this.props.precinctMap, null, new Map<string, ICluster>());
             this.props.setPhaseOneServiceCreator(phaseOneService);
         }
         console.log('state', newProps, this.props.phaseOneArgs.stateType, this.props.phaseOneArgs.algRunType);
@@ -116,25 +117,29 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
     }
 
     private startPhaseOne(): void {
-        this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
-        this.props.setNewClusters(new Map<string, ICluster>());
-        this.props.setPhaseOneArgs({
-            ...this.props.phaseOneArgs,
-            jobId: 'test'
-        }); // Test
-        this.props.phaseOneService.fetchNextStep(this.props.phaseOneArgs);
+        this.resetPhaseOneResults();
+        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
         console.log(this.props.phaseOneService);
     }
 
     private stepForward(): void {
+        this.resetPhaseOneResults();
+        this.props.setMapLevelCreator(ViewLevelEnum.NEW_DISTRICTS);
+        console.log(this.props.phaseOneService);
+    }
+
+    private resetPhaseOneResults(): void {
+        const args = {
+            ...this.props.phaseOneArgs,
+            jobId: null
+        };
+        this.props.phaseOneService.fetchNextStep(this.props.algorithmState === AlgorithmEnum.PHASE_2 ? args : this.props.phaseOneArgs); // TODO: Move when working
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
         this.props.setNewClusters(new Map<string, ICluster>());
-        this.props.phaseOneService.fetchNextStep(this.props.phaseOneArgs); // TODO: Move when working
-        console.log(this.props.phaseOneService);
     }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: any, ownProps: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
         newClusters: state.stateReducer.newClusters,
@@ -145,13 +150,15 @@ function mapStateToProps(state: any) {
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,
         setPhaseOneArgs: state.stateReducer.setPhaseOnArgs,
         setAlgorithmPhase: state.stateReducer.setAlgorithmPhase,
-        setNewClusters: state.stateReducer.setNewClusters
+        setNewClusters: state.stateReducer.setNewClusters,
+        setMapLevelCreator: state.stateReducer.setMapLevelCreator,
+        ...ownProps
     };
 }
 
 export const PhaseOneAlgorithmPanel = connect(
-    (state: any) => {
-        return mapStateToProps(state);
+    (state: any, ownProps: any) => {
+        return mapStateToProps(state, ownProps);
     },
     dispatch => bindActionCreators(mapActionCreators, dispatch)
 )(PhaseOneAlgorithmPanelComponent);

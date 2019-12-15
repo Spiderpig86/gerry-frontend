@@ -103,7 +103,6 @@ export class Coloring {
             fillColor: color
         };
     }
-
     
     public getDemographicStyleDistrict(district: ICluster, filter: string, zoom: number) {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);

@@ -6,6 +6,7 @@ import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing, Respon
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
 import { ModelMapper } from '../mapping/model-mapper';
+import { store } from '../../index';
 
 export class PhaseOneService {
     private dispatch: any;
@@ -45,15 +46,31 @@ export class PhaseOneService {
         const data = JSON.parse(response.body);
 
         const jobId = data.jobId;
+        if (jobId !== store.getState().stateReducer.phaseOneArgs.jobId) {
+            // This is a new job, clear new clusters
+            console.log('woweowoewoeowoewoow', jobId);
+            this.districts.clear();
+            this.dispatch(mapActionCreators.setPhaseOneJobId(jobId));
+        }
+
         const info = data.deltas[0];
         const iteration = info.iteration;
         const newDistricts: any[] = Object.values(info.newDistricts);
+        const changes: any[] = Object.entries(info.changedNodes);
+
+        // For each changed nodes, if the node's key is different than the new node's value, delete the old cluster
+        for (const change of changes) {
+            if (change[0] !== change[1]) {
+                this.districts.delete(change[0]);
+            }
+        }
 
         // Transform and populate map
         for (const district of newDistricts) {
             const key = district.numericalId;
             const cluster: ICluster = {
-                numericalId: district.id,
+                numericalId: district.numericalId,
+                name: `d${district.numericalId}`,
                 objectiveFunctionScores: null,
                 precinctNames: new Set<string>(district.precinctNames),
                 demographicData: {
@@ -65,12 +82,6 @@ export class PhaseOneService {
             };
 
             this.districts.set(key, cluster);
-
-            
-
-            if (data.statusCode === 'success') {
-                this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
-            }
         }
 
 
@@ -80,12 +91,25 @@ export class PhaseOneService {
                 this.precincts.get(precinctId).newCdId = Number(districtId);
             });
         });
+        
+        // On final iteration
+        if (data.statusCode === 'success') {
+            this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
+
+            // Re-color to improve contrast
+            let districtId = 1;
+            const finalDistricts = new Map<string, ICluster>();
+            this.districts.forEach((cluster: ICluster) => {
+                cluster.precinctNames.forEach(precinctId => {
+                    this.precincts.get(precinctId).newCdId = Number(districtId);
+                });
+                finalDistricts.set(districtId.toString(), cluster);
+                districtId++;
+            });
+            this.districts = finalDistricts;
+        }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
         this.dispatch(mapActionCreators.setNewClusters(this.districts));
-        console.log(jobId);
-        if (jobId) {
-            this.dispatch(mapActionCreators.setPhaseOneJobId(jobId));
-        }
     }
 
     private onClose(): void {
@@ -106,23 +130,6 @@ export class PhaseOneService {
         this.handler.publish(JSON.stringify(
                 args
         ));
-    }
-
-    public async runPhaseOne(phaseOneArgs: PhaseOneArgs) {
-        // Non-iterative approach
-        console.log('run phsae 1');
-        
-        this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2)); // TODO: Move when working
-        try {
-            const response = await Axios.post(`${Constants.APP_API}/algorithm/phase1`, {
-                ...phaseOneArgs,
-            });
-            // return formatResponse(ResponseEnum.OK, this.toPhaseZeroResult(response.data.precinctBlocs));
-            return null;
-        } catch (e) {
-            console.log(e);
-            return formatResponse(ResponseEnum.ERROR, null);
-        }
     }
 
     private getElection(electionData: any) {
