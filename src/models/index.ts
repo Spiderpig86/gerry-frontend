@@ -12,4 +12,3 @@ export { PhaseTwoArgs } from './Tabs/phasetwoargs';
 export { FilterArgs } from './Tabs/filterargs'
 
 export { CompactnessEnum, DemographicEnum, ElectionEnum, MapFilterEnum, PartyEnum, PoliticalFairnessEnum, StateEnum, ViewLevelEnum, AlgorithmEnum, ResponseEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, PhaseTwoMeasuresEnum, PhaseTwoPrecinctMoveEnum, PhaseOneMajMinPairsEnum, PhaseOneOtherPairsEnum, PhaseOneStopEnum, AlgorithmRunEnum } from './enums';
-export { WebSocketPing } from './websocket-ping';

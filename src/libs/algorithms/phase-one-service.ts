@@ -2,7 +2,7 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import Axios from 'axios';
 
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing, ResponseEnum, ElectionEnum } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, ElectionEnum } from '../../models';
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
 import { ModelMapper } from '../mapping/model-mapper';
@@ -45,13 +45,14 @@ export class PhaseOneService {
         const data = JSON.parse(response.body);
 
         const jobId = data.jobId;
-        // const.logs = data.logs;
+        const logs = data.logs;
         if (jobId !== store.getState().stateReducer.phaseOneArgs.jobId) {
             // This is a new job, clear new clusters
-            console.log('woweowoewoeowoewoow', jobId);
             this.districts.clear();
             this.dispatch(mapActionCreators.setPhaseOneJobId(jobId));
         }
+        
+        this.dispatch(mapActionCreators.appendLogs(logs));
 
         const info = data.deltas[0];
         // const iteration = info.iteration;

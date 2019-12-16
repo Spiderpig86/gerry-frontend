@@ -2,7 +2,7 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import Axios from 'axios';
 
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, WebSocketPing, ResponseEnum, ElectionEnum } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, ResponseEnum, ElectionEnum } from '../../models';
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
 import { ModelMapper } from '../mapping/model-mapper';

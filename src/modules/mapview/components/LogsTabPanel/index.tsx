@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import './styles.scss';
+import { Button } from 'react-bootstrap';
 
 interface ILogsTabPanelProps {
     logs: string[];
+    setLogs(logs: string[]): void;
 }
 
 export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {}> {
@@ -23,15 +25,22 @@ export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {
                 <br />
 
                 <h4>Debug Console</h4>
-                <textarea className='console' value={this.props.logs.join('\n')}></textarea>
+                <textarea className='console' value={this.props.logs ? this.props.logs.join('\n') : ''}></textarea>
+                <br />
+                <Button className='mb-3' onClick={this.clearLogs.bind(this)}>Clear</Button>
             </div>
         )
+    }
+
+    private clearLogs() {
+        this.props.setLogs([]);
     }
 }
 
 function mapStateToProps(state: any) {
     return {
-        logs: state.stateReducer.logs
+        logs: state.stateReducer.logs,
+        setLogs: state.stateReducer.setLogs
     };
 }
 

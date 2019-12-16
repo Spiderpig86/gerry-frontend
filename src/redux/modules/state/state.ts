@@ -50,6 +50,7 @@ const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
 const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
 const SET_PHASE_TWO_SERVICE = 'SET_PHASE_TWO_SERVICE';
 const SET_LOGS = 'SET_LOGS';
+const APPEND_LOGS = 'APPEND_LOGS';
 const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
 
 export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
@@ -265,6 +266,14 @@ export const setLogs = (logs: string[]) => {
     return {
         type: SET_LOGS,
         logs
+    };
+};
+
+export const appendLogs = (newLogs: string[]) => {
+    const logs = store.getState().stateReducer.logs.concat(newLogs);
+    return {
+        type: SET_LOGS,
+        logs: logs
     };
 };
 

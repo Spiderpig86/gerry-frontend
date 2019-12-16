@@ -513,7 +513,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             return this.coloring.getBlankStyle();
         }
 
-        // const district = this.props.oldClusters.get(properties.cd.toString());
         const district =
             this.props.level === ViewLevelEnum.OLD_DISTRICTS
                 ? this.props.oldClusters.get(properties.cd.toString())

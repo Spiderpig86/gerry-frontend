@@ -4,7 +4,7 @@ import * as Constants from '../config/constants';
 import Axios from 'axios';
 
 import { WebSocketHandler } from './ws';
-import { StateEnum, IPrecinct, ElectionEnum, ICluster } from '../models';
+import { StateEnum, IPrecinct, ElectionEnum, ICluster, ViewLevelEnum } from '../models';
 import { hashPrecinct } from './functions/hash';
 import { ModelMapper } from './mapping/model-mapper';
 
@@ -133,6 +133,7 @@ export class PrecinctService {
                 districtData.electionData.house18 = ModelMapper.toIVote(district.electionData);
             }
             this.dispatch(stateReducer.setOldClusters(districtClusters));
+            this.dispatch(stateReducer.setLevel(ViewLevelEnum.OLD_DISTRICTS));
         });
     }
 
