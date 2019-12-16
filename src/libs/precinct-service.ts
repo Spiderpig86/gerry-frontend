@@ -4,9 +4,10 @@ import * as Constants from '../config/constants';
 import Axios from 'axios';
 
 import { WebSocketHandler } from './ws';
-import { StateEnum, IPrecinct, ElectionEnum, ICluster, ViewLevelEnum } from '../models';
+import { StateEnum, IPrecinct, ElectionEnum, ICluster, ViewLevelEnum, AlgorithmEnum } from '../models';
 import { hashPrecinct } from './functions/hash';
 import { ModelMapper } from './mapping/model-mapper';
+import { store } from '../index';
 
 export class PrecinctService {
     private state: StateEnum;
@@ -49,6 +50,11 @@ export class PrecinctService {
         // this.dispatch(stateReducer.setPrecinctDataCreator(this.precincts));
         this.dispatch(stateReducer.setPrecinctMap(this.precinctMap));
         this.dispatch(stateReducer.selectState(this.state));
+
+        // Needed to set new precinct map used in service to run algorithm (when user runs phase 1 on one state, changes state, and runs phase 1 again)
+        if (store.getState().stateReducer.phaseOneService) {
+            store.getState().stateReducer.phaseOneService.setPrecinctMap(this.precinctMap);
+        }
     }
 
     private updateStateReducerPrecincts(message: any[]): void {
@@ -132,8 +138,12 @@ export class PrecinctService {
                 const districtData = districtClusters.get(key);
                 districtData.electionData.house18 = ModelMapper.toIVote(district.electionData);
             }
+
+            // Reset program state
             this.dispatch(stateReducer.setOldClusters(districtClusters));
+            this.dispatch(stateReducer.setNewClusters(new Map<string, ICluster>()));
             this.dispatch(stateReducer.setLevel(ViewLevelEnum.OLD_DISTRICTS));
+            this.dispatch(stateReducer.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1));
         });
     }
 

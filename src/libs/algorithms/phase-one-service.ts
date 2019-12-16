@@ -84,6 +84,7 @@ export class PhaseOneService {
 
             this.districts.set(key, cluster);
         }
+        console.log(data, this.precincts);
 
 
         // Update the final map with the new district IDs in newDistricts
@@ -94,8 +95,6 @@ export class PhaseOneService {
         });
         
         // On final iteration
-        console.log(data, this.districts);
-        
         if (data.statusCode === 'success') {
             this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
 
@@ -159,5 +158,9 @@ export class PhaseOneService {
 
     public setDispatch(dispatch: any) {
         this.dispatch = dispatch;
+    }
+
+    public setPrecinctMap(precinctMap: Map<string, IPrecinct>) {
+        this.precincts = precinctMap;
     }
 }
