@@ -1,6 +1,7 @@
 import { IDemographics } from './index';
 import { IElection } from './election';
 import { ClusterDemographics } from './demographics';
+import { PartyEnum } from './enums';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
@@ -13,7 +14,7 @@ export interface ICluster {
 
     numericalId: string;
     type?: string;
-    incumbent?: string;
+    incumbent?: { name: string; party: PartyEnum; };
     precinctNames: Set<string>;
     // counties: Set<string>;
     // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine

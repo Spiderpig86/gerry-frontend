@@ -106,7 +106,7 @@ export class PrecinctService {
                     name: district.name,
                     nodeType: district.nodeType,
                     type: district.type,
-                    incumbent: '',
+                    incumbent: { name: district.incumbent.name, party: district.incumbent.party },
                     objectiveFunctionScores: null,
                     precinctNames: new Set<string>(),
                     demographicData: {

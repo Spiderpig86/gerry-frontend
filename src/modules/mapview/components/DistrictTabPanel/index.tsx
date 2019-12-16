@@ -3,9 +3,10 @@ import * as React from 'react';
 import { Dropdown, DropdownButton, Image } from 'react-bootstrap';
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
 import { Card } from 'react-bootstrap';
-import { StateEnum, ICluster } from '../../../../models';
+import { StateEnum, ICluster, PartyEnum } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
 import { Coloring } from '../../../../libs/coloring';
+import { EnumNameMapper } from '../../../../libs/enum-name';
 
 interface DistrictTabPanelProps {
     selectedState: StateEnum;
@@ -92,17 +93,21 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                 <h4>District Statistics</h4>
                 <h6>Old District Statistics</h6>
 
-                <Card className='my-3'>
-                    <Card.Body>
-                        <Image className='float-left' style={{ width: '64px' }} roundedCircle src="https://www.wkar.org/sites/wkar/files/styles/medium/public/201905/IMG_7968.jpg" />
+                {
+                    this.state.oldDistrictData && (
+                        <Card className='my-3' style={{
+                            borderLeft: this.state.oldDistrictData.incumbent.party === PartyEnum.REPUBLICAN ? '10px solid #7e3131' : '10px solid #2f5fa1'
+                        }}>
+                            <Card.Body>
+                                <div className="message">
+                                    <h5>{ this.state.oldDistrictData.incumbent.name }</h5>
+                                    <h6>{ EnumNameMapper.getPartyName(this.state.oldDistrictData.incumbent.party) }</h6>
+                                </div>
+                            </Card.Body>
+                        </Card>
 
-                        <div className="message">
-                            <h5>Samuel Stanley</h5>
-                            <h6>Seawolf Party</h6>
-                        </div>
-                    </Card.Body>
-                </Card>
-
+                    )
+                }
                 <br />
                 <div className="d-flex align-items-center">
                     <div className='mr-2' style={{
@@ -146,15 +151,15 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                     <div className='mr-2' style={{
                         width: '28px',
                         height: '28px',
-                        backgroundColor: this.state.selectedNewDistrictId ? this.props.coloring.colors[parseInt(this.state.selectedNewDistrictId)] : '#ccc',
+                        backgroundColor: this.state.selectedNewDistrictId && this.state.selectedNewDistrictId !== '0' ? this.props.coloring.colors[parseInt(this.state.selectedNewDistrictId)] : '#ccc',
                         display: 'block',
                         borderRadius: '50%'
                     }}></div>
-                    <DropdownButton id="dropdown-basic-button" title={`Selected District: ${this.state.selectedNewDistrictId || 'N/A'}`}>
+                    <DropdownButton id="dropdown-basic-button" title={`Selected District: ${this.state.selectedNewDistrictId && this.state.selectedNewDistrictId !== '0' ? this.state.selectedNewDistrictId : 'N/A'}`}>
                         {
                             this.state.newSortedKeys.length > 0 && this.state.newSortedKeys.map(key => {
                                 return (
-                                    <Dropdown.Item key={key} onClick={() => this.selectNewDistrictData(key)}>District {key}</Dropdown.Item>
+                                    <Dropdown.Item key={key} onClick={() => this.selectNewDistrictData(key)}>District {key} {(this.isDistrictMajMin(key)) ? `(MajMin)` : ``}</Dropdown.Item>
                                 )
                             })
                         }
@@ -166,6 +171,12 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                     this.state.newDistrictData ? (
                         <div>
                             <p>Total Population: {this.state.newDistrictData.demographicData.totalPopulation.toLocaleString()}</p>
+                            {
+                                this.state.newDistrictData.isDistrictMajMin && (
+                                    
+                                    <p>This is a majority/minority district.</p>
+                                )
+                            }
                             <StatisticsAccordionComponent demographicData={this.state.newDistrictData.demographicData} electionData={this.state.newDistrictData.electionData} />
                         </div>
                     ) : (
@@ -193,6 +204,10 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
             selectedNewDistrictId: districtId,
             newDistrictData: this.props.newClusters.get(districtId)
         });
+    }
+
+    private isDistrictMajMin(id: string): boolean {
+        return this.props.newClusters.get(id).isMajorityMinority;
     }
 
     private resetDistrictResults() {

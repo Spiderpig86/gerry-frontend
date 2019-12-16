@@ -145,6 +145,16 @@ export class PhaseOneTabPanelComponent extends React.Component<
                                 defaultChecked={this.containsDemographic(DemographicEnum.HISPANIC)}
                                 onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.HISPANIC, e.target.checked)}
                             />
+                        </Form.Group><Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
+                            <Form.Check
+                                custom
+                                className={'col-12'}
+                                type={'checkbox'}
+                                id={'minorityGroupCheckNativeAmerican'}
+                                label={'Native Americans'}
+                                defaultChecked={this.containsDemographic(DemographicEnum.NATIVE_AMERICAN)}
+                                onChange={(e) => this.toggleSelectedDemographics(DemographicEnum.NATIVE_AMERICAN, e.target.checked)}
+                            />
                         </Form.Group>
                         <Form.Group className="ml-5 row form-group d-flex align-items-center py-2">
                             <Form.Check

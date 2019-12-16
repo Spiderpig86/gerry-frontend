@@ -518,9 +518,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             this.props.level === ViewLevelEnum.OLD_DISTRICTS
                 ? this.props.oldClusters.get(properties.cd.toString())
                 : this.props.newClusters.get(precinct.newCdId.toString() || '0');
-        // if (!district) {
-        //     return this.coloring.getBlankStyle();
-        // }
+        if (!district) {
+            return this.coloring.getBlankStyle();
+        }
         
         if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
             style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
