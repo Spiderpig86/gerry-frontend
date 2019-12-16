@@ -50,7 +50,8 @@ interface IMapViewState {
         demographicsProps: IDemographicsTabProps;
         electionsProps: IElectionsTabProps;
         precinctProps: IPrecinctPropertiesTabProps;
-        selectedDistrictId: string;
+        selectedOldDistrictId: string;
+        selectedNewDistrictId: string;
     };
     mapTooltip: IMapTooltipProps;
     selectedPrecinctId: string;
@@ -76,7 +77,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             demographicsProps: null,
             electionsProps: null,
             precinctProps: null,
-            selectedDistrictId: '0',
+            selectedOldDistrictId: '0',
+            selectedNewDistrictId: '0',
         },
         mapTooltip: {
             title: null,
@@ -173,9 +175,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         if (!element) {
                             return;
                         }
-                        // console.log(element);
                         console.log(element, this.props.precinctMap.get(element));
-                        // this.props.precinctMap.get(element).properties.v16_opres += 10000;
                         this.props.highlightedPrecincts.add(element);
                     });
                 });
@@ -432,7 +432,8 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 electionsProps,
                 demographicsProps,
                 precinctProps,
-                selectedDistrictId: precinctProps.congressionalDistrictId || '0'
+                selectedOldDistrictId: precinctProps.congressionalDistrictId || '0',
+                selectedNewDistrictId: this.props.precinctMap.get(hashPrecinct(properties)) ? this.props.precinctMap.get(hashPrecinct(properties)).newCdId : '0'
             }
         });
     }
@@ -767,7 +768,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                 : this.props.newClusters.get(precinct.newCdId.toString() || '0'); // Get correct cd data based on filter
 
         if (!cdData) {
-            console.log(precinct);
+            return;
         }
         
         response.subtitle = `District: ${cdData.name.substring(1)}`

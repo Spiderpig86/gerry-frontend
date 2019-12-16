@@ -28,7 +28,8 @@ interface IRightSidebarProps {
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
-    selectedDistrictId: string;
+    selectedOldDistrictId: string;
+    selectedNewDistrictId: string;
     rightSidebarHandler: (param) => void;
 
     coloring: Coloring;
@@ -54,7 +55,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedDistrictId={this.props.selectedDistrictId} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedOldDistrictId={this.props.selectedOldDistrictId} selectedNewDistrictId={this.props.selectedNewDistrictId} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -68,14 +69,6 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                 </Tabs>
             </Menu>
         );
-    }
-
-    private renderTooltip(props: any, text: string) {
-        props.style = {
-            ...props.style,
-            zIndex: 99999
-        };
-        return <Tooltip {...props} show={props.show.toString()}>{text}</Tooltip>;
     }
 }
 

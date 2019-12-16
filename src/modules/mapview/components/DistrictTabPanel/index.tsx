@@ -9,7 +9,8 @@ import { Coloring } from '../../../../libs/coloring';
 
 interface DistrictTabPanelProps {
     selectedState: StateEnum;
-    selectedDistrictId: string;
+    selectedOldDistrictId: string;
+    selectedNewDistrictId: string;
     oldClusters: Map<string, ICluster>;
     newClusters: Map<string, ICluster>;
     coloring: Coloring;
@@ -48,8 +49,11 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
             });
         }
 
-        if (this.props.selectedDistrictId !== '0') {
-            this.selectOldDistrictData(this.props.selectedDistrictId.toString());
+        if (this.props.selectedOldDistrictId !== '0') {
+            this.selectOldDistrictData(this.props.selectedOldDistrictId.toString());
+        }
+        if (this.props.selectedNewDistrictId !== '0') {
+            this.selectNewDistrictData(this.props.selectedNewDistrictId.toString());
         }
     }
 
@@ -64,8 +68,11 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
             newSortedKeys: Array.from(newProps.newClusters.keys()).sort((a, b) => Number(a) - Number(b))
         });
 
-        if (this.props.selectedDistrictId !== '0') {
-            this.selectOldDistrictData(this.props.selectedDistrictId.toString());
+        if (this.props.selectedOldDistrictId !== '0') {
+            this.selectOldDistrictData(this.props.selectedOldDistrictId.toString());
+        }
+        if (this.props.selectedNewDistrictId !== '0') {
+            this.selectNewDistrictData(this.props.selectedNewDistrictId.toString());
         }
     }
 
@@ -120,7 +127,10 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
 
                 {
                     this.state.oldDistrictData ? (
-                        <StatisticsAccordionComponent demographicData={this.state.oldDistrictData.demographicData} electionData={this.state.oldDistrictData.electionData} />
+                        <div>
+                            <p>Total Population: {this.state.oldDistrictData.demographicData.totalPopulation.toLocaleString()}</p>
+                            <StatisticsAccordionComponent demographicData={this.state.oldDistrictData.demographicData} electionData={this.state.oldDistrictData.electionData} />
+                        </div>
                     ) : (
                             <div className='text-center'>
                                 <h4>No district selected.</h4>
@@ -154,7 +164,10 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                 <br />
                 {
                     this.state.newDistrictData ? (
-                        <StatisticsAccordionComponent demographicData={this.state.newDistrictData.demographicData} electionData={this.state.newDistrictData.electionData} />
+                        <div>
+                            <p>Total Population: {this.state.newDistrictData.demographicData.totalPopulation.toLocaleString()}</p>
+                            <StatisticsAccordionComponent demographicData={this.state.newDistrictData.demographicData} electionData={this.state.newDistrictData.electionData} />
+                        </div>
                     ) : (
                             <div className='text-center'>
                                 <h4>No district selected.</h4>
