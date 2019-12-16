@@ -36,7 +36,7 @@ export class EnumNameMapper {
         [PhaseTwoMeasuresEnum.COMPACTNESS, 'Compactness'],
         [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 'Partisan Fairness'],
         [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 'Political Competitiveness'],
-        [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 'Political Homogeneity']
+        [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 'Population Homogeneity']
     ]);
 
     public static getElectionName(election: ElectionEnum): string {

@@ -250,14 +250,14 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                             ></TooltipSlider>
                         </Form.Group>
                         <Form.Group className="row form-group d-flex align-items-center py-2">
-                            <Form.Label className="col-6 mb-0">Political Homogeneity</Form.Label>
+                            <Form.Label className="col-6 mb-0">Population Homogeneity</Form.Label>
                             <TooltipSlider
                                 className={'col-6'}
                                 min={0}
                                 max={100}
                                 defaultValue={this.state.phaseTwoArgs.weights.get(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY)}
                                 tipFormatter={value => `${value}%`}
-                                onAfterChange={this.setObjectivePoliticalHomogeneity.bind(this)}
+                                onAfterChange={this.setObjectivePopulationHomogeneity.bind(this)}
                             ></TooltipSlider>
                         </Form.Group>
                     </div>
@@ -383,9 +383,9 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
         );
     }
 
-    private setObjectivePoliticalHomogeneity(objectivePoliticalHomogenity: number): void {
+    private setObjectivePopulationHomogeneity(objectivePopulationHomogenity: number): void {
         const weights = this.state.phaseTwoArgs.weights;
-        weights.set(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, objectivePoliticalHomogenity);
+        weights.set(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, objectivePopulationHomogenity);
         this.setState(
             {
                 phaseTwoArgs: {
