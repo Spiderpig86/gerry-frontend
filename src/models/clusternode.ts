@@ -2,6 +2,7 @@ import { IDemographics } from './index';
 import { IElection } from './election';
 import { ClusterDemographics } from './demographics';
 import { PartyEnum } from './enums';
+import { IVoteData } from './vote';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
@@ -25,6 +26,13 @@ export interface ICluster {
 
     [x: string]: any;
 
+}
+
+export interface ClusterProperties {
+    republicanRepCount: number,
+    democraticRepCount: number,
+    house16: IVoteData,
+    house18: IVoteData
 }
 
 // TODO: Map in state for each election and newly generated districts containing ICluster with objective function scores

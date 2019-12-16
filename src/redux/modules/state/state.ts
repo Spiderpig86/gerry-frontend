@@ -28,7 +28,8 @@ import {
     PhaseTwoPrecinctMoveEnum,
     AlgorithmRunEnum,
     PhaseOneOtherPairsEnum,
-    PhaseOneStopEnum
+    PhaseOneStopEnum,
+    ClusterProperties
 } from '../../../models';
 import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
@@ -293,6 +294,7 @@ export interface State {
     algorithmState: AlgorithmEnum;
     oldClusters: Map<string, ICluster>;
     newClusters: Map<string, ICluster>;
+    clusterProperties: ClusterProperties;
     phaseZeroArgs: PhaseZeroArgs;
     phaseZeroResults: PhaseZeroResult;
     phaseOneArgs: PhaseOneArgs;
@@ -313,6 +315,7 @@ const initialState: State = {
     algorithmState: AlgorithmEnum.PHASE_0_1,
     oldClusters: new Map<string, ICluster>(),
     newClusters: new Map<string, ICluster>(),
+    clusterProperties: null,
     phaseZeroArgs: {
         populationThreshold: Constants.DEFAULT_THRESHOLD,
         electionType: ElectionEnum.PRES_16,

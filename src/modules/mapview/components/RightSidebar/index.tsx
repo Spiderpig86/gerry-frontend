@@ -13,7 +13,7 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
-import { StateEnum, ICluster } from '../../../../models';
+import { StateEnum, ICluster, ClusterProperties, PartyEnum } from '../../../../models';
 import { Coloring } from '../../../../libs/coloring';
 
 import '../../../../styles/cirrus/tabs.scss';
@@ -35,10 +35,46 @@ interface IRightSidebarProps {
     coloring: Coloring;
 }
 
-export class RightSidebarComponent extends React.Component<IRightSidebarProps, {}> {
+interface IRightSidebarState {
+    clusterProperties: ClusterProperties;
+}
+
+export class RightSidebarComponent extends React.Component<IRightSidebarProps, IRightSidebarState> {
+
+    state = {
+        clusterProperties: {
+            republicanRepCount: 0,
+            democraticRepCount: 0,
+            house16: null,
+            house18: null
+        }
+    };
+
+    componentWillReceiveProps(newProps: IRightSidebarProps) {
+        if (newProps.oldClusters && newProps.oldClusters.size > 0) {
+            const properties = {
+                republicanRepCount: 0,
+                democraticRepCount: 0,
+                house16: null,
+                house18: null
+            };
+            newProps.oldClusters.forEach((cluster: ICluster) => {
+                if (cluster.incumbent.party === PartyEnum.DEMOCRATIC) {
+                    properties.democraticRepCount++;
+                } else {
+                    properties.republicanRepCount++;
+                }
+            });
+            properties.house16 = newProps.stateData.electionData.house16;
+            properties.house18 = newProps.stateData.electionData.house18;
+
+            this.setState({
+                clusterProperties: properties
+            });
+        }
+    }
 
     render() {
-
         return (
             <Menu onStateChange={this.props.rightSidebarHandler} isOpen={this.props.isOpen} right styles={RightSidebarStyles} width={'100%'} burgerButtonClassName={"burger-right"} menuClassName={"menu-right"}>
                 <h3 className="px-3">{this.props.precinctProps && this.props.precinctProps.precinctName} Data</h3>
@@ -52,7 +88,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, {
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
-                        <StatisticsTabPanel stateData={this.props.stateData} selectedState={this.props.selectedState} />
+                        <StatisticsTabPanel clusterProperties={this.state.clusterProperties} stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
                         <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedOldDistrictId={this.props.selectedOldDistrictId} selectedNewDistrictId={this.props.selectedNewDistrictId} />

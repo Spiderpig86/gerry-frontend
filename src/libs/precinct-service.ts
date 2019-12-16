@@ -4,7 +4,7 @@ import * as Constants from '../config/constants';
 import Axios from 'axios';
 
 import { WebSocketHandler } from './ws';
-import { StateEnum, IPrecinct, ElectionEnum, ICluster, ViewLevelEnum, AlgorithmEnum } from '../models';
+import { StateEnum, IPrecinct, ElectionEnum, ICluster, ViewLevelEnum, AlgorithmEnum, ClusterProperties } from '../models';
 import { hashPrecinct } from './functions/hash';
 import { ModelMapper } from './mapping/model-mapper';
 import { store } from '../index';
@@ -107,12 +107,13 @@ export class PrecinctService {
             for (const district of pres16.children) {
                 // Get district number as key
                 const key = district.name.substring(1);
+                
                 const cluster: ICluster = {
                     numericalId: district.id,
                     name: district.name,
                     nodeType: district.nodeType,
                     type: district.type,
-                    incumbent: { name: district.incumbent.name, party: district.incumbent.party },
+                    incumbent: district.incumbent && { name: district.incumbent.name, party: district.incumbent.party },
                     objectiveFunctionScores: null,
                     precinctNames: new Set<string>(),
                     demographicData: {

@@ -13,3 +13,8 @@
         }
     }
 }
+
+.ReactTable .rt-th, .ReactTable .rt-td {
+    text-overflow: inherit;
+    white-space: pre-wrap;
+}
