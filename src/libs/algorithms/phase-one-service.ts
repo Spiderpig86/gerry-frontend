@@ -2,7 +2,7 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import Axios from 'axios';
 
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, ElectionEnum } from '../../models';
+import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, ElectionEnum, StateEnum } from '../../models';
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
 import { ModelMapper } from '../mapping/model-mapper';
@@ -86,6 +86,8 @@ export class PhaseOneService {
         }
 
         // Update the final map with the new district IDs in newDistricts
+        console.log(this.precincts);
+        
         this.districts.forEach((districtObject: ICluster, districtId: string) => {
             districtObject.precinctNames.forEach(precinctId => {
                 this.precincts.get(precinctId).newCdId = Number(districtId);

@@ -69,7 +69,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                     this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
                                 }
                                 onClick={this.startPhaseOne.bind(this)}
-                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                                // style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
                             >
                                 <FontAwesomeIcon icon={faPlay} />
                                 &nbsp; Run Phase 1
@@ -99,7 +99,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                     this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
                                 }
                                 onClick={this.stepForward.bind(this)}
-                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                                // style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
                             >
                                 <FontAwesomeIcon icon={faStepForward} />
                                 &nbsp; Next

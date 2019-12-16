@@ -46,15 +46,16 @@ export class PrecinctService {
     }
 
     private onClose(): void {
+        // Needed to set new precinct map used in service to run algorithm (when user runs phase 1 on one state, changes state, and runs phase 1 again)
+        if (store.getState().stateReducer.phaseOneService) {
+            console.log('SETTING');
+            store.getState().stateReducer.phaseOneService.setPrecinctMap(this.precinctMap);
+        }
+
         // this.precincts.features = Array.from(this.precinctMap.values());
         // this.dispatch(stateReducer.setPrecinctDataCreator(this.precincts));
         this.dispatch(stateReducer.setPrecinctMap(this.precinctMap));
         this.dispatch(stateReducer.selectState(this.state));
-
-        // Needed to set new precinct map used in service to run algorithm (when user runs phase 1 on one state, changes state, and runs phase 1 again)
-        if (store.getState().stateReducer.phaseOneService) {
-            store.getState().stateReducer.phaseOneService.setPrecinctMap(this.precinctMap);
-        }
     }
 
     private updateStateReducerPrecincts(message: any[]): void {

@@ -35,6 +35,15 @@ export class PhaseOneTabPanelComponent extends React.Component<
         phaseOneArgs: this.props.phaseOneArgs
     };
 
+    componentWillReceiveProps(newProps: IPhaseOneTabPanelProps) {
+        // Fix issue where wrong state is selected after adjusting settings
+        if (newProps.phaseOneArgs.stateType !== this.state.phaseOneArgs.stateType) {
+            this.setState({
+                phaseOneArgs: newProps.phaseOneArgs
+            });
+        }
+    }
+
     render() {
         return (
             <>
