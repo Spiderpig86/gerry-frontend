@@ -13,7 +13,7 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
-import { StateEnum, ICluster, ClusterProperties, PartyEnum } from '../../../../models';
+import { StateEnum, ICluster, ClusterProperties, PartyEnum, ClusterCount, MapFilterEnum, IVoteData, ElectionEnum } from '../../../../models';
 import { Coloring } from '../../../../libs/coloring';
 
 import '../../../../styles/cirrus/tabs.scss';
@@ -25,6 +25,7 @@ interface IRightSidebarProps {
     newClusters: Map<string, ICluster>;
     isOpen: boolean;
     mapView: MapViewComponent;
+    mapFilter: MapFilterEnum;
     demographicsProps: IDemographicsTabProps;
     electionsProps: IElectionsTabProps;
     precinctProps: IPrecinctPropertiesTabProps;
@@ -37,6 +38,8 @@ interface IRightSidebarProps {
 
 interface IRightSidebarState {
     clusterProperties: ClusterProperties;
+    oldClusterCount: ClusterCount;
+    newClusterCount: ClusterCount;
 }
 
 export class RightSidebarComponent extends React.Component<IRightSidebarProps, IRightSidebarState> {
@@ -47,10 +50,21 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, I
             democraticRepCount: 0,
             house16: null,
             house18: null
+        },
+        oldClusterCount: {
+            republicanCount: 0,
+            democraticCount: 0,
+            tieCount: 0
+        },
+        newClusterCount: {
+            republicanCount: 0,
+            democraticCount: 0,
+            tieCount: 0
         }
     };
 
     componentWillReceiveProps(newProps: IRightSidebarProps) {
+        
         if (newProps.oldClusters && newProps.oldClusters.size > 0) {
             const properties = {
                 republicanRepCount: 0,
@@ -58,18 +72,61 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, I
                 house16: null,
                 house18: null
             };
+            const oldClusterCount = {
+                republicanCount: 0,
+                democraticCount: 0,
+                tieCount: 0
+            } as ClusterCount;
             newProps.oldClusters.forEach((cluster: ICluster) => {
                 if (cluster.incumbent.party === PartyEnum.DEMOCRATIC) {
                     properties.democraticRepCount++;
                 } else {
                     properties.republicanRepCount++;
                 }
+
+                const voteDataByElection = this.getVoteData(cluster, newProps.mapFilter);
+                if (voteDataByElection.voteData.winners.length === 1) {
+                    if (voteDataByElection.voteData.winners[0] === PartyEnum.DEMOCRATIC) {
+                        oldClusterCount.democraticCount++;
+                    } else {
+                        oldClusterCount.republicanCount++;
+                    }
+                } else {
+                    oldClusterCount.tieCount++;
+                }
+                oldClusterCount.election = voteDataByElection.election;
             });
+            
             properties.house16 = newProps.stateData.electionData.house16;
             properties.house18 = newProps.stateData.electionData.house18;
 
             this.setState({
-                clusterProperties: properties
+                clusterProperties: properties,
+                oldClusterCount
+            });
+        }
+
+        if (newProps.newClusters && newProps.newClusters.size > 0) {
+            const newClusterCount = {
+                republicanCount: 0,
+                democraticCount: 0,
+                tieCount: 0
+            } as ClusterCount;
+            newProps.newClusters.forEach((cluster: ICluster) => {
+                const voteDataByElection = this.getVoteData(cluster, newProps.mapFilter);
+                if (voteDataByElection.voteData.winners.length === 1) {
+                    if (voteDataByElection.voteData.winners[0] === PartyEnum.DEMOCRATIC) {
+                        newClusterCount.democraticCount++;
+                    } else {
+                        newClusterCount.republicanCount++;
+                    }
+                } else {
+                    newClusterCount.tieCount++;
+                }
+                newClusterCount.election = voteDataByElection.election;
+            });
+            this.setState({
+                newClusterCount
             });
         }
     }
@@ -91,7 +148,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, I
                         <StatisticsTabPanel clusterProperties={this.state.clusterProperties} stateData={this.props.stateData} selectedState={this.props.selectedState} />
                     </TabPanel>
                     <TabPanel>
-                        <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedOldDistrictId={this.props.selectedOldDistrictId} selectedNewDistrictId={this.props.selectedNewDistrictId} />
+                        <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedOldDistrictId={this.props.selectedOldDistrictId} mapFilter={this.props.mapFilter} selectedNewDistrictId={this.props.selectedNewDistrictId} oldClusterCount={this.state.oldClusterCount} newClusterCount={this.state.newClusterCount} />
                     </TabPanel>
                     <TabPanel>
                         <ElectionsTabPanel {...this.props.electionsProps} />
@@ -106,6 +163,38 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, I
             </Menu>
         );
     }
+
+    private getVoteData(cluster: ICluster, filter: MapFilterEnum): {voteData: IVoteData, election: ElectionEnum} {
+        let voteData: IVoteData = {
+            republicanVotes: 0,
+            democraticVotes: 0,
+            otherVotes: 0,
+            totalVotes: 0,
+            winners: []
+        };
+        let election = null;
+        
+        switch (filter) {
+            case MapFilterEnum.HOUSE_2016:
+                voteData = cluster.electionData.house16 || voteData;
+                election = ElectionEnum.HOUSE_16;
+                console.log(election);
+                
+                break;
+            case MapFilterEnum.HOUSE_2018:
+                voteData = cluster.electionData.house18 || voteData;
+                election = ElectionEnum.HOUSE_18;
+                
+                break;
+            default:
+                voteData = cluster.electionData.presidential16 || voteData;
+                election = ElectionEnum.PRES_16;
+        }
+        return {
+            voteData,
+            election
+        };
+    }
 }
 
 function mapStatetoProps(state: any, ownProps: any) {
@@ -114,6 +203,7 @@ function mapStatetoProps(state: any, ownProps: any) {
         stateData: state.stateReducer.stateData,
         oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
+        mapFilter: state.stateReducer.filterArgs.mapFilter,
         ...ownProps
     };
 }

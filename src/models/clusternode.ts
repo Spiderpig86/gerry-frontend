@@ -1,7 +1,7 @@
 import { IDemographics } from './index';
 import { IElection } from './election';
 import { ClusterDemographics } from './demographics';
-import { PartyEnum } from './enums';
+import { PartyEnum, ElectionEnum } from './enums';
 import { IVoteData } from './vote';
 
 /**
@@ -29,10 +29,17 @@ export interface ICluster {
 }
 
 export interface ClusterProperties {
-    republicanRepCount: number,
-    democraticRepCount: number,
-    house16: IVoteData,
-    house18: IVoteData
+    republicanRepCount: number;
+    democraticRepCount: number;
+    house16: IVoteData;
+    house18: IVoteData;
+}
+
+export interface ClusterCount {
+    democraticCount: number;
+    republicanCount: number;
+    tieCount: number;
+    election?: ElectionEnum;
 }
 
 // TODO: Map in state for each election and newly generated districts containing ICluster with objective function scores

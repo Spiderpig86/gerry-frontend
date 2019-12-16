@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
-import { StateEnum, ICluster, ClusterProperties } from '../../../../models';
+import { StateEnum, ICluster, ClusterProperties, ClusterCount } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
 import { Button } from 'react-bootstrap';
 

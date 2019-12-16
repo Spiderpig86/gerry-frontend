@@ -15,19 +15,11 @@ interface ILogsTabPanelProps {
 export class LogsTabPanelComponent extends React.Component<ILogsTabPanelProps, {}> {
     render() {
         return (
-            <div className='px-3'>
-                <h4>District Statistics</h4>
-                <div className="mx-2">
-                    <h6>Republican Districts: 5</h6>
-                    <h6>Democratic Districts: 5</h6>
-                </div>
-
-                <br />
-
-                <h4>Debug Console</h4>
+            <div className='p-3'>
+                <h4>Debug Log</h4>
                 <textarea className='console' value={this.props.logs ? this.props.logs.join('\n') : ''}></textarea>
                 <br />
-                <Button className='mb-3' onClick={this.clearLogs.bind(this)}>Clear</Button>
+                <Button className='ml-3 mb-3' onClick={this.clearLogs.bind(this)}>Clear</Button>
             </div>
         )
     }

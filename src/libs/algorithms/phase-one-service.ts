@@ -84,8 +84,6 @@ export class PhaseOneService {
 
             this.districts.set(key, cluster);
         }
-        console.log(data, this.precincts);
-
 
         // Update the final map with the new district IDs in newDistricts
         this.districts.forEach((districtObject: ICluster, districtId: string) => {

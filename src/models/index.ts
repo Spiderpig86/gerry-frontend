@@ -1,7 +1,7 @@
 export { IDemographics, ClusterDemographics } from './demographics';
 export { User } from './user';
 export { IPrecinct } from './precinct';
-export { ICluster, ClusterProperties } from './clusternode';
+export { ICluster, ClusterProperties, ClusterCount } from './clusternode';
 export { PrecinctProperties } from './properties';
 export { IVoteData } from './vote';
 export { IElection } from './election';
