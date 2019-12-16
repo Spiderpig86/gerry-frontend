@@ -26,7 +26,6 @@ export class PhaseOneService {
             this.onMessage.bind(this),
             this.onClose.bind(this)
         );
-        console.log(this.handler.stompClient)
     }
 
     private generateUrl(): string {
@@ -39,13 +38,14 @@ export class PhaseOneService {
     }
 
     private onOpen(): void {
-        console.info('Phase 1 stomp connected!');
+        console.info('Phase 1 Stomp connected!');
     }
 
     private onMessage(response: any): void {
         const data = JSON.parse(response.body);
 
         const jobId = data.jobId;
+        // const.logs = data.logs;
         if (jobId !== store.getState().stateReducer.phaseOneArgs.jobId) {
             // This is a new job, clear new clusters
             console.log('woweowoewoeowoewoow', jobId);
@@ -54,7 +54,7 @@ export class PhaseOneService {
         }
 
         const info = data.deltas[0];
-        const iteration = info.iteration;
+        // const iteration = info.iteration;
         const newDistricts: any[] = Object.values(info.newDistricts);
         const changes: any[] = Object.entries(info.changedNodes);
 

@@ -32,6 +32,7 @@ import {
 } from '../../../models';
 import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
+import { PhaseTwoService } from '../../../libs/algorithms/phase-two-service';
 
 const SET_STATE = 'SET_STATE';
 const SET_STATE_DATA = 'SET_STATE_DATA';
@@ -47,6 +48,7 @@ const SET_PHASE_ONE_ARGS = 'SET_PHASE_ONE_ARGS';
 const SET_PHASE_TWO_ARGS = 'SET_PHASE_TWO_ARGS';
 const SET_ALGORITHM_PHASE = 'SET_ALGORITHM_PHASE';
 const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
+const SET_PHASE_TWO_SERVICE = 'SET_PHASE_TWO_SERVICE';
 const SET_LOGS = 'SET_LOGS';
 const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
 
@@ -144,6 +146,13 @@ export const setPhaseOneServiceCreator = (phaseOneService: PhaseOneService) => {
     return (dispatch: any) => {
         phaseOneService.setDispatch(dispatch);
         dispatch(setPhaseOneService(phaseOneService));
+    };
+};
+
+export const setPhaseTwoServiceCreator = (phaseTwoService: PhaseTwoService) => {
+    return (dispatch: any) => {
+        phaseTwoService.setDispatch(dispatch);
+        dispatch(setPhaseTwoService(phaseTwoService));
     };
 };
 
@@ -245,9 +254,16 @@ export const setPhaseOneService = (phaseOneService: PhaseOneService) => {
     };
 };
 
+export const setPhaseTwoService = (phaseTwoService: PhaseTwoService) => {
+    return {
+        type: SET_PHASE_TWO_SERVICE,
+        phaseTwoService
+    };
+};
+
 export const setLogs = (logs: string[]) => {
     return {
-        type: SET_PHASE_ONE_SERVICE,
+        type: SET_LOGS,
         logs
     };
 };
