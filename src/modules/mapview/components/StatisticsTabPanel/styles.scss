@@ -5,3 +5,19 @@
         clear: both;
     }
 }
+
+.redistrict {
+    padding: .5rem 0;
+
+    ul {
+        border-bottom: none;
+        display: block;
+        list-style: disc inside;
+        overflow: initial;
+
+        li {
+            display: list-item;
+            text-align: left;
+        }
+    }
+}

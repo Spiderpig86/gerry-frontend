@@ -3,8 +3,10 @@ import * as React from 'react';
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
 import { StateEnum, ICluster } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
+import { Button } from 'react-bootstrap';
 
 import './styles.scss';
+import * as Redistricting from './redistricting.json';
 
 interface StatisticsTabPanelProps {
     selectedState: StateEnum;
@@ -28,8 +30,13 @@ export class StatisticsTabPanel extends React.PureComponent<StatisticsTabPanelPr
                 <h4>State Statistics</h4>
                 <p>Total Population: {this.props.stateData.demographicData.totalPopulation.toLocaleString()}</p>
                 <StatisticsAccordionComponent demographicData={this.props.stateData.demographicData} electionData={this.props.stateData.electionData} />
-
                 <br/>
+
+                <h5>Redistricting Guidelines</h5>
+                <div className='redistrict' dangerouslySetInnerHTML={{__html: unescape(Redistricting[this.props.selectedState].html)}} />
+                <a href={Redistricting[this.props.selectedState].link} target='_blank'>
+                    <Button className='mb-3'>More Info</Button>
+                </a>
             </div>
         );
     }
