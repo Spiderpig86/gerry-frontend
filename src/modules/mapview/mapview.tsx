@@ -782,22 +782,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
                         key: 'Total District Population',
                         value: cdData ? cdData.demographicData.totalPopulation : 0
                     },
-                    {
-                        key: 'Political Fairness Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Population Equality Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Compactness Score',
-                        value: 0.6
-                    },
-                    {
-                        key: 'Contiguity Score',
-                        value: 0.6
-                    }
                 );
                 break;
             case MapFilterEnum.PRES_2016:

@@ -72,7 +72,7 @@ export class PhaseTwoService {
 
             // console.log(data);
             // console.log(data.oldDistrictScores);
-            console.log(data.newStateScores);
+            // console.log(data.newStateScores);
 
             for (const oldDistrictEntry of oldDistrictScores) {
                 console.log(this.oldClusters, oldDistrictEntry);
