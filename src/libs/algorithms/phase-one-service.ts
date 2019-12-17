@@ -53,7 +53,7 @@ export class PhaseOneService {
             this.districts.clear();
             this.dispatch(mapActionCreators.setPhaseOneJobId(jobId));
         }
-        
+
         this.dispatch(mapActionCreators.appendLogs(logs));
         this.dispatch(mapActionCreators.setPhaseOneTime(timeTaken));
 
@@ -90,13 +90,13 @@ export class PhaseOneService {
 
         // Update the final map with the new district IDs in newDistricts
         console.log(this.precincts);
-        
+
         this.districts.forEach((districtObject: ICluster, districtId: string) => {
             districtObject.precinctNames.forEach(precinctId => {
                 this.precincts.get(precinctId).newCdId = Number(districtId);
             });
         });
-        
+
         // On final iteration
         if (data.statusCode === 'success') {
             this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
@@ -107,7 +107,6 @@ export class PhaseOneService {
             this.districts.forEach((cluster: ICluster) => {
                 cluster.precinctNames.forEach(precinctId => {
                     this.precincts.get(precinctId).newCdId = Number(districtId);
-                    
                 });
                 cluster.name = `d${districtId.toString()}`;
                 cluster.numericalId = districtId.toString();
@@ -116,12 +115,10 @@ export class PhaseOneService {
             });
             this.districts = finalDistricts;
             console.log(this.districts);
-            
         }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
         this.dispatch(mapActionCreators.setNewClusters(this.districts));
         console.log(timeTaken);
-        
     }
 
     private onClose(): void {
@@ -139,9 +136,7 @@ export class PhaseOneService {
             upperBound: phaseOneArgs.upperBound / 100,
             demographicTypes: Array.from(phaseOneArgs.demographicTypes)
         };
-        this.handler.publish(JSON.stringify(
-                args
-        ));
+        this.handler.publish(JSON.stringify(args));
         this.startTime = new Date().getTime();
     }
 
@@ -150,15 +145,15 @@ export class PhaseOneService {
             case ElectionEnum.PRES_16:
                 return {
                     presidential16: ModelMapper.toIVote(electionData)
-                }
+                };
             case ElectionEnum.HOUSE_16:
                 return {
                     house16: ModelMapper.toIVote(electionData)
-                }
+                };
             default:
                 return {
                     house18: ModelMapper.toIVote(electionData)
-                }
+                };
         }
     }
 

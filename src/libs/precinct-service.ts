@@ -51,6 +51,11 @@ export class PrecinctService {
             console.log('SETTING');
             store.getState().stateReducer.phaseOneService.setPrecinctMap(this.precinctMap);
         }
+        
+        if (store.getState().stateReducer.phaseTwoService) {
+            console.log('SETTING');
+            store.getState().stateReducer.phaseTwoService.setPrecinctMap(this.precinctMap);
+        }
 
         // this.precincts.features = Array.from(this.precinctMap.values());
         // this.dispatch(stateReducer.setPrecinctDataCreator(this.precincts));

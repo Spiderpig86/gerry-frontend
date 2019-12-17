@@ -6,7 +6,7 @@ import Slider, { createSliderWithTooltip, Range } from 'rc-slider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { PhaseOneArgs, ElectionEnum, DemographicEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PhaseTwoDepthEnum, AlgorithmEnum } from '../../../../models';
+import { PhaseOneArgs, ElectionEnum, DemographicEnum, AlgorithmEnum } from '../../../../models';
 
 import '../../../../styles/slider.scss';
 import { EnumNameMapper } from '../../../../libs/enum-name';
@@ -18,7 +18,7 @@ const TooltipSlider = createSliderWithTooltip(Slider);
 interface IPhaseOneTabPanelProps {
     phaseOneArgs: PhaseOneArgs;
     selectedState: string;
-    setPhaseOneArgs: (phaseOneArgs: PhaseOneArgs) => void;
+    setPhaseOneArgsCreator: (phaseOneArgs: PhaseOneArgs) => void;
     setAlgorithmPhase: (algorithmPhase: AlgorithmEnum) => any;
 }
 
@@ -212,7 +212,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 numDistricts,
                 jobId: null
             }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+        }, () => this.props.setPhaseOneArgsCreator(this.state.phaseOneArgs));
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
     }
 
@@ -223,7 +223,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 electionType,
                 jobId: null
             }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+        }, () => this.props.setPhaseOneArgsCreator(this.state.phaseOneArgs));
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
     }
 
@@ -236,7 +236,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 upperBound: values[1],
                 jobId: null
             }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+        }, () => this.props.setPhaseOneArgsCreator(this.state.phaseOneArgs));
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
     }
 
@@ -253,7 +253,7 @@ export class PhaseOneTabPanelComponent extends React.Component<
                 demographicTypes: demographics,
                 jobId: null
             }
-        }, () => this.props.setPhaseOneArgs(this.state.phaseOneArgs));
+        }, () => this.props.setPhaseOneArgsCreator(this.state.phaseOneArgs));
         this.props.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1); // If user runs again, we are back in phase 1
     }
 
@@ -266,7 +266,7 @@ function mapStateToProps(state: any) {
     return {
         selectedState: state.stateReducer.selectedState,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
-        setPhaseOneArgs: state.stateReducer.setPhase,
+        setPhaseOneArgsCreator: state.stateReducer.setPhaseOneArgsCreator,
         setAlgorithmPhase: state.stateReducer.setAlgorithmPhase,
     };
 }

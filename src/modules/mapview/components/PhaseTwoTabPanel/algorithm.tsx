@@ -7,51 +7,90 @@ import { fas, faPlay, faPause, faStepForward } from '@fortawesome/free-solid-svg
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { PhaseOneArgs, AlgorithmEnum, StateEnum, AlgorithmRunEnum } from '../../../../models';
+import { AlgorithmEnum, StateEnum, AlgorithmRunEnum, PhaseTwoArgs, IPrecinct, ICluster } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
+import { PhaseTwoService } from '../../../../libs/algorithms/phase-two-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
-    phaseOneArgs: PhaseOneArgs;
+    phaseTwoArgs: PhaseTwoArgs;
     selectedState: StateEnum;
+    phaseTwoService: PhaseTwoService;
+    precinctMap: Map<string, IPrecinct>;
+    newClusters: Map<string, ICluster>;
+    setPhaseTwoServiceCreator: (phaseTwoService: PhaseTwoService) => void;
 }
 
 export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
+
+    async componentDidMount() {
+        if (!this.props.phaseTwoService && this.props.precinctMap.size > 0) {
+            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.newClusters);
+            this.props.setPhaseTwoServiceCreator(phaseTwoService);
+        }
+    }
+
+    async componentWillReceiveProps(newProps) {
+        if (!this.props.phaseTwoService && this.props.precinctMap.size > 0) {
+            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.newClusters);
+            this.props.setPhaseTwoServiceCreator(phaseTwoService);
+        }
+    }
+
     render() {
+        console.log(this.props.phaseTwoArgs);
+        
         return (
             <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
                 <ButtonGroup>
                     <OverlayTrigger
+                        rootClose
                         placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={props =>
-                            this.renderTooltip(
-                                props,
-                                `Run Phase 2`
-                            )
-                        }
+                        delay={{ show: 10, hide: 10 }}
+                        overlay={props => this.renderTooltip(props, `Run Phase 2`)}
                     >
-                        <Button id="btnPlay" disabled={this.props.selectedState === StateEnum.NOT_SET || this.props.algorithmState !== AlgorithmEnum.PHASE_2} onClick={this.startPhaseTwo.bind(this)}>
-                            <FontAwesomeIcon icon={faPlay} />
-                            &nbsp; Run Phase 2
-                        </Button>
+                        <div>
+                            <Button
+                                id="btnPlay"
+                                disabled={
+                                    this.props.selectedState === StateEnum.NOT_SET ||
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                }
+                                onClick={this.startPhaseTwo.bind(this)}
+                                style={
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                        ? { pointerEvents: 'none' }
+                                        : { pointerEvents: 'all' }
+                                }
+                            >
+                                <FontAwesomeIcon icon={faPlay} />
+                                &nbsp; Run Phase 2
+                            </Button>
+                        </div>
                     </OverlayTrigger>
 
                     <OverlayTrigger
+                        rootClose
                         placement="top"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={props =>
-                            this.renderTooltip(
-                                props,
-                                `Pause Phase 2`
-                            )
-                        }
+                        delay={{ show: 10, hide: 10 }}
+                        overlay={props => this.renderTooltip(props, `Pause Phase 2`)}
                     >
-                        <Button 
-                        disabled={true}>
-                            <FontAwesomeIcon icon={faPause} />
-                            &nbsp; Pause Phase 2
-                        </Button>
+                        <div>
+                            <Button
+                                disabled={
+                                    this.props.selectedState === StateEnum.NOT_SET ||
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                }
+                                style={
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                        ? { pointerEvents: 'none' }
+                                        : { pointerEvents: 'all' }
+                                }
+                            >
+                                <FontAwesomeIcon icon={faPause} />
+                                &nbsp; Pause Phase 2
+                            </Button>
+                        </div>
                     </OverlayTrigger>
                 </ButtonGroup>
             </Row>
@@ -63,18 +102,27 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
             ...props.style,
             zIndex: 99999
         };
-        return <Tooltip {...props} show={props.show.toString()}>{text}</Tooltip>;
+        return (
+            <Tooltip {...props} show={props.show.toString()}>
+                {text}
+            </Tooltip>
+        );
     }
 
     private startPhaseTwo(): void {
+        this.props.phaseTwoService.fetchNextStep(this.props.phaseTwoArgs);
     }
 }
 
 function mapStateToProps(state: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
-        phaseOneArgs: state.stateReducer.phaseOneArgs,
+        phaseTwoArgs: state.stateReducer.phaseTwoArgs,
         selectedState: state.stateReducer.selectedState,
+        phaseTwoService: state.stateReducer.phaseTwoService,
+        precinctMap: state.stateReducer.precinctMap,
+        newClusters: state.stateReducer.newClusters,
+        setPhaseTwoServiceCreator: state.stateReducer.setPhaseTwoServiceCreator
     };
 }
 

@@ -29,7 +29,9 @@ import {
     AlgorithmRunEnum,
     PhaseOneOtherPairsEnum,
     PhaseOneStopEnum,
-    ClusterProperties
+    PoliticalCompetitivenessEnum,
+    ClusterProperties,
+    PopulationHomogeneityEnum
 } from '../../../models';
 import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
@@ -75,6 +77,12 @@ export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) =
                 stateType: state
             })
         );
+        dispatch(
+            setPhaseTwoArgs({
+                ...initialState.phaseTwoArgs,
+                stateType: state
+            })
+        );
         dispatch(setPhaseZeroResults(null));
         dispatch(setPZeroHighlightedPrecincts(new Set<String>()));
 
@@ -109,6 +117,7 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
                 ...initialState.phaseTwoArgs,
                 stateType: phaseOneArgs.stateType,
                 electionData: phaseOneArgs.electionType,
+                jobId: phaseOneArgs.jobId,
                 demographicTypes: phaseOneArgs.demographicTypes,
                 upperBound: phaseOneArgs.upperBound,
                 lowerBound: phaseOneArgs.lowerBound
@@ -119,9 +128,12 @@ export const setPhaseOneArgsCreator = (phaseOneArgs: PhaseOneArgs) => {
 
 export const setPhaseOneJobId = (jobId: string) => {
     return async (dispatch: any) => {
-        
         dispatch(setPhaseOneArgs({
             ...store.getState().stateReducer.phaseOneArgs,
+            jobId
+        }));
+        dispatch(setPhaseTwoArgs({
+            ...store.getState().stateReducer.phaseTwoArgs,
             jobId
         }));
     }
@@ -317,6 +329,7 @@ export interface State {
     filterArgs: FilterArgs;
     algorithmPhase: AlgorithmEnum;
     phaseOneService: PhaseOneService;
+    phaseTwoService: PhaseTwoService;
     logs: string[];
     highlightedPrecincts: Set<String>;
     phaseOneTime: number;
@@ -356,24 +369,27 @@ const initialState: State = {
     phaseTwoArgs: {
         stateType: StateEnum.NOT_SET,
         electionData: ElectionEnum.PRES_16,
-        stateId: '',
+
+        jobId: null,
         demographicTypes: new Set<DemographicEnum>(),
         upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
         lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
         epsilon: 0.001,
         weights: new Map([
-            [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 0],
-            [PhaseTwoMeasuresEnum.COMPACTNESS, 0],
-            [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 0],
-            [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 0],
-            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 0]
+            [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 50],
+            [PhaseTwoMeasuresEnum.COMPACTNESS, 50],
+            [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 50],
+            [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 50],
+            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 50]
         ]),
         phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
         precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.RANDOM,
         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
         politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
-        populationEqualityOption: PopulationEqualityEnum.IDEAL
+        populationEqualityOption: PopulationEqualityEnum.IDEAL,
+        politicalCompetitivenessOption: PoliticalCompetitivenessEnum.MARGIN_OF_VICTORY,
+        populationHomogeneityOption: PopulationHomogeneityEnum.NORMALIZED_SQUARE_ERROR
     },
     filterArgs: {
         viewLevel: ViewLevelEnum.OLD_DISTRICTS,
@@ -381,6 +397,7 @@ const initialState: State = {
     },
     algorithmPhase: AlgorithmEnum.PHASE_0_1,
     phaseOneService: null,
+    phaseTwoService: null,
     logs: [],
     highlightedPrecincts: new Set<String>(),
     phaseOneTime: null,
@@ -464,6 +481,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 phaseOneService: action.phaseOneService
+            };
+        case SET_PHASE_TWO_SERVICE:
+            return {
+                ...state,
+                phaseTwoService: action.phaseTwoService
             };
         case SET_LOGS:
             return {

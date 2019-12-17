@@ -54,6 +54,10 @@ export enum PopulationEqualityEnum {
     IDEAL = 'ideal'
 }
 
+export enum PopulationHomogeneityEnum {
+    NORMALIZED_SQUARE_ERROR = 'normalized_square_error'
+}
+
 export enum PartyEnum {
     DEMOCRATIC = 'democratic',
     REPUBLICAN = 'republican',
@@ -110,7 +114,7 @@ export enum PhaseOneStopEnum {
 export enum PhaseTwoMeasuresEnum {
     POPULATION_EQUALITY = 'POPULATION_EQUALITY',
     COMPACTNESS = 'COMPACTNESS',
-    PARTISAN_FAIRNESS = 'PARTISAN_FAIRNESS',
+    PARTISAN_FAIRNESS = 'POLITICAL_FAIRNESS',
     POLITICAL_COMPETITIVENESS = 'POLITICAL_COMPETITIVENESS',
     POPULATION_HOMOGENEITY = 'POPULATION_HOMOGENEITY'
 }
@@ -122,5 +126,7 @@ export enum PhaseTwoDepthEnum {
 }
 
 export enum PhaseTwoPrecinctMoveEnum {
-    RANDOM = 'random'
+    RANDOM = 'random',
+    MAJ_MIN = 'maj_min',
+    POP_NORMALIZER = 'population_normalizer'
 }

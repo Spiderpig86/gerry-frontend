@@ -15,7 +15,8 @@ import {
     PopulationEqualityEnum,
     PhaseTwoDepthEnum,
     PhaseTwoArgs,
-    PhaseTwoMeasuresEnum
+    PhaseTwoMeasuresEnum,
+    PhaseTwoPrecinctMoveEnum
 } from '../../../../models';
 import { EnumNameMapper } from '../../../../libs/enum-name';
 
@@ -24,7 +25,7 @@ import { PhaseTwoAlgorithmPanel } from './algorithm';
 
 const TooltipSlider = createSliderWithTooltip(Slider);
 
-interface IPhaseOneTabPanelProps {
+interface IPhaseTwoTabPanelProps {
     phaseOneArgs: PhaseOneArgs;
     phaseTwoArgs: PhaseTwoArgs;
     selectedState: string;
@@ -35,7 +36,7 @@ interface IPhaseTwoTabPanelState {
     phaseTwoArgs: PhaseTwoArgs;
 }
 
-export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanelProps, IPhaseTwoTabPanelState> {
+export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanelProps, IPhaseTwoTabPanelState> {
     state = {
         // phaseTwoArgs: {
         //     ...this.props.phaseTwoArgs,
@@ -73,6 +74,18 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
         { name: 'Level', key: PhaseTwoDepthEnum.LEVEL },
         { name: 'Tree', key: PhaseTwoDepthEnum.TREE }
     ];
+    private moveOptions = [
+        { name: 'Random', key: PhaseTwoPrecinctMoveEnum.RANDOM },
+        { name: 'Majority Minority', key: PhaseTwoPrecinctMoveEnum.MAJ_MIN },
+        { name: 'Population Normalizer', key: PhaseTwoPrecinctMoveEnum.POP_NORMALIZER }
+    ];
+
+    componentWillReceiveProps(newProps: IPhaseTwoTabPanelProps) {
+        // Fix issue where wrong state is selected after adjusting settings
+        this.setState({
+            phaseTwoArgs: newProps.phaseTwoArgs
+        });
+    }
 
     render() {
         return (
@@ -170,11 +183,37 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                                         data-depth={e.key}
                                         custom
                                         type={'radio'}
-                                        id={`dpethOption${i}`}
+                                        id={`depthOption${i}`}
                                         label={`${e.name}`}
                                         defaultChecked={e.key === this.state.phaseTwoArgs.phaseTwoDepthHeuristic}
                                         onChange={e =>
                                             this.setPhaseTwoDepthHeuristic(e.target.getAttribute('data-depth'))
+                                        }
+                                    />
+                                </Form.Group>
+                            );
+                        })}
+                    </div>
+
+                    <h6>Phase Two Move Heuristics</h6>
+                    <div className="mb-4">
+                        {this.moveOptions.map((e: any, i: number) => {
+                            return (
+                                <Form.Group
+                                    key={`depthGroup${i}`}
+                                    className="w-100 py-2 row form-group d-flex align-items-center"
+                                >
+                                    <Form.Check
+                                        name={`moveAlgo`}
+                                        key={e.key}
+                                        data-depth={e.key}
+                                        custom
+                                        type={'radio'}
+                                        id={`moveOption${i}`}
+                                        label={`${e.name}`}
+                                        defaultChecked={e.key === this.state.phaseTwoArgs.precinctMoveHeuristic}
+                                        onChange={e =>
+                                            this.setPhaseTwoMoveHeuristic(e.target.getAttribute('data-depth'))
                                         }
                                     />
                                 </Form.Group>
@@ -226,7 +265,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                             ></TooltipSlider>
                         </Form.Group>
                         <Form.Group className="row form-group d-flex align-items-center py-2">
-                            <Form.Label className="col-6 mb-0">Partisan Fairness</Form.Label>
+                            <Form.Label className="col-6 mb-0">Political Fairness</Form.Label>
                             <TooltipSlider
                                 className={'col-6'}
                                 min={0}
@@ -309,6 +348,18 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseOneTabPanel
                 phaseTwoArgs: {
                     ...this.state.phaseTwoArgs,
                     phaseTwoDepthHeuristic
+                }
+            },
+            () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)
+        );
+    }
+
+    private setPhaseTwoMoveHeuristic(precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum): void {
+        this.setState(
+            {
+                phaseTwoArgs: {
+                    ...this.state.phaseTwoArgs,
+                    precinctMoveHeuristic
                 }
             },
             () => this.props.setPhaseTwoArgs(this.state.phaseTwoArgs)

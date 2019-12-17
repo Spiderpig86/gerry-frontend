@@ -1,10 +1,10 @@
-import { StateEnum, ElectionEnum, DemographicEnum, PhaseTwoMeasuresEnum, PhaseTwoDepthEnum, PhaseTwoPrecinctMoveEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum } from '../enums';
+import { StateEnum, ElectionEnum, DemographicEnum, PhaseTwoMeasuresEnum, PhaseTwoDepthEnum, PhaseTwoPrecinctMoveEnum, CompactnessEnum, PoliticalFairnessEnum, PopulationEqualityEnum, PoliticalCompetitivenessEnum, PopulationHomogeneityEnum } from '../enums';
 
 export interface PhaseTwoArgs {
     stateType: StateEnum;
     electionData: ElectionEnum;
 
-    stateId: string;
+    jobId: string;
     demographicTypes: Set<DemographicEnum>;
     upperBound: number;
     lowerBound: number;
@@ -16,4 +16,6 @@ export interface PhaseTwoArgs {
     compactnessOption: CompactnessEnum;
     politicalFairnessOption: PoliticalFairnessEnum;
     populationEqualityOption: PopulationEqualityEnum;
+    politicalCompetitivenessOption: PoliticalCompetitivenessEnum;
+    populationHomogeneityOption: PopulationHomogeneityEnum;
 }

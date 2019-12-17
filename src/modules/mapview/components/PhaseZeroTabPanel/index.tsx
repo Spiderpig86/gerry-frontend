@@ -150,7 +150,7 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         <>
                             <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} highlightedPrecincts={this.props.highlightedPrecincts} setPZeroHighlightedPrecincts={this.props.setPZeroHighlightedPrecincts} />
                             {
-                                this.state.executionTime ? (
+                                this.state.executionTime && (
                                     <p>Execution Time: {this.state.executionTime} ms</p>
                                 )
                             }

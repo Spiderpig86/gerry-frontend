@@ -21,7 +21,6 @@ import { PhaseOneService } from '../../../../libs/algorithms/phase-one-service';
 
 interface IAlgorithmPanelProps {
     algorithmState: AlgorithmEnum;
-    newClusters: Map<string, ICluster>;
     phaseOneArgs: PhaseOneArgs;
     phaseOneService: PhaseOneService;
     phaseOneTime: number;
@@ -47,7 +46,6 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
             const phaseOneService = new PhaseOneService(this.props.precinctMap, null, new Map<string, ICluster>());
             this.props.setPhaseOneServiceCreator(phaseOneService);
         }
-        console.log('state', newProps, this.props.phaseOneArgs.stateType, this.props.phaseOneArgs.algRunType);
     }
 
     render() {
@@ -70,7 +68,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                     this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
                                 }
                                 onClick={this.startPhaseOne.bind(this)}
-                                // style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
                             >
                                 <FontAwesomeIcon icon={faPlay} />
                                 &nbsp; Run Phase 1
@@ -100,7 +98,7 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                     this.props.algorithmState !== AlgorithmEnum.PHASE_0_1
                                 }
                                 onClick={this.stepForward.bind(this)}
-                                // style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
+                                style={this.props.algorithmState !== AlgorithmEnum.PHASE_0_1 ? { pointerEvents: 'none' } : { pointerEvents: 'all' }}
                             >
                                 <FontAwesomeIcon icon={faStepForward} />
                                 &nbsp; Next
@@ -182,7 +180,6 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
 function mapStateToProps(state: any, ownProps: any) {
     return {
         algorithmState: state.stateReducer.algorithmState,
-        newClusters: state.stateReducer.newClusters,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         phaseOneService: state.stateReducer.phaseOneService,
         phaseOneTime: state.stateReducer.phaseOneTime,
