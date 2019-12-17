@@ -404,7 +404,7 @@ const initialState: State = {
             [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 50]
         ]),
         phaseTwoDepthHeuristic: PhaseTwoDepthEnum.STANDARD,
-        precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.RANDOM,
+        precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.POP_NORMALIZER,
         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
         politicalFairnessOption: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT,

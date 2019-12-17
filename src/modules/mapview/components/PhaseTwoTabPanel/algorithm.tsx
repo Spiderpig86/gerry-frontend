@@ -39,8 +39,6 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
     }
 
     render() {
-        console.log(this.props.phaseTwoArgs);
-        
         return (
             <Row className={'d-flex w-100'} style={{ bottom: 0, padding: '1rem', justifyContent: 'space-between' }}>
                 <ButtonGroup>

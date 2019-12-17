@@ -61,10 +61,17 @@ export class PhaseTwoService {
 
         if (data.statusCode === 'success') {
             // GET SCORES
+            // this.start(store.getState().stateReducer.phaseTwoArgs);
+            // const oldDistrictScores: any[] = Object.entries(data.oldDistrictScores);
+            // const oldStateScores: any = data.oldStateScores;
+            // const newDistrictScores: any[] = Object.entries(data.newDistrictScores);
+            // const newStateScores: any = data.newStateScores;
+
             return;
         }
 
         if (!this.isRunning) {
+            this.pause();
             return;
         }
 

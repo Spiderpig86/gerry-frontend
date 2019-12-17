@@ -89,7 +89,7 @@ export class PhaseOneService {
         }
 
         // Update the final map with the new district IDs in newDistricts
-        console.log(this.precincts);
+        // console.log(this.precincts);
 
         this.districts.forEach((districtObject: ICluster, districtId: string) => {
             districtObject.precinctNames.forEach(precinctId => {
@@ -117,7 +117,7 @@ export class PhaseOneService {
         }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
         this.dispatch(mapActionCreators.setNewClustersCreator(this.districts));
-        console.log(timeTaken);
+        // console.log(timeTaken);
     }
 
     private onClose(): void {
