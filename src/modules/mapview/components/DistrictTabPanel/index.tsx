@@ -258,7 +258,7 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                         <StatisticsAccordionComponent
                             demographicData={this.state.newDistrictData.demographicData}
                             electionData={this.state.newDistrictData.electionData}
-                            scores={this.state.oldDistrictData ? this.state.oldDistrictData.objectiveFunctionScores : null}
+                            scores={this.state.newDistrictData ? this.state.newDistrictData.objectiveFunctionScores : null}
                         />
                     </div>
                 ) : (

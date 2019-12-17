@@ -71,19 +71,24 @@ export class PhaseTwoService {
             const newStateScores: any = data.newStateScores;
 
             // console.log(data);
-            // console.log(data.oldDistrictScores);
-            // console.log(data.newStateScores);
+            console.log(data.oldDistrictScores);
+            console.log(data.newDistrictScores);
+            
 
             for (const oldDistrictEntry of oldDistrictScores) {
                 // console.log(this.oldClusters, oldDistrictEntry);
                 
                 const district = this.oldClusters.get(oldDistrictEntry[0].substring(1));
                 district.objectiveFunctionScores = oldDistrictEntry[1];
+                console.log(district);
+                
             }
             
             for (const newDistrictEntry of newDistrictScores) {
                 const district = this.newClusters.get(newDistrictEntry[0]);
                 district.objectiveFunctionScores = newDistrictEntry[1];
+                console.log(district);
+                
             }
             // console.log(oldStateScores, newStateScores);
             

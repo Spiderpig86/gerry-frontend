@@ -138,11 +138,11 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
         let scores = [];
         if (this.props.scores) {
             scores = [
-                [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, this.props.scores.populationEquality.score],
-                [PhaseTwoMeasuresEnum.COMPACTNESS, this.props.scores.compactness.score],
-                [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, this.props.scores.fairness.score],
-                [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, this.props.scores.competitiveness.score],
-                [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, this.props.scores.populationHomogeneity.score],
+                [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, this.props.scores.populationEquality ? this.props.scores.populationEquality.score : 0],
+                [PhaseTwoMeasuresEnum.COMPACTNESS, this.props.scores.compactness ? this.props.scores.compactness.score : 0],
+                [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, this.props.scores.fairness ? this.props.scores.fairness.score : 0],
+                [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, this.props.scores.competitiveness ? this.props.scores.competitiveness.score : 0],
+                [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, this.props.scores.populationHomogeneity ? this.props.scores.populationHomogeneity.score : 0],
                 ['Population % Diff', this.props.scores.mostToLeastPercentDifference || 0],
                 ['Sum', this.props.scores.sum || 0]
             ];
@@ -151,11 +151,11 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
         let additionalScores = [];
         if (this.props.additionalScores) {
             additionalScores = [
-                [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, this.props.additionalScores.populationEquality.score],
-                [PhaseTwoMeasuresEnum.COMPACTNESS, this.props.additionalScores.compactness.score],
-                [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, this.props.additionalScores.fairness.score],
-                [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, this.props.additionalScores.competitiveness.score],
-                [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, this.props.additionalScores.populationHomogeneity.score],
+                [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, this.props.additionalScores.populationEquality ? this.props.additionalScores.populationEquality.score : 0],
+                [PhaseTwoMeasuresEnum.COMPACTNESS, this.props.additionalScores.compactness ? this.props.additionalScores.compactness.score : 0],
+                [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, this.props.additionalScores.fairness ? this.props.additionalScores.fairness.score : 0],
+                [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, this.props.additionalScores.competitiveness ? this.props.additionalScores.competitiveness.score : 0],
+                [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, this.props.additionalScores.populationHomogeneity ? this.props.additionalScores.populationHomogeneity.score : 0],
                 ['Population % Diff', this.props.additionalScores.mostToLeastPercentDifference || 0],
                 ['Sum', this.props.additionalScores.sum || 0]
             ];
