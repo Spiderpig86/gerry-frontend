@@ -116,7 +116,7 @@ export class PhaseOneService {
             // this.districts = finalDistricts;
         }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
-        this.dispatch(mapActionCreators.setNewClusters(this.districts));
+        this.dispatch(mapActionCreators.setNewClustersCreator(this.districts));
         console.log(timeTaken);
     }
 

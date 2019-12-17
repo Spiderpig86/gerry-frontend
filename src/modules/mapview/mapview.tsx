@@ -218,7 +218,6 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
-        console.log('REEEENDEEERRRR')
         return (
             <div className="container-fluid d-flex">
                 {
@@ -553,7 +552,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         } else if (this.props.filter === MapFilterEnum.DEFAULT) {
             style = this.coloring.colorDefaultDistrict(properties, this.props.level, this.props.precinctMap, this.state.zoom);
         } else {
-            style = this.coloring.getDemographicStyleDistrict(district, this.props.filter, this.state.zoom);
+            style = this.coloring.getDemographicStyleDistrict(properties, district, this.props.filter, this.props.level, this.props.precinctMap, this.state.zoom);
         }
         return {
             ...style,

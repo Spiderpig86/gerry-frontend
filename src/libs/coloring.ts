@@ -104,7 +104,7 @@ export class Coloring {
         };
     }
     
-    public getDemographicStyleDistrict(district: ICluster, filter: string, zoom: number) {
+    public getDemographicStyleDistrict(properties: any, district: ICluster, filter: string, level: ViewLevelEnum, precinctMap: Map<string, IPrecinct>, zoom: number): PathOptions {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         const demographicPercent = this.getPopulationPercentByDemographicDistrict(district, filter);
         let color = Color.default(Constants.COLOR_DEMOGRAPHIC).saturate((demographicPercent - Constants.COLOR_MIDDLE_THRESHOLD) * Constants.COLOR_AMPLIFY_FACTOR)
@@ -115,8 +115,8 @@ export class Coloring {
                 .lighten(Constants.COLOR_MIDDLE_THRESHOLD - demographicPercent)
                 .hex();
         }
-
-        return {
+        
+        const colorConfig = {
             color: Color.default(Constants.COLOR_DEMOGRAPHIC)
                 .darken(0.5)
                 .hex(),
@@ -124,6 +124,14 @@ export class Coloring {
             fillOpacity: opacity,
             fillColor: color
         };
+
+        const precinct = precinctMap.get(hashPrecinct(properties));
+        if (!precinct) {
+            return colorConfig;
+        }
+        const cdId = (level === ViewLevelEnum.OLD_DISTRICTS ? precinct.originalCdId : precinct.newCdId || 0);
+        colorConfig.color = Color.rgb(this.colors[Number(cdId)]).hex();
+        return colorConfig;
     }
 
     public colorDistrictLoading(feature: any, zoom: number): PathOptions {

@@ -77,6 +77,8 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
         if (this.props.selectedNewDistrictId !== '0') {
             this.selectNewDistrictData(this.props.selectedNewDistrictId.toString());
         }
+        console.log('DISTRICTS', this.state.newSortedKeys, this.props.newClusters);
+        
     }
 
     render() {
@@ -93,7 +95,6 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
         if (!this.props.oldClusters || this.state.oldSortedKeys.length === 0) {
             return <Placeholder loading={true} title="" subtitle=""></Placeholder>;
         }
-
         return (
             <div style={{ padding: '0 1.5rem' }}>
                 <br />
@@ -112,8 +113,8 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
                     >
                         <Card.Body>
                             <div className="message">
-                                <h5>{this.state.oldDistrictData.incumbent.name}</h5>
-                                <h6>{EnumNameMapper.getPartyName(this.state.oldDistrictData.incumbent.party)}</h6>
+                                <h5>Incumbent: {this.state.oldDistrictData.incumbent.name}</h5>
+                                <h6>Party: {EnumNameMapper.getPartyName(this.state.oldDistrictData.incumbent.party)}</h6>
                             </div>
                         </Card.Body>
                     </Card>

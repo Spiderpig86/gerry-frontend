@@ -139,6 +139,15 @@ export const setPhaseOneJobId = (jobId: string) => {
     }
 }
 
+export const setNewClustersCreator = (newClusters: Map<string, ICluster>) => {
+    if (store.getState().stateReducer.phaseTwoService) {
+        store.getState().stateReducer.phaseTwoService.setNewClusters(newClusters);
+    }
+    return async (dispatch: any) => {
+        dispatch(setNewClusters(newClusters));
+    }
+};
+
 export const setMapFilterCreator = (filter: string) => {
     return (dispatch: any) => {
         dispatch(setFilter(filter));

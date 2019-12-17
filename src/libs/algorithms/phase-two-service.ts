@@ -92,16 +92,16 @@ export class PhaseTwoService {
 
         // Update precinct/district
         const district = this.districts.get(info.newDistrictId);
-        this.districts.set(info, district);
+        // this.districts.set(info.newDistrict, district);
         console.log(info.newDistrict, district, this.districts);
 
         district.precinctNames.add(info.movedPrecinctId);
         const precinct = this.precincts.get(info.movedPrecinctId);
         precinct.newCdId = Number(info.newDistrictId);
-        this.precincts.set(precinct.properties.precinct_id, precinct);
+        // this.precincts.set(precinct.properties.precinct_id, precinct);
         
         this.dispatch(mapActionCreators.setPrecinctMap(new Map(this.precincts)));
-        this.dispatch(mapActionCreators.setNewClusters(new Map(this.districts)));
+        this.dispatch(mapActionCreators.setNewClustersCreator(new Map(this.districts)));
 
         // setTimeout(() => {
             this.fetchNextStep(store.getState().stateReducer.phaseTwoArgs);
@@ -180,5 +180,9 @@ export class PhaseTwoService {
 
     public setPrecinctMap(precinctMap: Map<string, IPrecinct>) {
         this.precincts = precinctMap;
+    }
+
+    public setNewClusters(newClusters: Map<string, ICluster>) {
+        this.districts = newClusters;
     }
 }
