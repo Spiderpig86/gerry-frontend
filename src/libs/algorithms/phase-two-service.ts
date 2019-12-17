@@ -22,7 +22,7 @@ export class PhaseTwoService {
     private handler: StompClient;
     private precincts: Map<string, IPrecinct>;
     private districts: Map<string, ICluster>;
-    private phaseTwoArgs: PhaseTwoArgs;
+    private isRunning: boolean;
 
     constructor(precincts: Map<string, IPrecinct>, dispatch: any, districts: Map<string, ICluster>) {
         this.precincts = precincts;
@@ -36,6 +36,7 @@ export class PhaseTwoService {
             this.onMessage.bind(this),
             this.onClose.bind(this)
         );
+        this.isRunning = false;
     }
 
     private generateUrl(): string {
@@ -58,7 +59,7 @@ export class PhaseTwoService {
         const logs = data.logs;
         this.dispatch(mapActionCreators.appendLogs(logs));
 
-        if (data.statusCode === 'success') {
+        if (data.statusCode === 'success' || !this.isRunning) {
             return;
         }
 
@@ -69,9 +70,9 @@ export class PhaseTwoService {
         // For each district, set the new demographic data
         for (const demographicData of newDemographicData) {
             const district = this.districts.get(demographicData[0]);
-            console.log(demographicData[0], district, this.districts);
+            // console.log(demographicData[0], district, this.districts);
 
-            console.log(demographicData[1]);
+            // console.log(demographicData[1]);
 
             district.demographicData = {
                 ...demographicData[1],
@@ -92,19 +93,16 @@ export class PhaseTwoService {
 
         // Update precinct/district
         const district = this.districts.get(info.newDistrictId);
-        // this.districts.set(info.newDistrict, district);
-        console.log(info.newDistrict, district, this.districts);
-
         district.precinctNames.add(info.movedPrecinctId);
+
         const precinct = this.precincts.get(info.movedPrecinctId);
         precinct.newCdId = Number(info.newDistrictId);
-        // this.precincts.set(precinct.properties.precinct_id, precinct);
         
         this.dispatch(mapActionCreators.setPrecinctMap(new Map(this.precincts)));
         this.dispatch(mapActionCreators.setNewClustersCreator(new Map(this.districts)));
 
         // setTimeout(() => {
-            this.fetchNextStep(store.getState().stateReducer.phaseTwoArgs);
+        this.start(store.getState().stateReducer.phaseTwoArgs);
         // }, 500);
     }
 
@@ -112,10 +110,8 @@ export class PhaseTwoService {
         console.log('Closed stomp client');
     }
 
-    public fetchNextStep(phaseTwoArgs: PhaseTwoArgs) {
-        console.log(phaseTwoArgs);
-
-        this.phaseTwoArgs = phaseTwoArgs;
+    public start(phaseTwoArgs: PhaseTwoArgs) {
+        this.isRunning = true;
         const args = {
             jobId: phaseTwoArgs.jobId,
             stateType: phaseTwoArgs.stateType,
@@ -172,6 +168,14 @@ export class PhaseTwoService {
                     house18: ModelMapper.toIVote(electionData)
                 };
         }
+    }
+
+    public pause(): void {
+        this.isRunning = false;
+    }
+
+    public getIsRunning(): boolean {
+        return this.isRunning;
     }
 
     public setDispatch(dispatch: any) {

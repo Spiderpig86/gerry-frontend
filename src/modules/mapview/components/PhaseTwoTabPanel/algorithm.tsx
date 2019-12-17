@@ -18,11 +18,12 @@ interface IAlgorithmPanelProps {
     phaseTwoService: PhaseTwoService;
     precinctMap: Map<string, IPrecinct>;
     newClusters: Map<string, ICluster>;
+    phaseTwoRunning: boolean;
     setPhaseTwoServiceCreator: (phaseTwoService: PhaseTwoService) => void;
+    setPhaseTwoRunning: (phaseTwoRunning: boolean) => void;
 }
 
 export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
-
     async componentDidMount() {
         if (!this.props.phaseTwoService && this.props.precinctMap.size > 0) {
             const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.newClusters);
@@ -54,7 +55,7 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                 id="btnPlay"
                                 disabled={
                                     this.props.selectedState === StateEnum.NOT_SET ||
-                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2 || this.props.phaseTwoRunning
                                 }
                                 onClick={this.startPhaseTwo.bind(this)}
                                 style={
@@ -62,6 +63,7 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
                                         ? { pointerEvents: 'none' }
                                         : { pointerEvents: 'all' }
                                 }
+                                className='mr-1'
                             >
                                 <FontAwesomeIcon icon={faPlay} />
                                 &nbsp; Run Phase 2
@@ -79,13 +81,14 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
                             <Button
                                 disabled={
                                     this.props.selectedState === StateEnum.NOT_SET ||
-                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2
+                                    this.props.algorithmState !== AlgorithmEnum.PHASE_2 || !this.props.phaseTwoRunning
                                 }
                                 style={
                                     this.props.algorithmState !== AlgorithmEnum.PHASE_2
                                         ? { pointerEvents: 'none' }
                                         : { pointerEvents: 'all' }
                                 }
+                                onClick={this.pausePhaseTwo.bind(this)}
                             >
                                 <FontAwesomeIcon icon={faPause} />
                                 &nbsp; Pause Phase 2
@@ -110,7 +113,13 @@ export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgori
     }
 
     private startPhaseTwo(): void {
-        this.props.phaseTwoService.fetchNextStep(this.props.phaseTwoArgs);
+        this.props.setPhaseTwoRunning(true);
+        this.props.phaseTwoService.start(this.props.phaseTwoArgs);
+    }
+
+    private pausePhaseTwo(): void {
+        this.props.setPhaseTwoRunning(false);
+        this.props.phaseTwoService.pause();
     }
 }
 
@@ -120,9 +129,11 @@ function mapStateToProps(state: any) {
         phaseTwoArgs: state.stateReducer.phaseTwoArgs,
         selectedState: state.stateReducer.selectedState,
         phaseTwoService: state.stateReducer.phaseTwoService,
+        phaseTwoRunning: state.stateReducer.phaseTwoRunning,
         precinctMap: state.stateReducer.precinctMap,
         newClusters: state.stateReducer.newClusters,
-        setPhaseTwoServiceCreator: state.stateReducer.setPhaseTwoServiceCreator
+        setPhaseTwoServiceCreator: state.stateReducer.setPhaseTwoServiceCreator,
+        setPhaseTwoRunning: state.stateReducer.setPhaseTwoRunning
     };
 }
 

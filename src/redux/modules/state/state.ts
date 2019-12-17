@@ -56,6 +56,7 @@ const SET_LOGS = 'SET_LOGS';
 const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
 const SET_PHASE_ONE_TIME = 'SET_PHASE_ONE_TIME';
 const SET_PHASE_TWO_TIME = 'SET_PHASE_TWO_TIME';
+const SET_PHASE_TWO_RUNNING = 'SET_PHASE_TWO_RUNNING';
 
 export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
     return async (dispatch: any) => {
@@ -323,6 +324,14 @@ export const setPhaseTwoTime = (phaseTwoTime: number) => {
     };
 };
 
+export const setPhaseTwoRunning = (phaseTwoRunning: boolean) => {
+    return {
+        type: SET_PHASE_TWO_RUNNING,
+        phaseTwoRunning
+    };
+};
+
+
 export interface State {
     selectedState: StateEnum;
     stateData: ICluster;
@@ -345,6 +354,7 @@ export interface State {
     highlightedPrecincts: Set<String>;
     phaseOneTime: number;
     phaseTwoTime: number;
+    phaseTwoRunning: boolean;
 }
 
 const initialState: State = {
@@ -412,7 +422,8 @@ const initialState: State = {
     logs: [],
     highlightedPrecincts: new Set<String>(),
     phaseOneTime: null,
-    phaseTwoTime: null
+    phaseTwoTime: null,
+    phaseTwoRunning: false
 };
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -517,6 +528,11 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 phaseTwoTime: action.phaseTwoTime
+            };
+        case SET_PHASE_TWO_RUNNING:
+            return {
+                ...state,
+                phaseTwoRunning: action.phaseTwoRunning
             };
         default:
             return state;
