@@ -2,7 +2,16 @@ import * as Constants from '../../config/constants';
 import * as mapActionCreators from '../../redux/modules/state/state';
 import Axios from 'axios';
 
-import { IPrecinct, AlgorithmEnum, PhaseOneArgs, ICluster, ResponseEnum, ElectionEnum, PhaseTwoArgs, PhaseTwoMeasuresEnum } from '../../models';
+import {
+    IPrecinct,
+    AlgorithmEnum,
+    PhaseOneArgs,
+    ICluster,
+    ResponseEnum,
+    ElectionEnum,
+    PhaseTwoArgs,
+    PhaseTwoMeasuresEnum
+} from '../../models';
 import { formatResponse } from '../functions/response';
 import { StompClient } from '../stomp';
 import { ModelMapper } from '../mapping/model-mapper';
@@ -44,8 +53,59 @@ export class PhaseTwoService {
 
     private onMessage(response: any): void {
         const data = JSON.parse(response.body);
-        console.log(response);
+
+        // const jobId = data.jobId;
+        const logs = data.logs;
+        this.dispatch(mapActionCreators.appendLogs(logs));
+
+        if (data.statusCode === 'success') {
+            return;
+        }
+
+        const info = data.deltas[0];
+        const newDemographicData: any[] = Object.entries(info.newDemographicData);
+        const newElectionData: any[] = Object.entries(info.newElectionData);
+
+        // For each district, set the new demographic data
+        for (const demographicData of newDemographicData) {
+            const district = this.districts.get(demographicData[0]);
+            console.log(demographicData[0], district, this.districts);
+
+            console.log(demographicData[1]);
+
+            district.demographicData = {
+                ...demographicData[1],
+                population: ModelMapper.toIDemographic(demographicData[1].population)
+            };
+        }
+
+        // For each district, set the new election data
+        for (const electionData of newElectionData) {
+            const district = this.districts.get(electionData[0]);
+            district.electionData = this.getElection(electionData[1]);
+        }
+        // Remove the precinct from both districts and add it to the specified one
+        for (const districtId of Object.keys(info.newDemographicData)) {
+            const district = this.districts.get(districtId);
+            district.precinctNames.delete(info.movedPrecinctId);
+        }
+
+        // Update precinct/district
+        const district = this.districts.get(info.newDistrictId);
+        this.districts.set(info, district);
+        console.log(info.newDistrict, district, this.districts);
+
+        district.precinctNames.add(info.movedPrecinctId);
+        const precinct = this.precincts.get(info.movedPrecinctId);
+        precinct.newCdId = Number(info.newDistrictId);
+        this.precincts.set(precinct.properties.precinct_id, precinct);
         
+        this.dispatch(mapActionCreators.setPrecinctMap(new Map(this.precincts)));
+        this.dispatch(mapActionCreators.setNewClusters(new Map(this.districts)));
+
+        // setTimeout(() => {
+            this.fetchNextStep(store.getState().stateReducer.phaseTwoArgs);
+        // }, 500);
     }
 
     private onClose(): void {
@@ -54,7 +114,7 @@ export class PhaseTwoService {
 
     public fetchNextStep(phaseTwoArgs: PhaseTwoArgs) {
         console.log(phaseTwoArgs);
-        
+
         this.phaseTwoArgs = phaseTwoArgs;
         const args = {
             jobId: phaseTwoArgs.jobId,
@@ -67,7 +127,7 @@ export class PhaseTwoService {
             depthHeuristic: phaseTwoArgs.phaseTwoDepthHeuristic,
             moveHeuristic: phaseTwoArgs.precinctMoveHeuristic,
             epsilon: phaseTwoArgs.epsilon,
-            ...this.convertWeights(phaseTwoArgs, phaseTwoArgs.weights),
+            ...this.convertWeights(phaseTwoArgs, phaseTwoArgs.weights)
         };
         this.handler.publish(JSON.stringify(args));
     }
@@ -93,14 +153,31 @@ export class PhaseTwoService {
             popHomogeneityWeight: {
                 measure: phaseTwoArgs.populationHomogeneityOption,
                 weight: weights.get(PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY) / 100
-            },
+            }
+        };
+    }
+
+    private getElection(electionData: any) {
+        switch (electionData.electionType) {
+            case ElectionEnum.PRES_16:
+                return {
+                    presidential16: ModelMapper.toIVote(electionData)
+                };
+            case ElectionEnum.HOUSE_16:
+                return {
+                    house16: ModelMapper.toIVote(electionData)
+                };
+            default:
+                return {
+                    house18: ModelMapper.toIVote(electionData)
+                };
         }
     }
 
     public setDispatch(dispatch: any) {
         this.dispatch = dispatch;
     }
-    
+
     public setPrecinctMap(precinctMap: Map<string, IPrecinct>) {
         this.precincts = precinctMap;
     }

@@ -40,11 +40,9 @@ export enum PoliticalCompetitivenessEnum {
 }
 
 export enum PoliticalFairnessEnum {
-    EFFICIENCY_GAP = 'efficiency_gap',
     GERRYMANDER_DEMOCRAT = 'gerrymander_democrat',
     GERRYMANDER_REPUBLICAN = 'gerrymander_republican',
     LOPSIDED_MARGINS = 'lopsided_margins',
-    MEAN_MEDIAN_DIFFERENCE = 'mean_median',
     PARTISAN_DEMOCRAT = 'partisan_democrat',
     PARTISAN_REPUBLICAN = 'partisan_republican'
 }

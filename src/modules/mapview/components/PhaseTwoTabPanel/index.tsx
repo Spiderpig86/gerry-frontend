@@ -57,11 +57,9 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanel
         { name: 'Convex Hull', key: CompactnessEnum.CONVEX_HULL }
     ];
     private politicalFairnessOptions = [
-        { name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP },
         { name: 'Gerrymander Democratic', key: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT },
         { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN },
         { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS },
-        { name: 'Mean-Median Difference', key: PoliticalFairnessEnum.MEAN_MEDIAN_DIFFERENCE },
         { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT },
         { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }
     ];

@@ -218,6 +218,7 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     }
 
     render() {
+        console.log('REEEENDEEERRRR')
         return (
             <div className="container-fluid d-flex">
                 {

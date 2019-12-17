@@ -102,19 +102,18 @@ export class PhaseOneService {
             this.dispatch(mapActionCreators.setAlgorithmPhase(AlgorithmEnum.PHASE_2));
 
             // Re-color to improve contrast
-            let districtId = 1;
-            const finalDistricts = new Map<string, ICluster>();
-            this.districts.forEach((cluster: ICluster) => {
-                cluster.precinctNames.forEach(precinctId => {
-                    this.precincts.get(precinctId).newCdId = Number(districtId);
-                });
-                cluster.name = `d${districtId.toString()}`;
-                cluster.numericalId = districtId.toString();
-                finalDistricts.set(districtId.toString(), cluster);
-                districtId++;
-            });
-            this.districts = finalDistricts;
-            console.log(this.districts);
+            // let districtId = 1;
+            // const finalDistricts = new Map<string, ICluster>();
+            // this.districts.forEach((cluster: ICluster) => {
+            //     cluster.precinctNames.forEach(precinctId => {
+            //         this.precincts.get(precinctId).newCdId = Number(districtId);
+            //     });
+            //     cluster.name = `d${districtId.toString()}`;
+            //     cluster.numericalId = districtId.toString();
+            //     finalDistricts.set(districtId.toString(), cluster);
+            //     districtId++;
+            // });
+            // this.districts = finalDistricts;
         }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
         this.dispatch(mapActionCreators.setNewClusters(this.districts));

@@ -193,6 +193,8 @@ export const setPrecincts = (precincts: any) => {
 };
 
 export const setPrecinctMap = (precinctMap: Map<string, IPrecinct>) => {
+    console.log('SEEET');
+    
     return {
         type: SET_PRECINCT_MAP,
         precinctMap
@@ -386,7 +388,7 @@ const initialState: State = {
         precinctMoveHeuristic: PhaseTwoPrecinctMoveEnum.RANDOM,
         numRetries: Constants.DEFAULT_PHASE_TWO_RETRIES,
         compactnessOption: CompactnessEnum.GRAPH_THEORETICAL,
-        politicalFairnessOption: PoliticalFairnessEnum.EFFICIENCY_GAP,
+        politicalFairnessOption: PoliticalFairnessEnum.GERRYMANDER_DEMOCRAT,
         populationEqualityOption: PopulationEqualityEnum.IDEAL,
         politicalCompetitivenessOption: PoliticalCompetitivenessEnum.MARGIN_OF_VICTORY,
         populationHomogeneityOption: PopulationHomogeneityEnum.NORMALIZED_SQUARE_ERROR
