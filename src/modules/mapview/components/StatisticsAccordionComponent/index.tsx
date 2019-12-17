@@ -160,8 +160,7 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
                 ['Sum', this.props.additionalScores.sum || 0]
             ];
         }
-        console.log(scores, additionalScores);
-        
+        // console.log(scores, additionalScores);
 
         const pres16 = this.fillPresidential16(this.props.electionData);
         const house16 = this.fillHouse16(this.props.electionData);

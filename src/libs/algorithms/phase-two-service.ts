@@ -75,7 +75,7 @@ export class PhaseTwoService {
             // console.log(data.newStateScores);
 
             for (const oldDistrictEntry of oldDistrictScores) {
-                console.log(this.oldClusters, oldDistrictEntry);
+                // console.log(this.oldClusters, oldDistrictEntry);
                 
                 const district = this.oldClusters.get(oldDistrictEntry[0].substring(1));
                 district.objectiveFunctionScores = oldDistrictEntry[1];
@@ -85,7 +85,7 @@ export class PhaseTwoService {
                 const district = this.newClusters.get(newDistrictEntry[0]);
                 district.objectiveFunctionScores = newDistrictEntry[1];
             }
-            console.log(oldStateScores, newStateScores);
+            // console.log(oldStateScores, newStateScores);
             
 
             this.dispatch(mapActionCreators.setPhaseTwoScores({

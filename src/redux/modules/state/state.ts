@@ -414,7 +414,7 @@ const initialState: State = {
         demographicTypes: new Set<DemographicEnum>(),
         upperBound: Constants.DEFAULT_POP_PRECENT_MIN,
         lowerBound: Constants.DEFAULT_POP_PRECENT_MAX,
-        epsilon: 0.001,
+        epsilon: 0.00001,
         weights: new Map([
             [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 50],
             [PhaseTwoMeasuresEnum.COMPACTNESS, 50],
