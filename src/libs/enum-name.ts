@@ -34,7 +34,7 @@ export class EnumNameMapper {
     private static measuresNames: Map<PhaseTwoMeasuresEnum, string> = new Map([
         [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 'Population Equality'],
         [PhaseTwoMeasuresEnum.COMPACTNESS, 'Compactness'],
-        [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 'Partisan Fairness'],
+        [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 'Political Fairness'],
         [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 'Political Competitiveness'],
         [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 'Population Homogeneity']
     ]);

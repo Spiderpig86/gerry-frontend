@@ -137,11 +137,11 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
         const house18 = this.fillHouse18(this.props.electionData);
 
         const scores = [
-            [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, Math.random()],
-            [PhaseTwoMeasuresEnum.COMPACTNESS, Math.random()],
-            [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, Math.random()],
-            [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, Math.random()],
-            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, Math.random()]
+            [PhaseTwoMeasuresEnum.POPULATION_EQUALITY, 0],
+            [PhaseTwoMeasuresEnum.COMPACTNESS, 0],
+            [PhaseTwoMeasuresEnum.PARTISAN_FAIRNESS, 0],
+            [PhaseTwoMeasuresEnum.POLITICAL_COMPETITIVENESS, 0],
+            [PhaseTwoMeasuresEnum.POPULATION_HOMOGENEITY, 0]
         ];
 
         return (
@@ -299,6 +299,29 @@ export class StatisticsAccordionComponent extends React.PureComponent<Statistics
 
     private fillHouse18(electionData: any): any[] {
         if (electionData.house18) {
+            return [
+                [
+                    PartyEnum.DEMOCRATIC,
+                    this.props.electionData.house18.democraticVotes,
+                    this.props.electionData.house18.democraticVotes / this.props.electionData.house18.totalVotes
+                ],
+                [
+                    PartyEnum.REPUBLICAN,
+                    this.props.electionData.house18.republicanVotes,
+                    this.props.electionData.house18.republicanVotes / this.props.electionData.house18.totalVotes
+                ],
+                [
+                    PartyEnum.OTHER,
+                    this.props.electionData.house18.otherVotes || 0,
+                    (this.props.electionData.house18.otherVotes || 0) / this.props.electionData.house18.totalVotes
+                ]
+            ];
+        }
+        return [];
+    }
+
+    private fillObjectiveScores(objectiveScores: any): any[] {
+        if (objectiveScores) {
             return [
                 [
                     PartyEnum.DEMOCRATIC,

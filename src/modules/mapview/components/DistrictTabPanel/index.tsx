@@ -77,7 +77,6 @@ export class DistrictTabPanel extends React.PureComponent<DistrictTabPanelProps,
         if (this.props.selectedNewDistrictId !== '0') {
             this.selectNewDistrictData(this.props.selectedNewDistrictId.toString());
         }
-        console.log('DISTRICTS', this.state.newSortedKeys, this.props.newClusters);
         
     }
 

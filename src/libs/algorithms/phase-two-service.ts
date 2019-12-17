@@ -59,7 +59,12 @@ export class PhaseTwoService {
         const logs = data.logs;
         this.dispatch(mapActionCreators.appendLogs(logs));
 
-        if (data.statusCode === 'success' || !this.isRunning) {
+        if (data.statusCode === 'success') {
+            // GET SCORES
+            return;
+        }
+
+        if (!this.isRunning) {
             return;
         }
 
