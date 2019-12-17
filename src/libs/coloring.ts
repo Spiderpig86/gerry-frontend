@@ -176,6 +176,16 @@ export class Coloring {
         return colorConfig;
     }
 
+    public colorNeighborPrecinct(zoom: number) {
+        const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
+        return {
+            color: Constants.COLOR_NEIGHBOR_HIGHLIGHT,
+            weight: 1,
+            fillOpacity: opacity,
+            fillColor: Constants.COLOR_NEIGHBOR_HIGHLIGHT
+        };
+    }
+
     public colorPhaseZeroHighlight(zoom: number) {
         const opacity = Constants.COLOR_FILL_OPACITY - (zoom > 8 ? .25 : 0);
         return {

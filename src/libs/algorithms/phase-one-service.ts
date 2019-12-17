@@ -13,6 +13,7 @@ export class PhaseOneService {
     private handler: StompClient;
     private precincts: Map<string, IPrecinct>;
     private districts: Map<string, ICluster>;
+    private startTime: any;
 
     constructor(precincts: Map<string, IPrecinct>, dispatch: any, districts: Map<string, ICluster>) {
         this.precincts = precincts;
@@ -42,6 +43,7 @@ export class PhaseOneService {
     }
 
     private onMessage(response: any): void {
+        const timeTaken = new Date().getTime() - this.startTime;
         const data = JSON.parse(response.body);
 
         const jobId = data.jobId;
@@ -53,6 +55,7 @@ export class PhaseOneService {
         }
         
         this.dispatch(mapActionCreators.appendLogs(logs));
+        this.dispatch(mapActionCreators.setPhaseOneTime(timeTaken));
 
         const info = data.deltas[0];
         // const iteration = info.iteration;
@@ -117,6 +120,8 @@ export class PhaseOneService {
         }
         this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
         this.dispatch(mapActionCreators.setNewClusters(this.districts));
+        console.log(timeTaken);
+        
     }
 
     private onClose(): void {
@@ -137,6 +142,7 @@ export class PhaseOneService {
         this.handler.publish(JSON.stringify(
                 args
         ));
+        this.startTime = new Date().getTime();
     }
 
     private getElection(electionData: any) {

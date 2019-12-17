@@ -24,6 +24,7 @@ interface IAlgorithmPanelProps {
     newClusters: Map<string, ICluster>;
     phaseOneArgs: PhaseOneArgs;
     phaseOneService: PhaseOneService;
+    phaseOneTime: number;
     precinctMap: Map<string, IPrecinct>;
     selectedState: StateEnum;
     setPhaseOneServiceCreator: (phaseOneService: PhaseOneService) => void;
@@ -107,6 +108,13 @@ export class PhaseOneAlgorithmPanelComponent extends React.PureComponent<IAlgori
                         </div>
                     </OverlayTrigger>
                 </ButtonGroup>
+                {
+                    this.props.phaseOneTime && (
+                        <div className='d-flex align-items-center'>
+                            <span>{ this.props.phaseOneTime } ms</span>
+                        </div>
+                    )
+                }
                 <Form.Group className="row form-group d-flex align-items-center justify-content-flex-end">
                     <Form.Check
                         custom
@@ -177,6 +185,7 @@ function mapStateToProps(state: any, ownProps: any) {
         newClusters: state.stateReducer.newClusters,
         phaseOneArgs: state.stateReducer.phaseOneArgs,
         phaseOneService: state.stateReducer.phaseOneService,
+        phaseOneTime: state.stateReducer.phaseOneTime,
         precinctMap: state.stateReducer.precinctMap,
         selectedState: state.stateReducer.selectedState,
         setPhaseOneServiceCreator: state.stateReducer.setPhaseOneServiceCreator,

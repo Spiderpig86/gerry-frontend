@@ -165,20 +165,19 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
     onEachFeaturePrecinct(feature: any, layer: any) {
         layer.on({
             click: () => {
-                this.props.setPZeroHighlightedPrecincts(new Set<string>());
-                console.log(hashPrecinct(feature.properties), this.props.precinctMap.get(hashPrecinct(feature.properties)));
+                // this.props.setPZeroHighlightedPrecincts(new Set<string>());
                 const neighbors = feature.properties.neighbors.replace(/, /g, ',');
                 this.setState({
                     neighborPrecincts: neighbors.split(',')
-                }, () => {
-                    this.state.neighborPrecincts.forEach(element => {
-                        if (!element) {
-                            return;
-                        }
-                        console.log(element, this.props.precinctMap.get(element));
-                        this.props.highlightedPrecincts.add(element);
-                    });
                 });
+
+                // Hide neighbors
+                if (hashPrecinct(feature.properties) === this.state.selectedPrecinctId) {
+                    this.setState({
+                        neighborPrecincts: []
+                    });
+                }
+
                 this.fetchPrecinctData(feature, layer);
                // this.state.map.leafletElement.fitBounds(layer.getBounds(), {
                //     paddingBottomRight: [500, 0]
@@ -521,7 +520,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
             return this.coloring.getBlankStyle();
         }
         
-        if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
+        if (this.state.neighborPrecincts.includes(hashPrecinct(properties))) {
+            style = this.coloring.colorNeighborPrecinct(this.state.zoom);
+        } else if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
             style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
         } else if (
             this.props.filter === MapFilterEnum.PRES_2016 ||
@@ -563,7 +564,9 @@ export class MapViewComponent extends React.PureComponent<IMapViewProps, IMapVie
         const properties = feature.properties;
         let style = {};
 
-        if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
+        if (this.state.neighborPrecincts.includes(hashPrecinct(properties))) {
+            style = this.coloring.colorNeighborPrecinct(this.state.zoom);
+        } else if (this.props.highlightedPrecincts.has(hashPrecinct(properties))) {
             style = this.coloring.colorPhaseZeroHighlight(this.state.zoom);
         } else if (
             this.props.filter === MapFilterEnum.PRES_2016 ||

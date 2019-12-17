@@ -52,6 +52,8 @@ const SET_PHASE_ONE_SERVICE = 'SET_PHASE_ONE_SERVICE';
 const SET_PHASE_TWO_SERVICE = 'SET_PHASE_TWO_SERVICE';
 const SET_LOGS = 'SET_LOGS';
 const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
+const SET_PHASE_ONE_TIME = 'SET_PHASE_ONE_TIME';
+const SET_PHASE_TWO_TIME = 'SET_PHASE_TWO_TIME';
 
 export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
     return async (dispatch: any) => {
@@ -284,6 +286,20 @@ export const setPZeroHighlightedPrecincts = (highlightedPrecincts: Set<String>) 
     };
 };
 
+export const setPhaseOneTime = (phaseOneTime: number) => {
+    return {
+        type: SET_PHASE_ONE_TIME,
+        phaseOneTime
+    };
+};
+
+export const setPhaseTwoTime = (phaseTwoTime: number) => {
+    return {
+        type: SET_PHASE_TWO_TIME,
+        phaseTwoTime
+    };
+};
+
 export interface State {
     selectedState: StateEnum;
     stateData: ICluster;
@@ -303,6 +319,8 @@ export interface State {
     phaseOneService: PhaseOneService;
     logs: string[];
     highlightedPrecincts: Set<String>;
+    phaseOneTime: number;
+    phaseTwoTime: number;
 }
 
 const initialState: State = {
@@ -364,7 +382,9 @@ const initialState: State = {
     algorithmPhase: AlgorithmEnum.PHASE_0_1,
     phaseOneService: null,
     logs: [],
-    highlightedPrecincts: new Set<String>()
+    highlightedPrecincts: new Set<String>(),
+    phaseOneTime: null,
+    phaseTwoTime: null
 };
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -454,6 +474,16 @@ export const stateReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 highlightedPrecincts: action.highlightedPrecincts
+            };
+        case SET_PHASE_ONE_TIME:
+            return {
+                ...state,
+                phaseOneTime: action.phaseOneTime
+            };
+        case SET_PHASE_TWO_TIME:
+            return {
+                ...state,
+                phaseTwoTime: action.phaseTwoTime
             };
         default:
             return state;

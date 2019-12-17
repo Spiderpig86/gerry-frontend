@@ -31,6 +31,7 @@ interface IPhaseZeroTabPanelState {
     phaseZeroArgs: PhaseZeroArgs;
     phaseZeroResults: PhaseZeroResult;
     beginPhaseZero: boolean;
+    executionTime: number;
 }
 
 export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPanelProps, IPhaseZeroTabPanelState> {
@@ -146,7 +147,14 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
                         </p>
                     )}
                     {this.props.phaseZeroResults ? (
-                        <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} highlightedPrecincts={this.props.highlightedPrecincts} setPZeroHighlightedPrecincts={this.props.setPZeroHighlightedPrecincts} />
+                        <>
+                            <BlocItem phaseZeroResults={this.props.phaseZeroResults.precinctBlocs} highlightedPrecincts={this.props.highlightedPrecincts} setPZeroHighlightedPrecincts={this.props.setPZeroHighlightedPrecincts} />
+                            {
+                                this.state.executionTime ? (
+                                    <p>Execution Time: {this.state.executionTime} ms</p>
+                                )
+                            }
+                        </>
                     ) : (
                             <div className="mt-5">
                                 <Placeholder
@@ -216,12 +224,14 @@ export class PhaseZeroTabPanelComponent extends React.Component<IPhaseZeroTabPan
         this.setState({
             beginPhaseZero: true
         });
+        let seconds = new Date().getTime();
         const phaseZeroResult = await this.service.runPhaseZero(this.props.phaseZeroArgs);
         if (phaseZeroResult) {
             this.setState(
                 {
                     phaseZeroResults: phaseZeroResult.data,
-                    beginPhaseZero: false
+                    beginPhaseZero: false,
+                    executionTime: new Date().getTime() - seconds
                 },
                 () => this.props.setPhaseZeroResults(this.state.phaseZeroResults)
             );
