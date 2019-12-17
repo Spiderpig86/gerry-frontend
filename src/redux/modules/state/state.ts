@@ -203,8 +203,6 @@ export const setPrecincts = (precincts: any) => {
 };
 
 export const setPrecinctMap = (precinctMap: Map<string, IPrecinct>) => {
-    console.log('SEEET');
-    
     return {
         type: SET_PRECINCT_MAP,
         precinctMap

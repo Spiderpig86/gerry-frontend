@@ -60,6 +60,7 @@ export class PhaseTwoService {
         this.dispatch(mapActionCreators.appendLogs(logs));
 
         if (data.statusCode === 'success') {
+            this.pause();
             // GET SCORES
             // this.start(store.getState().stateReducer.phaseTwoArgs);
             // const oldDistrictScores: any[] = Object.entries(data.oldDistrictScores);
@@ -67,6 +68,11 @@ export class PhaseTwoService {
             // const newDistrictScores: any[] = Object.entries(data.newDistrictScores);
             // const newStateScores: any = data.newStateScores;
 
+            console.log(data);
+            console.log(data.oldDistrictScores);
+            console.log(data.newStateScores);
+            
+            
             return;
         }
 
@@ -83,7 +89,6 @@ export class PhaseTwoService {
         for (const demographicData of newDemographicData) {
             const district = this.districts.get(demographicData[0]);
             // console.log(demographicData[0], district, this.districts);
-
             // console.log(demographicData[1]);
 
             district.demographicData = {

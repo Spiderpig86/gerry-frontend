@@ -29,6 +29,7 @@ export const LeftSidebarStyles = {
         // backdropFilter: 'saturate(180%) blur(20px)',
         fontSize: '1rem',
         maxWidth: '600px',
+        boxShadow: '4px 0px 6px 0px rgba(0,0,0,0.12)'
     },
     bmMorphShape: {
         fill: '#373a47'
@@ -37,7 +38,8 @@ export const LeftSidebarStyles = {
         display: 'inherit'
     },
     bmOverlay: {
-        background: 'rgba(0, 0, 0, 0.3)'
+        background: 'rgba(0, 0, 0, 0.3)',
+        zIndex: '-1'
     },
     bmItemList: { }
 };

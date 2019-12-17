@@ -115,8 +115,8 @@ export class PhaseOneService {
             // });
             // this.districts = finalDistricts;
         }
-        this.dispatch(mapActionCreators.setPrecinctMap(this.precincts));
-        this.dispatch(mapActionCreators.setNewClustersCreator(this.districts));
+        this.dispatch(mapActionCreators.setPrecinctMap(new Map<string, IPrecinct>(this.precincts)));
+        this.dispatch(mapActionCreators.setNewClustersCreator(new Map<string, ICluster>(this.districts)));
         // console.log(timeTaken);
     }
 
