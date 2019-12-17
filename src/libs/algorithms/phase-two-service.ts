@@ -21,13 +21,15 @@ export class PhaseTwoService {
     private dispatch: any;
     private handler: StompClient;
     private precincts: Map<string, IPrecinct>;
-    private districts: Map<string, ICluster>;
+    private oldClusters: Map<string, ICluster>;
+    private newClusters: Map<string, ICluster>;
     private isRunning: boolean;
 
-    constructor(precincts: Map<string, IPrecinct>, dispatch: any, districts: Map<string, ICluster>) {
+    constructor(precincts: Map<string, IPrecinct>, dispatch: any, oldClusters: Map<string, ICluster>, newClusters: Map<string, ICluster>) {
         this.precincts = precincts;
         this.dispatch = dispatch;
-        this.districts = districts;
+        this.oldClusters = oldClusters;
+        this.newClusters = newClusters;
         this.handler = new StompClient(
             this.generateUrl(),
             this.getPath(),
@@ -63,15 +65,36 @@ export class PhaseTwoService {
             this.pause();
             // GET SCORES
             // this.start(store.getState().stateReducer.phaseTwoArgs);
-            // const oldDistrictScores: any[] = Object.entries(data.oldDistrictScores);
-            // const oldStateScores: any = data.oldStateScores;
-            // const newDistrictScores: any[] = Object.entries(data.newDistrictScores);
-            // const newStateScores: any = data.newStateScores;
+            const oldDistrictScores: any[] = Object.entries(data.oldDistrictScores);
+            const oldStateScores: any = data.oldStateScores;
+            const newDistrictScores: any[] = Object.entries(data.newDistrictScores);
+            const newStateScores: any = data.newStateScores;
 
-            console.log(data);
-            console.log(data.oldDistrictScores);
+            // console.log(data);
+            // console.log(data.oldDistrictScores);
             console.log(data.newStateScores);
+
+            for (const oldDistrictEntry of oldDistrictScores) {
+                console.log(this.oldClusters, oldDistrictEntry);
+                
+                const district = this.oldClusters.get(oldDistrictEntry[0].substring(1));
+                district.objectiveFunctionScores = oldDistrictEntry[1];
+            }
             
+            for (const newDistrictEntry of newDistrictScores) {
+                const district = this.newClusters.get(newDistrictEntry[0]);
+                district.objectiveFunctionScores = newDistrictEntry[1];
+            }
+            console.log(oldStateScores, newStateScores);
+            
+
+            this.dispatch(mapActionCreators.setPhaseTwoScores({
+                old: oldStateScores,
+                new: newStateScores
+            }));
+            this.dispatch(mapActionCreators.setOldClustersCreator(new Map(this.oldClusters)));
+            this.dispatch(mapActionCreators.setNewClustersCreator(new Map(this.newClusters)));
+            this.dispatch(mapActionCreators.setPhaseTwoRunning(false));
             
             return;
         }
@@ -87,7 +110,7 @@ export class PhaseTwoService {
 
         // For each district, set the new demographic data
         for (const demographicData of newDemographicData) {
-            const district = this.districts.get(demographicData[0]);
+            const district = this.newClusters.get(demographicData[0]);
             // console.log(demographicData[0], district, this.districts);
             // console.log(demographicData[1]);
 
@@ -99,24 +122,24 @@ export class PhaseTwoService {
 
         // For each district, set the new election data
         for (const electionData of newElectionData) {
-            const district = this.districts.get(electionData[0]);
+            const district = this.newClusters.get(electionData[0]);
             district.electionData = this.getElection(electionData[1]);
         }
         // Remove the precinct from both districts and add it to the specified one
         for (const districtId of Object.keys(info.newDemographicData)) {
-            const district = this.districts.get(districtId);
+            const district = this.newClusters.get(districtId);
             district.precinctNames.delete(info.movedPrecinctId);
         }
 
         // Update precinct/district
-        const district = this.districts.get(info.newDistrictId);
+        const district = this.newClusters.get(info.newDistrictId);
         district.precinctNames.add(info.movedPrecinctId);
 
         const precinct = this.precincts.get(info.movedPrecinctId);
         precinct.newCdId = Number(info.newDistrictId);
         
         this.dispatch(mapActionCreators.setPrecinctMap(new Map(this.precincts)));
-        this.dispatch(mapActionCreators.setNewClustersCreator(new Map(this.districts)));
+        this.dispatch(mapActionCreators.setNewClustersCreator(new Map(this.newClusters)));
 
         // setTimeout(() => {
         this.start(store.getState().stateReducer.phaseTwoArgs);
@@ -203,7 +226,11 @@ export class PhaseTwoService {
         this.precincts = precinctMap;
     }
 
+    public setOldClusters(oldClusters: Map<string, ICluster>) {
+        this.oldClusters = oldClusters;
+    }
+
     public setNewClusters(newClusters: Map<string, ICluster>) {
-        this.districts = newClusters;
+        this.newClusters = newClusters;
     }
 }

@@ -31,7 +31,8 @@ import {
     PhaseOneStopEnum,
     PoliticalCompetitivenessEnum,
     ClusterProperties,
-    PopulationHomogeneityEnum
+    PopulationHomogeneityEnum,
+    Scores
 } from '../../../models';
 import { PrecinctService } from '../../../libs/precinct-service';
 import { PhaseOneService } from '../../../libs/algorithms/phase-one-service';
@@ -57,6 +58,7 @@ const SET_PZERO_HIGHLIGHTED_PRECINCTS = 'SET_PZERO_HIGHLIGHTED_PRECINCTS';
 const SET_PHASE_ONE_TIME = 'SET_PHASE_ONE_TIME';
 const SET_PHASE_TWO_TIME = 'SET_PHASE_TWO_TIME';
 const SET_PHASE_TWO_RUNNING = 'SET_PHASE_TWO_RUNNING';
+const SET_PHASE_TWO_SCORES = 'SET_PHASE_TWO_SCORES';
 
 export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) => {
     return async (dispatch: any) => {
@@ -65,7 +67,7 @@ export const setSelectedStateCreator = (oldState: StateEnum, state: StateEnum) =
         }
         dispatch(setPrecinctMap(new Map<string, IPrecinct>()));
         dispatch(setStateData(null));
-        dispatch(setOldClusters(new Map<string, ICluster>()));
+        dispatch(setOldClustersCreator(new Map<string, ICluster>()));
         dispatch(
             setPhaseZeroArgs({
                 ...initialState.phaseZeroArgs,
@@ -139,6 +141,16 @@ export const setPhaseOneJobId = (jobId: string) => {
         }));
     }
 }
+
+export const setOldClustersCreator = (oldClusters: Map<string, ICluster>) => {
+    if (store.getState().stateReducer.phaseTwoService) {
+        store.getState().stateReducer.phaseTwoService.setOldClusters(oldClusters);
+    }
+    return async (dispatch: any) => {
+        dispatch(setOldClusters(oldClusters));
+    }
+};
+
 
 export const setNewClustersCreator = (newClusters: Map<string, ICluster>) => {
     if (store.getState().stateReducer.phaseTwoService) {
@@ -329,6 +341,13 @@ export const setPhaseTwoRunning = (phaseTwoRunning: boolean) => {
     };
 };
 
+export const setPhaseTwoScores = (scores: any) => {
+    return {
+        type: SET_PHASE_TWO_SCORES,
+        oldStateObjectiveScores: scores.old,
+        newStateObjectiveScores: scores.new
+    }
+}
 
 export interface State {
     selectedState: StateEnum;
@@ -353,6 +372,8 @@ export interface State {
     phaseOneTime: number;
     phaseTwoTime: number;
     phaseTwoRunning: boolean;
+    oldStateObjectiveScores: Scores;
+    newStateObjectiveScores: Scores;
 }
 
 const initialState: State = {
@@ -421,7 +442,9 @@ const initialState: State = {
     highlightedPrecincts: new Set<String>(),
     phaseOneTime: null,
     phaseTwoTime: null,
-    phaseTwoRunning: false
+    phaseTwoRunning: false,
+    oldStateObjectiveScores: null,
+    newStateObjectiveScores: null,
 };
 
 export const stateReducer = (state = initialState, action: any) => {
@@ -532,6 +555,12 @@ export const stateReducer = (state = initialState, action: any) => {
                 ...state,
                 phaseTwoRunning: action.phaseTwoRunning
             };
+        case SET_PHASE_TWO_SCORES:
+            return {
+                ...state,
+                oldStateObjectiveScores: action.oldStateObjectiveScores,
+                newStateObjectiveScores: action.newStateObjectiveScores
+            }
         default:
             return state;
     }

@@ -3,6 +3,7 @@ import { IElection } from './election';
 import { ClusterDemographics } from './demographics';
 import { PartyEnum, ElectionEnum } from './enums';
 import { IVoteData } from './vote';
+import { Scores } from './scores';
 
 /**
  * Stores cluster information for intermediate and original congressional districts.
@@ -21,7 +22,7 @@ export interface ICluster {
     // adjacentClusterKeys: Set<string>; // Store adjacent clusters, used in phase 2 for combine
     demographicData: ClusterDemographics;
     electionData: IElection;
-    objectiveFunctionScores: IObjectiveFunctionScores;
+    objectiveFunctionScores: Scores;
     isMajorityMinority: boolean;
 
     [x: string]: any;
@@ -40,14 +41,4 @@ export interface ClusterCount {
     republicanCount: number;
     tieCount: number;
     election?: ElectionEnum;
-}
-
-// TODO: Map in state for each election and newly generated districts containing ICluster with objective function scores
-export interface IObjectiveFunctionScores {
-
-    politicalFairness: number;
-    populationEquality: number;
-    compactness: number;
-    contiguity: number;
-
 }

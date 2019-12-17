@@ -13,7 +13,7 @@ import { PrecinctPropertiesTabPanel, IPrecinctPropertiesTabProps } from '../Prec
 import { MapViewComponent } from '../../mapview';
 import { IElectionsTabProps } from '../ElectionsTabPanel';
 import { RightSidebarStyles } from '../../../../global_components';
-import { StateEnum, ICluster, ClusterProperties, PartyEnum, ClusterCount, MapFilterEnum, IVoteData, ElectionEnum } from '../../../../models';
+import { StateEnum, ICluster, ClusterProperties, PartyEnum, ClusterCount, MapFilterEnum, IVoteData, ElectionEnum, Scores } from '../../../../models';
 import { Coloring } from '../../../../libs/coloring';
 
 import '../../../../styles/cirrus/tabs.scss';
@@ -31,6 +31,8 @@ interface IRightSidebarProps {
     precinctProps: IPrecinctPropertiesTabProps;
     selectedOldDistrictId: string;
     selectedNewDistrictId: string;
+    oldStateScores: Scores;
+    newStateScores: Scores;
     rightSidebarHandler: (param) => void;
 
     coloring: Coloring;
@@ -145,7 +147,7 @@ export class RightSidebarComponent extends React.Component<IRightSidebarProps, I
                         <Tab><h6>Properties</h6></Tab>
                     </TabList>
                     <TabPanel>
-                        <StatisticsTabPanel clusterProperties={this.state.clusterProperties} stateData={this.props.stateData} selectedState={this.props.selectedState} />
+                        <StatisticsTabPanel clusterProperties={this.state.clusterProperties} stateData={this.props.stateData} selectedState={this.props.selectedState} oldStateScores={this.props.oldStateScores} newStateScores={this.props.newStateScores} />
                     </TabPanel>
                     <TabPanel>
                         <DistrictTabPanel oldClusters={this.props.oldClusters} newClusters={this.props.newClusters} selectedState={this.props.selectedState} coloring={this.props.coloring} selectedOldDistrictId={this.props.selectedOldDistrictId} mapFilter={this.props.mapFilter} selectedNewDistrictId={this.props.selectedNewDistrictId} oldClusterCount={this.state.oldClusterCount} newClusterCount={this.state.newClusterCount} />
@@ -204,6 +206,8 @@ function mapStatetoProps(state: any, ownProps: any) {
         oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
         mapFilter: state.stateReducer.filterArgs.mapFilter,
+        oldStateScores: state.stateReducer.oldStateObjectiveScores,
+        newStateScores: state.stateReducer.newStateObjectiveScores,
         ...ownProps
     };
 }

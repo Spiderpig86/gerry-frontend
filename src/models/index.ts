@@ -5,6 +5,7 @@ export { ICluster, ClusterProperties, ClusterCount } from './clusternode';
 export { PrecinctProperties } from './properties';
 export { IVoteData } from './vote';
 export { IElection } from './election';
+export { Scores } from './scores';
 
 export { PhaseZeroArgs, PhaseZeroResult, PrecinctBlocSummary } from './Tabs/phasezeroargs';
 export { PhaseOneArgs, PhaseOneMergeDelta, PhaseOneResult } from './Tabs/phaseoneargs';

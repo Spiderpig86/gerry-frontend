@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StatisticsAccordionComponent } from '../StatisticsAccordionComponent';
-import { StateEnum, ICluster, ClusterProperties, ClusterCount } from '../../../../models';
+import { StateEnum, ICluster, ClusterProperties, ClusterCount, Scores } from '../../../../models';
 import { Placeholder } from '../../../../global_components';
 import { Button } from 'react-bootstrap';
 
@@ -13,6 +13,8 @@ interface StatisticsTabPanelProps {
     selectedState: StateEnum;
     stateData: ICluster;
     clusterProperties: ClusterProperties;
+    oldStateScores: Scores;
+    newStateScores: Scores;
 }
 
 export class StatisticsTabPanel extends React.PureComponent<StatisticsTabPanelProps, {}> {
@@ -83,7 +85,7 @@ export class StatisticsTabPanel extends React.PureComponent<StatisticsTabPanelPr
                 <br />
                 <h4>State Statistics</h4>
                 <p>Total Population: {this.props.stateData.demographicData.totalPopulation.toLocaleString()}</p>
-                <StatisticsAccordionComponent demographicData={this.props.stateData.demographicData} electionData={this.props.stateData.electionData} />
+                <StatisticsAccordionComponent scores={this.props.oldStateScores} additionalScores={this.props.newStateScores} demographicData={this.props.stateData.demographicData} electionData={this.props.stateData.electionData} />
                 <br/>
 
                 <h5>Statewide Voting Patterns</h5>

@@ -44,7 +44,8 @@ export enum PoliticalFairnessEnum {
     GERRYMANDER_REPUBLICAN = 'gerrymander_republican',
     LOPSIDED_MARGINS = 'lopsided_margins',
     PARTISAN_DEMOCRAT = 'partisan_democrat',
-    PARTISAN_REPUBLICAN = 'partisan_republican'
+    PARTISAN_REPUBLICAN = 'partisan_republican',
+    EFFICIENCY_GAP = 'efficiency_gap'
 }
 
 export enum PopulationEqualityEnum {

@@ -147,7 +147,7 @@ export class PrecinctService {
             }
 
             // Reset program state
-            this.dispatch(stateReducer.setOldClusters(districtClusters));
+            this.dispatch(stateReducer.setOldClustersCreator(districtClusters));
             this.dispatch(stateReducer.setNewClustersCreator(new Map<string, ICluster>()));
             this.dispatch(stateReducer.setLevel(ViewLevelEnum.OLD_DISTRICTS));
             this.dispatch(stateReducer.setAlgorithmPhase(AlgorithmEnum.PHASE_0_1));

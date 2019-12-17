@@ -17,6 +17,7 @@ interface IAlgorithmPanelProps {
     selectedState: StateEnum;
     phaseTwoService: PhaseTwoService;
     precinctMap: Map<string, IPrecinct>;
+    oldClusters: Map<string, ICluster>;
     newClusters: Map<string, ICluster>;
     phaseTwoRunning: boolean;
     setPhaseTwoServiceCreator: (phaseTwoService: PhaseTwoService) => void;
@@ -26,14 +27,14 @@ interface IAlgorithmPanelProps {
 export class PhaseTwoAlgorithmPanelComponent extends React.PureComponent<IAlgorithmPanelProps, {}> {
     async componentDidMount() {
         if (!this.props.phaseTwoService && this.props.precinctMap.size > 0) {
-            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.newClusters);
+            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.oldClusters, this.props.newClusters);
             this.props.setPhaseTwoServiceCreator(phaseTwoService);
         }
     }
 
     async componentWillReceiveProps(newProps) {
         if (!this.props.phaseTwoService && this.props.precinctMap.size > 0) {
-            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.newClusters);
+            const phaseTwoService = new PhaseTwoService(this.props.precinctMap, null, this.props.oldClusters, this.props.newClusters);
             this.props.setPhaseTwoServiceCreator(phaseTwoService);
         }
     }
@@ -129,6 +130,7 @@ function mapStateToProps(state: any) {
         phaseTwoService: state.stateReducer.phaseTwoService,
         phaseTwoRunning: state.stateReducer.phaseTwoRunning,
         precinctMap: state.stateReducer.precinctMap,
+        oldClusters: state.stateReducer.oldClusters,
         newClusters: state.stateReducer.newClusters,
         setPhaseTwoServiceCreator: state.stateReducer.setPhaseTwoServiceCreator,
         setPhaseTwoRunning: state.stateReducer.setPhaseTwoRunning

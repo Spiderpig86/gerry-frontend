@@ -61,7 +61,8 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanel
         { name: 'Gerrymander Republican', key: PoliticalFairnessEnum.GERRYMANDER_REPUBLICAN },
         { name: 'Lopsided Margins', key: PoliticalFairnessEnum.LOPSIDED_MARGINS },
         { name: 'Partisan Democrat', key: PoliticalFairnessEnum.PARTISAN_DEMOCRAT },
-        { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN }
+        { name: 'Partisan Republican', key: PoliticalFairnessEnum.PARTISAN_REPUBLICAN },
+        { name: 'Efficiency Gap', key: PoliticalFairnessEnum.EFFICIENCY_GAP }
     ];
     private populationEqualityOptions = [
         { name: 'Most to Least', key: PopulationEqualityEnum.MOST_TO_LEAST },
@@ -141,7 +142,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanel
                         })}
                     </div>
 
-                    <h6>Population Equality Options</h6>
+                    {/* <h6>Population Equality Options</h6>
                     <div className="mb-4">
                         {this.populationEqualityOptions.map((e: any, i: number) => {
                             return (
@@ -165,7 +166,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanel
                                 </Form.Group>
                             );
                         })}
-                    </div>
+                    </div> */}
 
                     <h6>Phase Two Depth Heuristics</h6>
                     <div className="mb-4">
