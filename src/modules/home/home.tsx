@@ -58,7 +58,7 @@ class HomeComponent extends React.Component<
                             </h1>
                             <br />
                             <h5>
-                                A Gerrymandering anaylsis tool to gerneate fair
+                                A Gerrymandering anaylsis tool to generate fair
                                 and non-partisan districts.
                             </h5>
                             <br />
