@@ -43,7 +43,7 @@ export class PhaseTwoService {
 
     private generateUrl(): string {
         // return `wss://echo.websocket.org`;
-        return `http://localhost:8080/algorithm-sockets`;
+        return `${Constants.APP_API}/algorithm-sockets`;
     }
 
     private getPath() {

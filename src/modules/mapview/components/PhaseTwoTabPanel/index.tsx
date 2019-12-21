@@ -50,7 +50,7 @@ export class PhaseTwoTabPanelComponent extends React.Component<IPhaseTwoTabPanel
     };
 
     private compactnessOptions = [
-        { name: 'Graph Theory', key: CompactnessEnum.GRAPH_THEORETICAL },
+        { name: 'Graph Theoretical', key: CompactnessEnum.GRAPH_THEORETICAL },
         { name: 'PolsbyPopper', key: CompactnessEnum.POLSBY_POPPER },
         { name: 'Schwartzberg', key: CompactnessEnum.SCHWARTZBERG },
         { name: 'Reock', key: CompactnessEnum.REOCK },
