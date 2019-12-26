@@ -29,13 +29,36 @@
 ## Media
 
 ![Splash Screen](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-landing.gif?raw=true)
+<p align="center">Initial load of application.</p>
+<br />
+
 ![Loading Data](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-2.gif?raw=true)
+<p align="center">Selection of state with data being loaded via websockets.</p>
+<br />
+
 ![Map Filters](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-3.gif?raw=true)
+<p align="center">Map filter selection.</p>
+<br />
+
 ![Phase 0](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-4.gif?raw=true)
+<p align="center">Execution of phase 0.</p>
+<br />
+
 ![Phase 1](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-5.gif?raw=true)
+<p align="center">Execution of phase 1.</p>
+<br />
+
 ![Phase 2](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-6.gif?raw=true)
+<p align="center">Execution of phase 2.</p>
+<br />
+
 ![Phase 2 Post](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-7.gif?raw=true)
+<p align="center">Displaying phase 2 results.</p>
+<br />
+
 ![Phase 1 California](https://github.com/Spiderpig86/gerry-frontend/blob/master/media/gerry-cali.gif?raw=true)
+<p align="center">Executing iterative steps for phase 1 for California.</p>
+<br />
 
 ## Demo
 
