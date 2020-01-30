@@ -23,8 +23,9 @@
 * :bear: [Hibernate](http://hibernate.org/) - ORM for Java.
 * :whale: [MySQL](https://www.mysql.com/) - open source RDBMS.
 
-## Where are the other repositories?
-* This is coming soon...
+## Other Repositories
+* [Backend](https://github.com/devhid/gerry-backend)
+* Preprocessing - coming soon.
 
 ## Media
 
