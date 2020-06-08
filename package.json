@@ -45,7 +45,7 @@
     "react-progressbar": "^15.4.1",
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
-    "react-spinners": "^0.6.1",
+    "react-spinners": "^0.8.3",
     "react-table": "^6.10.0",
     "react-tabs": "^3.0.0",
     "redux": "4.0.0",
