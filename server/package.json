@@ -9,6 +9,6 @@
   "author": "Stanley Lim <slim679975@gmail.com> (http://stanleylim.me/)",
   "license": "ISC",
   "dependencies": {
-    "websocket": "^1.0.31"
+    "websocket": "^1.0.32"
   }
 }
