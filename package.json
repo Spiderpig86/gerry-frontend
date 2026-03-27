@@ -25,7 +25,7 @@
     "@types/redux": "3.6.0",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.17.0",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "color": "^3.1.2",
     "distinct-colors": "^1.0.4",
     "geojson-vt": "^3.2.1",
