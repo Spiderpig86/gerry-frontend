@@ -8,7 +8,9 @@
     "build:dev": "webpack --config configs/webpack.dev.js -d",
     "build:prod": "webpack --config configs/webpack.prod.js",
     "test": "jest",
-    "test:update-snapshot": "jest --updateSnapshot"
+    "test:update-snapshot": "jest --updateSnapshot",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "author": "Spiderpig86",
   "license": "",
@@ -49,7 +51,8 @@
     "react-table": "^6.11.5",
     "react-tabs": "^3.0.0",
     "redux": "4.0.0",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@types/color": "^3.0.0",
@@ -110,5 +113,6 @@
     "moduleNameMapper": {
       "^.+\\.(css|less|scss)$": "identity-obj-proxy"
     }
-  }
+  },
+  "snyk": true
 }
